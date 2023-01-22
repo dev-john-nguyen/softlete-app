@@ -1,0 +1,338 @@
+[
+    {
+        "name": "Ab Coaster"
+    },
+    {
+        "name": "Ab Crunch Machine"
+    },
+    {
+        "name": "Ab Roller Wheel"
+    },
+    {
+        "name": "Battle Ropes"
+    },
+    {
+        "name": "Blocks"
+    },
+    {
+        "name": "Climbing Rope"
+    },
+    {
+        "name": "Energy Bars"
+    },
+    {
+        "name": "Headphones"
+    },
+    {
+        "name": "Protein Shakes"
+    },
+    {
+        "name": "Water Bottles"
+    },
+    {
+        "name": "Workout Shorts"
+    },
+    {
+        "name": "Yoga Mat"
+    },
+    {
+        "name": "Agility Ladder"
+    },
+    {
+        "name": "Cones"
+    },
+    {
+        "name": "Dragging Sled"
+    },
+    {
+        "name": "Jump Box"
+    },
+    {
+        "name": "Plyo Boxes"
+    },
+    {
+        "name": "Ankle Weights"
+    },
+    {
+        "name": "Balance Board"
+    },
+    {
+        "name": "Gymnastic Rings"
+    },
+    {
+        "name": "Mini-Trampoline"
+    },
+    {
+        "name": "Sliders"
+    },
+    {
+        "name": "Wooden Balancing Board"
+    },
+    {
+        "name": "Ez Curl Bar"
+    },
+    {
+        "name": "Dipping Station/Bars"
+    },
+    {
+        "name": "Pull-Up Bars"
+    },
+    {
+        "name": "Tricep Bar"
+    },
+    {
+        "name": "Barbell Collar"
+    },
+    {
+        "name": "Barbell Rack"
+    },
+    {
+        "name": "Bumper Plates"
+    },
+    {
+        "name": "Bench"
+    },
+    {
+        "name": "Flat Bench"
+    },
+    {
+        "name": "Incline / Decline Bench"
+    },
+    {
+        "name": "Olympic Bench"
+    },
+    {
+        "name": "The Roman Chair"
+    },
+    {
+        "name": "Weight Bench"
+    },
+    {
+        "name": "Air Resistance Exercise Bike"
+    },
+    {
+        "name": "Fixie Bike"
+    },
+    {
+        "name": "Maxi Climber"
+    },
+    {
+        "name": "Mini Exercise Bikes"
+    },
+    {
+        "name": "Recumbent Bike"
+    },
+    {
+        "name": "Spin Bike"
+    },
+    {
+        "name": "Stair Climber"
+    },
+    {
+        "name": "Stair Stepper"
+    },
+    {
+        "name": "Stationary Bike"
+    },
+    {
+        "name": "Adjustable Dumbbell System"
+    },
+    {
+        "name": "Dumbbell Rack"
+    },
+    {
+        "name": "Dumbbells"
+    },
+    {
+        "name": "Cable Crossover Machine"
+    },
+    {
+        "name": "Cable Pulley Machine"
+    },
+    {
+        "name": "Cables / Pulleys"
+    },
+    {
+        "name": "Calf Raise Machine (Seating / Standing)"
+    },
+    {
+        "name": "Glute Ham Developer"
+    },
+    {
+        "name": "Leg Abduction / Adduction Machine"
+    },
+    {
+        "name": "Leg / Hamstring Curl"
+    },
+    {
+        "name": "Leg Curl / Hamstring Machine"
+    },
+    {
+        "name": "Leg Extension"
+    },
+    {
+        "name": "Leg Extension Machine"
+    },
+    {
+        "name": "Leg Press Machine"
+    },
+    {
+        "name": "Suspension Trainer"
+    },
+    {
+        "name": "Chest Press Machine"
+    },
+    {
+        "name": "Hip Abduction Machine"
+    },
+    {
+        "name": "Medicine Ball"
+    },
+    {
+        "name": "Pec Fly Machine"
+    },
+    {
+        "name": "Pilates Machine"
+    },
+    {
+        "name": "Punching Bag"
+    },
+    {
+        "name": "Reverse Hyper Machine"
+    },
+    {
+        "name": "Weights"
+    },
+    {
+        "name": "Stretching Machine"
+    },
+    {
+        "name": "Vibration Plate"
+    },
+    {
+        "name": "Power Rack"
+    },
+    {
+        "name": "Squat Station"
+    },
+    {
+        "name": "What equipment do you need to workout?"
+    },
+    {
+        "name": "What workout equipment should I buy?"
+    },
+    {
+        "name": "What is the best workout equipment for High Intensity Interval Training?"
+    },
+    {
+        "name": "Ab Rollers"
+    },
+    {
+        "name": "Abdominal Bench"
+    },
+    {
+        "name": "Barbells"
+    },
+    {
+        "name": "Bench Press"
+    },
+    {
+        "name": "Calf Machines"
+    },
+    {
+        "name": "Smith Machine"
+    },
+    {
+        "name": "Dipping Bars"
+    },
+    {
+        "name": "Dumb Bells"
+    },
+    {
+        "name": "Hack Squat Machine"
+    },
+    {
+        "name": "Hammer Strength Machine"
+    },
+    {
+        "name": "Resistance Bands"
+    },
+    {
+        "name": "Hyper Extension Bench"
+    },
+    {
+        "name": "Kettle Bells"
+    },
+    {
+        "name": "Lat Pulldown Machine"
+    },
+    {
+        "name": "Leg Abduction Machine"
+    },
+    {
+        "name": "Leg Curl Machine"
+    },
+    {
+        "name": "Pec Deck Machine"
+    },
+    {
+        "name": "Preacher Bench"
+    },
+    {
+        "name": "Push Up Bars"
+    },
+    {
+        "name": "Jump Rope"
+    },
+    {
+        "name": "Vertical Climber Machine"
+    },
+    {
+        "name": "Inversion Table"
+    },
+    {
+        "name": "Pull Up Bar"
+    },
+    {
+        "name": "Squat Rack"
+    },
+    {
+        "name": "Stability Ball"
+    },
+    {
+        "name": "Wall Ball"
+    },
+    {
+        "name": "Power Tower"
+    },
+    {
+        "name": "Exercise Bikes"
+    },
+    {
+        "name": "Rowing Machine"
+    },
+    {
+        "name": "Treadmill"
+    },
+    {
+        "name": "Elliptical Machine"
+    },
+    {
+        "name": "Incline Bench Press"
+    },
+    {
+        "name": "Handgrip Exerciser"
+    },
+    {
+        "name": "Half Rack"
+    },
+    {
+        "name": "Home Gym"
+    },
+    {
+        "name": "Weight Vest"
+    },
+    {
+        "name": "Foam Roller"
+    }
+]

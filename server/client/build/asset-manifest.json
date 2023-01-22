@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4faad5ee.chunk.css",
+    "main.js": "/static/js/main.dec3cf0e.chunk.js",
+    "main.js.map": "/static/js/main.dec3cf0e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.900dd88b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.900dd88b.js.map",
+    "static/js/2.5d1d5e93.chunk.js": "/static/js/2.5d1d5e93.chunk.js",
+    "static/js/2.5d1d5e93.chunk.js.map": "/static/js/2.5d1d5e93.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.4faad5ee.chunk.css.map": "/static/css/main.4faad5ee.chunk.css.map",
+    "static/js/2.5d1d5e93.chunk.js.LICENSE.txt": "/static/js/2.5d1d5e93.chunk.js.LICENSE.txt",
+    "static/media/HomeBgSvg.ebb63bab.svg": "/static/media/HomeBgSvg.ebb63bab.svg",
+    "static/media/HomeScreen.21841a0c.png": "/static/media/HomeScreen.21841a0c.png",
+    "static/media/LoginScreen.31a800ee.png": "/static/media/LoginScreen.31a800ee.png",
+    "static/media/WorkoutScreen.2568d96d.png": "/static/media/WorkoutScreen.2568d96d.png",
+    "static/media/logo.014b7b5a.svg": "/static/media/logo.014b7b5a.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.900dd88b.js",
+    "static/js/2.5d1d5e93.chunk.js",
+    "static/css/main.4faad5ee.chunk.css",
+    "static/js/main.dec3cf0e.chunk.js"
+  ]
+}

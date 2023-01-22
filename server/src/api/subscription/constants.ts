@@ -1,0 +1,1 @@
+export const monthlySubId = 'price_1JjttJBYwwVRRcqV6f9Z9137';

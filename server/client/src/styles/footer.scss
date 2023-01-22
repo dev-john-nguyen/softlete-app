@@ -1,0 +1,106 @@
+.footer {
+    width: 100%;
+    background: $color-light-grey;
+    margin-top: 5rem;
+
+    &-content {
+        padding: 5rem 3rem 5rem 3rem;
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+        flex-direction: row;
+        max-width: 1000px;
+        margin: auto;
+        justify-content: center;
+
+        @media only screen and (max-width: 600px) {
+            flex-direction: column;
+            align-items: center;
+            padding: 5rem 3rem 5rem 3rem;
+        }
+    }
+
+    &_logo {
+        height: 3rem;
+        width: 3rem;
+
+        @media only screen and (max-width: 600px) {
+            height: 5rem;
+            width: 5rem;
+        }
+    }
+
+    h1 {
+        font-size: 10px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        color: #858585;
+    }
+
+    &-logo {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        &-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-self: flex-start;
+        }
+
+        h1 {
+            color: $color-black;
+            margin-top: 10px;
+        }
+
+        p {
+            color: $color-secondary;
+        }
+    }
+
+    &-menu {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+
+        @media only screen and (max-width: 600px) {
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
+
+    &-social {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+
+        @media only screen and (max-width: 600px) {
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
+
+    &-download {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+
+        @media only screen and (max-width: 600px) {
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
+
+    .link {
+        margin-bottom: 10px;
+    }
+
+    a {
+        font-size: 10px;
+        color: $color-light-black;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+    }
+}

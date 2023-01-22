@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-native",
+    "lib": ["es2015", "es2015.promise", "es2016.array.include", "dom"],
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@app/elements": ["src/components/elements/index.ts"],
+      "@app/icons": ["src/assets/index.tsx"],
+      "@app/ui": ["src/ui/index.ts"],
+      "@app/utils": ["src/utils/index.ts"],
+      "@app/services": ["src/services/absolute-exports/services.ts"]
+    },
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "target": "esnext",
+    "types": ["jest"]
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+}

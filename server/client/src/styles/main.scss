@@ -1,0 +1,165 @@
+$color-primary: #8c0000;
+$color-primary-light: #a33232;
+$color-secondary: #c4c4c4;
+$color-black: #250000;
+$color-light-black: #1c1c1c;
+$color-light-grey: #e8e8e8;
+$color-grey: #d9d9d9;
+$color-white: #ffff;
+$color-red: #f84242;
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.6;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 6px;
+  }
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#root {
+  margin: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+.content {
+  box-sizing: border-box;
+  min-height: 100vh;
+  max-width: 1200px;
+}
+
+p,
+h2,
+input,
+textarea,
+li,
+label {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 1.5px;
+}
+
+h1,
+a,
+button,
+strong {
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 1.5px;
+}
+
+.loader {
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+button {
+  border: 3px solid #8c0000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(25px);
+  outline: none;
+  border-radius: 20px;
+  padding: 10px 30px 10px 30px;
+  font-size: 16px;
+  display: inline-block;
+  border-radius: 10rem;
+  color: $color-white;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  top: 0px;
+
+  &:active {
+    top: 5px;
+    transition: all 0.3s;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #8c0000 0%, rgba(140, 0, 0, 1) 100%);
+    border-radius: 10rem;
+    z-index: -2;
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: $color-primary-light;
+    transition: all 0.3s;
+    border-radius: 10rem;
+    z-index: -1;
+  }
+  &:hover {
+    color: #fff;
+    &:before {
+      width: 100%;
+    }
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: $color-white;
+
+  p {
+    margin-left: 0.5rem;
+  }
+
+  &_icon {
+    font-size: 3rem !important;
+  }
+
+  &_brand {
+    text-transform: capitalize;
+  }
+}
+
+.stripe-card-element {
+  padding: 10px;
+}
+
+@import "home";
+@import "form";
+@import "modal";
+@import "navbar";
+@import "legal";
+@import "footer";

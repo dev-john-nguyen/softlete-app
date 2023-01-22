@@ -1,0 +1,178 @@
+.nav {
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid $color-light-grey;
+
+    &-menu {
+        @media only screen and (max-width: 400px) {
+            overflow-x: scroll;
+            white-space: nowrap;
+            padding: 10px;
+        }
+    }
+
+    &-content {
+        box-sizing: border-box;
+        padding: 2rem 3rem 2rem 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1000px;
+        margin: auto;
+        position: relative;
+    }
+
+    &_logo {
+        height: 4rem;
+        width: 4rem;
+
+        @media only screen and (max-width: 600px) {
+            height: 5rem;
+            width: 5rem;
+        }
+    }
+
+    a {
+        font-size: 12px;
+        color: $color-black;
+        text-decoration: none;
+        @media only screen and (max-width: 600px) {
+            font-size: 8px;
+        }
+    }
+
+    .icon {
+        div {
+            width: 20px;
+            height: 2px;
+            background-color: $color-primary;
+            margin: 5px 0;
+        }
+        @media only screen and (min-width: 600px) {
+            display: none;
+        }
+    }
+
+    .link {
+        position: relative;
+        display: inline-block;
+        letter-spacing: 0.15rem;
+        text-transform: uppercase;
+        padding: 5px;
+        margin-left: 2rem;
+
+        @media only screen and (max-width: 600px) {
+            margin-left: 0rem;
+            letter-spacing: 0rem;
+            display: none;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 0%;
+            height: 100%;
+            background-color: #e8cccc;
+            transition: all 0.3s;
+            border-radius: 10rem;
+            z-index: -1;
+            @media only screen and (max-width: 600px) {
+                left: -5%;
+            }
+        }
+
+        &:hover {
+            transition: all 3s;
+            &:before {
+                width: 120%;
+                @media only screen and (max-width: 600px) {
+                    width: 110%;
+                }
+            }
+        }
+    }
+}
+
+.mobile-menu {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgba($color-primary, $alpha: 0.95);
+    z-index: 1000;
+    display: none;
+
+    @media only screen and (max-width: 600px) {
+        display: initial;
+    }
+
+    &-close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+    }
+
+    .link {
+        position: relative;
+        letter-spacing: 0.15rem;
+        text-transform: uppercase;
+        padding: 5px;
+        font-size: 14px;
+        margin-top: 2rem;
+
+        a {
+            font-size: 16px;
+            color: $color-white;
+            text-decoration: none;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 0%;
+            height: 100%;
+            background-color: $color-primary-light;
+            transition: all 0.3s;
+            border-radius: 10rem;
+            z-index: -1;
+            @media only screen and (max-width: 600px) {
+                left: -5%;
+            }
+        }
+
+        &:hover {
+            transition: all 3s;
+            &:before {
+                width: 120%;
+                @media only screen and (max-width: 600px) {
+                    width: 110%;
+                }
+            }
+        }
+    }
+}
+
+.hide {
+    left: 150%;
+    transition: 0.2s ease-out;
+    visibility: hidden;
+}
+
+.show {
+    left: 0%;
+    transition: 0.2s ease-in;
+    visibility: visible;
+}
