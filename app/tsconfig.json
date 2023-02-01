@@ -14,7 +14,8 @@
       "@app/icons": ["src/assets/index.tsx"],
       "@app/ui": ["src/ui/index.ts"],
       "@app/utils": ["src/utils/index.ts"],
-      "@app/services": ["src/services/absolute-exports/services.ts"]
+      "@app/services": ["src/services/absolute-exports/services.ts"],
+      "@app/contexts": ["src/contexts/index.ts"]
     },
     "noEmit": true,
     "resolveJsonModule": true,
