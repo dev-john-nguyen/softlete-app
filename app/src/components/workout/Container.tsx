@@ -1,325 +1,322 @@
-import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { WorkoutExerciseProps, WorkoutExerciseDataProps, WorkoutActionProps, DataArrProps, WorkoutStatus, ViewWorkoutProps } from '../../services/workout/types';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+  useContext,
+} from 'react';
+import {
+  WorkoutExerciseProps,
+  WorkoutExerciseDataProps,
+  DataArrProps,
+  WorkoutStatus,
+} from '../../services/workout/types';
 import WorkoutNavbar from './Navbar';
 import ExercisesContainer from './exercises/Container';
 import _ from 'lodash';
 import Constants from '../../utils/Constants';
-import { connect } from 'react-redux';
-import { removeWorkoutExercise, updateWoHealthData, updateWorkoutExerciseData, updateWorkoutExercises } from '../../services/workout/actions';
-import { removeProgramWorkoutExercise, updateProgramExerciseData } from '../../services/program/actions';
-import { ProgramActionProps } from '../../services/program/types';
-import { ReducerProps } from '../../services';
-import { ExerciseProps } from '../../services/exercises/types';
-import StyleConstants from '../tools/StyleConstants';
-import BaseColors from '../../utils/BaseColors';
-import { normalize } from '../../utils/tools';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  removeWorkoutExercise,
+  updateWorkoutExerciseData,
+} from '../../services/workout/actions';
+import {
+  removeProgramWorkoutExercise,
+  updateProgramExerciseData,
+} from '../../services/program/actions';
 import { ImageProps } from '../../services/user/types';
-import PlusSvg from '../../assets/PlusSvg';
+import { HomeWorkoutContext } from '@app/contexts';
+import { useNavigation } from '@react-navigation/native';
+import { FlexBox } from '@app/ui';
+import { ReducerProps } from 'src/services';
+import { CircleAdd } from '@app/elements';
 
 interface Props {
-    isProgramTemplate?: boolean;
-    workout: ViewWorkoutProps;
-    updateWorkoutExerciseData?: WorkoutActionProps['updateWorkoutExerciseData'];
-    updateWorkoutExercises?: WorkoutActionProps['updateWorkoutExercises'];
-    onNavigateToAddExercise?: (group: number, order: number) => void;
-    updateProgramExerciseData: ProgramActionProps['updateProgramExerciseData'];
-    onNavigateToExercise: (exercise: ExerciseProps) => void;
-    removeWorkoutExercise: WorkoutActionProps['removeWorkoutExercise'];
-    athlete?: boolean;
-    navigation: any;
-    removeProgramWorkoutExercise: ProgramActionProps['removeProgramWorkoutExercise'];
-    updateWoHealthData: WorkoutActionProps['updateWoHealthData']
-    image?: ImageProps;
-    setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
+  isProgramTemplate?: boolean;
+  onNavigateToAddExercise?: (group: number, order: number) => void;
+  athlete?: boolean;
+  image?: ImageProps;
+  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
 }
 
+const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
+  const { onNavigateToAddExercise, onNavigateToExercise, setImage, image } =
+    useContext(HomeWorkoutContext);
+  const { workout } = useSelector((state: ReducerProps) => ({
+    workout: state.workout.viewWorkout,
+  }));
+  const dispatch = useDispatch();
+  const navigation = useNavigation<any>();
+  const [groupKeys, setGroupKeys] = useState<number[]>([]);
+  const [groupState, setGroupState] = useState({
+    prev: 0,
+    cur: 0,
+  });
+  const [navGroupState, setNavGroupState] = useState({ group: 0 });
+  const [exercises, setExercises] = useState<WorkoutExerciseProps[]>([]);
+  const [curEx, setCurEx] = useState<WorkoutExerciseProps>();
+  const navIsActive = useRef(false);
+  const mount = useRef(false);
+  const saving = useRef(false);
+  const statusRef = useRef('');
+  const exercisePropsRef: any = useRef([]);
 
-const WorkoutContainer = ({ workout, navigation, updateWorkoutExerciseData, onNavigateToAddExercise, isProgramTemplate, updateProgramExerciseData, onNavigateToExercise, athlete, removeWorkoutExercise, removeProgramWorkoutExercise, updateWoHealthData, image, setImage }: Props) => {
-    const [groupKeys, setGroupKeys] = useState<number[]>([]);
-    const [groupState, setGroupState] = useState({
-        prev: 0,
-        cur: 0
+  const handleUpdateWorkoutStates = useCallback(() => {
+    if (!workout.exercises) return;
+    let cloneExs = _(workout.exercises).cloneDeep();
+    cloneExs = _.sortBy(cloneExs, e => [e.group, e.order]);
+    let groupCount = 0;
+    let prevGroup = 0;
+
+    cloneExs.forEach((e, i) => {
+      if (i === 0) {
+        prevGroup = e.group;
+        e.group = groupCount;
+      } else {
+        if (prevGroup !== e.group) {
+          groupCount++;
+        }
+        prevGroup = e.group;
+        e.group = groupCount;
+      }
     });
-    const [navGroupState, setNavGroupState] = useState({ group: 0 })
-    const [exercises, setExercises] = useState<WorkoutExerciseProps[]>([]);
-    const [curEx, setCurEx] = useState<WorkoutExerciseProps>()
-    const navIsActive = useRef(false);
-    const mount = useRef(false);
-    const saving = useRef(false);
-    const statusRef = useRef('');
-    const exercisePropsRef: any = useRef([])
 
-    const handleUpdateWorkoutStates = useCallback(() => {
-        if (!workout.exercises) return;
-        let cloneExs = _(workout.exercises).cloneDeep();
-        cloneExs = _.sortBy(cloneExs, (e) => [e.group, e.order]);
-        let groupCount = 0;
-        let prevGroup = 0;
+    const keys = _.sortedUniq(_.sortBy(cloneExs.map(e => e.group)));
 
-        cloneExs.forEach((e, i) => {
-            if (i === 0) {
-                prevGroup = e.group;
-                e.group = groupCount;
-            } else {
-                if (prevGroup !== e.group) {
-                    groupCount++
-                }
-                prevGroup = e.group
-                e.group = groupCount
-            }
-        })
+    setExercises(cloneExs);
+    setGroupKeys(keys);
+  }, [workout.exercises]);
 
-        const keys = _.sortedUniq(_.sortBy(cloneExs.map(e => e.group)))
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <WorkoutNavbar
+          status={workout.status}
+          groupKeys={groupKeys}
+          onGroupPress={key => setNavGroupState({ group: key })}
+          curGroup={groupState.cur}
+          onAddExercise={onAddExercise}
+          athlete={athlete}
+        />
+      ),
+    });
+  }, [athlete, workout, groupKeys, groupState]);
 
-        setExercises(cloneExs)
-        setGroupKeys(keys)
-    }, [workout.exercises])
+  useEffect(() => {
+    handleUpdateWorkoutStates();
+    exercisePropsRef.current = workout.exercises;
+  }, [workout.exercises]);
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => (
-                <WorkoutNavbar
-                    status={workout.status}
-                    groupKeys={groupKeys}
-                    onGroupPress={(key) => setNavGroupState({ group: key })}
-                    curGroup={groupState.cur}
-                    onAddExercise={onAddExercise}
-                    athlete={athlete}
-                />
-            )
-        })
-    }, [athlete, workout, groupKeys, groupState])
+  useEffect(() => {
+    mount.current = true;
 
-    useEffect(() => {
-        handleUpdateWorkoutStates();
-        exercisePropsRef.current = workout.exercises;
-    }, [workout.exercises])
+    const saveInterval = setInterval(() => {
+      saveExercisesData();
+    }, Constants.autoSaveDuration);
 
-
-    useEffect(() => {
-        mount.current = true
-
-        const saveInterval = setInterval(() => {
-            saveExercisesData()
-        }, Constants.autoSaveDuration);
-
-        return () => {
-            mount.current = false
-            clearInterval(saveInterval)
-            saveExercisesData()
-        }
-    }, [])
-
-    useEffect(() => {
-        if (statusRef.current !== workout.status) {
-            statusRef.current = workout.status;
-            navIsActive.current = true;
-            setGroupState({
-                prev: 0,
-                cur: 0
-            })
-            setNavGroupState({ group: 0 })
-        }
-    }, [workout])
-
-    const saveExercisesData = async () => {
-        if (athlete || !updateWorkoutExerciseData || saving.current) return;
-        saving.current = true;
-
-        let stateExercises: WorkoutExerciseProps[] = [];
-        //need to get the most up to date state of exercises
-        setExercises((e) => {
-            stateExercises = [...e]
-            return e
-        })
-
-        const stateData = stateExercises.map(e => {
-            return {
-                _id: e._id,
-                tempId: e.tempId,
-                calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
-                data: e.data.map((d) => ({
-                    ...d,
-                    predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
-                    performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0
-                }))
-            }
-        })
-
-        const refData = exercisePropsRef.current?.map((e: WorkoutExerciseProps) => {
-            return {
-                _id: e._id,
-                tempId: e.tempId,
-                calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
-                data: e.data.map((d) => ({
-                    ...d,
-                    predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
-                    performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0
-                }))
-            }
-        })
-
-        const changes = _.differenceWith(stateData, refData, _.isEqual);
-
-        if (changes.length < 1) {
-            saving.current = false;
-            return
-        }
-
-        const dataArr: DataArrProps[] = changes.filter((e) => e._id || e.tempId).map(e => (
-            {
-                _id: e._id ? e._id : '',
-                tempId: e.tempId,
-                calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
-                data: e.data.map((d) => ({
-                    ...d,
-                    predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
-                    performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0
-                }))
-            }
-        ))
-
-        let res: undefined | void | WorkoutExerciseProps[];
-
-        if (dataArr.length > 0) {
-            if (isProgramTemplate) {
-                //save to program
-                res = await updateProgramExerciseData(dataArr).catch(err => console.log(err))
-            } else {
-                //save to real workout
-                res = await updateWorkoutExerciseData(dataArr).catch(err => console.log(err))
-            }
-        }
-
-        saving.current = false
-        return res;
-    }
-
-    const onGroupSelect = (g: number) => {
-        navIsActive.current = true;
-        setGroupState(s => ({
-            prev: s.cur,
-            cur: g
-        }))
+    return () => {
+      mount.current = false;
+      clearInterval(saveInterval);
+      saveExercisesData();
     };
+  }, []);
 
-    const onUpdateData = (updatedData: WorkoutExerciseDataProps[], index: number) => {
-        if (athlete) return;
-        exercises[index].data = [...updatedData]
-        setExercises([...exercises])
+  useEffect(() => {
+    if (statusRef.current !== workout.status) {
+      statusRef.current = workout.status;
+      navIsActive.current = true;
+      setGroupState({
+        prev: 0,
+        cur: 0,
+      });
+      setNavGroupState({ group: 0 });
+    }
+  }, [workout]);
+
+  const saveExercisesData = async () => {
+    if (athlete || saving.current) return;
+    saving.current = true;
+
+    let stateExercises: WorkoutExerciseProps[] = [];
+    //need to get the most up to date state of exercises
+    setExercises(e => {
+      stateExercises = [...e];
+      return e;
+    });
+
+    const stateData = stateExercises.map(e => {
+      return {
+        _id: e._id,
+        tempId: e.tempId,
+        calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
+        data: e.data.map(d => ({
+          ...d,
+          predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
+          performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0,
+        })),
+      };
+    });
+
+    const refData = exercisePropsRef.current?.map((e: WorkoutExerciseProps) => {
+      return {
+        _id: e._id,
+        tempId: e.tempId,
+        calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
+        data: e.data.map(d => ({
+          ...d,
+          predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
+          performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0,
+        })),
+      };
+    });
+
+    const changes = _.differenceWith(stateData, refData, _.isEqual);
+
+    if (changes.length < 1) {
+      saving.current = false;
+      return;
     }
 
-    const onCalcRefUpdate = (calc: number | string, index: number) => {
-        if (athlete) return;
-        exercises[index].calcRef = calc as number //but this is actually a string;
-        exercises[index].data = exercises[index].data.map(d => {
-            //take percentage and multiply by calc ref to get predicted val
-            let predictVal = 0;
-            if (d.pct) {
-                let val = (d.pct / 100) * parseFloat(calc as string)
-                predictVal = parseFloat(val.toFixed(2))
-            }
-            return {
-                ...d,
-                predictVal: predictVal ? predictVal : 0
-            }
-        })
-        setExercises([...exercises])
+    const dataArr: DataArrProps[] = changes
+      .filter(e => e._id || e.tempId)
+      .map(e => ({
+        _id: e._id ? e._id : '',
+        tempId: e.tempId,
+        calcRef: e.calcRef ? parseFloat(e.calcRef.toString()) : 0,
+        data: e.data.map(d => ({
+          ...d,
+          predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
+          performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0,
+        })),
+      }));
+
+    let res: any;
+
+    if (dataArr.length > 0) {
+      if (isProgramTemplate) {
+        //save to program
+        res = await dispatch(updateProgramExerciseData(dataArr)).catch(err =>
+          console.log(err),
+        );
+      } else {
+        //save to real workout
+        res = await dispatch(updateWorkoutExerciseData(dataArr)).catch(err =>
+          console.log(err),
+        );
+      }
     }
 
-    const onAddExercise = (newGroup?: Boolean) => {
-        if (workout.status === WorkoutStatus.completed || athlete || !onNavigateToAddExercise) return;
+    saving.current = false;
+    return res;
+  };
 
-        let groupProps = 0;
+  const onGroupSelect = (g: number) => {
+    navIsActive.current = true;
+    setGroupState(s => ({
+      prev: s.cur,
+      cur: g,
+    }));
+  };
 
-        let keys: number[] = [];
+  const onUpdateData = (
+    updatedData: WorkoutExerciseDataProps[],
+    index: number,
+  ) => {
+    if (athlete) return;
+    exercises[index].data = [...updatedData];
+    setExercises([...exercises]);
+  };
 
-        setGroupKeys(k => {
-            keys = k
-            return k
-        })
+  const onCalcRefUpdate = (calc: number | string, index: number) => {
+    if (athlete) return;
+    exercises[index].calcRef = calc as number; //but this is actually a string;
+    exercises[index].data = exercises[index].data.map(d => {
+      //take percentage and multiply by calc ref to get predicted val
+      let predictVal = 0;
+      if (d.pct) {
+        const val = (d.pct / 100) * parseFloat(calc as string);
+        predictVal = parseFloat(val.toFixed(2));
+      }
+      return {
+        ...d,
+        predictVal: predictVal ? predictVal : 0,
+      };
+    });
+    setExercises([...exercises]);
+  };
 
-        if (newGroup) {
-            if (keys.length < 1) {
-                groupProps = 0
-            } else {
-                //get the last group and plus one
-                groupProps = keys[keys.length - 1] + 1
-            }
-        } else {
-            groupProps = groupState.cur;
-        }
-        const order = newGroup ? 0 : exercises ? exercises.length - 1 : 0;
-        //save exercise data if there are any changes
-        saveExercisesData();
-        onNavigateToAddExercise(groupProps, order);
-    }
-
-    const onRemoveExercise = async (exercise: WorkoutExerciseProps) => {
-        if (isProgramTemplate) {
-            await removeProgramWorkoutExercise(exercise)
-        } else {
-            await removeWorkoutExercise(exercise)
-        }
-    }
-
-    const shouldRenderAddCom = () => {
-        if (athlete) return false;
-        if (workout.status === WorkoutStatus.pending) return true;
-        if (workout.programTemplateUid) return true;
-        return false;
-    }
-
-    return (
-        <View style={styles.container}>
-            <ExercisesContainer
-                updateWoHealthData={updateWoHealthData}
-                exercises={exercises}
-                onUpdateData={onUpdateData}
-                curGroup={groupState.cur}
-                onGroupSelect={onGroupSelect}
-                navIsActive={navIsActive}
-                workout={workout}
-                setCurEx={setCurEx}
-                onNavigateToExercise={onNavigateToExercise}
-                onCalcRefUpdate={onCalcRefUpdate}
-                athlete={athlete}
-                removeWorkoutExercise={onRemoveExercise}
-                navGroupState={navGroupState}
-                image={image}
-                setImage={setImage}
-            />
-            {shouldRenderAddCom() && (
-                <Pressable style={({ pressed }) => [styles.addContainer, { backgroundColor: pressed ? BaseColors.lightPrimary : BaseColors.primary }]} onPress={() => onAddExercise()}>
-                    <PlusSvg strokeColor={BaseColors.white} />
-                </Pressable>
-            )}
-        </View>
+  const onAddExercise = (newGroup?: boolean) => {
+    if (
+      workout.status === WorkoutStatus.completed ||
+      athlete ||
+      !onNavigateToAddExercise
     )
-}
+      return;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        zIndex: 100,
-    },
-    addContainer: {
-        height: normalize.width(8),
-        width: normalize.width(8),
-        padding: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 100,
-        alignSelf: 'center',
-        marginBottom: StyleConstants.baseMargin,
-        position: 'absolute',
-        bottom: 0,
-        zIndex: 100
-    },
-})
+    let groupProps = 0;
 
-const mapStateToProps = (state: ReducerProps) => ({
-})
+    let keys: number[] = [];
 
-export default connect(mapStateToProps, { updateWorkoutExerciseData, updateWorkoutExercises, updateProgramExerciseData, removeWorkoutExercise, removeProgramWorkoutExercise, updateWoHealthData })(WorkoutContainer);
+    setGroupKeys(k => {
+      keys = k;
+      return k;
+    });
+
+    if (newGroup) {
+      if (keys.length < 1) {
+        groupProps = 0;
+      } else {
+        //get the last group and plus one
+        groupProps = keys[keys.length - 1] + 1;
+      }
+    } else {
+      groupProps = groupState.cur;
+    }
+    const order = newGroup ? 0 : exercises ? exercises.length - 1 : 0;
+    //save exercise data if there are any changes
+    saveExercisesData();
+    onNavigateToAddExercise(groupProps, order);
+  };
+
+  const onRemoveExercise = async (exercise: WorkoutExerciseProps) => {
+    if (isProgramTemplate) {
+      await dispatch(removeProgramWorkoutExercise(exercise));
+    } else {
+      await dispatch(removeWorkoutExercise(exercise));
+    }
+  };
+
+  const shouldAddCom = (() => {
+    if (athlete) return false;
+    if (workout.status === WorkoutStatus.pending) return true;
+    if (workout.programTemplateUid) return true;
+    return false;
+  })();
+
+  return (
+    <FlexBox flex={1} zIndex={100} justifyContent="center">
+      <ExercisesContainer
+        exercises={exercises}
+        onUpdateData={onUpdateData}
+        curGroup={groupState.cur}
+        onGroupSelect={onGroupSelect}
+        navIsActive={navIsActive}
+        workout={workout}
+        setCurEx={setCurEx}
+        onNavigateToExercise={onNavigateToExercise}
+        onCalcRefUpdate={onCalcRefUpdate}
+        athlete={athlete}
+        removeWorkoutExercise={onRemoveExercise}
+        navGroupState={navGroupState}
+        image={image}
+        setImage={setImage}
+      />
+      {shouldAddCom && (
+        <CircleAdd onPress={onAddExercise} style={{ bottom: 10 }} />
+      )}
+    </FlexBox>
+  );
+};
+
+export default WorkoutContainer;

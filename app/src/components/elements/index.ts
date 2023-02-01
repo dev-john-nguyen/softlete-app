@@ -22,3 +22,4 @@ export { default as ExerciseVideo } from './ExerciseVideo';
 export { default as InfoListBox } from './InfoListBox';
 export { default as LineChartGraph } from './LineChartGraph';
 export { default as GraphPlaceholder } from './GraphPlaceholder';
+export { default as ToolTip } from './ToolTip';

@@ -41,6 +41,9 @@ import { default as Mail } from './MailSvg';
 import { default as Lock } from './LockSvg';
 import { default as SendMail } from './SendMailSvg';
 import { default as Info } from './InfoSvg';
+import { default as TrashBin } from './TrashSvg';
+import { default as Refresh } from './RefreshSvg';
+import { default as Calculator } from './CalcSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -82,12 +85,17 @@ const Icons = {
   lock: (props: any) => <Lock {...props} />,
   send_mail: (props: any) => <SendMail {...props} />,
   info: (props: any) => <Info {...props} />,
+  trash_bin: (props: any) => <TrashBin {...props} />,
+  refresh: (props: any) => <Refresh {...props} />,
+  calculator: (props: any) => <Calculator {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
 
 type Props = {
   onPress?: () => void;
+  onPressIn?: () => void;
+  onPressOut?: () => void;
   icon: IconOptions;
   size: number;
   strokeColor?: string;
@@ -107,13 +115,17 @@ const Icon: FC<Props> = ({
   opacity,
   containerStyles,
   hitSlop,
+  onPressIn,
+  onPressOut,
   ...props
 }) => {
-  if (onPress) {
+  if (onPress || onPressIn || onPressOut) {
     return (
       <Pressable
         hitSlop={hitSlop}
         onPress={onPress}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
         style={{
           opacity,
           ...(containerStyles || {}),
