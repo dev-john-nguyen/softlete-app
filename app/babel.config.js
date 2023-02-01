@@ -23,6 +23,7 @@ module.exports = {
           '@app/ui': './src/ui',
           '@app/utils': './src/utils',
           '@app/services': './src/services/absolute-exports',
+          '@app/contexts': './src/contexts',
         },
       },
     ],
