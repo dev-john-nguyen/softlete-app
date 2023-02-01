@@ -23,7 +23,6 @@ interface Props {
   editable?: boolean;
   onFocus?: () => void;
   styles?: StyleProp<ViewStyle>;
-  containerStyles?: StyleProp<ViewStyle>;
   autoCorrect?: TextInputProps['autoCorrect'];
   blurOnSubmit?: boolean;
   inputRef?: any;
@@ -63,7 +62,6 @@ const Input = ({
   label,
   defaultValue,
   icon,
-  containerStyles,
   ...props
 }: Props) => {
   const renderStyles = () => {
@@ -95,16 +93,13 @@ const Input = ({
 
   return (
     <View
-      style={[
-        {
-          marginRight: props.mr,
-          marginLeft: props.ml,
-          marginTop: props.mt,
-          marginBottom: props.mb,
-          margin: props.m,
-        },
-        containerStyles,
-      ]}>
+      style={{
+        marginRight: props.mr,
+        marginLeft: props.ml,
+        marginTop: props.mt,
+        marginBottom: props.mb,
+        margin: props.m,
+      }}>
       {label && (
         <PrimaryText size="small" marginBottom={5}>
           {label}

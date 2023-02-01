@@ -10,8 +10,6 @@ interface Props {
   onPress: () => void;
   loading?: boolean;
   variant?: 'primary' | 'secondary';
-  fontSize?: 'small' | 'medium' | 'large';
-  fontVariant?: 'primary' | 'secondary';
 }
 
 const PrimaryButton = ({
@@ -20,8 +18,6 @@ const PrimaryButton = ({
   onPress,
   loading,
   variant = 'primary',
-  fontSize,
-  fontVariant,
   ...stylesProps
 }: Props & StyleProp<any>) => {
   return (
@@ -62,9 +58,7 @@ const PrimaryButton = ({
       }}
       onPress={onPress}>
       <PrimaryText
-        color={variant === 'secondary' ? Colors.primary : Colors.white}
-        variant={fontVariant}
-        size={fontSize}>
+        color={variant === 'secondary' ? Colors.primary : Colors.white}>
         {children}
       </PrimaryText>
       {loading && (

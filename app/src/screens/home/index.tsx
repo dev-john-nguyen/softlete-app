@@ -132,6 +132,8 @@ function HomeStack(parentProps: any) {
           name={HomeStackScreens.Workout}
           component={View}
           options={{
+            headerRight: undefined,
+            headerTintColor: BaseColors.black,
             gestureEnabled: false,
           }}
         />
