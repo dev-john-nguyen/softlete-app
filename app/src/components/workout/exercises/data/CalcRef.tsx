@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React from 'react';
 import Input from '../../../elements/Input';
 import { FlexBox } from '@app/ui';
-import { PrimaryText, ToolTip } from '@app/elements';
-import { Colors, rgba, strToFloat, StyleConstants } from '@app/utils';
+import { ToolTip } from '@app/elements';
+import { Colors, rgba, strToFloat } from '@app/utils';
 import Icon from '@app/icons';
 
 interface Props {
@@ -12,8 +11,6 @@ interface Props {
 }
 
 const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
-  const [info, setInfo] = useState(false);
-
   const onCalcRefInputChange = (calcStr: string) => {
     const calc = strToFloat(calcStr);
     onCalcRefUpdate(calc);
@@ -27,12 +24,12 @@ const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
         top="-10%"
         right="-3%"
         zIndex={100}
+        duration={5}
       />
 
       <Icon
         icon="calculator"
         color={rgba(Colors.lightWhiteRgb, 0.5)}
-        onPress={() => setInfo(i => (i ? false : true))}
         size={25}
       />
 
