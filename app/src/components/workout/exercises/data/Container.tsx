@@ -21,6 +21,7 @@ import { SetContainer } from './Set';
 import { Colors, rgba } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
+import { PrimaryButton } from '@app/elements';
 
 interface Props {
   data: WorkoutExerciseDataProps[];
@@ -274,7 +275,6 @@ const ExerciseData = ({
           onCircleCheckPress={onCircleCheckPress}
           status={workout.status}
           dataKey={dataKey}
-          onAddSetPress={onAddSet}
         />
       );
     });
@@ -313,6 +313,17 @@ const ExerciseData = ({
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         {DataElement}
+        {!athlete && editable && (
+          <PrimaryButton
+            marginTop={10}
+            onPress={onAddSet}
+            width="100%"
+            borderRadius={5}
+            fontSize="small"
+            fontVariant="secondary">
+            Add Set
+          </PrimaryButton>
+        )}
         <Animated.View style={animatedStyles} />
       </ScrollView>
     </Pressable>

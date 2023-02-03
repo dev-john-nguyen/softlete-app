@@ -188,7 +188,7 @@ export const updateWorkoutExercises =
   };
 
 export const removeWorkoutExercise =
-  async (exercise: WorkoutExerciseProps) =>
+  (exercise: WorkoutExerciseProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     //need to add remove to exercise
     //just create a new route specifically for removing one exercise
@@ -447,7 +447,7 @@ export const setViewWorkout =
   };
 
 export const updateWorkoutStatus =
-  async (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
+  (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { offline } = getState().global;
 
@@ -471,7 +471,7 @@ export const updateWorkoutStatus =
   };
 
 export const updateWorkoutExerciseData =
-  async (dataArr: DataArrProps[]) =>
+  (dataArr: DataArrProps[]) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     //validate data
 
@@ -526,7 +526,7 @@ export const updateWorkoutExerciseData =
   };
 
 export const completeWorkout =
-  async (
+  (
     workout: WorkoutProps,
     strainRating: number,
     reflection: string,
@@ -602,7 +602,7 @@ export const completeWorkout =
   };
 
 export const updateWoHealthData =
-  async (workoutUid: string, healthData: HealthDataProps) =>
+  (workoutUid: string, healthData: HealthDataProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global } = getState();
     let duration = healthData.duration;
@@ -655,7 +655,7 @@ export const updateWoHealthData =
   };
 
 export const updateWoWorkoutRoute =
-  async (workoutUid: string, locations: LocationValue[], activityId?: string) =>
+  (workoutUid: string, locations: LocationValue[], activityId?: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global } = getState();
 

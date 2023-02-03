@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { AppDispatch } from '../../../App';
 import { ReducerProps } from '..';
 import request from '../utils/request';
@@ -387,7 +388,7 @@ export const removeProgramWorkout =
   };
 
 export const removeProgramWorkoutExercise =
-  async (programWorkoutExercise: WorkoutExerciseProps) =>
+  (programWorkoutExercise: WorkoutExerciseProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     request('POST', PATHS.programs.removeExercise, dispatch, {
       exerciseUid: programWorkoutExercise._id,
@@ -489,7 +490,7 @@ export const removeGeneratedProgram =
   };
 
 export const updateProgramExerciseData =
-  async (dataArr: DataArrProps[]) =>
+  (dataArr: DataArrProps[]) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     //validate data
     //remove the perform values from program template data

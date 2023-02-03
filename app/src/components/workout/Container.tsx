@@ -196,14 +196,10 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     if (dataArr.length > 0) {
       if (isProgramTemplate) {
         //save to program
-        res = await dispatch(updateProgramExerciseData(dataArr)).catch(err =>
-          console.log(err),
-        );
+        res = dispatch(updateProgramExerciseData(dataArr));
       } else {
         //save to real workout
-        res = await dispatch(updateWorkoutExerciseData(dataArr)).catch(err =>
-          console.log(err),
-        );
+        res = dispatch(updateWorkoutExerciseData(dataArr));
       }
     }
 
@@ -281,9 +277,9 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
 
   const onRemoveExercise = async (exercise: WorkoutExerciseProps) => {
     if (isProgramTemplate) {
-      await dispatch(removeProgramWorkoutExercise(exercise));
+      dispatch(removeProgramWorkoutExercise(exercise));
     } else {
-      await dispatch(removeWorkoutExercise(exercise));
+      dispatch(removeWorkoutExercise(exercise));
     }
   };
 

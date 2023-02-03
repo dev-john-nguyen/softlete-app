@@ -8,7 +8,6 @@ export { default as Input } from './Input';
 export { default as ScreenTemplate } from './ScreenTemplate';
 export { default as ConfirmModal } from './ConfirmModal';
 export { default as CircleAdd } from './CircleAdd';
-export { default as CircleCheck } from './CircleCheck';
 export { default as KeyboardInput } from './KeyboardInput';
 export { default as Loading } from './Loading';
 export { default as SearchBar } from './SearchBar';

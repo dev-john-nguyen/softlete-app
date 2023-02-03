@@ -1,10 +1,10 @@
-import { CircleCheck, Input, PrimaryButton, PrimaryText } from '@app/elements';
+import { Input, PrimaryButton, PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, normalize, rgba, StyleConstants } from '@app/utils';
+import { Colors, rgba, StyleConstants } from '@app/utils';
 import React, { Fragment } from 'react';
 import { useMemo } from 'react';
 import {
-  View,
   StyleSheet,
   Pressable,
   PressableStateCallbackType,
@@ -16,6 +16,35 @@ import {
   WorkoutStatus,
 } from '../../../../services/workout/types';
 import { DataKeys } from './types';
+
+type CompletedProps = {
+  onPress?: () => void;
+  checked?: boolean;
+};
+
+const Completed = ({ onPress, checked }: CompletedProps) => {
+  return (
+    <Pressable
+      style={{
+        borderColor: checked ? Colors.green : Colors.white,
+        flex: 1,
+        borderWidth: 1,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onPress={onPress}
+      hitSlop={5}>
+      {({ pressed }) =>
+        checked || pressed ? (
+          <Icon icon="checked" color={Colors.green} size={30} />
+        ) : (
+          <Icon icon="pencil" color={Colors.white} size={18} />
+        )
+      }
+    </Pressable>
+  );
+};
 
 interface Props {
   showWarmUp: boolean;
@@ -42,7 +71,6 @@ interface Props {
   onCircleCheckPress: (item: WorkoutExerciseDataProps, index: number) => void;
   status: string;
   dataKey: DataKeys;
-  onAddSetPress: () => void;
 }
 
 export const SetContainer = ({
@@ -60,7 +88,6 @@ export const SetContainer = ({
   onCircleCheckPress,
   status,
   dataKey,
-  onAddSetPress,
 }: Props) => {
   const numberPressableStyle = ({
     pressed,
@@ -92,32 +119,33 @@ export const SetContainer = ({
 
   return (
     <Fragment>
-      <FlexBox width="100%" marginBottom={5}>
-        {showWarmUp && (
+      {showWarmUp && (
+        <FlexBox
+          width="100%"
+          marginBottom={10}
+          marginTop={10}
+          alignItems="center"
+          justifyContent="space-between"
+          opacity={0.5}>
           <FlexBox
-            width="100%"
-            marginBottom={15}
-            alignItems="center"
-            justifyContent="space-between"
-            opacity={0.5}>
-            <FlexBox
-              height={1}
-              width="30%"
-              borderRadius={100}
-              backgroundColor={Colors.lightGrey}
-            />
-            <PrimaryText color={Colors.lightWhite} size="small">
-              End Warm Up
-            </PrimaryText>
-            <FlexBox
-              height={1}
-              width="30%"
-              borderRadius={100}
-              backgroundColor={Colors.lightGrey}
-            />
-          </FlexBox>
-        )}
-        <FlexBox flex={0.5} marginRight={5}>
+            height={1}
+            width="30%"
+            borderRadius={100}
+            backgroundColor={Colors.lightGrey}
+          />
+          <PrimaryText color={Colors.lightWhite} size="small">
+            End Warm Up
+          </PrimaryText>
+          <FlexBox
+            height={1}
+            width="30%"
+            borderRadius={100}
+            backgroundColor={Colors.lightGrey}
+          />
+        </FlexBox>
+      )}
+      <FlexBox width="100%" marginBottom={5}>
+        <FlexBox flex={0.8} marginRight={5}>
           <Pressable
             style={numberPressableStyle}
             onLongPress={() => editable && onRemoveSet(index)}
@@ -150,12 +178,10 @@ export const SetContainer = ({
         </FlexBox>
         <FlexBox flex={1}>
           {!athlete && status === WorkoutStatus.inProgress ? (
-            <View style={styles.circleCheck}>
-              <CircleCheck
-                onPress={() => onCircleCheckPress(item, index)}
-                checked={item.completed}
-              />
-            </View>
+            <Completed
+              onPress={() => onCircleCheckPress(item, index)}
+              checked={item.completed}
+            />
           ) : (
             <>
               <Input
@@ -173,26 +199,11 @@ export const SetContainer = ({
           )}
         </FlexBox>
       </FlexBox>
-      {!athlete && editable && (
-        <PrimaryButton
-          onPress={onAddSetPress}
-          marginTop={10}
-          width="100%"
-          borderRadius={5}
-          fontSize="small"
-          fontVariant="secondary">
-          Add Set
-        </PrimaryButton>
-      )}
     </Fragment>
   );
 };
 
 const styles = StyleSheet.create({
-  circleCheck: {
-    width: normalize.width(10),
-    height: normalize.width(10),
-  },
   percent: {
     position: 'absolute',
     right: '0%',
@@ -201,16 +212,5 @@ const styles = StyleSheet.create({
     color: Colors.lightWhite,
     fontSize: StyleConstants.smallMediumFont,
     opacity: 0.3,
-  },
-  setsContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: rgba(Colors.lightWhiteRgb, 0.2),
-    marginRight: 5,
-    width: '100%',
-    padding: 10,
-    marginTop: StyleConstants.baseMargin,
   },
 });
