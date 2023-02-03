@@ -318,7 +318,7 @@ const ExerciseData = ({
             marginTop={10}
             onPress={onAddSet}
             width="100%"
-            borderRadius={5}
+            borderRadius={100}
             fontSize="small"
             fontVariant="secondary">
             Add Set

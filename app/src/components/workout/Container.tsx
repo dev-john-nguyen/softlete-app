@@ -61,6 +61,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   const saving = useRef(false);
   const statusRef = useRef('');
   const exercisePropsRef: any = useRef([]);
+  const prevWorkoutRefId = useRef<string>('');
 
   const handleUpdateWorkoutStates = useCallback(() => {
     if (!workout.exercises) return;
@@ -109,20 +110,21 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   }, [workout.exercises]);
 
   useEffect(() => {
+    let debounce: _.DebouncedFunc<() => Promise<any>>;
+    if (mount.current) {
+      debounce = _.debounce(saveExercisesData, Constants.autoSaveDuration);
+    }
     mount.current = true;
-
-    const saveInterval = setInterval(() => {
-      saveExercisesData();
-    }, Constants.autoSaveDuration);
-
     return () => {
       mount.current = false;
-      clearInterval(saveInterval);
+      debounce?.cancel();
       saveExercisesData();
     };
-  }, []);
+  }, [exercises]);
 
   useEffect(() => {
+    prevWorkoutRefId.current = workout._id;
+
     if (statusRef.current !== workout.status) {
       statusRef.current = workout.status;
       navIsActive.current = true;
@@ -135,17 +137,13 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   }, [workout]);
 
   const saveExercisesData = async () => {
-    if (athlete || saving.current) return;
+    if (athlete || saving.current || prevWorkoutRefId.current !== workout._id) {
+      return;
+    }
+
     saving.current = true;
 
-    let stateExercises: WorkoutExerciseProps[] = [];
-    //need to get the most up to date state of exercises
-    setExercises(e => {
-      stateExercises = [...e];
-      return e;
-    });
-
-    const stateData = stateExercises.map(e => {
+    const stateData = exercises.map(e => {
       return {
         _id: e._id,
         tempId: e.tempId,
@@ -298,7 +296,6 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         curGroup={groupState.cur}
         onGroupSelect={onGroupSelect}
         navIsActive={navIsActive}
-        workout={workout}
         setCurEx={setCurEx}
         onNavigateToExercise={onNavigateToExercise}
         onCalcRefUpdate={onCalcRefUpdate}

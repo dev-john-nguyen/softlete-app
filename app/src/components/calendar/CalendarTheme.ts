@@ -10,7 +10,7 @@ export default {
   selectedDayTextColor: Colors.primary,
   todayTextColor: Colors.primary,
   dayTextColor: Colors.lightWhite,
-  textDisabledColor: rgba(Colors.whiteRbg, 0),
+  textDisabledColor: rgba(Colors.whiteRbg, 0.5),
   dotColor: Colors.primary,
   selectedDotColor: Colors.primary,
   arrowColor: Colors.primary,

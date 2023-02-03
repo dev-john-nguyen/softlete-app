@@ -492,16 +492,19 @@ export const updateWorkoutExerciseData =
       }
     }
     //update the exercises
-    const updatedExercises: WorkoutExerciseProps[] = exercises.map(e => {
-      const targetE = dataArr.find(
-        d => (d._id && d._id === e._id) || (d.tempId && d.tempId === e.tempId),
-      );
-      if (targetE) {
-        e.data = targetE.data;
-        e.calcRef = targetE.calcRef;
-      }
-      return { ...e };
-    });
+    const updatedExercises: WorkoutExerciseProps[] = _.cloneDeep(exercises).map(
+      e => {
+        const targetE = dataArr.find(
+          d =>
+            (d._id && d._id === e._id) || (d.tempId && d.tempId === e.tempId),
+        );
+        if (targetE) {
+          e.data = targetE.data;
+          e.calcRef = targetE.calcRef;
+        }
+        return { ...e };
+      },
+    );
 
     if (!offline) {
       const res = await request('POST', PATHS.workouts.updateData, dispatch, {
