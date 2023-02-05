@@ -25,23 +25,33 @@ type CompletedProps = {
 const Completed = ({ onPress, checked }: CompletedProps) => {
   return (
     <Pressable
-      style={{
-        borderColor: checked ? Colors.green : Colors.white,
+      style={({ pressed }) => ({
+        borderColor: pressed
+          ? rgba(Colors.greenRbg, 0.5)
+          : checked
+          ? Colors.green
+          : Colors.white,
         flex: 1,
         borderWidth: 1,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
-      }}
+      })}
       onPress={onPress}
       hitSlop={5}>
-      {({ pressed }) =>
-        checked || pressed ? (
-          <Icon icon="checked" color={Colors.green} size={30} />
-        ) : (
-          <Icon icon="pencil" color={Colors.white} size={18} />
-        )
-      }
+      {({ pressed }) => (
+        <Icon
+          icon="checked"
+          color={
+            pressed
+              ? rgba(Colors.greenRbg, 0.5)
+              : checked
+              ? Colors.green
+              : rgba(Colors.whiteRbg, 0.1)
+          }
+          size={30}
+        />
+      )}
     </Pressable>
   );
 };
