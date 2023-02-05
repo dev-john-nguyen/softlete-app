@@ -105,22 +105,25 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   }, [athlete, workout, groupKeys, groupState]);
 
   useEffect(() => {
+    mount.current = true;
+    return () => {
+      setExercises(e => {
+        saveExercisesDataHandler(e, athlete);
+        return e;
+      });
+      autoSaveHandler.cancel();
+      mount.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     handleUpdateWorkoutStates();
     exercisePropsRef.current = workout.exercises;
   }, [workout.exercises]);
 
   useEffect(() => {
-    let debounce: _.DebouncedFunc<() => Promise<any>>;
-    if (mount.current) {
-      debounce = _.debounce(saveExercisesData, Constants.autoSaveDuration);
-    }
-    mount.current = true;
-    return () => {
-      mount.current = false;
-      debounce?.cancel();
-      saveExercisesData();
-    };
-  }, [exercises]);
+    if (mount.current) autoSaveHandler(exercises, athlete);
+  }, [exercises, athlete]);
 
   useEffect(() => {
     prevWorkoutRefId.current = workout._id;
@@ -136,7 +139,17 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     }
   }, [workout]);
 
-  const saveExercisesData = async () => {
+  const autoSaveHandler = useCallback(
+    _.debounce((exercises, athlete) => {
+      saveExercisesDataHandler(exercises, athlete);
+    }, Constants.autoSaveDuration),
+    [],
+  );
+
+  const saveExercisesDataHandler = async (
+    exercises: WorkoutExerciseProps[],
+    athlete?: boolean,
+  ) => {
     if (athlete || saving.current || prevWorkoutRefId.current !== workout._id) {
       return;
     }
@@ -269,7 +282,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     }
     const order = newGroup ? 0 : exercises ? exercises.length - 1 : 0;
     //save exercise data if there are any changes
-    saveExercisesData();
+    saveExercisesDataHandler(exercises, athlete);
     onNavigateToAddExercise(groupProps, order);
   };
 
