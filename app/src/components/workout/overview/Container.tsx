@@ -177,7 +177,7 @@ const OverviewContainer = ({
     if (athlete)
       return (
         <View style={styles.healthContainer}>
-          <HealthContainer data={healthData} status={workout.status} />
+          <HealthContainer data={healthData} />
         </View>
       );
     switch (workout.status) {
@@ -209,7 +209,7 @@ const OverviewContainer = ({
                 <PencilSvg color={BaseColors.white} />
               )}
             </Pressable>
-            <HealthContainer data={healthData} status={workout.status} />
+            <HealthContainer data={healthData} />
           </View>
         );
     }
@@ -225,7 +225,7 @@ const OverviewContainer = ({
                 Target Goals
               </SecondaryText>
             </View>
-            <HealthContainer data={healthData} status={workout.status} />
+            <HealthContainer data={healthData} />
           </>
         ) : (
           <>

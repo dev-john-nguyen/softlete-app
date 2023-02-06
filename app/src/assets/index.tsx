@@ -47,6 +47,8 @@ import { default as Calculator } from './CalcSvg';
 import { default as Pencil } from './PencilSvg';
 import { default as ThumbsUp } from './ThumbSvg';
 import { default as Folder } from './FolderSvg';
+import { default as Category } from './CategorySvg';
+import { default as Devices } from './DevicesSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -94,6 +96,8 @@ const Icons = {
   pencil: (props: any) => <Pencil {...props} />,
   thumbs_up: (props: any) => <ThumbsUp {...props} />,
   folder: (props: any) => <Folder {...props} />,
+  category: (props: any) => <Category {...props} />,
+  devices: (props: any) => <Devices {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

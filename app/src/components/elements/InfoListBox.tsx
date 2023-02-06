@@ -18,7 +18,7 @@ type Props = {
 };
 
 const InfoListBox: FC<Props> = ({
-  color = Colors.primary,
+  color = Colors.white,
   letter,
   icon,
   desc,

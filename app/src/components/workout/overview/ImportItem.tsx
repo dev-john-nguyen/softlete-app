@@ -43,7 +43,7 @@ const ImportItem = ({ data, onImportData }: Props) => {
           {renderDate()}
         </SecondaryText>
       </View>
-      <DisplayHealthData data={renderData()} status={''} />
+      <DisplayHealthData data={renderData()} />
     </View>
   );
 };

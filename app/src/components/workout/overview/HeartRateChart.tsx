@@ -1,4 +1,5 @@
 import { GraphPlaceholder, PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, normalize, rgba } from '@app/utils';
 import React from 'react';
@@ -8,9 +9,10 @@ interface Props {
   data: number[];
   dates?: string[];
   color?: string;
+  onClose?: () => void;
 }
 
-const HeartRateChart = ({ data, dates, color }: Props) => {
+const HeartRateChart = ({ data, dates, color, onClose }: Props) => {
   return (
     <FlexBox column>
       <FlexBox justifyContent="space-between" marginBottom={5} width="100%">
@@ -22,6 +24,9 @@ const HeartRateChart = ({ data, dates, color }: Props) => {
             bpm
           </PrimaryText>
         </FlexBox>
+        {onClose && (
+          <Icon icon="close" size={12} color={Colors.white} onPress={onClose} />
+        )}
       </FlexBox>
       {data.length < 1 ? (
         <FlexBox height={150} marginTop={10} marginBottom={20}>
