@@ -1,12 +1,10 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { HealthDataProps } from '../../../services/workout/types';
-import BaseColors from '../../../utils/BaseColors';
-import PrimaryButton from '../../elements/PrimaryButton';
-import SecondaryText from '../../elements/SecondaryText';
-import StyleConstants from '../../tools/StyleConstants';
-import DisplayHealthData from './HealthContainer';
-import { renderTime } from '../../../utils/format';
+import React, { useMemo } from 'react';
+import { FlexBox } from '@app/ui';
+import { HealthDataProps } from 'src/services/workout/types';
+import HealthContainer from './HealthContainer';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
+import { PrimaryText } from '@app/elements';
 
 interface Props {
   onImportData: () => void;
@@ -14,7 +12,7 @@ interface Props {
 }
 
 const ImportItem = ({ data, onImportData }: Props) => {
-  const renderData = () => {
+  const formattedData: HealthDataProps = useMemo(() => {
     return {
       activityName: data.activityName,
       sourceName: data.sourceName,
@@ -23,48 +21,23 @@ const ImportItem = ({ data, onImportData }: Props) => {
       distance: data.distance,
       activityId: data.activityId,
       heartRates: data.heartRates,
-    } as HealthDataProps;
-  };
-
-  const renderDate = () => {
-    if (data.start && data.end) {
-      return 'Time: ' + renderTime(data.start) + ' - ' + renderTime(data.end);
-    }
-    return 'Custom';
-  };
+      date: data.date,
+    };
+  }, [data]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <PrimaryButton onPress={onImportData} styles={styles.import}>
-          Import
-        </PrimaryButton>
-        <SecondaryText styles={styles.time} bold>
-          {renderDate()}
-        </SecondaryText>
-      </View>
-      <DisplayHealthData data={renderData()} />
-    </View>
+    <FlexBox column marginBottom={10}>
+      <FlexBox justifyContent="flex-end" marginBottom={5} alignItems="center">
+        <Icon
+          icon="download"
+          onPress={onImportData}
+          size={25}
+          color={Colors.white}
+        />
+      </FlexBox>
+      <HealthContainer data={formattedData} />
+    </FlexBox>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: StyleConstants.baseMargin,
-  },
-  import: {
-    alignSelf: 'flex-start',
-    fontSize: StyleConstants.extraSmallFont,
-    marginBottom: 10,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  time: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.secondary,
-  },
-});
 export default ImportItem;

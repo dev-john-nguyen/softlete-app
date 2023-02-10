@@ -1,25 +1,21 @@
+import { InfoListBox, PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
+import { FlexBox } from '@app/ui';
+import { Colors } from '@app/utils';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthObserver,
   HealthValue,
 } from 'react-native-health';
-import Chevron from '../../../assets/ChevronSvg';
-import DevicesSvg from '../../../assets/DevicesSvg';
 import { getWoSample } from '../../../helpers/health.helpers';
 import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
 import AutoId from '../../../utils/AutoId';
-import BaseColors from '../../../utils/BaseColors';
 import Constants from '../../../utils/Constants';
-import { normalize } from '../../../utils/tools';
-import SecondaryText from '../../elements/SecondaryText';
-import StyleConstants from '../../tools/StyleConstants';
-import HealthForm from './forms/HealthForm';
+import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
-import HealthItem from './HealthItem';
 import ImportItem from './ImportItem';
 
 interface Props {
@@ -172,18 +168,18 @@ const HealthImportContainer = ({
   const renderDate = () => {
     const d = new Date(workout.date);
     return (
-      <View style={styles.dateContainer}>
-        <SecondaryText styles={styles.day} bold>
-          {custom ? 'Custom' : 'Device Activites'}
-        </SecondaryText>
-        <SecondaryText styles={styles.date} bold>
+      <FlexBox justifyContent="space-between" marginBottom={10}>
+        <PrimaryText size="small">
           {Constants.months[d.getMonth()] +
             ' ' +
-            d.getUTCDate() +
+            d.getDate() +
             ', ' +
             d.getFullYear()}
-        </SecondaryText>
-      </View>
+        </PrimaryText>
+        <PrimaryText size="small" textTransform="capitalize">
+          {Constants.daysOfWeek[d.getDay()]}
+        </PrimaryText>
+      </FlexBox>
     );
   };
 
@@ -199,80 +195,52 @@ const HealthImportContainer = ({
 
   if (custom) {
     return (
-      <View style={{ flex: 1, margin: StyleConstants.baseMargin }}>
+      <FlexBox flex={1} column margin={15}>
         {renderDate()}
         <HealthForm
           onSubmit={onCustomImportSubmit}
           onClose={onCustomStateChange}
           activityName={workout.type}
         />
-      </View>
+      </FlexBox>
     );
   }
 
   if (hide) return <></>;
 
   return (
-    <View style={{ flex: 1, margin: StyleConstants.baseMargin }}>
-      <Pressable
-        style={styles.back}
-        onPress={onChangeShowImportState}
-        hitSlop={5}>
-        <Chevron strokeColor={BaseColors.white} />
-      </Pressable>
-      <View style={{ marginBottom: StyleConstants.baseMargin }}>
+    <FlexBox flex={1} column margin={15} marginTop={5}>
+      <FlexBox
+        padding={6}
+        borderRadius={100}
+        borderWidth={1}
+        borderColor={Colors.white}
+        alignSelf="flex-start"
+        marginBottom={5}
+        onPress={onChangeShowImportState}>
+        <Icon icon="close" size={10} direction="left" color={Colors.white} />
+      </FlexBox>
+      <FlexBox column marginBottom={10}>
         <HealthContainer data={workout.healthData} />
-      </View>
-      <View style={styles.container}>
+      </FlexBox>
+      <FlexBox column flex={1}>
         {renderDate()}
         <ScrollView
-          style={styles.container}
+          style={{ flex: 1 }}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}>
           {renderDataOptions()}
-          <HealthItem
-            svg={<DevicesSvg fillColor={BaseColors.primary} />}
+          <InfoListBox
+            secondary
+            icon="devices"
             label="Source"
-            text="Custom"
+            desc="Custom Health Statistics"
             onPress={onCustomStateChange}
-            edit
           />
         </ScrollView>
-      </View>
-    </View>
+      </FlexBox>
+    </FlexBox>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  back: {
-    fontSize: StyleConstants.extraSmallFont,
-    width: normalize.width(25),
-    height: normalize.width(25),
-    marginBottom: 10,
-  },
-  cancel: {
-    alignSelf: 'flex-start',
-    fontSize: StyleConstants.extraSmallFont,
-  },
-  date: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.secondary,
-  },
-  dateContainer: {
-    marginBottom: StyleConstants.baseMargin,
-    paddingBottom: 5,
-    borderBottomColor: BaseColors.lightGrey,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  day: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.secondary,
-    textTransform: 'capitalize',
-  },
-});
 export default HealthImportContainer;

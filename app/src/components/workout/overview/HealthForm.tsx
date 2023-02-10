@@ -1,25 +1,22 @@
 import _ from 'lodash';
 import React from 'react';
-import { View, ScrollView, StyleSheet, Pressable } from 'react-native';
-import { HealthActivity } from 'react-native-health';
-import Chevron from '../../../../assets/ChevronSvg';
-import ClockSvg from '../../../../assets/ClockSvg';
-import FireSvg from '../../../../assets/FireSvg';
-import HeartSvg from '../../../../assets/HeartSvg';
-import RulerSvg from '../../../../assets/RulerSvg';
+import { View, StyleSheet } from 'react-native';
 import {
   HealthDataProps,
   HealthDisMeas,
-} from '../../../../services/workout/types';
-import AutoId from '../../../../utils/AutoId';
-import BaseColors from '../../../../utils/BaseColors';
-import { normalize, strToFloat } from '../../../../utils/tools';
-import StyleConstants from '../../../tools/StyleConstants';
-import HealthItem from '../HealthItem';
-import { convertMsToTime } from '../../../../utils/format';
-import BaseForm from './BaseForm';
-import DurationForm from './DurationForm';
-import MeasForm from './MeasForm';
+} from '../../../services/workout/types';
+import { FlexBox } from '@app/ui';
+import { InfoListBox, PrimaryButton } from '@app/elements';
+import {
+  Colors,
+  convertMsToTime,
+  normalize,
+  strToFloat,
+  StyleConstants,
+} from '@app/utils';
+import { HealthActivity } from 'react-native-health';
+import AutoId from 'src/utils/AutoId';
+import { DurationForm, MeasForm, BaseForm } from './FormElements';
 
 interface Props {
   onSubmit: (data: HealthDataProps) => void;
@@ -53,7 +50,18 @@ class HealthForm extends React.Component<Props, StateProps> {
     };
   }
 
-  componentWillUnmount() {
+  componentDidMount() {
+    const { healthData } = this.props;
+    healthData && this.updateHealthDateState(healthData);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (!_.isEqual(this.props.healthData, prevProps.healthData)) {
+      this.updateHealthDateState(this.props.healthData);
+    }
+  }
+
+  onSubmitHandler = () => {
     const manualData: HealthDataProps = {
       activityId: this.state.activityId,
       activityName: this.props.activityName as HealthActivity,
@@ -66,18 +74,7 @@ class HealthForm extends React.Component<Props, StateProps> {
       date: '',
     };
     this.props.onSubmit(manualData);
-  }
-
-  componentDidMount() {
-    const { healthData } = this.props;
-    healthData && this.updateHealthDateState(healthData);
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (!_.isEqual(this.props.healthData, prevProps.healthData)) {
-      this.updateHealthDateState(this.props.healthData);
-    }
-  }
+  };
 
   updateHealthDateState(healthData?: HealthDataProps) {
     if (healthData) {
@@ -130,48 +127,34 @@ class HealthForm extends React.Component<Props, StateProps> {
     return num;
   };
 
-  renderBack = (action: (action: any) => void) => {
-    return (
-      <Pressable onPress={action} style={styles.back}>
-        <Chevron strokeColor={BaseColors.white} />
-      </Pressable>
-    );
-  };
-
   render() {
     if (this.state.editName) {
       switch (this.state.editName) {
         case 'duration':
           return (
-            <View style={styles.editContainer}>
+            <FlexBox width="100%">
               <DurationForm
                 onDurationUpdate={num => this.setState({ duration: num })}
-                renderBack={this.renderBack(() =>
-                  this.setState({ editName: '' }),
-                )}
+                onClose={() => this.setState({ editName: '' })}
               />
-            </View>
+            </FlexBox>
           );
         case 'distance':
           return (
-            <View style={styles.editContainer}>
+            <FlexBox width="100%">
               <MeasForm
-                meas={this.state.disMeas}
-                onMeasChange={m => this.setState({ disMeas: m })}
                 disPlaceHolder={this.renderPlaceHolder(this.state.distance)}
                 distance={this.renderValue(this.state.distance)}
                 onChangeDistance={txt =>
                   this.setState({ distance: this.onParseText(txt) })
                 }
-                renderBack={this.renderBack(() =>
-                  this.setState({ editName: '' }),
-                )}
+                onClose={() => this.setState({ editName: '' })}
               />
-            </View>
+            </FlexBox>
           );
         case 'calories':
           return (
-            <View style={styles.editContainer}>
+            <FlexBox width="100%">
               <BaseForm
                 value={this.state.calories.toString()}
                 onChange={txt =>
@@ -180,15 +163,13 @@ class HealthForm extends React.Component<Props, StateProps> {
                 placeholder={this.renderPlaceHolder(this.state.calories)}
                 title={'Calories'}
                 label={'kcal Burned'}
-                renderBack={this.renderBack(() =>
-                  this.setState({ editName: '' }),
-                )}
+                onClose={() => this.setState({ editName: '' })}
               />
-            </View>
+            </FlexBox>
           );
         case 'avghr':
           return (
-            <View style={styles.editContainer}>
+            <FlexBox width="100%">
               <BaseForm
                 value={this.state.avgHr.toString()}
                 onChange={txt =>
@@ -197,67 +178,70 @@ class HealthForm extends React.Component<Props, StateProps> {
                 placeholder={this.renderPlaceHolder(this.state.avgHr)}
                 title={'Avg Heart Rate'}
                 label={'Beats Per Minute (BPM)'}
-                renderBack={this.renderBack(() =>
-                  this.setState({ editName: '' }),
-                )}
+                onClose={() => this.setState({ editName: '' })}
               />
-            </View>
+            </FlexBox>
           );
       }
     }
 
     return (
-      <View style={styles.container}>
-        <View style={styles.btnContainer}>
-          {this.props.onClose && this.renderBack(this.props.onClose)}
-        </View>
-        <View style={styles.healthRowContainer}>
-          <HealthItem
-            svg={<ClockSvg fillColor={BaseColors.white} />}
+      <View>
+        <FlexBox justifyContent="space-between" marginBottom={10}>
+          <InfoListBox
+            secondary
+            flex={1}
+            icon="clock"
             label="Duration"
-            text={convertMsToTime(this.state.duration)}
+            desc={convertMsToTime(this.state.duration) as string}
             onPress={() => this.setState({ editName: 'duration' })}
-            edit
           />
-          <HealthItem
-            svg={<RulerSvg fillColor={BaseColors.white} />}
+          <InfoListBox
+            secondary
+            flex={1}
+            marginRight={0}
+            icon="ruler"
             label="Distance"
-            text={`${this.state.distance} ${this.state.disMeas}`}
+            desc={`${this.state.distance} ${this.state.disMeas}`}
             onPress={() => this.setState({ editName: 'distance' })}
-            edit
           />
-        </View>
-        <View style={styles.healthRowContainer}>
-          <HealthItem
-            svg={<FireSvg fillColor={BaseColors.white} />}
+        </FlexBox>
+        <FlexBox justifyContent="space-between" marginBottom={10}>
+          <InfoListBox
+            secondary
+            flex={1}
+            icon="fire"
             label="Calories"
-            text={`${this.state.calories} kcal`}
+            desc={`${this.state.calories} kcal`}
             onPress={() => this.setState({ editName: 'calories' })}
-            edit
           />
-          <HealthItem
-            svg={<HeartSvg fillColor={BaseColors.white} />}
+          <InfoListBox
+            secondary
+            flex={1}
+            marginRight={0}
+            icon="heart"
             label="Avg HR"
-            text={`${this.state.avgHr} bpm`}
+            desc={`${this.state.avgHr} bpm`}
             onPress={() => this.setState({ editName: 'avghr' })}
-            edit
           />
-        </View>
+        </FlexBox>
+        <FlexBox justifyContent="space-between" marginTop={10}>
+          {this.props.onClose && (
+            <PrimaryButton variant="secondary" onPress={this.props.onClose}>
+              Cancel
+            </PrimaryButton>
+          )}
+          <PrimaryButton onPress={this.onSubmitHandler}>Add</PrimaryButton>
+        </FlexBox>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {},
   editContainer: {
     flexDirection: 'row',
     width: '100%',
-  },
-  healthRowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: StyleConstants.baseMargin,
   },
   back: {
     width: normalize.width(20),
@@ -279,11 +263,11 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     marginTop: StyleConstants.baseMargin,
-    backgroundColor: BaseColors.white,
+    backgroundColor: Colors.white,
     padding: StyleConstants.baseMargin,
     borderRadius: StyleConstants.borderRadius,
     marginRight: StyleConstants.baseMargin,
-    shadowColor: BaseColors.lightPrimary,
+    shadowColor: Colors.lightPrimary,
     shadowOffset: {
       width: 5,
       height: 2,
@@ -299,13 +283,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: StyleConstants.smallFont,
-    color: BaseColors.secondary,
+    color: Colors.secondary,
     marginRight: StyleConstants.smallMargin,
     marginBottom: StyleConstants.smallMargin,
   },
   text: {
     fontSize: StyleConstants.smallFont,
-    color: BaseColors.primary,
+    color: Colors.primary,
     paddingTop: StyleConstants.baseMargin,
   },
 });

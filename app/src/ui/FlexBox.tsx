@@ -42,7 +42,8 @@ const FlexBox = ({
           styles,
         ]}
         onPress={onPress}
-        onLongPress={onLongPress}>
+        onLongPress={onLongPress}
+        hitSlop={5}>
         {children}
       </Pressable>
     );

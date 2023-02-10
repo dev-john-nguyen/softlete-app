@@ -5,13 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  Keyboard,
-  ScrollView,
-} from 'react-native';
+import { View, Pressable, Keyboard, ScrollView } from 'react-native';
 import {
   HealthDataProps,
   HealthDisMeas,
@@ -19,25 +13,22 @@ import {
   WorkoutActionProps,
   WorkoutStatus,
 } from '../../../services/workout/types';
-import StyleConstants, { moderateScale } from '../../tools/StyleConstants';
 import { ImageProps } from '../../../services/user/types';
 import AutoId from '../../../utils/AutoId';
 import HealthContainer from './HealthContainer';
 import HealthImportContainer from './HealthImportContainer';
 import AppleHealthKit from 'react-native-health';
-import HealthForm from './forms/HealthForm';
+import HealthForm from './HealthForm';
 import { capitalize, normalize } from '../../../utils/tools';
 import _ from 'lodash';
-import SecondaryText from '../../elements/SecondaryText';
-import BaseColors from '../../../utils/BaseColors';
-import PencilSvg from '../../../assets/PencilSvg';
-import CloseSvg from '../../../assets/CloseSvg';
 import { HomeWorkoutContext } from '@app/contexts';
 import { Input, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import ReflectionImage from './ReflectionImage';
+import Icon from '@app/icons';
+import { Colors, StyleConstants } from '@app/utils';
 
 interface WorkoutReflectionProps {
   setImage: (img: ImageProps) => void;
@@ -176,55 +167,58 @@ const OverviewContainer = ({
     if (showImport) return;
     if (athlete)
       return (
-        <View style={styles.healthContainer}>
+        <FlexBox column margin={15} marginTop={5}>
           <HealthContainer data={healthData} />
-        </View>
+        </FlexBox>
       );
     switch (workout.status) {
       case WorkoutStatus.pending:
         return (
-          <View style={styles.healthContainer}>
+          <FlexBox column margin={15} marginTop={5}>
             <HealthForm
               onSubmit={onChangeHealthData}
               healthData={healthData}
               activityName={workout.type}
             />
-            <View style={styles.infoContainer}>
-              <SecondaryText styles={styles.infoHeader} bold>
-                Quick Tip
-              </SecondaryText>
-              <SecondaryText styles={styles.infoText}>
+            <FlexBox column>
+              <PrimaryText bold>Quick Tip</PrimaryText>
+              <PrimaryText>
                 Use the above actions to set goals for your training.
-              </SecondaryText>
-            </View>
-          </View>
+              </PrimaryText>
+            </FlexBox>
+          </FlexBox>
         );
       case WorkoutStatus.completed:
         return (
-          <View style={styles.healthContainer}>
-            <Pressable style={styles.update} onPress={onChangeShowImportState}>
-              {showImport ? (
-                <CloseSvg color={BaseColors.white} />
-              ) : (
-                <PencilSvg color={BaseColors.white} />
-              )}
-            </Pressable>
+          <FlexBox column margin={15} marginTop={5}>
+            <FlexBox
+              padding={5}
+              borderRadius={100}
+              borderWidth={1}
+              borderColor={Colors.white}
+              alignSelf="flex-start"
+              marginBottom={5}>
+              <Icon
+                icon={showImport ? 'close' : 'pencil'}
+                size={12}
+                onPress={onChangeShowImportState}
+                color={Colors.white}
+              />
+            </FlexBox>
             <HealthContainer data={healthData} />
-          </View>
+          </FlexBox>
         );
     }
   };
 
   if (workout.programTemplateUid) {
     return (
-      <View style={[styles.healthContainer, { flex: 1 }]}>
+      <FlexBox flex={1} column margin={15} marginTop={5}>
         {athlete ? (
           <>
-            <View style={styles.infoContainer}>
-              <SecondaryText styles={styles.infoHeader} bold>
-                Target Goals
-              </SecondaryText>
-            </View>
+            <FlexBox column>
+              <PrimaryText bold>Target Goals</PrimaryText>
+            </FlexBox>
             <HealthContainer data={healthData} />
           </>
         ) : (
@@ -234,22 +228,18 @@ const OverviewContainer = ({
               healthData={healthData}
               activityName={workout.type}
             />
-            <View style={styles.infoContainer}>
-              <SecondaryText styles={styles.infoHeader} bold>
-                Note
-              </SecondaryText>
-              <SecondaryText styles={styles.infoText}>
-                Set target goals for your workout.
-              </SecondaryText>
-            </View>
+            <FlexBox column>
+              <PrimaryText bold>Note</PrimaryText>
+              <PrimaryText>Set target goals for your workout.</PrimaryText>
+            </FlexBox>
           </>
         )}
-      </View>
+      </FlexBox>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <FlexBox screenWidth column flex={1} zIndex={100}>
       <HealthImportContainer
         workout={workout}
         type={AppleHealthKit.Constants.Observers.Workout}
@@ -262,41 +252,8 @@ const OverviewContainer = ({
       {workout.status !== WorkoutStatus.pending && !showImport && (
         <WorkoutReflection image={image} setImage={setImage} />
       )}
-    </View>
+    </FlexBox>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: normalize.width(1),
-    flex: 1,
-    zIndex: 100,
-  },
-  healthContainer: {
-    margin: StyleConstants.baseMargin,
-  },
-  update: {
-    alignSelf: 'flex-start',
-    marginBottom: StyleConstants.smallMargin,
-    width: normalize.width(15),
-    height: normalize.width(15),
-    borderColor: BaseColors.white,
-    borderWidth: 1,
-    borderRadius: 100,
-    padding: 7,
-  },
-  infoContainer: {
-    marginTop: moderateScale(30),
-    marginBottom: StyleConstants.baseMargin,
-  },
-  infoHeader: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.white,
-    marginBottom: 10,
-  },
-  infoText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-  },
-});
 export default OverviewContainer;
