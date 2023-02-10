@@ -79,7 +79,7 @@ interface Props {
   value: string;
   athlete?: boolean;
   onCircleCheckPress: (item: WorkoutExerciseDataProps, index: number) => void;
-  status: string;
+  status: WorkoutStatus;
   dataKey: DataKeys;
 }
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, Keyboard, Pressable } from 'react-native';
+import { StyleSheet, Keyboard, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { normalize, strToFloat } from '../../../../utils/tools';
-import StyleConstants, { moderateScale } from '../../../tools/StyleConstants';
+import StyleConstants from '../../../tools/StyleConstants';
 import {
   WorkoutExerciseDataProps,
   WorkoutProps,
