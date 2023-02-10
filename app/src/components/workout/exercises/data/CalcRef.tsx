@@ -2,8 +2,7 @@ import React from 'react';
 import Input from '../../../elements/Input';
 import { FlexBox } from '@app/ui';
 import { ToolTip } from '@app/elements';
-import { Colors, rgba, strToFloat } from '@app/utils';
-import Icon from '@app/icons';
+import { strToFloat } from '@app/utils';
 
 interface Props {
   calcRef: number | undefined;
@@ -19,18 +18,10 @@ const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
   return (
     <FlexBox flex={1} alignItems="center">
       <ToolTip
-        message="This number multiply by col 4 populates col 3."
-        position="absolute"
-        top="-10%"
-        right="-3%"
+        message="This input will be used as the base calculation of the . (input * percentage)"
         zIndex={100}
         duration={5}
-      />
-
-      <Icon
-        icon="calculator"
-        color={rgba(Colors.lightWhiteRgb, 0.5)}
-        size={25}
+        marginRight={5}
       />
 
       <Input

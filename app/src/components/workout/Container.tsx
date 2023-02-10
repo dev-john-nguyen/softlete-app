@@ -302,7 +302,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   })();
 
   return (
-    <FlexBox flex={1} zIndex={100} justifyContent="center">
+    <FlexBox flex={1} zIndex={100} justifyContent="center" marginTop={15}>
       <ExercisesContainer
         exercises={exercises}
         onUpdateData={onUpdateData}

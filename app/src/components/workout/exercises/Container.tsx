@@ -11,7 +11,7 @@ import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
 import { ImageProps } from '../../../services/user/types';
-import AerobicContainer from '../overview/Container';
+import OverviewContainer from '../overview/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateWoHealthData } from 'src/services/workout/actions';
 import { ReducerProps } from 'src/services';
@@ -116,7 +116,7 @@ const ExercisesContainer = ({
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.inProgress || athlete) return <></>;
     return (
-      <AerobicContainer
+      <OverviewContainer
         image={image}
         setImage={setImage}
         workout={workout}
@@ -130,7 +130,7 @@ const ExercisesContainer = ({
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.completed) return <></>;
     return (
-      <AerobicContainer
+      <OverviewContainer
         image={image}
         setImage={setImage}
         workout={workout}
