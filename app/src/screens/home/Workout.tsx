@@ -231,7 +231,6 @@ const Workout = ({
           />
         ) : (
           <OverviewContainer
-            navigation={navigation}
             workout={workout}
             updateWoHealthData={onUpdateWoHealthData}
             image={image}

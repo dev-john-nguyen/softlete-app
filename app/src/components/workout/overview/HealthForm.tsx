@@ -1,19 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import {
   HealthDataProps,
   HealthDisMeas,
 } from '../../../services/workout/types';
 import { FlexBox } from '@app/ui';
 import { InfoListBox, PrimaryButton } from '@app/elements';
-import {
-  Colors,
-  convertMsToTime,
-  normalize,
-  strToFloat,
-  StyleConstants,
-} from '@app/utils';
+import { convertMsToTime, strToFloat } from '@app/utils';
 import { HealthActivity } from 'react-native-health';
 import AutoId from 'src/utils/AutoId';
 import { DurationForm, MeasForm, BaseForm } from './FormElements';
@@ -226,72 +220,18 @@ class HealthForm extends React.Component<Props, StateProps> {
           />
         </FlexBox>
         <FlexBox justifyContent="space-between" marginTop={10}>
-          {this.props.onClose && (
+          {this.props.onClose ? (
             <PrimaryButton variant="secondary" onPress={this.props.onClose}>
               Cancel
             </PrimaryButton>
+          ) : (
+            <FlexBox />
           )}
-          <PrimaryButton onPress={this.onSubmitHandler}>Add</PrimaryButton>
+          <PrimaryButton onPress={this.onSubmitHandler}>Create</PrimaryButton>
         </FlexBox>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  editContainer: {
-    flexDirection: 'row',
-    width: '100%',
-  },
-  back: {
-    width: normalize.width(20),
-    height: normalize.width(20),
-    marginBottom: 5,
-  },
-  doneBtn: {
-    alignSelf: 'flex-start',
-    fontSize: StyleConstants.extraSmallFont,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  btnContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  import: {
-    fontSize: StyleConstants.extraSmallFont,
-    alignSelf: 'flex-start',
-  },
-  itemContainer: {
-    marginTop: StyleConstants.baseMargin,
-    backgroundColor: Colors.white,
-    padding: StyleConstants.baseMargin,
-    borderRadius: StyleConstants.borderRadius,
-    marginRight: StyleConstants.baseMargin,
-    shadowColor: Colors.lightPrimary,
-    shadowOffset: {
-      width: 5,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  svg: {
-    width: normalize.width(15),
-    height: normalize.width(15),
-    marginBottom: StyleConstants.smallMargin,
-  },
-  label: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.secondary,
-    marginRight: StyleConstants.smallMargin,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.primary,
-    paddingTop: StyleConstants.baseMargin,
-  },
-});
 
 export default HealthForm;

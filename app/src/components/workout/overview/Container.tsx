@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { View, Pressable, Keyboard, ScrollView } from 'react-native';
 import {
   HealthDataProps,
@@ -12,6 +6,7 @@ import {
   ViewWorkoutProps,
   WorkoutActionProps,
   WorkoutStatus,
+  WorkoutTypes,
 } from '../../../services/workout/types';
 import { ImageProps } from '../../../services/user/types';
 import AutoId from '../../../utils/AutoId';
@@ -19,7 +14,7 @@ import HealthContainer from './HealthContainer';
 import HealthImportContainer from './HealthImportContainer';
 import AppleHealthKit from 'react-native-health';
 import HealthForm from './HealthForm';
-import { capitalize, normalize } from '../../../utils/tools';
+import { normalize } from '../../../utils/tools';
 import _ from 'lodash';
 import { HomeWorkoutContext } from '@app/contexts';
 import { Input, PrimaryText } from '@app/elements';
@@ -29,6 +24,7 @@ import { ReducerProps } from 'src/services';
 import ReflectionImage from './ReflectionImage';
 import Icon from '@app/icons';
 import { Colors, StyleConstants } from '@app/utils';
+import { useNavigation } from '@react-navigation/native';
 
 interface WorkoutReflectionProps {
   setImage: (img: ImageProps) => void;
@@ -76,7 +72,6 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
 };
 
 interface Props {
-  navigation?: any;
   workout: ViewWorkoutProps;
   updateWoHealthData?: WorkoutActionProps['updateWoHealthData'];
   athlete?: boolean;
@@ -85,7 +80,6 @@ interface Props {
 }
 
 const OverviewContainer = ({
-  navigation,
   workout,
   updateWoHealthData,
   athlete,
@@ -94,17 +88,20 @@ const OverviewContainer = ({
 }: Props) => {
   const [showImport, setShowImport] = useState(false);
   const [healthData, setHealthData] = useState<HealthDataProps>();
-  const mount = useRef(false);
+  const navigation = useNavigation();
 
-  useLayoutEffect(() => {
-    navigation &&
-      navigation.setOptions({
-        headerTitle: workout.name ? capitalize(workout.name) : '',
-      });
+  useEffect(() => {
+    if (workout.type !== WorkoutTypes.TraditionalStrengthTraining) {
+      navigation.setOptions({ headerTitle: '' });
+      if (workout.healthData) {
+        setShowImport(true);
+      } else {
+        setShowImport(false);
+      }
+    }
   }, [workout, navigation]);
 
   useEffect(() => {
-    mount.current = true;
     if (workout.healthData) {
       setHealthData(workout.healthData);
     } else {
@@ -120,9 +117,6 @@ const OverviewContainer = ({
         date: workout.date,
       });
     }
-    return () => {
-      mount.current = false;
-    };
   }, [workout]);
 
   const onImportData = (data: HealthDataProps) =>
@@ -160,32 +154,37 @@ const OverviewContainer = ({
     };
     onImportData(dataObj);
     setHealthData({ ...dataObj, _id: AutoId.newId(10) });
-    setShowImport(false);
+    setShowImport(true);
   };
 
-  const renderHealthComponents = () => {
+  const healthElements = useMemo(() => {
     if (showImport) return;
-    if (athlete)
+
+    if (athlete) {
       return (
         <FlexBox column margin={15} marginTop={5}>
           <HealthContainer data={healthData} />
         </FlexBox>
       );
+    }
+
     switch (workout.status) {
       case WorkoutStatus.pending:
         return (
           <FlexBox column margin={15} marginTop={5}>
+            <FlexBox column marginBottom={15}>
+              <PrimaryText size="medium" bold>
+                Quick Tip
+              </PrimaryText>
+              <PrimaryText>
+                Use the below actions to set goals for your training.
+              </PrimaryText>
+            </FlexBox>
             <HealthForm
               onSubmit={onChangeHealthData}
               healthData={healthData}
               activityName={workout.type}
             />
-            <FlexBox column>
-              <PrimaryText bold>Quick Tip</PrimaryText>
-              <PrimaryText>
-                Use the above actions to set goals for your training.
-              </PrimaryText>
-            </FlexBox>
           </FlexBox>
         );
       case WorkoutStatus.completed:
@@ -209,34 +208,7 @@ const OverviewContainer = ({
           </FlexBox>
         );
     }
-  };
-
-  if (workout.programTemplateUid) {
-    return (
-      <FlexBox flex={1} column margin={15} marginTop={5}>
-        {athlete ? (
-          <>
-            <FlexBox column>
-              <PrimaryText bold>Target Goals</PrimaryText>
-            </FlexBox>
-            <HealthContainer data={healthData} />
-          </>
-        ) : (
-          <>
-            <HealthForm
-              onSubmit={onChangeHealthData}
-              healthData={healthData}
-              activityName={workout.type}
-            />
-            <FlexBox column>
-              <PrimaryText bold>Note</PrimaryText>
-              <PrimaryText>Set target goals for your workout.</PrimaryText>
-            </FlexBox>
-          </>
-        )}
-      </FlexBox>
-    );
-  }
+  }, [showImport, athlete, workout, healthData]);
 
   return (
     <FlexBox screenWidth column flex={1} zIndex={100}>
@@ -247,8 +219,7 @@ const OverviewContainer = ({
         hide={!showImport}
         onChangeShowImportState={onChangeShowImportState}
       />
-
-      {renderHealthComponents()}
+      {healthElements}
       {workout.status !== WorkoutStatus.pending && !showImport && (
         <WorkoutReflection image={image} setImage={setImage} />
       )}
