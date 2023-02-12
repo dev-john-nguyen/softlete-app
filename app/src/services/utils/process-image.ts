@@ -68,7 +68,7 @@ const notifyError = async (
   dispatch: AppDispatch,
   getState: () => ReducerProps,
 ) => {
-  const { workout, global } = getState();
+  const workout = _.cloneDeep(getState().workout);
 
   //find the exercise
   const wo = workout.workouts.find(w => w.imageId === batch.imageId);
@@ -97,7 +97,7 @@ const updateImageBatch = async (
   remove?: boolean,
 ) => {
   //get most recent
-  const { woImageBatch } = getState().global;
+  const woImageBatch = _.cloneDeep(getState().global.woImageBatch);
   let newBatchStore;
 
   if (remove) {
