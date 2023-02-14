@@ -8,23 +8,23 @@ import { WoImageBatchProps } from '../global/types';
 import { INSERT_NOTIFICATION } from '../notifications/actionTypes';
 import { NotificationProps, NotificationTypes } from '../notifications/types';
 import saveImage from './save-image';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import uniqBy from 'lodash/uniqBy';
 import AutoId from '../../utils/AutoId';
 import request from './request';
 import PATHS from '../../utils/PATHS';
 
-//need to await the initial store
-
 export default (base64: string, imageId: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { user } = getState();
-    const imageBatch = _.cloneDeep(getState().global.woImageBatch);
+    const imageBatch = getState().global.woImageBatch;
 
     let batch: WoImageBatchProps | undefined = imageBatch.find(
       i => i.imageId === imageId,
     );
 
     if (!batch) {
+      // im adding a batch every time
       batch = {
         base64,
         imageId,
@@ -33,7 +33,7 @@ export default (base64: string, imageId: string) =>
 
     if (!batch) return;
 
-    await updateImageBatch(batch, dispatch, getState);
+    updateImageBatch(batch, dispatch, getState);
 
     const imagePath = genWoImagePath(user.uid, batch.imageId);
 
@@ -43,10 +43,10 @@ export default (base64: string, imageId: string) =>
       }
     } catch (err: any) {
       console.log(err);
-      return notifyError(batch, dispatch, getState);
+      return errorHandler(batch, dispatch, getState);
     }
 
-    await updateImageBatch(batch, dispatch, getState);
+    updateImageBatch(batch, dispatch, getState);
 
     const dispatchHandler = (({ payload }: any) =>
       console.log(payload.msg)) as AppDispatch;
@@ -58,17 +58,17 @@ export default (base64: string, imageId: string) =>
       { imageId: batch.imageId, url: batch.url },
     );
 
-    if (!data) return notifyError(batch, dispatch, getState);
+    if (!data) return errorHandler(batch, dispatch, getState);
 
     updateImageBatch(batch, dispatch, getState, true);
   };
 
-const notifyError = async (
+const errorHandler = async (
   batch: WoImageBatchProps,
   dispatch: AppDispatch,
   getState: () => ReducerProps,
 ) => {
-  const workout = _.cloneDeep(getState().workout);
+  const workout = getState().workout;
 
   //find the exercise
   const wo = workout.workouts.find(w => w.imageId === batch.imageId);
@@ -90,27 +90,25 @@ const notifyError = async (
   updateImageBatch(batch, dispatch, getState, true);
 };
 
-const updateImageBatch = async (
-  batch: WoImageBatchProps,
+const updateImageBatch = (
+  batchProp: WoImageBatchProps,
   dispatch: AppDispatch,
   getState: () => ReducerProps,
   remove?: boolean,
 ) => {
-  //get most recent
-  const woImageBatch = _.cloneDeep(getState().global.woImageBatch);
-  let newBatchStore;
+  // need to clone batch as well bc it's keeping the same instance
+  const batch = cloneDeep(batchProp);
+  const woImageBatch = getState().global.woImageBatch;
+  let newBatchStore = cloneDeep(woImageBatch);
 
   if (remove) {
-    const findIndex = woImageBatch.findIndex(
-      item => item.imageId == batch.imageId,
-    );
-    if (findIndex > -1) woImageBatch.splice(findIndex, 1);
-    newBatchStore = [...woImageBatch];
+    newBatchStore = newBatchStore.filter(b => b.imageId !== batch.imageId);
   } else {
-    newBatchStore = _.uniqBy([batch, ...woImageBatch], 'imageId');
+    newBatchStore = uniqBy([batch, ...newBatchStore], 'imageId');
   }
 
   dispatch({ type: SET_WO_IMAGE_BATCH, payload: newBatchStore });
+
   AsyncStorage.setItem(
     LocalStoragePaths.woImageBatch,
     JSON.stringify(newBatchStore),
