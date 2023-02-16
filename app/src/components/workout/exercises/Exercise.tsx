@@ -71,7 +71,7 @@ const WorkoutExercise = ({
   };
 
   return (
-    <FlexBox screenWidth column>
+    <FlexBox screenWidth column marginTop={15}>
       <FlexBox
         marginBottom={10}
         justifyContent="space-between"

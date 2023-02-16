@@ -1,4 +1,6 @@
 import { PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
+import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, rgba } from '@app/utils';
 import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
@@ -62,16 +64,27 @@ const ReflectionImage = ({ allowUpload, setImage, image, imageUri }: Props) => {
 
   const svgElement = (() => {
     if (allowUpload) {
-      if (!imageUri && !image?.uri) {
-        return (
-          <Pressable style={styles.addSvg} onPress={onSelectImage}>
-            <AddImageSvg fillColor={rgba(Colors.lightWhiteRgb, 0.6)} />
-          </Pressable>
-        );
-      }
+      return (
+        <Pressable style={styles.addSvg} onPress={onSelectImage}>
+          <AddImageSvg fillColor={rgba(Colors.lightWhiteRgb, 0.6)} />
+        </Pressable>
+      );
     } else {
       if (!imageUri && !image?.uri) {
-        return <PrimaryText>No Image</PrimaryText>;
+        return (
+          <FlexBox
+            width="100%"
+            height="100%"
+            alignItems="center"
+            justifyContent="center"
+            position="absolute"
+            column>
+            <Icon icon="logo" size={25} variant="secondary" />
+            <PrimaryText marginTop={5} size="medium">
+              No Image
+            </PrimaryText>
+          </FlexBox>
+        );
       }
     }
   })();

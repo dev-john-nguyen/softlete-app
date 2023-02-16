@@ -564,10 +564,12 @@ export const completeWorkout =
     let localImageUri = workout.localImageUri;
 
     if (image && image.base64) {
-      //new image, so generate a new image Id
+      // new image, so generate a new image Id
       imageId = AutoId.newId(10);
       localImageUri = image.uri;
       processImage(image.base64, imageId)(dispatch, getState);
+      // remove old
+      if (workout.imageUri) removeImage([workout.imageUri]);
     }
 
     const { data }: { data?: WorkoutProps } = await request(

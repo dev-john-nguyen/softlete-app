@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Pressable, Keyboard, ScrollView } from 'react-native';
 import {
   HealthDataProps,
@@ -10,10 +10,8 @@ import {
 } from '../../../services/workout/types';
 import { ImageProps } from '../../../services/user/types';
 import AutoId from '../../../utils/AutoId';
-import HealthContainer from './HealthContainer';
 import HealthImportContainer from './HealthImportContainer';
 import AppleHealthKit from 'react-native-health';
-import HealthForm from './HealthForm';
 import { normalize } from '../../../utils/tools';
 import _ from 'lodash';
 import { HomeWorkoutContext } from '@app/contexts';
@@ -22,8 +20,7 @@ import { FlexBox } from '@app/ui';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import ReflectionImage from './ReflectionImage';
-import Icon from '@app/icons';
-import { Colors, StyleConstants } from '@app/utils';
+import { StyleConstants } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
 
 interface WorkoutReflectionProps {
@@ -86,18 +83,12 @@ const OverviewContainer = ({
   image,
   setImage,
 }: Props) => {
-  const [showImport, setShowImport] = useState(false);
   const [healthData, setHealthData] = useState<HealthDataProps>();
   const navigation = useNavigation();
 
   useEffect(() => {
     if (workout.type !== WorkoutTypes.TraditionalStrengthTraining) {
       navigation.setOptions({ headerTitle: '' });
-      if (workout.healthData) {
-        setShowImport(true);
-      } else {
-        setShowImport(false);
-      }
     }
   }, [workout, navigation]);
 
@@ -122,8 +113,6 @@ const OverviewContainer = ({
   const onImportData = (data: HealthDataProps) =>
     updateWoHealthData &&
     updateWoHealthData(workout._id, data).catch(err => console.log(err));
-
-  const onChangeShowImportState = () => setShowImport(i => (i ? false : true));
 
   const onChangeHealthData = (data: HealthDataProps) => {
     //check if there is a difference
@@ -154,75 +143,17 @@ const OverviewContainer = ({
     };
     onImportData(dataObj);
     setHealthData({ ...dataObj, _id: AutoId.newId(10) });
-    setShowImport(true);
   };
 
-  const healthElements = useMemo(() => {
-    if (showImport) return;
-
-    if (athlete) {
-      return (
-        <FlexBox column margin={15} marginTop={5}>
-          <HealthContainer data={healthData} />
-        </FlexBox>
-      );
-    }
-
-    switch (workout.status) {
-      case WorkoutStatus.pending:
-        return (
-          <FlexBox column margin={15} marginTop={5}>
-            <FlexBox column marginBottom={15}>
-              <PrimaryText size="medium" bold>
-                Quick Tip
-              </PrimaryText>
-              <PrimaryText>
-                Use the below actions to set goals for your training.
-              </PrimaryText>
-            </FlexBox>
-            <HealthForm
-              onSubmit={onChangeHealthData}
-              healthData={healthData}
-              activityName={workout.type}
-            />
-          </FlexBox>
-        );
-      case WorkoutStatus.completed:
-        return (
-          <FlexBox column margin={15} marginTop={5}>
-            <FlexBox
-              padding={5}
-              borderRadius={100}
-              borderWidth={1}
-              borderColor={Colors.white}
-              alignSelf="flex-start"
-              marginBottom={5}>
-              <Icon
-                icon={showImport ? 'close' : 'pencil'}
-                size={12}
-                onPress={onChangeShowImportState}
-                color={Colors.white}
-              />
-            </FlexBox>
-            <HealthContainer data={healthData} />
-          </FlexBox>
-        );
-    }
-  }, [showImport, athlete, workout, healthData]);
-
   return (
-    <FlexBox screenWidth column flex={1} zIndex={100}>
+    <FlexBox screenWidth column flex={1} zIndex={100} marginTop={10}>
       <HealthImportContainer
         workout={workout}
         type={AppleHealthKit.Constants.Observers.Workout}
         onImportData={onChangeHealthData}
-        hide={!showImport}
-        onChangeShowImportState={onChangeShowImportState}
+        setImage={setImage}
+        image={image}
       />
-      {healthElements}
-      {workout.status !== WorkoutStatus.pending && !showImport && (
-        <WorkoutReflection image={image} setImage={setImage} />
-      )}
     </FlexBox>
   );
 };

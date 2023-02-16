@@ -1,9 +1,15 @@
-import { InfoListBox, PrimaryText } from '@app/elements';
+import { InfoListBox, Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors } from '@app/utils';
+import { Colors, normalize, StyleConstants } from '@app/utils';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import AppleHealthKit, {
   HealthInputOptions,
@@ -11,31 +17,89 @@ import AppleHealthKit, {
   HealthValue,
 } from 'react-native-health';
 import { getWoSample } from '../../../helpers/health.helpers';
-import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
+import {
+  HealthDataProps,
+  WorkoutProps,
+  WorkoutStatus,
+} from '../../../services/workout/types';
 import AutoId from '../../../utils/AutoId';
 import Constants from '../../../utils/Constants';
 import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
 import ImportItem from './ImportItem';
+import { HomeWorkoutContext } from '@app/contexts';
+import { Pressable, Keyboard, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
+import ReflectionImage from './ReflectionImage';
+import { ImageProps } from 'src/services/user/types';
+
+interface WorkoutReflectionProps {
+  setImage: (img: ImageProps) => void;
+  image?: ImageProps;
+}
+
+const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
+  const { workout } = useSelector((state: ReducerProps) => ({
+    workout: state.workout.viewWorkout,
+  }));
+
+  const { setReflection } = useContext(HomeWorkoutContext);
+
+  return (
+    <FlexBox column>
+      <Pressable onPress={() => Keyboard.dismiss()}>
+        <ReflectionImage
+          setImage={setImage}
+          image={image}
+          imageUri={workout.imageUri ? workout.imageUri : workout.localImageUri}
+          allowUpload={workout.status === WorkoutStatus.inProgress}
+        />
+        {workout.status === WorkoutStatus.completed ? (
+          <FlexBox height={normalize.height(12)} marginTop={10}>
+            <ScrollView>
+              <View onStartShouldSetResponder={() => true}>
+                <PrimaryText>{workout.reflection}</PrimaryText>
+              </View>
+            </ScrollView>
+          </FlexBox>
+        ) : (
+          <Input
+            onChangeText={txt => setReflection?.(txt)}
+            defaultValue={workout.reflection}
+            placeholder="Write a caption..."
+            multiline={true}
+            onSubmitEditing={() => Keyboard.dismiss()}
+            blurOnSubmit={true}
+            maxLength={200}
+            styles={{ marginTop: StyleConstants.baseMargin, borderRadius: 0 }}
+          />
+        )}
+      </Pressable>
+    </FlexBox>
+  );
+};
 
 interface Props {
   workout: WorkoutProps;
   type?: HealthObserver;
   onImportData: (data: HealthDataProps) => void;
   hide?: boolean;
-  onChangeShowImportState: () => void;
+  image?: ImageProps;
+  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
 }
 
 const HealthImportContainer = ({
   workout,
   type: type,
   onImportData,
-  hide,
-  onChangeShowImportState,
+  image,
+  setImage,
 }: Props) => {
   const [data, setData] = useState<HealthDataProps[]>([]);
   const [custom, setCustom] = useState(false);
   const [customId] = useState(AutoId.newId(10));
+  const [deviceWosIsVisible, setDeviceWosIsVisible] = useState(false);
   const mount = useRef(false);
 
   useEffect(() => {
@@ -206,39 +270,50 @@ const HealthImportContainer = ({
     );
   }
 
-  if (hide) return <></>;
-
   return (
-    <FlexBox flex={1} column margin={15} marginTop={5}>
-      <FlexBox
-        padding={6}
-        borderRadius={100}
-        borderWidth={1}
-        borderColor={Colors.white}
-        alignSelf="flex-start"
-        marginBottom={5}
-        onPress={onChangeShowImportState}>
-        <Icon icon="close" size={10} direction="left" color={Colors.white} />
-      </FlexBox>
+    <FlexBox column margin={15} marginTop={0} marginBottom={0} flex={1}>
+      {workout.status !== WorkoutStatus.inProgress && (
+        <FlexBox
+          padding={6}
+          borderRadius={100}
+          borderWidth={1}
+          borderColor={Colors.white}
+          alignSelf="flex-start"
+          marginBottom={5}
+          onPress={() => setDeviceWosIsVisible(isVisible => !isVisible)}>
+          <Icon
+            icon={deviceWosIsVisible ? 'close' : 'pencil'}
+            size={10}
+            direction="left"
+            color={Colors.white}
+          />
+        </FlexBox>
+      )}
       <FlexBox column marginBottom={10}>
         <HealthContainer data={workout.healthData} />
       </FlexBox>
-      <FlexBox column flex={1}>
-        {renderDate()}
-        <ScrollView
-          style={{ flex: 1 }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          {renderDataOptions()}
-          <InfoListBox
-            secondary
-            icon="devices"
-            label="Source"
-            desc="Custom Health Statistics"
-            onPress={onCustomStateChange}
-          />
-        </ScrollView>
-      </FlexBox>
+      {deviceWosIsVisible ? (
+        <FlexBox column flex={1}>
+          {renderDate()}
+          <ScrollView
+            style={{ flex: 1 }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}>
+            {renderDataOptions()}
+            <InfoListBox
+              secondary
+              icon="devices"
+              label="Source"
+              desc="Custom Health Statistics"
+              onPress={onCustomStateChange}
+            />
+          </ScrollView>
+        </FlexBox>
+      ) : (
+        workout.status !== WorkoutStatus.pending && (
+          <WorkoutReflection image={image} setImage={setImage} />
+        )
+      )}
     </FlexBox>
   );
 };
