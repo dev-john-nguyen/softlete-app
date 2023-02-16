@@ -133,7 +133,6 @@ export const SetContainer = ({
         <FlexBox
           width="100%"
           marginBottom={10}
-          marginTop={10}
           alignItems="center"
           justifyContent="space-between"
           opacity={0.5}>
@@ -154,8 +153,8 @@ export const SetContainer = ({
           />
         </FlexBox>
       )}
-      <FlexBox width="100%" marginBottom={5}>
-        <FlexBox flex={0.8} marginRight={5}>
+      <FlexBox width="100%" marginBottom={10}>
+        <FlexBox flex={0.6} marginRight={10}>
           <Pressable
             style={numberPressableStyle}
             onLongPress={() => editable && onRemoveSet(index)}
@@ -165,7 +164,7 @@ export const SetContainer = ({
             </PrimaryText>
           </Pressable>
         </FlexBox>
-        <FlexBox flex={1} marginRight={5}>
+        <FlexBox flex={0.8} marginRight={10}>
           <Input
             value={item.reps.toString()}
             onChangeText={val => onChangeText(item, index, DataKeys.reps, val)}
@@ -175,7 +174,7 @@ export const SetContainer = ({
             {...inputStyles}
           />
         </FlexBox>
-        <FlexBox flex={1} marginRight={5}>
+        <FlexBox flex={1} marginRight={10}>
           <Input
             value={value}
             onChangeText={val => onChangePText(item, index, dataKey, val)}
@@ -186,7 +185,7 @@ export const SetContainer = ({
             {...inputStyles}
           />
         </FlexBox>
-        <FlexBox flex={1}>
+        <FlexBox flex={0.8}>
           {!athlete && status === WorkoutStatus.inProgress ? (
             <Completed
               onPress={() => onCircleCheckPress(item, index)}

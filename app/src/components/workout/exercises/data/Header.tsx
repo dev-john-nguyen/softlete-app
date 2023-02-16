@@ -12,18 +12,18 @@ interface Props {
 const ExerciseDataHeader = ({ status, measSubCat }: Props) => {
   return (
     <FlexBox width="100%" marginBottom={5} paddingLeft={15} paddingRight={15}>
-      <FlexBox flex={0.8}>
+      <FlexBox flex={0.6} marginRight={10}>
         <PrimaryText size="medium">Sets</PrimaryText>
       </FlexBox>
-      <FlexBox flex={1}>
+      <FlexBox flex={0.8} marginRight={10}>
         <PrimaryText size="medium">Reps</PrimaryText>
       </FlexBox>
-      <FlexBox flex={1}>
+      <FlexBox flex={1} marginRight={10}>
         <PrimaryText size="medium" textTransform="capitalize">
           {measSubCat ? measSubCat : 'Pounds'}
         </PrimaryText>
       </FlexBox>
-      <FlexBox flex={1}>
+      <FlexBox flex={0.8}>
         <PrimaryText size="medium" textTransform="capitalize">
           {status !== WorkoutStatus.inProgress ? 'Percent' : 'Status'}
         </PrimaryText>
