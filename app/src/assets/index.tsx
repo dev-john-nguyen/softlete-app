@@ -50,6 +50,7 @@ import { default as Folder } from './FolderSvg';
 import { default as Category } from './CategorySvg';
 import { default as Devices } from './DevicesSvg';
 import { default as AddImage } from './AddImageSvg';
+import { default as Sort } from './SortSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -100,6 +101,7 @@ const Icons = {
   category: (props: any) => <Category {...props} />,
   devices: (props: any) => <Devices {...props} />,
   add_image: (props: any) => <AddImage {...props} />,
+  sort: (props: any) => <Sort {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
