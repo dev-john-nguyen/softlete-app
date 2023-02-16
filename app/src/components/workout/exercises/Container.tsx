@@ -84,9 +84,15 @@ const ExercisesContainer = ({
     //navigate to the first item of that group
     if (listRef.current) {
       if (navIsActive.current) {
-        const scrollToIndex = exercises.findIndex(e => e.group === group);
-        if (scrollToIndex > -1) {
-          listRef.current.scrollToIndex({ index: scrollToIndex });
+        if (group === -1) {
+          listRef.current.scrollToOffset({ offset: 0 });
+        } else if (group === -2) {
+          listRef.current.scrollToEnd();
+        } else {
+          const scrollToIndex = exercises.findIndex(e => e.group === group);
+          if (scrollToIndex > -1) {
+            listRef.current.scrollToIndex({ index: scrollToIndex });
+          }
         }
       }
     }
