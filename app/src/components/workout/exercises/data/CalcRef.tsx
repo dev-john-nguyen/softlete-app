@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React from 'react';
 import Input from '../../../elements/Input';
 import { FlexBox } from '@app/ui';
-import { PrimaryText, ToolTip } from '@app/elements';
-import { Colors, rgba, strToFloat, StyleConstants } from '@app/utils';
-import Icon from '@app/icons';
+import { ToolTip } from '@app/elements';
+import { strToFloat } from '@app/utils';
 
 interface Props {
   calcRef: number | undefined;
@@ -12,8 +10,6 @@ interface Props {
 }
 
 const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
-  const [info, setInfo] = useState(false);
-
   const onCalcRefInputChange = (calcStr: string) => {
     const calc = strToFloat(calcStr);
     onCalcRefUpdate(calc);
@@ -22,18 +18,10 @@ const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
   return (
     <FlexBox flex={1} alignItems="center">
       <ToolTip
-        message="This number multiply by col 4 populates col 3."
-        position="absolute"
-        top="-10%"
-        right="-3%"
+        message="This input will be used as the base calculation of the . (input * percentage)"
         zIndex={100}
-      />
-
-      <Icon
-        icon="calculator"
-        color={rgba(Colors.lightWhiteRgb, 0.5)}
-        onPress={() => setInfo(i => (i ? false : true))}
-        size={25}
+        duration={5}
+        marginRight={5}
       />
 
       <Input

@@ -87,7 +87,7 @@ const Input = ({
       color:
         editable || editable == null
           ? BaseColors.lightWhite
-          : rgba(BaseColors.lightWhiteRgb, 0.2),
+          : rgba(BaseColors.lightWhiteRgb, 0.5),
       maxHeight: maxHeight,
       ...borderStyles,
     };

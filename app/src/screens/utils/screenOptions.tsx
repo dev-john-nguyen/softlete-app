@@ -1,21 +1,8 @@
 import Fonts from '../../utils/Fonts';
 import BaseColors from '../../utils/BaseColors';
-import StyleConstants from '../../components/tools/StyleConstants';
-import { HomeStackScreens } from '../home/types';
+import { moderateScale } from '../../components/tools/StyleConstants';
 
 export default (parentProps: any, childProps: any) => {
-  let rotateBack = '0';
-  let backColor = BaseColors.white;
-
-  switch (childProps.route.name) {
-    case HomeStackScreens.Health:
-    case HomeStackScreens.Calendar:
-      rotateBack = '90';
-      break;
-    case HomeStackScreens.Map:
-      backColor = BaseColors.primary;
-  }
-
   return {
     headerBackTitleVisible: false,
     headerTitle: '',
@@ -23,9 +10,8 @@ export default (parentProps: any, childProps: any) => {
     headerTitleStyle: {
       fontFamily: Fonts.primary,
       color: BaseColors.lightWhite,
-      fontSize: StyleConstants.smallerFont,
-      textTransform: 'uppercase',
-      letterSpacing: 2,
+      fontSize: moderateScale(18),
+      textTransform: 'capitalize',
     },
     headerTransparent: true,
     headerLeft: () => null,

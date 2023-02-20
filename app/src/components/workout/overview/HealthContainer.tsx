@@ -1,51 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import CategorySvg from '../../../assets/CategorySvg';
-import ClockSvg from '../../../assets/ClockSvg';
-import CompassSvg from '../../../assets/CompassSvg';
-import DevicesSvg from '../../../assets/DevicesSvg';
-import FireSvg from '../../../assets/FireSvg';
-import GraphSvg from '../../../assets/GraphSvg';
-import HeartSvg from '../../../assets/HeartSvg';
-import RulerSvg from '../../../assets/RulerSvg';
 import { HomeStackScreens } from '../../../screens/home/types';
 import { HealthDataProps } from '../../../services/workout/types';
-import BaseColors from '../../../utils/BaseColors';
-import { renderHealthActivityName } from '../../../utils/format';
-import { normalize } from '../../../utils/tools';
-import StyleConstants from '../../tools/StyleConstants';
-import HealthItem from './HealthItem';
-import HeartRateChart from './HeartRateChart';
 import {
   convertMsToTime,
   renderCalories,
   renderDistance,
+  renderHealthActivityName,
   renderHeartRateAvg,
 } from '../../../utils/format';
+import { InfoListBox } from '@app/elements';
+import { Colors } from '@app/utils';
 
 interface Props {
   data?: HealthDataProps;
-  status: string;
 }
 
-const HealthContainer = ({ data, status }: Props) => {
-  const [showGraph, setShowGraph] = useState(false);
+const HealthContainer = ({ data }: Props) => {
   const navigation = useNavigation<any>();
 
-  if (showGraph) {
-    return (
-      <HeartRateChart
-        data={data && data.heartRates ? data.heartRates : []}
-        onBack={() => setShowGraph(false)}
-        color={BaseColors.white}
-      />
-    );
-  }
-
   const onMapPress = () => navigation.navigate(HomeStackScreens.Map, { data });
+
+  const onViewSummary = () =>
+    navigation.navigate(HomeStackScreens.WorkoutActivitySummary, { data });
 
   return (
     <ScrollView
@@ -53,82 +31,67 @@ const HealthContainer = ({ data, status }: Props) => {
       horizontal
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
-      <HealthItem
-        svg={<CategorySvg fillColor={BaseColors.white} />}
+      <InfoListBox
+        secondary
+        icon="category"
         label="Activity"
-        text={data ? renderHealthActivityName(data.activityName) : 'Activity'}
+        desc={data ? renderHealthActivityName(data.activityName) : 'Activity'}
       />
-      <HealthItem
-        svg={<DevicesSvg fillColor={BaseColors.white} />}
+      <InfoListBox
+        secondary
+        icon="devices"
         label="Source"
-        text={data ? data.sourceName : 'unknown'}
+        desc={data ? data.sourceName : 'unknown'}
       />
-      <HealthItem
-        svg={<ClockSvg fillColor={BaseColors.white} />}
+
+      <InfoListBox
+        secondary
+        icon="clock"
         label="Duration"
-        text={data ? convertMsToTime(data.duration) : '0 sec'}
+        desc={data ? (convertMsToTime(data.duration) as string) : '0 sec'}
       />
-      <HealthItem
-        svg={<RulerSvg fillColor={BaseColors.white} />}
+
+      <InfoListBox
+        secondary
+        icon="ruler"
         label="Distance"
-        text={`${data ? renderDistance(data.distance) : 0} ${
+        desc={`${data ? renderDistance(data.distance) : 0} ${
           data?.disMeas ? data.disMeas : 'mi'
         }`}
       />
-      <HealthItem
-        svg={<HeartSvg fillColor={BaseColors.white} />}
-        topRight={<GraphSvg color={BaseColors.white} />}
-        label="Avg HR"
-        text={`${renderHeartRateAvg(data?.heartRates)} bpm`}
-        onPress={() => setShowGraph(true)}
-      />
-      <HealthItem
-        svg={<FireSvg fillColor={BaseColors.white} />}
+
+      <InfoListBox
+        secondary
+        icon="fire"
         label="Calories"
-        text={data ? renderCalories(data.calories) : '0 kcal'}
+        desc={data ? renderCalories(data.calories) : '0 kcal'}
       />
-      <HealthItem
-        svg={<CompassSvg color={BaseColors.white} />}
-        label="View Map"
-        text={''}
+
+      <InfoListBox
+        secondary
+        icon="heart"
+        label="Avg HR"
+        desc={`${renderHeartRateAvg(data?.heartRates)} bpm`}
+      />
+
+      <InfoListBox
+        secondary
+        label="View"
+        icon="notebook"
+        desc="Statistics"
+        onPress={onViewSummary}
+        color={Colors.white}
+      />
+
+      <InfoListBox
+        secondary
+        icon="compass"
+        label="View"
+        desc="Map Visual"
         onPress={onMapPress}
       />
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {},
-  itemContainer: {
-    marginTop: StyleConstants.baseMargin,
-    backgroundColor: BaseColors.white,
-    padding: StyleConstants.baseMargin,
-    borderRadius: StyleConstants.borderRadius,
-    marginRight: StyleConstants.baseMargin,
-    shadowColor: BaseColors.lightPrimary,
-    shadowOffset: {
-      width: 5,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  svg: {
-    width: normalize.width(15),
-    height: normalize.width(15),
-    marginBottom: StyleConstants.smallMargin,
-  },
-  label: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.secondary,
-    marginRight: StyleConstants.smallMargin,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.primary,
-    paddingTop: StyleConstants.baseMargin,
-  },
-});
 export default HealthContainer;

@@ -15,10 +15,12 @@ type Props = {
   screenWidthPct?: number;
   marginBottom?: number;
   marginTop?: number;
+  flex?: number;
+  marginRight?: number;
 };
 
 const InfoListBox: FC<Props> = ({
-  color = Colors.primary,
+  color = Colors.white,
   letter,
   icon,
   desc,
@@ -28,12 +30,15 @@ const InfoListBox: FC<Props> = ({
   screenWidthPct,
   marginBottom,
   marginTop,
+  flex,
+  marginRight,
 }) => {
   if (secondary) {
     return (
       <FlexBox
+        flex={flex}
         borderRadius={5}
-        marginRight={10}
+        marginRight={marginRight ?? 10}
         padding={15}
         maxWidth={normalize.width(1.6)}
         backgroundColor={Colors.lightPrimary}
@@ -47,13 +52,26 @@ const InfoListBox: FC<Props> = ({
           <PrimaryText opacity={0.6}>{label}</PrimaryText>
           <PrimaryText size="medium">{desc}</PrimaryText>
         </FlexBox>
+        {onPress && (
+          <FlexBox
+            position="absolute"
+            right={5}
+            top={5}
+            borderColor={color}
+            borderWidth={1}
+            padding={5}
+            borderRadius={100}>
+            <Icon icon="chevron" direction="right" color={color} size={5} />
+          </FlexBox>
+        )}
       </FlexBox>
     );
   }
   return (
     <FlexBox
+      flex={flex}
       borderRadius={5}
-      marginRight={5}
+      marginRight={marginRight || 5}
       alignItems="center"
       padding={15}
       maxWidth={normalize.width(1.6)}
@@ -85,6 +103,18 @@ const InfoListBox: FC<Props> = ({
       <PrimaryText color={color} size="small" variant="secondary" marginTop={5}>
         {desc}
       </PrimaryText>
+      {onPress && (
+        <FlexBox
+          position="absolute"
+          right={5}
+          top={5}
+          borderColor={color}
+          borderWidth={1}
+          padding={5}
+          borderRadius={100}>
+          <Icon icon="chevron" direction="right" color={color} size={5} />
+        </FlexBox>
+      )}
     </FlexBox>
   );
 };

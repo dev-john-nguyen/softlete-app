@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, Keyboard, Pressable } from 'react-native';
+import { StyleSheet, Keyboard, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { normalize, strToFloat } from '../../../../utils/tools';
-import StyleConstants, { moderateScale } from '../../../tools/StyleConstants';
+import StyleConstants from '../../../tools/StyleConstants';
 import {
   WorkoutExerciseDataProps,
   WorkoutProps,
@@ -21,6 +21,7 @@ import { SetContainer } from './Set';
 import { Colors, rgba } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
+import { PrimaryButton } from '@app/elements';
 
 interface Props {
   data: WorkoutExerciseDataProps[];
@@ -274,7 +275,6 @@ const ExerciseData = ({
           onCircleCheckPress={onCircleCheckPress}
           status={workout.status}
           dataKey={dataKey}
-          onAddSetPress={onAddSet}
         />
       );
     });
@@ -313,6 +313,17 @@ const ExerciseData = ({
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         {DataElement}
+        {!athlete && editable && (
+          <PrimaryButton
+            marginTop={10}
+            onPress={onAddSet}
+            width="100%"
+            borderRadius={100}
+            fontSize="small"
+            fontVariant="secondary">
+            Add Set
+          </PrimaryButton>
+        )}
         <Animated.View style={animatedStyles} />
       </ScrollView>
     </Pressable>

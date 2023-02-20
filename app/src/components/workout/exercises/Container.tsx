@@ -5,16 +5,16 @@ import {
   WorkoutExerciseDataProps,
   WorkoutStatus,
   WorkoutActionProps,
-  ViewWorkoutProps,
   HealthDataProps,
 } from '../../../services/workout/types';
 import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
 import { ImageProps } from '../../../services/user/types';
-import AerobicContainer from '../overview/Container';
-import { useDispatch } from 'react-redux';
+import OverviewContainer from '../overview/Container';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateWoHealthData } from 'src/services/workout/actions';
+import { ReducerProps } from 'src/services';
 
 interface Props {
   exercises: WorkoutExerciseProps[];
@@ -22,7 +22,6 @@ interface Props {
   onGroupSelect: (g: number) => void;
   curGroup?: number;
   navIsActive: any;
-  workout: ViewWorkoutProps;
   setCurEx: React.Dispatch<
     React.SetStateAction<WorkoutExerciseProps | undefined>
   >;
@@ -49,7 +48,6 @@ const ExercisesContainer = ({
   onGroupSelect,
   curGroup,
   navIsActive,
-  workout,
   setCurEx,
   onNavigateToExercise,
   athlete,
@@ -61,6 +59,9 @@ const ExercisesContainer = ({
   const listRef: any = useRef();
   const lastViewableItem: any = useRef();
   const dispatch = useDispatch();
+  const { workout } = useSelector((state: ReducerProps) => ({
+    workout: state.workout.viewWorkout,
+  }));
 
   const onViewableItemsChanged = useCallback(({ viewableItems }: InfoProps) => {
     for (let i = 0; i < viewableItems.length; i++) {
@@ -83,9 +84,15 @@ const ExercisesContainer = ({
     //navigate to the first item of that group
     if (listRef.current) {
       if (navIsActive.current) {
-        const scrollToIndex = exercises.findIndex(e => e.group === group);
-        if (scrollToIndex > -1) {
-          listRef.current.scrollToIndex({ index: scrollToIndex });
+        if (group === -1) {
+          listRef.current.scrollToOffset({ offset: 0 });
+        } else if (group === -2) {
+          listRef.current.scrollToEnd();
+        } else {
+          const scrollToIndex = exercises.findIndex(e => e.group === group);
+          if (scrollToIndex > -1) {
+            listRef.current.scrollToIndex({ index: scrollToIndex });
+          }
         }
       }
     }
@@ -115,7 +122,7 @@ const ExercisesContainer = ({
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.inProgress || athlete) return <></>;
     return (
-      <AerobicContainer
+      <OverviewContainer
         image={image}
         setImage={setImage}
         workout={workout}
@@ -129,7 +136,7 @@ const ExercisesContainer = ({
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.completed) return <></>;
     return (
-      <AerobicContainer
+      <OverviewContainer
         image={image}
         setImage={setImage}
         workout={workout}

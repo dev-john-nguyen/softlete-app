@@ -4,6 +4,7 @@ export default {
   primaryRgb: '23, 0, 1',
   lightWhite: '#FAFAFA',
   lightWhiteRgb: '250, 250, 250',
+  blendWhite: '#2E191A',
   black: '#250000',
   lightBlack: '#333333',
   secondary: '#C4C4C4',

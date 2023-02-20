@@ -75,8 +75,8 @@ const Main = ({
             ...DefaultTheme,
             colors: {
               ...DefaultTheme.colors,
-              background: 'transparent',
-              primary: BaseColors.black,
+              background: BaseColors.primary,
+              primary: BaseColors.primary,
             },
           }}
           ref={navigationRef}>

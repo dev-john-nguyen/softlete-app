@@ -66,7 +66,6 @@ const WorkoutNavbar = ({
   return (
     <ScrollView style={styles.container} horizontal>
       <FlexBox alignItems="center">
-        {status === WorkoutStatus.completed && <View style={styles.reflect} />}
         {groupKeys.map((g, index) => (
           <NavbarItem
             index={index}
@@ -85,7 +84,9 @@ const WorkoutNavbar = ({
             }
           />
         ))}
-        {status === WorkoutStatus.inProgress && <View style={styles.reflect} />}
+        {status === WorkoutStatus.inProgress && (
+          <Pressable style={styles.reflect} onPress={() => onGroupPress(-2)} />
+        )}
         {!athlete && status !== WorkoutStatus.completed && (
           <CircleAdd
             onPress={() => onAddExercise(true)}

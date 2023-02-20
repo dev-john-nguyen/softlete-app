@@ -44,6 +44,13 @@ import { default as Info } from './InfoSvg';
 import { default as TrashBin } from './TrashSvg';
 import { default as Refresh } from './RefreshSvg';
 import { default as Calculator } from './CalcSvg';
+import { default as Pencil } from './PencilSvg';
+import { default as ThumbsUp } from './ThumbSvg';
+import { default as Folder } from './FolderSvg';
+import { default as Category } from './CategorySvg';
+import { default as Devices } from './DevicesSvg';
+import { default as AddImage } from './AddImageSvg';
+import { default as Sort } from './SortSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -88,6 +95,13 @@ const Icons = {
   trash_bin: (props: any) => <TrashBin {...props} />,
   refresh: (props: any) => <Refresh {...props} />,
   calculator: (props: any) => <Calculator {...props} />,
+  pencil: (props: any) => <Pencil {...props} />,
+  thumbs_up: (props: any) => <ThumbsUp {...props} />,
+  folder: (props: any) => <Folder {...props} />,
+  category: (props: any) => <Category {...props} />,
+  devices: (props: any) => <Devices {...props} />,
+  add_image: (props: any) => <AddImage {...props} />,
+  sort: (props: any) => <Sort {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

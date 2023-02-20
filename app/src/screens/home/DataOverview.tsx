@@ -52,6 +52,7 @@ const DataOverview = ({ healthData }: Props) => {
     const dataStore: DataProps[] = [];
 
     for (const key in grouped) {
+      // eslint-disable-next-line no-prototype-builtins
       if (grouped.hasOwnProperty(key)) {
         const healthData = grouped[key];
 

@@ -25,7 +25,7 @@ async function validateSkipRouteSamples() {
       "Activity doesn't have any route information in Health. Do you still want to import?",
       [
         {
-          text: 'Maybe Later',
+          text: 'Cancel',
           onPress: () => reject(),
           style: 'cancel',
         },

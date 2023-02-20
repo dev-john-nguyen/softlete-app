@@ -1,89 +1,131 @@
+import { Colors, rgba, StyleConstants } from '@app/utils';
 import React from 'react';
 import { StyleSheet, Pressable, View } from 'react-native';
 import { WorkoutStatus } from '../../services/workout/types';
-import BaseColors, { rgba } from '../../utils/BaseColors';
-import StyleConstants from '../tools/StyleConstants';
 import PrimaryText from '../elements/PrimaryText';
 
-
 interface Props {
-    status: WorkoutStatus;
-    onUpdateStatus?: (status: WorkoutStatus) => void;
-    athlete?: boolean;
+  status: WorkoutStatus;
+  onUpdateStatus?: (status: WorkoutStatus) => void;
+  athlete?: boolean;
 }
-
 
 const StagingActions = ({ status, onUpdateStatus, athlete }: Props) => {
+  const onPress = (s: WorkoutStatus) => {
+    if (status === s || athlete) return;
+    onUpdateStatus && onUpdateStatus(s);
+  };
 
-    const onPress = (s: WorkoutStatus) => {
-        if (status === s || athlete) return;
-        onUpdateStatus && onUpdateStatus(s)
-    }
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            status === WorkoutStatus.completed
+              ? rgba(Colors.greenRbg, 0.1)
+              : rgba(Colors.whiteRbg, 0.05),
+        },
+      ]}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.tabContainer,
+          {
+            backgroundColor:
+              pressed && !athlete
+                ? status === WorkoutStatus.completed
+                  ? rgba(Colors.greenRbg, 0.1)
+                  : rgba(Colors.whiteRbg, 0.2)
+                : status === WorkoutStatus.pending
+                ? rgba(Colors.whiteRbg, 0.1)
+                : 'transparent',
+            borderTopLeftRadius: 100,
+            borderBottomLeftRadius: 100,
+            borderRadius:
+              status === WorkoutStatus.pending || (pressed && !athlete)
+                ? 100
+                : undefined,
+          },
+        ]}
+        onPress={() => onPress(WorkoutStatus.pending)}>
+        <PrimaryText
+          color={
+            status === WorkoutStatus.pending ? Colors.white : Colors.lightWhite
+          }>
+          Pending
+        </PrimaryText>
+      </Pressable>
 
+      <Pressable
+        style={({ pressed }) => [
+          styles.tabContainer,
+          {
+            backgroundColor:
+              pressed && !athlete
+                ? status === WorkoutStatus.completed
+                  ? rgba(Colors.greenRbg, 0.1)
+                  : rgba(Colors.whiteRbg, 0.2)
+                : status === WorkoutStatus.inProgress
+                ? rgba(Colors.whiteRbg, 0.1)
+                : 'transparent',
+            borderRadius:
+              status === WorkoutStatus.inProgress || (pressed && !athlete)
+                ? 100
+                : undefined,
+          },
+        ]}
+        onPress={() => onPress(WorkoutStatus.inProgress)}>
+        <PrimaryText
+          color={
+            status === WorkoutStatus.pending ? Colors.white : Colors.lightWhite
+          }>
+          Performing
+        </PrimaryText>
+      </Pressable>
 
-    return (
-        <View style={[styles.container, {
-            backgroundColor: status === WorkoutStatus.completed ? rgba(BaseColors.greenRbg, .5) : rgba(BaseColors.primaryRgb, .2),
-        }]}>
-            <Pressable style={({ pressed }) => [styles.tabContainer, {
-                backgroundColor: (pressed && !athlete) ? status === WorkoutStatus.completed ? BaseColors.green : rgba(BaseColors.primaryRgb, .5) : status === WorkoutStatus.pending ? BaseColors.primary : 'transparent',
-                borderTopLeftRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderRadius: status === WorkoutStatus.pending || (pressed && !athlete) ? 100 : undefined,
-            }]} onPress={() => onPress(WorkoutStatus.pending)}>
-                <PrimaryText styles={{
-                    color: status === WorkoutStatus.pending ? BaseColors.white : BaseColors.lightWhite,
-                    ...styles.tabText
-                }}>Pending</PrimaryText>
-            </Pressable>
-
-            <Pressable style={({ pressed }) => [styles.tabContainer, {
-                backgroundColor: (pressed && !athlete) ? status === WorkoutStatus.completed ? BaseColors.green : rgba(BaseColors.primaryRgb, .5) : status === WorkoutStatus.inProgress ? BaseColors.primary : 'transparent',
-                borderRadius: status === WorkoutStatus.inProgress || (pressed && !athlete) ? 100 : undefined,
-            }]}
-                onPress={() => onPress(WorkoutStatus.inProgress)}
-            >
-                <PrimaryText styles={{
-                    color: status === WorkoutStatus.inProgress ? BaseColors.white : BaseColors.lightWhite,
-                    ...styles.tabText
-                }}>Performing</PrimaryText>
-            </Pressable>
-
-            <Pressable style={({ pressed }) => [styles.tabContainer, {
-                backgroundColor: status === WorkoutStatus.completed ? BaseColors.green : 'transparent',
-                borderTopRightRadius: 100,
-                borderBottomRightRadius: 100,
-                borderRadius: status === WorkoutStatus.completed || (pressed && !athlete) ? 100 : undefined,
-            }]}
-                onPress={() => onPress(WorkoutStatus.completed)}
-            >
-                <PrimaryText styles={{
-                    color: status === WorkoutStatus.completed ? BaseColors.white : BaseColors.lightWhite,
-                    ...styles.tabText
-                }}>Completed</PrimaryText>
-            </Pressable>
-        </View>
-    )
-}
+      <Pressable
+        style={({ pressed }) => [
+          styles.tabContainer,
+          {
+            backgroundColor:
+              pressed && !athlete
+                ? rgba(Colors.greenRbg, 0.1)
+                : status === WorkoutStatus.completed
+                ? Colors.green
+                : 'transparent',
+            borderTopRightRadius: 100,
+            borderBottomRightRadius: 100,
+            borderRadius:
+              status === WorkoutStatus.completed || (pressed && !athlete)
+                ? 100
+                : undefined,
+          },
+        ]}
+        onPress={() => onPress(WorkoutStatus.completed)}>
+        <PrimaryText
+          color={
+            status === WorkoutStatus.pending ? Colors.white : Colors.lightWhite
+          }>
+          Completed
+        </PrimaryText>
+      </Pressable>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        marginLeft: StyleConstants.baseMargin,
-        marginRight: StyleConstants.baseMargin,
-        flexDirection: 'row',
-        borderRadius: 100,
-        alignSelf: 'center',
-    },
-    tabContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 15,
-    },
-    tabText: {
-        fontSize: StyleConstants.extraSmallFont,
-        textTransform: 'uppercase',
-        letterSpacing: 1
-    },
-})
+  container: {
+    marginLeft: StyleConstants.baseMargin,
+    marginRight: StyleConstants.baseMargin,
+    flexDirection: 'row',
+    borderRadius: 100,
+    alignSelf: 'center',
+  },
+  tabContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+  },
+});
 export default StagingActions;

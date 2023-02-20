@@ -1,49 +1,33 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   WorkoutExerciseProps,
   WorkoutActionProps,
-  RootWorkoutProps,
   WorkoutExercisesObjProps,
 } from '../../services/workout/types';
 import ExerciseList from '../../components/restructure/List';
 import { useSharedValue } from 'react-native-reanimated';
 import { listToObject } from '../../components/restructure/utils';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { ReducerProps } from '../../services';
-import { exercisesArrToObj, normalize } from '../../utils/tools';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
-import SaveSvg from '../../assets/SaveSvg';
-import BaseColors from '../../utils/BaseColors';
-import StyleConstants from '../../components/tools/StyleConstants';
+import { exercisesArrToObj } from '../../utils/tools';
+import { ActivityIndicator } from 'react-native';
 import { updateWorkoutExercises } from '../../services/workout/actions';
 import _ from 'lodash';
 import { setBanner } from '../../services/banner/actions';
 import { BannerActionsProps, BannerTypes } from '../../services/banner/types';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
-import BackButton from '../../components/elements/BackButton';
 import PrimaryText from '../../components/elements/PrimaryText';
+import { ScreenTemplate } from '@app/elements';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
-  navigation: any;
-  route: any;
-  viewWorkout: RootWorkoutProps['viewWorkout'];
   updateWorkoutExercises: WorkoutActionProps['updateWorkoutExercises'];
   setBanner: BannerActionsProps['setBanner'];
 }
 
-const ExerciseRestructure = ({
-  route,
-  navigation,
-  viewWorkout,
-  updateWorkoutExercises,
-  setBanner,
-}: Props) => {
+const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
   const [exercises, setExercises] = useState<WorkoutExerciseProps[]>([]);
   const [exercisesObj, setExerciseObj] = useState<WorkoutExercisesObjProps>({});
   const [groups, setGroups] = useState<string[]>([]);
@@ -53,7 +37,10 @@ const ExerciseRestructure = ({
   const [trashBin, setTrashBin] = useState<WorkoutExerciseProps[]>([]);
   const [prevExerciseObj, setPrevExerciseObj] =
     useState<WorkoutExercisesObjProps>({});
-  const headerHeight = useHeaderHeight();
+  const { viewWorkout } = useSelector((state: ReducerProps) => ({
+    viewWorkout: state.workout.viewWorkout,
+  }));
+  const navigation = useNavigation();
 
   const initiateData = useCallback(() => {
     if (viewWorkout) {
@@ -128,7 +115,7 @@ const ExerciseRestructure = ({
       });
     });
 
-    let removedExercises: WorkoutExerciseProps[] = [];
+    const removedExercises: WorkoutExerciseProps[] = [];
 
     if (trashBin.length > 0) {
       trashBin.forEach(t => {
@@ -252,18 +239,22 @@ const ExerciseRestructure = ({
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'left', 'right']}>
-      <View style={[{ height: headerHeight }, styles.headerContainer]}>
-        <BackButton onPress={() => navigation.goBack()} rotateBack="0" />
-        <PrimaryText styles={styles.middleText}>Restructure</PrimaryText>
-        <Pressable style={styles.rightContainer} onPress={onSave} hitSlop={5}>
+    <ScreenTemplate
+      isBackVisible
+      middleContent={
+        <FlexBox alignItems="flex-end">
+          <PrimaryText size="medium">Restructure</PrimaryText>
+        </FlexBox>
+      }
+      rightContent={
+        <FlexBox alignItems="flex-end" justifyContent="flex-end" flex={1}>
           {loading ? (
-            <ActivityIndicator size="small" color={BaseColors.black} />
+            <ActivityIndicator size="small" color={Colors.white} />
           ) : (
-            <SaveSvg strokeColor={BaseColors.black} />
+            <Icon icon="save" color={Colors.white} size={25} onPress={onSave} />
           )}
-        </Pressable>
-      </View>
+        </FlexBox>
+      }>
       <ExerciseList
         exercisesProps={exercises}
         groupsProps={groups}
@@ -275,33 +266,10 @@ const ExerciseRestructure = ({
         exercisePos={exercisePos}
         onTrashExercise={onTrashExercise}
       />
-    </SafeAreaView>
+    </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingBottom: 10,
-  },
-  leftContainer: {},
-  middleText: {
-    fontSize: StyleConstants.smallerFont,
-    color: BaseColors.black,
-  },
-  rightContainer: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    marginRight: StyleConstants.baseMargin,
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  viewWorkout: state.workout.viewWorkout,
-});
-
-export default connect(mapStateToProps, { updateWorkoutExercises, setBanner })(
+export default connect(null, { updateWorkoutExercises, setBanner })(
   ExerciseRestructure,
 );

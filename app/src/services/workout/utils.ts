@@ -223,9 +223,9 @@ const getWoStatusColor = (s: WorkoutStatus) => {
     case WorkoutStatus.completed:
       return Colors.green;
     case WorkoutStatus.inProgress:
-      return Colors.primary;
+      return Colors.white;
     default:
-      return Colors.primary;
+      return Colors.white;
   }
 };
 

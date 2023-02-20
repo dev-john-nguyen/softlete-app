@@ -188,7 +188,7 @@ export const updateWorkoutExercises =
   };
 
 export const removeWorkoutExercise =
-  async (exercise: WorkoutExerciseProps) =>
+  (exercise: WorkoutExerciseProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     //need to add remove to exercise
     //just create a new route specifically for removing one exercise
@@ -447,7 +447,7 @@ export const setViewWorkout =
   };
 
 export const updateWorkoutStatus =
-  async (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
+  (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { offline } = getState().global;
 
@@ -471,7 +471,7 @@ export const updateWorkoutStatus =
   };
 
 export const updateWorkoutExerciseData =
-  async (dataArr: DataArrProps[]) =>
+  (dataArr: DataArrProps[]) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     //validate data
 
@@ -492,16 +492,19 @@ export const updateWorkoutExerciseData =
       }
     }
     //update the exercises
-    const updatedExercises: WorkoutExerciseProps[] = exercises.map(e => {
-      const targetE = dataArr.find(
-        d => (d._id && d._id === e._id) || (d.tempId && d.tempId === e.tempId),
-      );
-      if (targetE) {
-        e.data = targetE.data;
-        e.calcRef = targetE.calcRef;
-      }
-      return { ...e };
-    });
+    const updatedExercises: WorkoutExerciseProps[] = _.cloneDeep(exercises).map(
+      e => {
+        const targetE = dataArr.find(
+          d =>
+            (d._id && d._id === e._id) || (d.tempId && d.tempId === e.tempId),
+        );
+        if (targetE) {
+          e.data = targetE.data;
+          e.calcRef = targetE.calcRef;
+        }
+        return { ...e };
+      },
+    );
 
     if (!offline) {
       const res = await request('POST', PATHS.workouts.updateData, dispatch, {
@@ -526,7 +529,7 @@ export const updateWorkoutExerciseData =
   };
 
 export const completeWorkout =
-  async (
+  (
     workout: WorkoutProps,
     strainRating: number,
     reflection: string,
@@ -561,10 +564,12 @@ export const completeWorkout =
     let localImageUri = workout.localImageUri;
 
     if (image && image.base64) {
-      //new image, so generate a new image Id
+      // new image, so generate a new image Id
       imageId = AutoId.newId(10);
       localImageUri = image.uri;
       processImage(image.base64, imageId)(dispatch, getState);
+      // remove old
+      if (workout.imageUri) removeImage([workout.imageUri]);
     }
 
     const { data }: { data?: WorkoutProps } = await request(
@@ -602,7 +607,7 @@ export const completeWorkout =
   };
 
 export const updateWoHealthData =
-  async (workoutUid: string, healthData: HealthDataProps) =>
+  (workoutUid: string, healthData: HealthDataProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global } = getState();
     let duration = healthData.duration;
@@ -655,7 +660,7 @@ export const updateWoHealthData =
   };
 
 export const updateWoWorkoutRoute =
-  async (workoutUid: string, locations: LocationValue[], activityId?: string) =>
+  (workoutUid: string, locations: LocationValue[], activityId?: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global } = getState();
 

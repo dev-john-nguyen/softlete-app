@@ -61,6 +61,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   const saving = useRef(false);
   const statusRef = useRef('');
   const exercisePropsRef: any = useRef([]);
+  const prevWorkoutRefId = useRef<string>('');
 
   const handleUpdateWorkoutStates = useCallback(() => {
     if (!workout.exercises) return;
@@ -104,25 +105,29 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   }, [athlete, workout, groupKeys, groupState]);
 
   useEffect(() => {
+    mount.current = true;
+    return () => {
+      setExercises(e => {
+        saveExercisesDataHandler(e, athlete);
+        return e;
+      });
+      autoSaveHandler.cancel();
+      mount.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     handleUpdateWorkoutStates();
     exercisePropsRef.current = workout.exercises;
   }, [workout.exercises]);
 
   useEffect(() => {
-    mount.current = true;
-
-    const saveInterval = setInterval(() => {
-      saveExercisesData();
-    }, Constants.autoSaveDuration);
-
-    return () => {
-      mount.current = false;
-      clearInterval(saveInterval);
-      saveExercisesData();
-    };
-  }, []);
+    if (mount.current) autoSaveHandler(exercises, athlete);
+  }, [exercises, athlete]);
 
   useEffect(() => {
+    prevWorkoutRefId.current = workout._id;
+
     if (statusRef.current !== workout.status) {
       statusRef.current = workout.status;
       navIsActive.current = true;
@@ -134,18 +139,24 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     }
   }, [workout]);
 
-  const saveExercisesData = async () => {
-    if (athlete || saving.current) return;
+  const autoSaveHandler = useCallback(
+    _.debounce((exercises, athlete) => {
+      saveExercisesDataHandler(exercises, athlete);
+    }, Constants.autoSaveDuration),
+    [],
+  );
+
+  const saveExercisesDataHandler = async (
+    exercises: WorkoutExerciseProps[],
+    athlete?: boolean,
+  ) => {
+    if (athlete || saving.current || prevWorkoutRefId.current !== workout._id) {
+      return;
+    }
+
     saving.current = true;
 
-    let stateExercises: WorkoutExerciseProps[] = [];
-    //need to get the most up to date state of exercises
-    setExercises(e => {
-      stateExercises = [...e];
-      return e;
-    });
-
-    const stateData = stateExercises.map(e => {
+    const stateData = exercises.map(e => {
       return {
         _id: e._id,
         tempId: e.tempId,
@@ -196,14 +207,10 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     if (dataArr.length > 0) {
       if (isProgramTemplate) {
         //save to program
-        res = await dispatch(updateProgramExerciseData(dataArr)).catch(err =>
-          console.log(err),
-        );
+        res = dispatch(updateProgramExerciseData(dataArr));
       } else {
         //save to real workout
-        res = await dispatch(updateWorkoutExerciseData(dataArr)).catch(err =>
-          console.log(err),
-        );
+        res = dispatch(updateWorkoutExerciseData(dataArr));
       }
     }
 
@@ -247,6 +254,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   };
 
   const onAddExercise = (newGroup?: boolean) => {
+    console.log(newGroup);
     if (
       workout.status === WorkoutStatus.completed ||
       athlete ||
@@ -275,15 +283,15 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     }
     const order = newGroup ? 0 : exercises ? exercises.length - 1 : 0;
     //save exercise data if there are any changes
-    saveExercisesData();
+    saveExercisesDataHandler(exercises, athlete);
     onNavigateToAddExercise(groupProps, order);
   };
 
   const onRemoveExercise = async (exercise: WorkoutExerciseProps) => {
     if (isProgramTemplate) {
-      await dispatch(removeProgramWorkoutExercise(exercise));
+      dispatch(removeProgramWorkoutExercise(exercise));
     } else {
-      await dispatch(removeWorkoutExercise(exercise));
+      dispatch(removeWorkoutExercise(exercise));
     }
   };
 
@@ -302,7 +310,6 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         curGroup={groupState.cur}
         onGroupSelect={onGroupSelect}
         navIsActive={navIsActive}
-        workout={workout}
         setCurEx={setCurEx}
         onNavigateToExercise={onNavigateToExercise}
         onCalcRefUpdate={onCalcRefUpdate}
@@ -313,7 +320,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         setImage={setImage}
       />
       {shouldAddCom && (
-        <CircleAdd onPress={onAddExercise} style={{ bottom: 10 }} />
+        <CircleAdd onPress={() => onAddExercise()} style={{ bottom: 10 }} />
       )}
     </FlexBox>
   );

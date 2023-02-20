@@ -12,7 +12,7 @@ import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
 import ExerciseAnalytics from '../exercises/Analytics';
 import Exercise from '../exercises/View';
-import BaseColors from '../../utils/BaseColors';
+import BaseColors, { rgba } from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
 import WorkoutModal from './modals/WorkoutModal';
 import GoOnlineModal from './modals/GoOnlineModal';
@@ -26,6 +26,7 @@ import Map from './Map';
 import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
+import { FlexBox } from '@app/ui';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -187,6 +188,7 @@ function HomeStack(parentProps: any) {
             headerTitle: '',
             headerRight: undefined,
             headerTransparent: true,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         />
 
@@ -208,7 +210,14 @@ function HomeStack(parentProps: any) {
         />
       </Tab.Group>
 
-      <Tab.Group screenOptions={{ presentation: 'transparentModal' }}>
+      <Tab.Group
+        screenOptions={{
+          presentation: 'transparentModal',
+          cardStyle: { backgroundColor: 'transparent' },
+          cardOverlay: () => {
+            return <FlexBox flex={1} backgroundColor="red" />;
+          },
+        }}>
         <Tab.Screen
           name={HomeStackScreens.WorkoutModal}
           component={WorkoutModal}

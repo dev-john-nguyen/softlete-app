@@ -1,76 +1,66 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import BaseColors from '../../utils/BaseColors';
-import StyleConstants from '../tools/StyleConstants';
-import SecondaryText from '../elements/SecondaryText';
+import { StyleSheet, ScrollView } from 'react-native';
 import { normalize } from '../../utils/tools';
+import { FlexBox } from '@app/ui';
+import { PrimaryText } from '@app/elements';
 
+const WorkoutHelp = () => {
+  return (
+    <ScrollView
+      style={styles.container}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>How to add another group?</PrimaryText>
+        <PrimaryText>
+          Tap on the circle plus icon in the navbar located at the top of the
+          screen.
+        </PrimaryText>
+      </FlexBox>
 
-interface Props {
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>How to add warm up sets?</PrimaryText>
+        <PrimaryText>Tap the last set that the warm up will occur.</PrimaryText>
+      </FlexBox>
 
-}
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>How to delete sets?</PrimaryText>
+        <PrimaryText>
+          You can remove a set by tapping and holding on the set you want to
+          remove.
+        </PrimaryText>
+      </FlexBox>
 
-//delete sets
-//reorder
-//stages of workout
-const WorkoutHelp = ({ }: Props) => {
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to add another group?</SecondaryText>
-                <SecondaryText styles={styles.text}>Tap on the circle plus icon located in the navbar.</SecondaryText>
-            </View>
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>
+          How to update the measurement for an exercise?
+        </PrimaryText>
+        <PrimaryText>
+          Tap on the exercise and navigate to the exercise edit screen. There
+          you will have an option to update the measurement type.
+        </PrimaryText>
+      </FlexBox>
 
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to add warm up sets?</SecondaryText>
-                <SecondaryText styles={styles.text}>Tap on the last set.</SecondaryText>
-            </View>
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>
+          How to remove/reorder exercises?
+        </PrimaryText>
+        <PrimaryText>
+          Visit the menu and tap on the restructure option.
+        </PrimaryText>
+      </FlexBox>
 
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to delete sets?</SecondaryText>
-                <SecondaryText styles={styles.text}>Tap and hold on the set you want to remove.</SecondaryText>
-            </View>
-
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to update measurement for an exercise?</SecondaryText>
-                <SecondaryText styles={styles.text}>Tap on the exercise and navigate to the exercise edit screen. There you will have an option to update the measurement type.</SecondaryText>
-            </View>
-
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to remove/reorder exercises?</SecondaryText>
-                <SecondaryText styles={styles.text}>Visit the menu and tap on the restructure option.</SecondaryText>
-            </View>
-
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>How to progress to next stage.</SecondaryText>
-                <SecondaryText styles={styles.text}>Press and hold on the desired stage. You can only complete a workout when on performing stage.</SecondaryText>
-            </View>
-
-            <View style={styles.section}>
-                <SecondaryText styles={styles.label} bold>Workout stages.</SecondaryText>
-                <SecondaryText styles={styles.text}>{`Pending => Performing => Completed. You can revert back to previous stages.`}</SecondaryText>
-            </View>
-
-        </ScrollView>
-    )
-}
+      <FlexBox column marginBottom={10}>
+        <PrimaryText opacity={0.5}>Workout stages.</PrimaryText>
+        <PrimaryText>{`A workout consist of 3 stages (pending, performing, and completed). The stages allows you and other users to identify where you are in a workout.`}</PrimaryText>
+      </FlexBox>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        maxHeight: normalize.height(2),
-        padding: 10,
-    },
-    section: {
-        marginBottom: StyleConstants.smallMargin
-    },
-    label: {
-        fontSize: StyleConstants.smallFont,
-        color: BaseColors.black,
-        marginBottom: 2,
-    },
-    text: {
-        fontSize: StyleConstants.smallFont,
-        color: BaseColors.black
-    }
-})
+  container: {
+    maxHeight: normalize.height(2),
+  },
+});
 export default WorkoutHelp;

@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-  Keyboard,
-} from 'react-native';
+import { ActivityIndicator, Keyboard } from 'react-native';
 import {
   WorkoutExerciseProps,
   WorkoutExerciseDataProps,
@@ -15,12 +9,11 @@ import {
 } from '../../../services/workout/types';
 import PrimaryText from '../../elements/PrimaryText';
 import ExerciseData from './data/Container';
-import StyleConstants from '../../tools/StyleConstants';
-import { normalize } from '../../../utils/tools';
 import { MeasSubCats, ExerciseProps } from '../../../services/exercises/types';
 import _ from 'lodash';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
+import { FlexBox } from '@app/ui';
 
 interface Props {
   exercise: WorkoutExerciseProps;
@@ -78,11 +71,14 @@ const WorkoutExercise = ({
   };
 
   return (
-    <View style={styles.container}>
-      <Pressable
-        style={styles.headerContainer}
+    <FlexBox screenWidth column marginTop={15}>
+      <FlexBox
+        marginBottom={10}
+        justifyContent="space-between"
+        paddingLeft={15}
+        paddingRight={15}
         onPress={() => Keyboard.dismiss()}>
-        <Pressable style={styles.header} onPress={onExercisePress}>
+        <FlexBox alignSelf="flex-start" flex={1} onPress={onExercisePress}>
           {exercise.exercise ? (
             <PrimaryText
               size="large"
@@ -93,14 +89,10 @@ const WorkoutExercise = ({
           ) : (
             <ActivityIndicator size="small" color={Colors.white} />
           )}
-        </Pressable>
+        </FlexBox>
         {!athlete && workout.status === WorkoutStatus.pending ? (
           loading ? (
-            <ActivityIndicator
-              size="small"
-              color={Colors.primary}
-              style={styles.trash}
-            />
+            <ActivityIndicator size="small" color={Colors.white} />
           ) : (
             <Icon
               icon="trash_bin"
@@ -112,7 +104,7 @@ const WorkoutExercise = ({
         ) : (
           <></>
         )}
-      </Pressable>
+      </FlexBox>
       <ExerciseData
         calcRef={exercise.calcRef}
         data={exercise.data}
@@ -126,31 +118,8 @@ const WorkoutExercise = ({
         showGoBack={showGoBack}
         goToFirstItem={goToFirstItem}
       />
-    </View>
+    </FlexBox>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: StyleConstants.baseMargin,
-    width: normalize.width(1),
-  },
-  trash: {
-    width: normalize.width(20),
-    height: normalize.width(20),
-    alignSelf: 'flex-start',
-    marginLeft: StyleConstants.smallMargin,
-  },
-  headerContainer: {
-    marginBottom: StyleConstants.baseMargin,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: StyleConstants.baseMargin,
-    paddingRight: StyleConstants.baseMargin,
-  },
-  header: {
-    alignSelf: 'flex-start',
-    flex: 1,
-  },
-});
 export default React.memo(WorkoutExercise, areEqual);
