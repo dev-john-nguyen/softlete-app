@@ -136,7 +136,7 @@ const WorkoutModal = ({
   }, [confirm, help]);
 
   const headerText = useMemo(() => {
-    if (confirm) return 'Delete Workout';
+    if (confirm) return 'Remove Workout';
     if (help) return 'Tips/Help';
     return 'Menu';
   }, [confirm, help]);
