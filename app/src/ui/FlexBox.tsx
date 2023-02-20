@@ -1,6 +1,6 @@
 import { normalize, useResizeStyles } from '@app/utils';
 import React from 'react';
-import { View, StyleProp, Pressable } from 'react-native';
+import { View, StyleProp, Pressable, LayoutChangeEvent } from 'react-native';
 
 // box shadows
 
@@ -10,6 +10,7 @@ type FlexBoxProps = {
   screenWidth?: boolean;
   screenWidthPct?: number;
   column?: boolean;
+  onLayout?: (e: LayoutChangeEvent) => void;
 } & StyleProp<any>;
 
 const FlexBox = ({
@@ -20,6 +21,7 @@ const FlexBox = ({
   screenWidth,
   screenWidthPct,
   column,
+  onLayout,
   ...stylesProp
 }: FlexBoxProps) => {
   const styles = useResizeStyles(stylesProp);
@@ -43,7 +45,8 @@ const FlexBox = ({
         ]}
         onPress={onPress}
         onLongPress={onLongPress}
-        hitSlop={5}>
+        hitSlop={5}
+        onLayout={onLayout}>
         {children}
       </Pressable>
     );
@@ -51,6 +54,7 @@ const FlexBox = ({
 
   return (
     <View
+      onLayout={onLayout}
       style={[
         {
           flexDirection: direction,

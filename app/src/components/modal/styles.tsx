@@ -1,5 +1,5 @@
+import { Colors, rgba } from '@app/utils';
 import { StyleSheet } from 'react-native';
-import BaseColors from '../../utils/BaseColors';
 import { normalize } from '../../utils/tools';
 import StyleConstants from '../tools/StyleConstants';
 
@@ -26,7 +26,7 @@ const modalStyles = StyleSheet.create({
   },
   back: {
     fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.black,
+    color: Colors.black,
   },
   loading: {
     position: 'absolute',
@@ -49,15 +49,16 @@ const modalStyles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     zIndex: 0,
+    backgroundColor: rgba(Colors.primaryRgb, 0.5),
   },
   modal: {
-    backgroundColor: BaseColors.lightGrey,
+    backgroundColor: Colors.lightGrey,
     padding: StyleConstants.baseMargin,
     borderRadius: 5,
   },
   title: {
     fontSize: StyleConstants.smallMediumFont,
-    color: BaseColors.primary,
+    color: Colors.primary,
     textAlign: 'center',
   },
   svg: {
@@ -65,7 +66,7 @@ const modalStyles = StyleSheet.create({
     width: normalize.width(25),
   },
   item: {
-    borderColor: BaseColors.lightPrimary,
+    borderColor: Colors.lightPrimary,
     borderWidth: 1,
     marginTop: 5,
     marginBottom: 5,
@@ -81,7 +82,7 @@ const modalStyles = StyleSheet.create({
   },
   label: {
     fontSize: StyleConstants.smallerFont,
-    color: BaseColors.black,
+    color: Colors.black,
   },
 });
 

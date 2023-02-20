@@ -152,7 +152,7 @@ const WorkoutModal = ({
   };
 
   return (
-    <FlexBox column>
+    <FlexBox column flex={1}>
       <Pressable
         onPress={() => navigation.goBack()}
         style={styles.closeContainer}
