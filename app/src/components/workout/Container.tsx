@@ -254,6 +254,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   };
 
   const onAddExercise = (newGroup?: boolean) => {
+    console.log(newGroup);
     if (
       workout.status === WorkoutStatus.completed ||
       athlete ||
@@ -319,7 +320,7 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         setImage={setImage}
       />
       {shouldAddCom && (
-        <CircleAdd onPress={onAddExercise} style={{ bottom: 10 }} />
+        <CircleAdd onPress={() => onAddExercise()} style={{ bottom: 10 }} />
       )}
     </FlexBox>
   );

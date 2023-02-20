@@ -43,7 +43,7 @@ const WorkoutHeader = ({
   }, [program]);
 
   return (
-    <View>
+    <FlexBox column paddingTop={10}>
       {!template && (
         <StagingActions
           onUpdateStatus={onUpdateStatus}
@@ -85,7 +85,7 @@ const WorkoutHeader = ({
           </FlexBox>
         )}
       </SafeAreaView>
-    </View>
+    </FlexBox>
   );
 };
 
