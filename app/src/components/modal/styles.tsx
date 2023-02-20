@@ -8,11 +8,6 @@ const modalStyles = StyleSheet.create({
     backgroundColor: `rgba(0, 0, 0 ,.7)`,
     flex: 1,
   },
-  confirmActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: StyleConstants.baseMargin,
-  },
   backContainer: {
     width: normalize.width(25),
     height: normalize.width(25),
@@ -21,7 +16,7 @@ const modalStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: StyleConstants.baseMargin,
+    marginBottom: StyleConstants.smallMargin,
     marginTop: StyleConstants.smallMargin,
   },
   back: {
@@ -52,7 +47,9 @@ const modalStyles = StyleSheet.create({
     backgroundColor: rgba(Colors.primaryRgb, 0.5),
   },
   modal: {
-    backgroundColor: Colors.lightGrey,
+    borderColor: Colors.white,
+    borderWidth: 1,
+    backgroundColor: Colors.blendWhite,
     padding: StyleConstants.baseMargin,
     borderRadius: 5,
   },
@@ -66,7 +63,8 @@ const modalStyles = StyleSheet.create({
     width: normalize.width(25),
   },
   item: {
-    borderColor: Colors.lightPrimary,
+    backgroundColor: rgba(Colors.whiteRbg, 0.1),
+    borderColor: Colors.white,
     borderWidth: 1,
     marginTop: 5,
     marginBottom: 5,

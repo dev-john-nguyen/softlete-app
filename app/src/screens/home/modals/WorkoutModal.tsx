@@ -1,10 +1,6 @@
 import React, { Dispatch, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Pressable, ActivityIndicator } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { normalize } from '../../../utils/tools';
-import SortSvg from '../../../assets/SortSvg';
-import TrashSvg from '../../../assets/TrashSvg';
-import InfoSvg from '../../../assets/InfoSvg';
 import { ReducerProps } from '../../../services';
 import { connect } from 'react-redux';
 import { removeProgramWorkout } from '../../../services/program/actions';
@@ -18,10 +14,7 @@ import {
   WorkoutTypes,
 } from '../../../services/workout/types';
 import PrimaryButton from '../../../components/elements/PrimaryButton';
-import SecondaryButton from '../../../components/elements/SecondaryButton';
 import WorkoutHelp from '../../../components/modal/WorkoutHelp';
-import Chevron from '../../../assets/ChevronSvg';
-import CloseSvg from '../../../assets/CloseSvg';
 import styles from '../../../components/modal/styles';
 import { FlexBox } from '@app/ui';
 import { PrimaryText } from '@app/elements';
@@ -97,13 +90,15 @@ const WorkoutModal = ({
     if (confirm)
       return (
         <View>
-          <PrimaryText>Are you sure you want to remove?</PrimaryText>
-          <View style={styles.confirmActions}>
-            <PrimaryButton onPress={onDeleteWorkout}>Confirm</PrimaryButton>
-            <SecondaryButton onPress={() => setConfirm(false)}>
-              Cancel
-            </SecondaryButton>
-          </View>
+          <PrimaryText>
+            Are you sure you want to remove? You cannot restore the workout once
+            removed.
+          </PrimaryText>
+          <FlexBox marginTop={15} width="100%">
+            <PrimaryButton onPress={onDeleteWorkout} width="100%">
+              Confirm Removal
+            </PrimaryButton>
+          </FlexBox>
         </View>
       );
 
@@ -112,36 +107,36 @@ const WorkoutModal = ({
     return (
       <View>
         <Pressable style={styles.item} onPress={onEditWorkoutHeader}>
-          <PrimaryText color={Colors.primary}>Edit</PrimaryText>
-          <Icon icon="pencil" color={Colors.primary} size={15} />
+          <PrimaryText color={Colors.white}>Edit</PrimaryText>
+          <Icon icon="pencil" color={Colors.white} size={15} />
         </Pressable>
 
         {workout.type === WorkoutTypes.TraditionalStrengthTraining && (
           <Pressable style={styles.item} onPress={onRestructure}>
-            <PrimaryText color={Colors.primary}>Restructure</PrimaryText>
-            <Icon icon="sort" color={Colors.primary} size={15} />
+            <PrimaryText color={Colors.white}>Restructure</PrimaryText>
+            <Icon icon="sort" color={Colors.white} size={15} />
           </Pressable>
         )}
         <Pressable style={styles.item} onPress={() => setHelp(true)}>
-          <PrimaryText color={Colors.primary}>Tips/Help</PrimaryText>
-          <Icon icon="info" color={Colors.primary} size={15} />
+          <PrimaryText color={Colors.white}>Tips/Help</PrimaryText>
+          <Icon icon="info" color={Colors.white} size={15} />
         </Pressable>
 
         <Pressable style={styles.item} onPress={() => setConfirm(true)}>
-          <PrimaryText color={Colors.primary}>Remove</PrimaryText>
-          <Icon icon="trash_bin" color={Colors.primary} size={15} />
+          <PrimaryText color={Colors.white}>Remove</PrimaryText>
+          <Icon icon="trash_bin" color={Colors.white} size={15} />
         </Pressable>
 
         <Pressable style={styles.item} onPress={() => navigation.goBack()}>
-          <PrimaryText color={Colors.primary}>Cancel</PrimaryText>
-          <Icon icon="close" color={Colors.primary} size={12} />
+          <PrimaryText color={Colors.white}>Cancel</PrimaryText>
+          <Icon icon="close" color={Colors.white} size={12} />
         </Pressable>
       </View>
     );
   }, [confirm, help]);
 
   const headerText = useMemo(() => {
-    if (confirm) return 'Confirm';
+    if (confirm) return 'Delete Workout';
     if (help) return 'Tips/Help';
     return 'Menu';
   }, [confirm, help]);
@@ -160,22 +155,26 @@ const WorkoutModal = ({
       <View style={[styles.content, { marginTop: headerHeight }]}>
         <View style={styles.modal}>
           <View style={styles.headerContainer}>
-            {confirm || help ? (
-              <Pressable style={styles.backContainer} onPress={onBack}>
-                <Chevron strokeColor={Colors.black} />
-              </Pressable>
-            ) : (
-              <View />
-            )}
-            <PrimaryText color={Colors.primary} size="medium">
-              {headerText}
-            </PrimaryText>
+            {!confirm && !help && <View />}
+            <FlexBox alignItems="center" onPress={onBack}>
+              {(confirm || help) && (
+                <Icon
+                  icon="chevron"
+                  size={16}
+                  color={Colors.white}
+                  containerStyles={{ marginRight: 5 }}
+                />
+              )}
+              <PrimaryText color={Colors.white} size="medium">
+                {headerText}
+              </PrimaryText>
+            </FlexBox>
             <View />
           </View>
           {loading && (
             <ActivityIndicator
               size="small"
-              color={Colors.primary}
+              color={Colors.white}
               style={styles.loading}
             />
           )}
