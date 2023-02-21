@@ -49,31 +49,36 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
   return (
     <FlexBox column>
       <Pressable onPress={() => Keyboard.dismiss()}>
-        <ReflectionImage
-          setImage={setImage}
-          image={image}
-          imageUri={workout.imageUri ? workout.imageUri : workout.localImageUri}
-          allowUpload={workout.status === WorkoutStatus.inProgress}
-        />
-        {workout.status === WorkoutStatus.completed ? (
-          <FlexBox height={normalize.height(12)} marginTop={10}>
-            <ScrollView>
-              <View onStartShouldSetResponder={() => true}>
-                <PrimaryText>{workout.reflection}</PrimaryText>
-              </View>
-            </ScrollView>
-          </FlexBox>
-        ) : (
+        {workout.status === WorkoutStatus.inProgress && (
           <Input
+            label="How was the workout?"
             onChangeText={txt => setReflection?.(txt)}
             defaultValue={workout.reflection}
             placeholder="Write a caption..."
             multiline={true}
             onSubmitEditing={() => Keyboard.dismiss()}
             blurOnSubmit={true}
-            maxLength={200}
-            styles={{ marginTop: StyleConstants.baseMargin, borderRadius: 0 }}
+            maxLength={150}
+            styles={{
+              marginBottom: StyleConstants.baseMargin,
+              borderRadius: 0,
+            }}
           />
+        )}
+        <ReflectionImage
+          setImage={setImage}
+          image={image}
+          imageUri={workout.imageUri ? workout.imageUri : workout.localImageUri}
+          allowUpload={workout.status === WorkoutStatus.inProgress}
+        />
+        {workout.status === WorkoutStatus.completed && (
+          <FlexBox marginTop={10}>
+            <ScrollView>
+              <View onStartShouldSetResponder={() => true}>
+                <PrimaryText>{workout.reflection}</PrimaryText>
+              </View>
+            </ScrollView>
+          </FlexBox>
         )}
       </Pressable>
     </FlexBox>
@@ -290,7 +295,7 @@ const HealthImportContainer = ({
         </FlexBox>
       )}
       <FlexBox column marginBottom={10}>
-        <HealthContainer data={workout.healthData} />
+        <HealthContainer data={workout.healthData} workout={workout} />
       </FlexBox>
       {deviceWosIsVisible ? (
         <FlexBox column flex={1}>

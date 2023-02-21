@@ -17,6 +17,7 @@ type Props = {
   marginTop?: number;
   flex?: number;
   marginRight?: number;
+  opacity?: number;
 };
 
 const InfoListBox: FC<Props> = ({
@@ -32,10 +33,12 @@ const InfoListBox: FC<Props> = ({
   marginTop,
   flex,
   marginRight,
+  opacity = 1,
 }) => {
   if (secondary) {
     return (
       <FlexBox
+        opacity={opacity}
         flex={flex}
         borderRadius={5}
         marginRight={marginRight ?? 10}
@@ -69,6 +72,7 @@ const InfoListBox: FC<Props> = ({
   }
   return (
     <FlexBox
+      opacity={opacity}
       flex={flex}
       borderRadius={5}
       marginRight={marginRight || 5}

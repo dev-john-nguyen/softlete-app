@@ -4,7 +4,6 @@ import { HealthDataProps } from 'src/services/workout/types';
 import HealthContainer from './HealthContainer';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { PrimaryText } from '@app/elements';
 
 interface Props {
   onImportData: () => void;
