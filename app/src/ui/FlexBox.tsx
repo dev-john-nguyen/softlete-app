@@ -1,6 +1,12 @@
-import { normalize, useResizeStyles } from '@app/utils';
+import { Colors, normalize, rgba, useResizeStyles } from '@app/utils';
 import React from 'react';
-import { View, StyleProp, Pressable, LayoutChangeEvent } from 'react-native';
+import {
+  View,
+  StyleProp,
+  Pressable,
+  LayoutChangeEvent,
+  StyleSheet,
+} from 'react-native';
 
 // box shadows
 
@@ -11,6 +17,7 @@ type FlexBoxProps = {
   screenWidthPct?: number;
   column?: boolean;
   onLayout?: (e: LayoutChangeEvent) => void;
+  applyBoxShadow?: boolean;
 } & StyleProp<any>;
 
 const FlexBox = ({
@@ -22,6 +29,7 @@ const FlexBox = ({
   screenWidthPct,
   column,
   onLayout,
+  applyBoxShadow,
   ...stylesProp
 }: FlexBoxProps) => {
   const styles = useResizeStyles(stylesProp);
@@ -42,6 +50,7 @@ const FlexBox = ({
             width,
           },
           styles,
+          applyBoxShadow ? flexStyles.boxShadow : undefined,
         ]}
         onPress={onPress}
         onLongPress={onLongPress}
@@ -61,10 +70,21 @@ const FlexBox = ({
           width,
         },
         styles,
+        applyBoxShadow ? flexStyles.boxShadow : undefined,
       ]}>
       {children}
     </View>
   );
 };
+
+const flexStyles = StyleSheet.create({
+  boxShadow: {
+    shadowColor: rgba(Colors.whiteRbg, 0.2),
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 20,
+  },
+});
 
 export default FlexBox;

@@ -106,7 +106,7 @@ const Input = ({
         containerStyles,
       ]}>
       {label && (
-        <PrimaryText size="small" marginBottom={5}>
+        <PrimaryText size="small" marginBottom={5} opacity={0.5}>
           {label}
         </PrimaryText>
       )}

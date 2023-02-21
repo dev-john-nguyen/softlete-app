@@ -1,12 +1,13 @@
 import { InfoListBox, Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, normalize, StyleConstants } from '@app/utils';
+import { Colors, rgba, StyleConstants } from '@app/utils';
 import _ from 'lodash';
 import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -23,16 +24,59 @@ import {
   WorkoutStatus,
 } from '../../../services/workout/types';
 import AutoId from '../../../utils/AutoId';
-import Constants from '../../../utils/Constants';
 import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
-import ImportItem from './ImportItem';
 import { HomeWorkoutContext } from '@app/contexts';
 import { Pressable, Keyboard, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import ReflectionImage from './ReflectionImage';
 import { ImageProps } from 'src/services/user/types';
+
+interface ImportItemProps {
+  onImportData: () => void;
+  data: HealthDataProps;
+}
+
+const ImportItem = ({ data, onImportData }: ImportItemProps) => {
+  const formattedData: HealthDataProps = useMemo(() => {
+    return {
+      activityName: data.activityName,
+      sourceName: data.sourceName,
+      duration: data.duration,
+      calories: data.calories,
+      distance: data.distance,
+      activityId: data.activityId,
+      heartRates: data.heartRates,
+      date: data.date,
+    };
+  }, [data]);
+
+  return (
+    <FlexBox column marginBottom={10}>
+      <FlexBox
+        alignSelf="flex-end"
+        justifyContent="flex-end"
+        marginBottom={5}
+        alignItems="center"
+        backgroundColor={rgba(Colors.whiteRbg, 0.5)}
+        borderRadius={100}
+        paddingLeft={10}
+        paddingRight={10}
+        paddingBottom={5}
+        paddingTop={5}>
+        <PrimaryText>Set</PrimaryText>
+        <Icon
+          icon="download"
+          onPress={onImportData}
+          size={20}
+          color={Colors.white}
+        />
+      </FlexBox>
+      <HealthContainer data={formattedData} />
+    </FlexBox>
+  );
+};
 
 interface WorkoutReflectionProps {
   setImage: (img: ImageProps) => void;
@@ -47,11 +91,19 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
   const { setReflection } = useContext(HomeWorkoutContext);
 
   return (
-    <FlexBox column>
+    <FlexBox
+      column
+      backgroundColor={
+        workout.status === WorkoutStatus.completed
+          ? Colors.blendWhite
+          : undefined
+      }
+      borderRadius={5}
+      applyBoxShadow={workout.status === WorkoutStatus.completed}>
       <Pressable onPress={() => Keyboard.dismiss()}>
         {workout.status === WorkoutStatus.inProgress && (
           <Input
-            label="How was the workout?"
+            label="Summary"
             onChangeText={txt => setReflection?.(txt)}
             defaultValue={workout.reflection}
             placeholder="Write a caption..."
@@ -72,12 +124,17 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
           allowUpload={workout.status === WorkoutStatus.inProgress}
         />
         {workout.status === WorkoutStatus.completed && (
-          <FlexBox marginTop={10}>
-            <ScrollView>
-              <View onStartShouldSetResponder={() => true}>
-                <PrimaryText>{workout.reflection}</PrimaryText>
-              </View>
-            </ScrollView>
+          <FlexBox column padding={15}>
+            <PrimaryText opacity={0.6} marginBottom={5} size="medium">
+              Summary
+            </PrimaryText>
+            <FlexBox>
+              <ScrollView>
+                <View onStartShouldSetResponder={() => true}>
+                  <PrimaryText>{workout.reflection}</PrimaryText>
+                </View>
+              </ScrollView>
+            </FlexBox>
           </FlexBox>
         )}
       </Pressable>
@@ -234,24 +291,6 @@ const HealthImportContainer = ({
     setCustom(false);
   };
 
-  const renderDate = () => {
-    const d = new Date(workout.date);
-    return (
-      <FlexBox justifyContent="space-between" marginBottom={10}>
-        <PrimaryText size="small">
-          {Constants.months[d.getMonth()] +
-            ' ' +
-            d.getDate() +
-            ', ' +
-            d.getFullYear()}
-        </PrimaryText>
-        <PrimaryText size="small" textTransform="capitalize">
-          {Constants.daysOfWeek[d.getDay()]}
-        </PrimaryText>
-      </FlexBox>
-    );
-  };
-
   const renderDataOptions = useCallback(() => {
     return data.map((item, i) => (
       <ImportItem
@@ -265,7 +304,6 @@ const HealthImportContainer = ({
   if (custom) {
     return (
       <FlexBox flex={1} column margin={15}>
-        {renderDate()}
         <HealthForm
           onSubmit={onCustomImportSubmit}
           onClose={onCustomStateChange}
@@ -299,7 +337,6 @@ const HealthImportContainer = ({
       </FlexBox>
       {deviceWosIsVisible ? (
         <FlexBox column flex={1}>
-          {renderDate()}
           <ScrollView
             style={{ flex: 1 }}
             showsHorizontalScrollIndicator={false}
