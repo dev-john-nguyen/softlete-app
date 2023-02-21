@@ -79,10 +79,7 @@ const ReflectionImage = ({ allowUpload, setImage, image, imageUri }: Props) => {
             justifyContent="center"
             position="absolute"
             column>
-            <Icon icon="logo" size={25} variant="secondary" />
-            <PrimaryText marginTop={5} size="medium">
-              No Image
-            </PrimaryText>
+            <Icon icon="logo" size={50} variant="secondary" opacity={0.9} />
           </FlexBox>
         );
       }

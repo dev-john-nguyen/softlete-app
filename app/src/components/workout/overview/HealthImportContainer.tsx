@@ -95,7 +95,7 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
       column
       backgroundColor={
         workout.status === WorkoutStatus.completed
-          ? Colors.blendWhite
+          ? Colors.lightPrimary
           : undefined
       }
       borderRadius={5}
@@ -131,7 +131,9 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
             <FlexBox>
               <ScrollView>
                 <View onStartShouldSetResponder={() => true}>
-                  <PrimaryText>{workout.reflection}</PrimaryText>
+                  <PrimaryText>
+                    {workout.reflection || 'Nothing to say...'}
+                  </PrimaryText>
                 </View>
               </ScrollView>
             </FlexBox>
