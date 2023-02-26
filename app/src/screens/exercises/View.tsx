@@ -1,39 +1,33 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../services/exercises/types';
 import { normalize } from '../../utils/tools';
-import BaseColors from '../../utils/BaseColors';
-import GraphSvg from '../../assets/GraphSvg';
-import PrimaryText from '../../components/elements/PrimaryText';
-import SecondaryText from '../../components/elements/SecondaryText';
-import YoutubePreview from '../../components/elements/YoutubePreview';
-import Loading from '../../components/elements/Loading';
-import { RouteProp } from '@react-navigation/native';
-import PencilSvg from '../../assets/PencilSvg';
-import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
 import { connect } from 'react-redux';
 import { updatePinExercises } from '../../services/user/actions';
 import { PinExerciseProps } from '../../services/misc/types';
 import { HomeStackScreens } from '../home/types';
 import { NetworkStackScreens } from '../network/types';
-import Switch from '../../components/elements/Switch';
-import RulerSvg from '../../assets/RulerSvg';
-import CategorySvg from '../../assets/CategorySvg';
-import ScaleSvg from '../../assets/ScaleSvg';
 import BodySvg from '../../assets/body/BodySvg';
-import DumbbellSvg from '../../assets/DumbbellSvg';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { AppDispatch } from '../../../App';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { UserProps } from '../../services/user/types';
 import ExerciseVideo from '../../components/elements/ExerciseVideo';
 import { AthleteProfileProps } from '../../services/athletes/types';
 import { ProgramStackScreens } from '../program/types';
-import ErrorSvg from '../../assets/ErrorSvg';
 import reportExercise from '../utils/report-exercise';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import Icon from '@app/icons';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {
+  InfoListBox,
+  Loading,
+  PrimaryText,
+  Switch,
+  YoutubePreview,
+} from '@app/elements';
+import { FlexBox } from '@app/ui';
+import { StyleConstants } from '@app/utils';
 
 interface Props {
   route: any;
@@ -53,7 +47,7 @@ const Description = ({ description }: { description?: string }) => {
 
   return (
     <Pressable onPress={() => setExtend(bol => !bol)}>
-      <SecondaryText styles={styles.des}>
+      <PrimaryText styles={styles.des}>
         {(() => {
           if (description.length > 100) {
             if (extend) return description;
@@ -61,7 +55,7 @@ const Description = ({ description }: { description?: string }) => {
           }
           return description;
         })()}
-      </SecondaryText>
+      </PrimaryText>
     </Pressable>
   );
 };
@@ -79,44 +73,6 @@ const Exercise = ({
   const [exercise, setExercise] = useState<ExerciseProps>();
   const [isPin, setIsPin] = useState(false);
   const [athlete, setAthlete] = useState(false);
-  const headerHeight = useHeaderHeight();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        !offline && (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Pressable
-              style={styles.actionContainer}
-              onPress={onNavigateToAnalytics}
-              hitSlop={5}>
-              <View style={styles.edit}>
-                <GraphSvg color={BaseColors.white} />
-              </View>
-            </Pressable>
-            {athlete ? (
-              <Pressable
-                style={styles.actionContainer}
-                onPress={onReportImage}
-                hitSlop={5}>
-                <Pressable style={styles.edit} onPress={onReportImage}>
-                  <ErrorSvg fillColor={BaseColors.white} />
-                </Pressable>
-              </Pressable>
-            ) : (
-              <Pressable
-                style={styles.actionContainer}
-                onPress={onNavigateToUpdate}
-                hitSlop={5}>
-                <Pressable style={styles.edit} onPress={onNavigateToUpdate}>
-                  <PencilSvg fillColor={BaseColors.white} />
-                </Pressable>
-              </Pressable>
-            )}
-          </View>
-        ),
-    });
-  }, [exercise, offline]);
 
   useEffect(() => {
     if (!route.params || !route.params.exercise) {
@@ -202,93 +158,115 @@ const Exercise = ({
   if (!exercise) return <Loading />;
 
   return (
-    <ScreenTemplate>
-      <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
+    <ScreenTemplate
+      rightContent={
+        <FlexBox alignItems="flex-end" justifyContent="flex-start">
+          {!offline && (
+            <>
+              <Icon
+                icon="graph"
+                color={Colors.white}
+                size={20}
+                onPress={onNavigateToAnalytics}
+                containerStyles={{ marginRight: 20 }}
+              />
+              {athlete ? (
+                <Icon
+                  icon="error"
+                  color={Colors.white}
+                  size={20}
+                  onPress={onReportImage}
+                />
+              ) : (
+                <Icon
+                  icon="pencil"
+                  color={Colors.white}
+                  size={20}
+                  onPress={onNavigateToUpdate}
+                />
+              )}
+            </>
+          )}
+        </FlexBox>
+      }>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: StyleConstants.baseMargin }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}>
+        <PrimaryText size="large" variant="primary" textTransform="capitalize">
+          {exercise.name}
+        </PrimaryText>
+        <Description description={exercise.description} />
+        {!athlete && (
+          <FlexBox marginTop={15}>
+            <Switch
+              onSwitch={() => onUpdatePinExercises(isPin ? false : true)}
+              active={isPin}
+              styles={{ marginRight: StyleConstants.smallMargin, top: -5 }}
+            />
+            <PrimaryText>{isPin ? 'Pinned' : 'Unpinned'}</PrimaryText>
+          </FlexBox>
+        )}
+
         <ScrollView
-          style={[styles.container, { marginTop: headerHeight }]}
-          contentContainerStyle={{ paddingBottom: StyleConstants.baseMargin }}
+          horizontal
+          style={{ marginTop: StyleConstants.baseMargin }}
+          contentContainerStyle={{
+            flexDirection:
+              exercise.localUrl || exercise.url ? 'row' : 'row-reverse',
+          }}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}>
-          <PrimaryText styles={styles.header}>{exercise.name}</PrimaryText>
-          <Description description={exercise.description} />
-          {!athlete && (
-            <View style={styles.pinContainer}>
-              <Switch
-                onSwitch={() => onUpdatePinExercises(isPin ? false : true)}
-                active={isPin}
-                styles={{ marginRight: StyleConstants.smallMargin, top: -5 }}
-              />
-              <SecondaryText styles={styles.label}>
-                {isPin ? 'Pinned' : 'Unpinned'}
-              </SecondaryText>
-            </View>
-          )}
-
-          <ScrollView
-            horizontal
-            style={{ marginTop: StyleConstants.baseMargin }}
-            contentContainerStyle={{
-              flexDirection:
-                exercise.localUrl || exercise.url ? 'row' : 'row-reverse',
-            }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}>
+          <FlexBox marginLeft={exercise.localUrl || exercise.url ? 0 : 10}>
             <ExerciseVideo props={exercise} />
+          </FlexBox>
+          <FlexBox marginLeft={exercise.localUrl || exercise.url ? 10 : 0}>
             <YoutubePreview id={exercise.youtubeId} />
-          </ScrollView>
-
-          <View style={styles.body}>
-            <BodySvg muscleGroup={exercise.muscleGroup} />
-          </View>
-
-          <ScrollView
-            horizontal
-            style={{ marginTop: StyleConstants.baseMargin }}
-            contentContainerStyle={{ alignItems: 'flex-start' }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}>
-            <View style={styles.itemContainer}>
-              <View style={styles.svg}>
-                <CategorySvg fillColor={BaseColors.lightWhite} />
-              </View>
-              <SecondaryText styles={styles.label}>Category</SecondaryText>
-              <SecondaryText styles={[styles.text, styles.textCap]} bold>
-                {exercise.category}
-              </SecondaryText>
-            </View>
-
-            <View style={styles.itemContainer}>
-              <View style={styles.svg}>
-                <DumbbellSvg fillColor={BaseColors.lightWhite} />
-              </View>
-              <SecondaryText styles={styles.label}>Equipment</SecondaryText>
-              <SecondaryText styles={[styles.text, styles.textCap]} bold>
-                {exercise.equipment}
-              </SecondaryText>
-            </View>
-
-            <View style={styles.itemContainer}>
-              <View style={styles.svg}>
-                <ScaleSvg fillColor={BaseColors.lightWhite} />
-              </View>
-              <SecondaryText styles={styles.label}>Measurement</SecondaryText>
-              <SecondaryText styles={[styles.text, styles.textCap]} bold>
-                {exercise.measCat}
-              </SecondaryText>
-            </View>
-
-            <View style={styles.itemContainer}>
-              <View style={styles.svg}>
-                <RulerSvg fillColor={BaseColors.lightWhite} />
-              </View>
-              <SecondaryText styles={styles.label}>Unit</SecondaryText>
-              <SecondaryText styles={[styles.text, styles.textCap]} bold>
-                {exercise.measSubCat}
-              </SecondaryText>
-            </View>
-          </ScrollView>
+          </FlexBox>
         </ScrollView>
-      </SafeAreaView>
+
+        <View style={styles.body}>
+          <BodySvg muscleGroup={exercise.muscleGroup} />
+        </View>
+
+        <ScrollView
+          horizontal
+          style={{ marginTop: StyleConstants.baseMargin }}
+          contentContainerStyle={{ alignItems: 'flex-start' }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          <InfoListBox
+            secondary
+            desc={exercise.category}
+            label="Category"
+            icon="category"
+            textTransform="capitalize"
+          />
+          <InfoListBox
+            secondary
+            desc={exercise.equipment}
+            label="Equipment"
+            icon="dumb_bell"
+            textTransform="capitalize"
+          />
+
+          <InfoListBox
+            secondary
+            desc={exercise.measCat}
+            label="Measurement"
+            icon="scale"
+            textTransform="capitalize"
+          />
+          <InfoListBox
+            secondary
+            desc={exercise.measSubCat}
+            label="Unit"
+            icon="ruler"
+            textTransform="capitalize"
+          />
+        </ScrollView>
+      </ScrollView>
     </ScreenTemplate>
   );
 };
@@ -335,7 +313,7 @@ const styles = StyleSheet.create({
     width: normalize.width(13),
     padding: 8,
     borderRadius: 100,
-    backgroundColor: BaseColors.primary,
+    backgroundColor: Colors.primary,
     marginRight: StyleConstants.smallMargin,
   },
   header: {
@@ -350,16 +328,16 @@ const styles = StyleSheet.create({
   },
   analytics: {
     fontSize: StyleConstants.smallFont,
-    color: BaseColors.white,
+    color: Colors.white,
   },
   itemContainer: {
     marginTop: StyleConstants.baseMargin,
-    borderColor: BaseColors.white,
+    borderColor: Colors.white,
     borderWidth: 1,
     padding: StyleConstants.baseMargin,
     borderRadius: StyleConstants.borderRadius,
     marginRight: StyleConstants.baseMargin,
-    shadowColor: BaseColors.lightPrimary,
+    shadowColor: Colors.lightPrimary,
     shadowOffset: {
       width: 5,
       height: 2,
@@ -370,13 +348,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: StyleConstants.smallerFont,
-    color: BaseColors.lightWhite,
+    color: Colors.lightWhite,
     marginRight: StyleConstants.smallMargin,
     marginBottom: StyleConstants.smallMargin,
   },
   text: {
     fontSize: StyleConstants.smallFont,
-    color: BaseColors.black,
+    color: Colors.black,
     paddingTop: StyleConstants.baseMargin,
   },
   textCap: {
@@ -385,7 +363,7 @@ const styles = StyleSheet.create({
   url: {
     textDecorationLine: 'underline',
     fontSize: StyleConstants.smallFont,
-    color: BaseColors.primary,
+    color: Colors.primary,
   },
 });
 
