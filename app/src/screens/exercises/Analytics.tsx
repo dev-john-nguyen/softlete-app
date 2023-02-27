@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { connect, useSelector } from 'react-redux';
 import {
   fetchExerciseAnalytics,
@@ -10,7 +10,6 @@ import AnalyticsGraph from '../../components/analytics/Graph';
 import _ from 'lodash';
 import Loading from '../../components/elements/Loading';
 import {
-  AnalyticsFilters,
   DateSelectionTypes,
   DEFAULT_DATES,
 } from '../../components/analytics/types';

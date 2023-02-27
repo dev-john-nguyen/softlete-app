@@ -56,6 +56,7 @@ import { default as Scale } from './ScaleSvg';
 import { default as BarChart } from './BarChartSvg';
 import { default as BoxGraph } from './BoxGraphSvg';
 import { default as Table } from './TableSvg';
+import { default as Search } from './SearchSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -112,6 +113,7 @@ const Icons = {
   bar_chart: (props: any) => <BarChart {...props} />,
   box_graph: (props: any) => <BoxGraph {...props} />,
   box_table: (props: any) => <Table {...props} />,
+  search: (props: any) => <Search {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
