@@ -4,7 +4,8 @@ import Empty from './Empty';
 import { FlexBox } from '@app/ui';
 import _ from 'lodash';
 import { Constants } from '@app/utils';
-import { ChartBanner, LineChartGraph } from '@app/elements';
+import { ChartBanner, LineChartGraph, PickerButton } from '@app/elements';
+import { AnalyticDataProps, AnalyticsFilters } from './types';
 
 interface CustomLineChartProps {
   data: any;
@@ -60,15 +61,28 @@ const CustomLineChart = ({
 };
 
 interface Props {
-  data: any;
+  data: AnalyticDataProps[];
   dates: Date[];
 }
 
 const AnalyticsGraph = ({ dates, data }: Props) => {
+  const [filter, setFilter] = useState<AnalyticsFilters>(AnalyticsFilters.AVG);
   const [chartLayout, setChartLayout] = useState<{
     width: number;
     height: number;
   }>();
+
+  const filteredData = useMemo(() => {
+    switch (filter) {
+      case AnalyticsFilters.LOW:
+        return data.map(d => d.min);
+      case AnalyticsFilters.HIGH:
+        return data.map(d => d.max);
+      case AnalyticsFilters.AVG:
+      default:
+        return data.map(d => d.avg);
+    }
+  }, [filter, data]);
 
   const getChartLayoutHandler = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
@@ -76,11 +90,33 @@ const AnalyticsGraph = ({ dates, data }: Props) => {
   };
 
   return (
-    <FlexBox flex={1} padding={15}>
+    <FlexBox flex={1} padding={15} paddingTop={0} column>
+      <FlexBox marginBottom={10}>
+        <PickerButton
+          marginBottom={0}
+          isActive={filter === AnalyticsFilters.LOW}
+          onPress={() => setFilter(AnalyticsFilters.LOW)}>
+          Min
+        </PickerButton>
+        <PickerButton
+          marginBottom={0}
+          containerStyles={{ marginLeft: 10 }}
+          isActive={filter === AnalyticsFilters.AVG}
+          onPress={() => setFilter(AnalyticsFilters.AVG)}>
+          Avg
+        </PickerButton>
+        <PickerButton
+          marginBottom={0}
+          containerStyles={{ marginLeft: 10 }}
+          isActive={filter === AnalyticsFilters.HIGH}
+          onPress={() => setFilter(AnalyticsFilters.HIGH)}>
+          Max
+        </PickerButton>
+      </FlexBox>
       <FlexBox flex={1} onLayout={getChartLayoutHandler}>
         {data.length > 0 && chartLayout ? (
           <CustomLineChart
-            data={data}
+            data={filteredData}
             dates={dates}
             chartLayout={chartLayout}
           />

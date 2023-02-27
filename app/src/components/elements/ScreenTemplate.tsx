@@ -37,6 +37,9 @@ interface Props {
   enableScrollWrapper?: boolean;
   isLoading?: boolean;
   applyKeyboardDismiss?: boolean;
+  leftContentFlex?: number;
+  rightContentFlex?: number;
+  middleContentFlex?: number;
 }
 
 const ScreenTemplate = ({
@@ -61,6 +64,9 @@ const ScreenTemplate = ({
   enableScrollWrapper,
   isLoading,
   applyKeyboardDismiss,
+  leftContentFlex,
+  rightContentFlex,
+  middleContentFlex,
 }: Props) => {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
@@ -95,7 +101,7 @@ const ScreenTemplate = ({
             paddingLeft={15}
             paddingRight={15}
             zIndex={100}>
-            <FlexBox flex={0.3}>
+            <FlexBox flex={leftContentFlex ?? 0.3}>
               {isBackVisible && (
                 <BackButton
                   onPress={goBackHandler}
@@ -104,10 +110,13 @@ const ScreenTemplate = ({
               )}
               {leftContent}
             </FlexBox>
-            <FlexBox flex={1} alignItems="center" justifyContent="center">
+            <FlexBox
+              flex={middleContentFlex ?? 1}
+              alignItems="center"
+              justifyContent="center">
               {middleContent}
             </FlexBox>
-            <FlexBox flex={0.3}>{rightContent}</FlexBox>
+            <FlexBox flex={rightContentFlex ?? 0.3}>{rightContent}</FlexBox>
           </FlexBox>
           {enableScrollWrapper ? (
             <>

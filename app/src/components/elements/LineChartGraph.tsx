@@ -1,7 +1,7 @@
 import { GraphPlaceholder, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, normalize, rgba } from '@app/utils';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
 import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
 
@@ -42,7 +42,7 @@ const LineChartGraph: FC<Props> = ({
   subHeader,
   decimalPlaces = 0,
   labels = [],
-  paddingRight = 30,
+  paddingRight,
   onDataPointClick,
   fromZero,
   renderDotContent,
@@ -50,6 +50,15 @@ const LineChartGraph: FC<Props> = ({
   height = normalize.height(5),
   width = normalize.width(1),
 }) => {
+  const chartPaddingRight = useMemo(() => {
+    if (paddingRight) return paddingRight;
+    const max = Math.max.apply(null, data);
+    if (max) {
+      return max.toString().length * 10;
+    } else {
+      return 30;
+    }
+  }, [data]);
   return (
     <FlexBox column>
       {(header || subHeader) && (
@@ -76,7 +85,7 @@ const LineChartGraph: FC<Props> = ({
             labels: labels,
             datasets: [
               {
-                data: data.length < 2 ? [0] : data,
+                data: data,
               },
             ],
           }}
@@ -109,7 +118,8 @@ const LineChartGraph: FC<Props> = ({
             strokeWidth: 1,
           }}
           style={{
-            paddingRight: moderateScale(paddingRight),
+            paddingRight: moderateScale(chartPaddingRight),
+            overflow: 'visible',
           }}
         />
       )}

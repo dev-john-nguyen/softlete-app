@@ -64,7 +64,6 @@ const ExerciseAnalytics = ({
   const [isFetching, setIsFetching] = useState(false);
   const [dates, setDates] = useState<Date[]>([]);
   const [data, setData] = useState<AnalyticDataProps[]>([]);
-  const [filter, setFilter] = useState<AnalyticsFilters>(AnalyticsFilters.AVG);
 
   const handleFetchedAnalytics = (
     fetchedAnalytics: void | AnalyticsProps[],
@@ -169,18 +168,6 @@ const ExerciseAnalytics = ({
     }
   };
 
-  const filteredData = useMemo(() => {
-    switch (filter) {
-      case AnalyticsFilters.LOW:
-        return data.map(d => d.min);
-      case AnalyticsFilters.HIGH:
-        return data.map(d => d.max);
-      case AnalyticsFilters.AVG:
-      default:
-        return data.map(d => d.avg);
-    }
-  }, [filter, data]);
-
   const onDatesSubmission = async () => {
     if (!analytics) return;
     const { athlete } = route.params;
@@ -214,8 +201,10 @@ const ExerciseAnalytics = ({
   return (
     <ScreenTemplate
       isBackVisible
+      leftContentFlex={0}
+      rightContentFlex={0}
       middleContent={
-        <FlexBox>
+        <FlexBox flex={1} marginLeft={10}>
           <PrimaryText size="large" variant="primary">
             {analytics?.exercise?.name || 'Analytics'}
           </PrimaryText>
@@ -225,7 +214,7 @@ const ExerciseAnalytics = ({
         if (loading) return <Loading white />;
         return (
           <FlexBox flex={1} column>
-            <FlexBox paddingRight={15} paddingLeft={15} marginTop={5} column>
+            <FlexBox paddingRight={15} paddingLeft={15} column>
               <PrimaryText textTransform="capitalize">
                 Measurement: {analytics?.exercise?.measSubCat || 'N/A'}
               </PrimaryText>
@@ -248,7 +237,7 @@ const ExerciseAnalytics = ({
                   <DataTable data={analytics?.data || []} key="data-table" />,
                   <AnalyticsGraph
                     dates={dates}
-                    data={filteredData}
+                    data={data}
                     key="analytics-graph"
                   />,
                 ]}

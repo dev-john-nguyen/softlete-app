@@ -17,6 +17,7 @@ type Props = {
   arrowDirection?: 'down' | 'right' | 'left' | 'up';
   borderBottom?: boolean;
   marginBottom?: number;
+  isActive?: boolean;
 };
 
 const PickerButton: React.FC<Props> = props => {
@@ -31,10 +32,10 @@ const PickerButton: React.FC<Props> = props => {
         padding={10}
         paddingLeft={15}
         paddingRight={15}
-        marginBottom={props.marginBottom || 15}
+        marginBottom={props.marginBottom ?? 15}
         alignItems="center"
         justifyContent="space-between"
-        backgroundColor={rgba(Colors.whiteRbg, 0.05)}
+        backgroundColor={rgba(Colors.whiteRbg, props.isActive ? 0.2 : 0.05)}
         opacity={props.disabled ? 0.5 : 1}
         borderRadius={props.borderRadius || 5}
         borderBottomWidth={props.borderBottom ? 1 : 0}
