@@ -53,6 +53,9 @@ import { default as AddImage } from './AddImageSvg';
 import { default as Sort } from './SortSvg';
 import { default as Error } from './ErrorSvg';
 import { default as Scale } from './ScaleSvg';
+import { default as BarChart } from './BarChartSvg';
+import { default as BoxGraph } from './BoxGraphSvg';
+import { default as Table } from './TableSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -106,6 +109,9 @@ const Icons = {
   sort: (props: any) => <Sort {...props} />,
   error: (props: any) => <Error {...props} />,
   scale: (props: any) => <Scale {...props} />,
+  bar_chart: (props: any) => <BarChart {...props} />,
+  box_graph: (props: any) => <BoxGraph {...props} />,
+  box_table: (props: any) => <Table {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

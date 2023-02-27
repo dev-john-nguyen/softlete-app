@@ -7,18 +7,25 @@ const svg = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/
 <rect x="9" y="9" width="6" height="11" stroke-linecap="round"/>
 <path d="M3 6C3 5.05719 3 4.58579 3.29289 4.29289C3.58579 4 4.05719 4 5 4H19C19.9428 4 20.4142 4 20.7071 4.29289C21 4.58579 21 5.05719 21 6V9H3V6Z" stroke-linecap="round"/>
 </svg>
-`
+`;
 
 interface Props {
-    strokeColor: string;
+  strokeColor?: string;
+  color?: string;
+  size?: number;
 }
 
-class TableSvg extends React.Component<Props, {}> {
-    render() {
-        return (
-            <SvgXml xml={svg} width='100%' height='100%' stroke={this.props.strokeColor} />
-        )
-    }
+class TableSvg extends React.Component<Props> {
+  render() {
+    return (
+      <SvgXml
+        xml={svg}
+        width={this.props.size || '100%'}
+        height={this.props.size || '100%'}
+        stroke={this.props.color || this.props.strokeColor}
+      />
+    );
+  }
 }
 
-export default TableSvg
+export default TableSvg;

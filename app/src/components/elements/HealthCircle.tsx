@@ -2,9 +2,9 @@ import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { normalize } from '@app/utils';
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { ProgressCircle } from 'react-native-svg-charts';
-import BaseColors, { rgba } from '../../../utils/BaseColors';
+import BaseColors, { rgba } from '../../utils/BaseColors';
 
 interface Props {
   progress: number;
@@ -21,10 +21,10 @@ const HealthProgressItem = ({
   progress,
   name,
   value,
-  index,
-  containerStyle,
   small,
 }: Props) => {
+  const circleSize = small ? normalize.width(6) : normalize.width(5);
+  const circleWidth = small ? 7 : 8;
   return (
     <FlexBox alignItems="center" marginBottom={10} flexDirection="column">
       <ProgressCircle
@@ -34,10 +34,10 @@ const HealthProgressItem = ({
         startAngle={0}
         cornerRadius={45}
         style={{
-          height: normalize.width(5),
-          width: normalize.width(5),
+          height: circleSize,
+          width: circleSize,
         }}
-        strokeWidth={8}
+        strokeWidth={circleWidth}
       />
       <FlexBox flexDirection="column" alignItems="center" marginTop={5}>
         <PrimaryText size="medium" variant="secondary">
@@ -50,7 +50,5 @@ const HealthProgressItem = ({
     </FlexBox>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default HealthProgressItem;

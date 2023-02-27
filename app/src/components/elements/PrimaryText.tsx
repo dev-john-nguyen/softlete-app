@@ -45,7 +45,7 @@ const PrimaryText: FC<Props & StyleProp<any>> = ({
       letterSpacing = 1;
     }
 
-    if (variant === 'primary') {
+    if (variant === 'primary' || size === 'large') {
       fontFamily = Fonts.primary;
     } else if (
       variant === 'secondary' ||

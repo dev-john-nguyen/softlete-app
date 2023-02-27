@@ -12,7 +12,7 @@ interface Props {
 const Loading = ({ white = true, size = 'large' }: Props) => {
   return (
     <FlexBox column alignItems="center" justifyContent="center" flex={1}>
-      <PrimaryText size="large" variant="primary" marginBottom={10}>
+      <PrimaryText size="large" variant="primary" marginBottom={15}>
         Loading Data ...
       </PrimaryText>
       <ActivityIndicator

@@ -3,14 +3,37 @@ import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, normalize, rgba } from '@app/utils';
 import React, { FC } from 'react';
 import { LineChart } from 'react-native-chart-kit';
+import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
+
+export type onDataPointClickProps = {
+  index: number;
+  value: number;
+  dataset: Dataset;
+  x: number;
+  y: number;
+  getColor: (opacity: number) => string;
+};
+
+export type renderDotContentProps = {
+  x: number;
+  y: number;
+  index: number;
+  indexData: number;
+};
 
 interface Props {
   data: number[];
-  header: string;
-  subHeader: string;
+  header?: string;
+  subHeader?: string;
   decimalPlaces?: number;
   labels?: string[];
   paddingRight?: number;
+  onDataPointClick?: ((data: onDataPointClickProps) => void) | undefined;
+  renderDotContent?: (params: renderDotContentProps) => React.ReactNode;
+  fromZero?: boolean;
+  widthDots?: boolean;
+  height?: number;
+  width?: number;
 }
 
 const LineChartGraph: FC<Props> = ({
@@ -20,23 +43,31 @@ const LineChartGraph: FC<Props> = ({
   decimalPlaces = 0,
   labels = [],
   paddingRight = 30,
+  onDataPointClick,
+  fromZero,
+  renderDotContent,
+  widthDots = false,
+  height = normalize.height(5),
+  width = normalize.width(1),
 }) => {
   return (
     <FlexBox column>
-      <FlexBox justifyContent="space-between" marginBottom={5} width="100%">
-        <FlexBox column>
-          <PrimaryText size="medium" bold>
-            {header}
-          </PrimaryText>
-          {subHeader && (
-            <PrimaryText size="small" opacity={0.6}>
-              {subHeader}
+      {(header || subHeader) && (
+        <FlexBox justifyContent="space-between" marginBottom={5} width="100%">
+          <FlexBox column>
+            <PrimaryText size="medium" bold>
+              {!!header}
             </PrimaryText>
-          )}
+            {subHeader && (
+              <PrimaryText size="small" opacity={0.6}>
+                {!!subHeader}
+              </PrimaryText>
+            )}
+          </FlexBox>
         </FlexBox>
-      </FlexBox>
+      )}
       {data.length < 1 ? (
-        <FlexBox height={150} marginTop={10} marginBottom={20}>
+        <FlexBox height={height} marginTop={10} marginBottom={20} width={width}>
           <GraphPlaceholder />
         </FlexBox>
       ) : (
@@ -49,12 +80,15 @@ const LineChartGraph: FC<Props> = ({
               },
             ],
           }}
-          width={normalize.width(1)}
-          height={normalize.height(5)}
+          width={width}
+          height={height}
           withVerticalLines={false}
           bezier
           segments={4}
-          withDots={false}
+          onDataPointClick={onDataPointClick}
+          fromZero={fromZero}
+          renderDotContent={renderDotContent}
+          withDots={widthDots}
           chartConfig={{
             backgroundGradientFrom: 'transparent',
             backgroundGradientTo: 'transparent',
@@ -68,9 +102,9 @@ const LineChartGraph: FC<Props> = ({
               fontSize: 10,
             },
             propsForDots: {
-              r: '2',
-              strokeWidth: '0',
-              stroke: Colors.primary,
+              r: '.5',
+              strokeWidth: '10',
+              stroke: Colors.white,
             },
             strokeWidth: 1,
           }}

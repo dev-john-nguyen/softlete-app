@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PrimaryText } from '@app/elements';
 import { Colors } from '@app/utils';
-import { View } from 'react-native';
 import { FlexBox } from '@app/ui';
 
 interface Props {
@@ -12,21 +11,20 @@ interface Props {
     indexData: number;
   };
   isActive: boolean;
-  data: {
-    date: Date;
-    value: number;
-  }[];
+  data: Date[];
+  direction?: 'top' | 'bottom';
 }
 
-const ExerciseChartItem = ({ props, isActive, data }: Props) => {
-  const getDate = () => {
-    const d = data.find((_, i) => i === props.index);
-    if (d) {
-      const { date } = d;
-      return date.getMonth() + 1 + '/' + date.getDate();
+const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
+  const formattedDate = useMemo(() => {
+    if (data && props.index < data.length) {
+      const date = data[props.index];
+      if (date) {
+        return date.getMonth() + 1 + '/' + date.getDate();
+      }
     }
     return '';
-  };
+  }, [data, props]);
 
   return (
     <FlexBox
@@ -41,10 +39,10 @@ const ExerciseChartItem = ({ props, isActive, data }: Props) => {
       borderRadius={5}
       alignItems="center"
       left={props.x - 25}
-      top={props.y - 50}
+      top={direction === 'top' ? props.y - 50 : props.y + 10}
       opacity={isActive ? 1 : 0}>
       <PrimaryText size="small" fontSize={10}>
-        {getDate()}
+        {formattedDate}
       </PrimaryText>
       <PrimaryText size="small" fontSize={10} bold>
         {props.indexData}
@@ -53,4 +51,4 @@ const ExerciseChartItem = ({ props, isActive, data }: Props) => {
   );
 };
 
-export default ExerciseChartItem;
+export default ChartBanner;
