@@ -7,7 +7,7 @@ const useBanner = () => {
   return (
     message: string,
     type: BannerTypes = BannerTypes.default,
-    duration?: number,
+    duration?: number, // ms
   ) => {
     dispatch(setBanner(type, message, duration ? 1000 * duration : undefined));
   };

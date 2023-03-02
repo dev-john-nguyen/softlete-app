@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ActivityIndicator, Keyboard } from 'react-native';
 import { normalize, capitalize } from '../../utils/tools';
-import BaseColors from '../../utils/BaseColors';
 import {
   ExerciseActionProps,
   Categories,
@@ -27,6 +26,9 @@ import {
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
+import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
+import { Colors } from '@app/utils';
 
 interface Props {
   navigation: any;
@@ -55,12 +57,12 @@ const EditExerciseDetails = ({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Categories>(Categories.other);
-  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [isOwner, setIsOwner] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
+  const setBanner = useBanner();
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -123,15 +125,12 @@ const EditExerciseDetails = ({
     //reset all states
     setConfirm(false);
     setLoading(false);
-    setErrors([]);
   }, [route]);
 
   const onSubmit = async () => {
     if (!exerciseProps) return;
 
-    const errorsStore = [];
-
-    if (!name) errorsStore.push('Name is required.');
+    if (!name) return setBanner('Name is required.', BannerTypes.error);
 
     if (
       (exerciseProps._id &&
@@ -139,12 +138,8 @@ const EditExerciseDetails = ({
       !exerciseProps._id
     ) {
       const isValid = await validateName();
-      if (!isValid) errorsStore.push('This name is already used.');
-    }
-
-    if (errorsStore.length > 0) {
-      setErrors(errorsStore);
-      return;
+      if (!isValid)
+        return setBanner('This name is already used.', BannerTypes.error);
     }
 
     dispatch({
@@ -216,6 +211,20 @@ const EditExerciseDetails = ({
     isOwner && setPicker(PickerOptions.cats);
   };
 
+  const rightContent = useMemo(() => {
+    if (loading) return <ActivityIndicator color={Colors.white} />;
+    if (exerciseProps?._id && isOwner) {
+      return (
+        <Icon
+          icon="trash_bin"
+          onPress={onDelete}
+          size={20}
+          color={Colors.white}
+        />
+      );
+    }
+  }, [loading, exerciseProps, isOwner]);
+
   return (
     <ScreenTemplate
       applyContentPadding
@@ -224,26 +233,12 @@ const EditExerciseDetails = ({
       onPickerClose={() => setPicker(PickerOptions.disable)}
       pickerValue={pickerValue}
       pickerItems={pickerItems}
-      onPickerChangeValue={onPickerValueChange}>
-      <FlexBox justifyContent="flex-end" alignItems="flex-end">
-        {loading ? (
-          <ActivityIndicator color={BaseColors.white} /> ? (
-            exerciseProps?._id &&
-            isOwner && (
-              <Icon
-                icon="trash_bin"
-                color={BaseColors.white}
-                onPress={onDelete}
-                size={20}
-              />
-            )
-          ) : (
-            <></>
-          )
-        ) : (
-          <></>
-        )}
-      </FlexBox>
+      onPickerChangeValue={onPickerValueChange}
+      rightContent={
+        <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
+          {rightContent}
+        </FlexBox>
+      }>
       {confirm ? (
         <ConfirmModal
           onConfirm={onDelete}
@@ -257,17 +252,8 @@ const EditExerciseDetails = ({
       <PrimaryText>Fill out the form below.</PrimaryText>
       {!isOwner ? (
         <FlexBox>
-          <Icon icon="info" color={BaseColors.white} size={20} />
+          <Icon icon="info" color={Colors.white} size={20} />
           <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
-        </FlexBox>
-      ) : (
-        <></>
-      )}
-      {errors.length > 0 ? (
-        <FlexBox marginTop={5} marginBottom={5}>
-          {errors.map(e => (
-            <PrimaryText key={Math.random()}>*{e}</PrimaryText>
-          ))}
         </FlexBox>
       ) : (
         <></>

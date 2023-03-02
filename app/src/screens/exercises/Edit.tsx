@@ -43,6 +43,7 @@ import Icon from '@app/icons';
 import { Colors, Constants } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
 import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
 
 interface Props {
   navigation: any;
@@ -169,7 +170,7 @@ const EditExercise = ({
 
     if (errorsStore) {
       setLoading(false);
-      setBanner(errorsStore);
+      setBanner(errorsStore, BannerTypes.error);
       return;
     }
 
@@ -329,7 +330,7 @@ const EditExercise = ({
                   icon="trash_bin"
                   color={Colors.white}
                   onPress={onDelete}
-                  size={25}
+                  size={20}
                   containerStyles={{ marginRight: 15 }}
                 />
               )}
@@ -337,7 +338,7 @@ const EditExercise = ({
                 icon="save"
                 color={Colors.white}
                 onPress={onSubmit}
-                size={25}
+                size={20}
               />
             </>
           )}

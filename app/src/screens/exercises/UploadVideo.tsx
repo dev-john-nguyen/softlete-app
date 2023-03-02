@@ -18,7 +18,7 @@ import {
   ScreenTemplate,
   VideoPicker,
 } from '@app/elements';
-import { AutoId } from '@app/utils';
+import { AutoId, Colors } from '@app/utils';
 
 interface Props {
   navigation: any;
@@ -160,9 +160,14 @@ const UploadExerciseVideo = ({
       isBackVisible
       applyContentPadding
       rightContent={
-        <FlexBox flex={1}>
+        <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
           {exerciseProps?._id && (
-            <Icon icon="trash_bin" size={20} onPress={onTrash} />
+            <Icon
+              icon="trash_bin"
+              size={20}
+              onPress={onTrash}
+              color={Colors.white}
+            />
           )}
         </FlexBox>
       }>
@@ -172,7 +177,6 @@ const UploadExerciseVideo = ({
         <VideoPicker
           uri={videoURL}
           setUri={setUri}
-          dispatch={dispatch}
           thumbnail={videoThumbnail}
         />
         <FlexBox marginTop={20}>
