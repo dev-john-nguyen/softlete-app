@@ -18,20 +18,23 @@ type Props = {
   borderBottom?: boolean;
   marginBottom?: number;
   isActive?: boolean;
+  textTransform?: 'capitalize';
 };
 
 const PickerButton: React.FC<Props> = props => {
   return (
     <FlexBox {...props.containerStyles} column>
       {!!props.label && (
-        <PrimaryText variant="secondary" size="small" marginBottom={5}>
+        <PrimaryText
+          variant="secondary"
+          size="small"
+          marginBottom={5}
+          opacity={0.8}>
           {props.label}
         </PrimaryText>
       )}
       <FlexBox
         padding={10}
-        paddingLeft={15}
-        paddingRight={15}
         marginBottom={props.marginBottom ?? 15}
         alignItems="center"
         justifyContent="space-between"
@@ -41,7 +44,10 @@ const PickerButton: React.FC<Props> = props => {
         borderBottomWidth={props.borderBottom ? 1 : 0}
         borderBottomColor={BaseColors.lightGrey}
         onPress={props.disabled ? undefined : props.onPress}>
-        <PrimaryText variant="secondary" size="small">
+        <PrimaryText
+          variant="secondary"
+          size="small"
+          textTransform={props.textTransform}>
           {props.children}
         </PrimaryText>
         {props.arrow && (

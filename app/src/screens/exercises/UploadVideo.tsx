@@ -1,66 +1,46 @@
-import _ from 'lodash';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
-import { connect } from 'react-redux';
+import React, { useEffect, useMemo, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../App';
-import PrimaryButton from '../../components/elements/PrimaryButton';
-import PrimaryText from '../../components/elements/PrimaryText';
-import SecondaryText from '../../components/elements/SecondaryText';
-import VideoPicker from '../../components/elements/VideoPicker';
-import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { ExercisesVideoBatchProps } from '../../services/global/types';
-import AutoId from '../../utils/AutoId';
-import BaseColors from '../../utils/BaseColors';
 import { HomeStackScreens } from '../home/types';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { AdminStackList } from '../admin/screens/types';
-import {
-  ExerciseActionProps,
-  ExerciseProps,
-} from '../../services/exercises/types';
+import { ExerciseActionProps } from '../../services/exercises/types';
 import { removeExercise } from '../../services/exercises/actions';
-import TrashSvg from '../../assets/TrashSvg';
-import { normalize } from '../../utils/tools';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import { UserProps } from '../../services/user/types';
 import { ProgramStackScreens } from '../program/types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import {
+  PrimaryButton,
+  PrimaryText,
+  ScreenTemplate,
+  VideoPicker,
+} from '@app/elements';
+import { AutoId } from '@app/utils';
 
 interface Props {
   navigation: any;
   route: any;
   dispatch: AppDispatch;
-  exerciseProps?: ExerciseProps;
   removeExercise: ExerciseActionProps['removeExercise'];
-  user: UserProps;
 }
 
 const UploadExerciseVideo = ({
   navigation,
   dispatch,
   route,
-  exerciseProps,
   removeExercise,
-  user,
 }: Props) => {
+  const { exerciseProps } = useSelector((state: ReducerProps) => ({
+    exerciseProps: state.exercises.targetExercise,
+    user: state.user,
+  }));
+
   const [uri, setUri] = useState('');
   const [thumbnail, setThumbnail] = useState('');
   const [trashVid, setTrashVid] = useState(false);
-  const headerHeight = useHeaderHeight();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        exerciseProps?._id && (
-          <Pressable style={styles.svg} onPress={onTrash}>
-            <TrashSvg fillColor={BaseColors.white} />
-          </Pressable>
-        ),
-    });
-  }, [exerciseProps]);
 
   useEffect(() => {
     onCreateThumbnail();
@@ -155,7 +135,7 @@ const UploadExerciseVideo = ({
     return navigation.navigate(HomeStackScreens.EditExerciseDetails);
   };
 
-  const getVideoUrl = () => {
+  const videoURL = useMemo(() => {
     if (uri) return uri;
     if (exerciseProps) {
       if (trashVid) return '';
@@ -163,9 +143,9 @@ const UploadExerciseVideo = ({
       if (exerciseProps.localUrl) return exerciseProps.localUrl;
     }
     return '';
-  };
+  }, [uri, trashVid, exerciseProps]);
 
-  const getThumbNail = () => {
+  const videoThumbnail = useMemo(() => {
     if (thumbnail) return thumbnail;
     if (exerciseProps) {
       if (trashVid) return '';
@@ -173,69 +153,40 @@ const UploadExerciseVideo = ({
       if (exerciseProps.localThumbnail) return exerciseProps.localThumbnail;
     }
     return '';
-  };
+  }, [thumbnail, exerciseProps, trashVid]);
 
   return (
-    <ScreenTemplate>
-      <SafeAreaView
-        style={styles.container}
-        edges={['bottom', 'left', 'right']}>
-        <View style={[styles.container, { marginTop: headerHeight }]}>
-          <PrimaryText styles={styles.header}>Upload Video</PrimaryText>
-          <SecondaryText styles={styles.sub}>
-            Duration must be 30 seconds or less.
-          </SecondaryText>
-          <VideoPicker
-            uri={getVideoUrl()}
-            setUri={setUri}
-            dispatch={dispatch}
-            thumbnail={getThumbNail()}
-          />
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={onRemoveVid} varient="secondary">
-              Clear Video
-            </PrimaryButton>
-            <PrimaryButton onPress={onCompressAndSaveVideo}>Next</PrimaryButton>
-          </View>
-        </View>
-      </SafeAreaView>
+    <ScreenTemplate
+      isBackVisible
+      applyContentPadding
+      rightContent={
+        <FlexBox flex={1}>
+          {exerciseProps?._id && (
+            <Icon icon="trash_bin" size={20} onPress={onTrash} />
+          )}
+        </FlexBox>
+      }>
+      <FlexBox column>
+        <PrimaryText size="large">Upload Video</PrimaryText>
+        <PrimaryText>Duration must be 30 seconds or less.</PrimaryText>
+        <VideoPicker
+          uri={videoURL}
+          setUri={setUri}
+          dispatch={dispatch}
+          thumbnail={videoThumbnail}
+        />
+        <FlexBox marginTop={20}>
+          <PrimaryButton onPress={onRemoveVid} varient="secondary">
+            Clear Video
+          </PrimaryButton>
+          <PrimaryButton onPress={onCompressAndSaveVideo} marginLeft={20}>
+            Next
+          </PrimaryButton>
+        </FlexBox>
+      </FlexBox>
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginLeft: StyleConstants.baseMargin,
-    marginRight: StyleConstants.baseMargin,
-  },
-  header: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.white,
-    textTransform: 'capitalize',
-    marginBottom: 5,
-  },
-  sub: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  buttonContainer: {
-    marginTop: StyleConstants.baseMargin,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  svg: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    marginRight: StyleConstants.baseMargin,
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  exerciseProps: state.exercises.targetExercise,
-  user: state.user,
-});
 
 const mapDispatchToProps = (dispatch: any) => ({
   removeExercise: (exericseUid?: string) =>
@@ -243,7 +194,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   dispatch,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UploadExerciseVideo);
+export default connect(null, mapDispatchToProps)(UploadExerciseVideo);

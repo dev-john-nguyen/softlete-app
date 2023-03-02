@@ -42,6 +42,7 @@ import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { Colors, Constants } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
+import useBanner from 'src/hooks/utils/useBanner';
 
 interface Props {
   navigation: any;
@@ -81,12 +82,12 @@ const EditExercise = ({
     MuscleGroups.other,
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
-  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
   const [isOwner, setIsOwner] = useState(true);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
   const keyboardHeight = useKeyboard();
+  const setBanner = useBanner();
 
   const handleNavigation = () => {
     if (route && route.params) {
@@ -136,7 +137,6 @@ const EditExercise = ({
     );
     //reset all states
     setLoading(false);
-    setErrors([]);
   }, [route]);
 
   useEffect(() => {
@@ -154,7 +154,7 @@ const EditExercise = ({
   const onSubmit = async () => {
     if (loading || !exerciseProps) return;
 
-    const errorsStore = [];
+    let errorsStore = '';
 
     setLoading(true);
 
@@ -162,16 +162,16 @@ const EditExercise = ({
 
     if (youtubeUrl) {
       youtubeId = await fetchUrl();
-      if (!youtubeId) errorsStore.push('Invalid youtube url');
+      if (!youtubeId) {
+        errorsStore = 'The youtube URL provided was invalid. Please try again.';
+      }
     }
 
-    if (errorsStore.length > 0) {
+    if (errorsStore) {
       setLoading(false);
-      setErrors(errorsStore);
+      setBanner(errorsStore);
       return;
     }
-
-    setErrors([]);
 
     let admin = false;
 
@@ -314,6 +314,7 @@ const EditExercise = ({
       pickerValue={pickerValue}
       pickerItems={pickerItems}
       onPickerChangeValue={onPickerValueChange}
+      applyContentPadding
       rightContent={
         <FlexBox flex={1} justifyContent="flex-end">
           {loading ? (
@@ -342,11 +343,7 @@ const EditExercise = ({
           )}
         </FlexBox>
       }>
-      <ScrollView
-        style={{
-          paddingLeft: StyleConstants.baseMargin,
-          paddingRight: StyleConstants.baseMargin,
-        }}>
+      <ScrollView>
         <PrimaryText size="large">Exercise Details</PrimaryText>
         <PrimaryText>Optional Fields</PrimaryText>
         {!isOwner && (
@@ -355,25 +352,20 @@ const EditExercise = ({
             <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
           </FlexBox>
         )}
-        {errors.length > 0 && (
-          <FlexBox column marginTop={5} marginBottom={10}>
-            {errors.map(e => (
-              <PrimaryText key={Math.random()}>*{e}</PrimaryText>
-            ))}
-          </FlexBox>
-        )}
 
         <PickerButton
           label="Measurement Sub Category"
           onPress={() => {
             Keyboard.dismiss();
             setPicker(PickerOptions.measSubCats);
-          }}>
+          }}
+          textTransform="capitalize">
           {measSubCat}
         </PickerButton>
 
         {isOwner && (
           <PickerButton
+            textTransform="capitalize"
             label="Muscle Group"
             onPress={() => {
               Keyboard.dismiss();
@@ -410,6 +402,7 @@ const EditExercise = ({
           borderRadius={5}
           borderColor={Colors.white}
           borderWidth={1}
+          marginTop={10}
           {...Constants.videoSmallDim}>
           <FastImage
             source={{ uri: youtubeThumbnail }}

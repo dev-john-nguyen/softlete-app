@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import {
   ImageLibraryOptions,
   launchImageLibrary,
@@ -8,11 +8,11 @@ import BaseColors from '../../utils/BaseColors';
 import StyleConstants from '../tools/StyleConstants';
 import Constants from '../../utils/Constants';
 import VideoView from './Video';
-import {normalize} from '../../utils/tools';
+import { normalize } from '../../utils/tools';
 import AddImageSvg from '../../assets/AddImageSvg';
-import {AppDispatch} from '../../../App';
-import {setBanner} from '../../services/banner/actions';
-import {BannerTypes} from '../../services/banner/types';
+import { AppDispatch } from '../../../App';
+import { setBanner } from '../../services/banner/actions';
+import { BannerTypes } from '../../services/banner/types';
 
 interface Props {
   uri: string;
@@ -30,11 +30,11 @@ const videoOptions: ImageLibraryOptions = {
   maxWidth: 1000,
 };
 
-const VideoPicker = ({uri, setUri, dispatch, thumbnail}: Props) => {
+const VideoPicker = ({ uri, setUri, dispatch, thumbnail }: Props) => {
   const onSelectVideo = () => {
     launchImageLibrary(
       videoOptions,
-      ({errorCode, errorMessage, didCancel, assets}) => {
+      ({ errorCode, errorMessage, didCancel, assets }) => {
         if (didCancel) {
           //user canceled
           return;
@@ -72,7 +72,7 @@ const VideoPicker = ({uri, setUri, dispatch, thumbnail}: Props) => {
 
   return (
     <View style={styles.content}>
-      {!!uri ? (
+      {uri ? (
         <VideoView url={uri} thumbnail={thumbnail} large />
       ) : (
         <View
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: StyleConstants.baseMargin,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
   },
   image: {
     width: normalize.width(7),

@@ -246,7 +246,7 @@ const Exercise = ({
           />
           <InfoListBox
             secondary
-            desc={exercise.equipment}
+            desc={exercise.equipment || 'N/A'}
             label="Equipment"
             icon="dumb_bell"
             textTransform="capitalize"

@@ -1,13 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Pressable,
-  Keyboard,
-} from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ActivityIndicator, Keyboard } from 'react-native';
 import { normalize, capitalize } from '../../utils/tools';
-import BaseColors, { rgba } from '../../utils/BaseColors';
+import BaseColors from '../../utils/BaseColors';
 import {
   ExerciseActionProps,
   Categories,
@@ -15,14 +9,10 @@ import {
 } from '../../services/exercises/types';
 import { removeExercise, findExercise } from '../../services/exercises/actions';
 import { connect } from 'react-redux';
-import TrashSvg from '../../assets/TrashSvg';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
 import { UserProps } from '../../services/user/types';
-import InfoSvg from '../../assets/InfoSvg';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { HomeStackScreens } from '../home/types';
 import { ProgramStackScreens } from '../program/types';
 import { AppDispatch } from '../../../App';
@@ -34,9 +24,7 @@ import {
   PrimaryButton,
   PrimaryText,
   ScreenTemplate,
-  SecondaryText,
 } from '@app/elements';
-import CustomPicker from 'src/components/elements/Picker';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 
@@ -73,7 +61,6 @@ const EditExerciseDetails = ({
   const [isOwner, setIsOwner] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
-  const headerHeight = useHeaderHeight();
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -199,7 +186,7 @@ const EditExerciseDetails = ({
     return true;
   };
 
-  const renderPickeritems = useCallback(() => {
+  const pickerItems = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
         return Object.values(Categories).map(item => (
@@ -216,7 +203,7 @@ const EditExerciseDetails = ({
     }
   };
 
-  const renderPickerValue = useCallback(() => {
+  const pickerValue = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
         return category;
@@ -230,21 +217,31 @@ const EditExerciseDetails = ({
   };
 
   return (
-    <ScreenTemplate>
+    <ScreenTemplate
+      applyContentPadding
+      isBackVisible
+      isPickerOpen={!!picker}
+      onPickerClose={() => setPicker(PickerOptions.disable)}
+      pickerValue={pickerValue}
+      pickerItems={pickerItems}
+      onPickerChangeValue={onPickerValueChange}>
       <FlexBox justifyContent="flex-end" alignItems="flex-end">
         {loading ? (
-          <ActivityIndicator color={BaseColors.white} />
-        ) : (
-          <>
-            {exerciseProps?._id && isOwner && (
+          <ActivityIndicator color={BaseColors.white} /> ? (
+            exerciseProps?._id &&
+            isOwner && (
               <Icon
                 icon="trash_bin"
                 color={BaseColors.white}
                 onPress={onDelete}
                 size={20}
               />
-            )}
-          </>
+            )
+          ) : (
+            <></>
+          )
+        ) : (
+          <></>
         )}
       </FlexBox>
       {confirm ? (
@@ -256,151 +253,63 @@ const EditExerciseDetails = ({
       ) : (
         <></>
       )}
-      <View
-        style={{
-          paddingLeft: StyleConstants.baseMargin,
-          paddingRight: StyleConstants.baseMargin,
-        }}>
-        <PrimaryText styles={styles.headerText}>Exercise Details</PrimaryText>
-        <SecondaryText styles={styles.headerSubText}>
-          Fill out the form below.
-        </SecondaryText>
-        {!isOwner && (
-          <View style={styles.infoContainer}>
-            <View style={styles.info}>
-              <InfoSvg fillColor={BaseColors.primary} />
-            </View>
-            <SecondaryText styles={styles.infoText}>
-              You have limited access.
-            </SecondaryText>
-          </View>
-        )}
-        <View style={styles.errorContainer}>
-          {errors.length > 0 &&
-            errors.map((e, i) => (
-              <SecondaryText styles={styles.errorText} key={Math.random()}>
-                *{e}
-              </SecondaryText>
-            ))}
-        </View>
-
-        <SecondaryText styles={styles.label}>Name</SecondaryText>
-        <Input
-          placeholder="Name"
-          onChangeText={txt => isOwner && setName(txt)}
-          value={name}
-          autoCapitalize="words"
-          maxLength={50}
-          editable={isOwner}
-          styles={{ marginBottom: StyleConstants.smallMargin }}
-        />
-
-        <SecondaryText styles={styles.label}>Description</SecondaryText>
-        <Input
-          placeholder="Description"
-          onChangeText={txt => isOwner && setDescription(txt)}
-          value={description}
-          multiline={true}
-          maxLength={100}
-          editable={isOwner}
-          styles={{ marginBottom: StyleConstants.smallMargin }}
-          maxHeight={normalize.height(9)}
-          variant="textarea"
-        />
-
-        <PickerButton label="Category" onPress={onCatPress} disabled={!isOwner}>
-          {category ? category : 'Category'}
-        </PickerButton>
-
-        <PrimaryButton onPress={onSubmit} styles={styles.btn}>
-          Next
-        </PrimaryButton>
-      </View>
-      <CustomPicker
-        open={!!picker}
-        setOpen={() => setPicker(PickerOptions.disable)}
-        value={renderPickerValue()}
-        pickerItems={renderPickeritems()}
-        setValue={onPickerValueChange}
+      <PrimaryText size="large">Exercise Details</PrimaryText>
+      <PrimaryText>Fill out the form below.</PrimaryText>
+      {!isOwner ? (
+        <FlexBox>
+          <Icon icon="info" color={BaseColors.white} size={20} />
+          <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
+        </FlexBox>
+      ) : (
+        <></>
+      )}
+      {errors.length > 0 ? (
+        <FlexBox marginTop={5} marginBottom={5}>
+          {errors.map(e => (
+            <PrimaryText key={Math.random()}>*{e}</PrimaryText>
+          ))}
+        </FlexBox>
+      ) : (
+        <></>
+      )}
+      <Input
+        label="Name"
+        placeholder="Name"
+        onChangeText={txt => isOwner && setName(txt)}
+        value={name}
+        autoCapitalize="words"
+        maxLength={50}
+        editable={isOwner}
+        styles={{ marginBottom: StyleConstants.smallMargin }}
       />
+
+      <Input
+        label="Description"
+        placeholder="Description"
+        onChangeText={txt => isOwner && setDescription(txt)}
+        value={description}
+        multiline={true}
+        maxLength={100}
+        editable={isOwner}
+        styles={{ marginBottom: StyleConstants.smallMargin }}
+        maxHeight={normalize.height(9)}
+        variant="textarea"
+      />
+
+      <PickerButton
+        label="Category"
+        onPress={onCatPress}
+        disabled={!isOwner}
+        textTransform="capitalize">
+        {category ? category : 'Category'}
+      </PickerButton>
+
+      <PrimaryButton onPress={onSubmit} alignSelf="flex-end">
+        Next
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerText: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.white,
-  },
-  headerSubText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  label: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  actionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    paddingBottom: StyleConstants.smallMargin,
-    marginRight: StyleConstants.baseMargin,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  infoText: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.black,
-    margin: 5,
-  },
-  errorContainer: {
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  svg: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    marginLeft: StyleConstants.baseMargin,
-  },
-  errorText: {
-    fontSize: normalize.width(30),
-    color: BaseColors.red,
-  },
-  info: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    alignSelf: 'center',
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    padding: 15,
-    borderRadius: StyleConstants.borderRadius,
-    borderWidth: 1,
-    borderColor: rgba(BaseColors.whiteRbg, 0.8),
-    marginBottom: StyleConstants.smallMargin,
-    backgroundColor: 'transparent',
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.white,
-    marginLeft: 5,
-    textTransform: 'capitalize',
-  },
-  btn: {
-    alignSelf: 'flex-end',
-    marginTop: StyleConstants.baseMargin,
-  },
-});
 
 const mapStateToProps = (state: ReducerProps) => ({
   user: state.user,

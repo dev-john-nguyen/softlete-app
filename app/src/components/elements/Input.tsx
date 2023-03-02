@@ -74,7 +74,7 @@ const Input = ({
 
     if (variant === 'textarea') {
       borderStyles.borderWidth = 1;
-      borderStyles.borderColor = BaseColors.lightGrey;
+      borderStyles.borderColor = Colors.white;
     }
 
     return {
@@ -106,7 +106,7 @@ const Input = ({
         containerStyles,
       ]}>
       {label && (
-        <PrimaryText size="small" marginBottom={5} opacity={0.5}>
+        <PrimaryText size="small" marginBottom={5} opacity={0.8}>
           {label}
         </PrimaryText>
       )}

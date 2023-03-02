@@ -63,7 +63,7 @@ const ExerciseYoutubePreview = ({ id, small }: Props) => {
         </Pressable>
       ) : (
         <View style={videoStyle}>
-          <PlaceholderImage />
+          <PlaceholderImage size={30} />
         </View>
       )}
     </FlexBox>
