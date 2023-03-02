@@ -205,7 +205,7 @@ const ExerciseAnalytics = ({
       middleContent={
         <FlexBox flex={1} marginLeft={10}>
           <PrimaryText size="large" variant="primary">
-            {analytics?.exercise?.name || 'Analytics'}
+            {analytics?.exercise?.name || 'Exercise Analytics'}
           </PrimaryText>
         </FlexBox>
       }>

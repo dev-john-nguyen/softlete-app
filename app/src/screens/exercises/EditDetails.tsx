@@ -37,6 +37,8 @@ import {
   SecondaryText,
 } from '@app/elements';
 import CustomPicker from 'src/components/elements/Picker';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
 
 interface Props {
   navigation: any;
@@ -140,7 +142,7 @@ const EditExerciseDetails = ({
   const onSubmit = async () => {
     if (!exerciseProps) return;
 
-    let errorsStore = [];
+    const errorsStore = [];
 
     if (!name) errorsStore.push('Name is required.');
 
@@ -229,101 +231,98 @@ const EditExerciseDetails = ({
 
   return (
     <ScreenTemplate>
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.actionContainer, { height: headerHeight }]}>
-          {loading ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ActivityIndicator color={BaseColors.white} />
-            </View>
-          ) : (
-            <>
-              {exerciseProps?._id && isOwner && (
-                <Pressable style={styles.svg} onPress={onDelete}>
-                  <TrashSvg fillColor={BaseColors.white} />
-                </Pressable>
-              )}
-            </>
-          )}
-        </View>
-
-        {confirm && (
-          <ConfirmModal
-            onConfirm={onDelete}
-            onDeny={() => setConfirm(false)}
-            header={`Are you sure you want to remove ${name}?`}
-          />
+      <FlexBox justifyContent="flex-end" alignItems="flex-end">
+        {loading ? (
+          <ActivityIndicator color={BaseColors.white} />
+        ) : (
+          <>
+            {exerciseProps?._id && isOwner && (
+              <Icon
+                icon="trash_bin"
+                color={BaseColors.white}
+                onPress={onDelete}
+                size={20}
+              />
+            )}
+          </>
         )}
-        <View
-          style={{
-            paddingLeft: StyleConstants.baseMargin,
-            paddingRight: StyleConstants.baseMargin,
-          }}>
-          <PrimaryText styles={styles.headerText}>Exercise Details</PrimaryText>
-          <SecondaryText styles={styles.headerSubText}>
-            Fill out the form below.
-          </SecondaryText>
-          {!isOwner && (
-            <View style={styles.infoContainer}>
-              <View style={styles.info}>
-                <InfoSvg fillColor={BaseColors.primary} />
-              </View>
-              <SecondaryText styles={styles.infoText}>
-                You have limited access.
-              </SecondaryText>
-            </View>
-          )}
-          <View style={styles.errorContainer}>
-            {errors.length > 0 &&
-              errors.map((e, i) => (
-                <SecondaryText styles={styles.errorText} key={Math.random()}>
-                  *{e}
-                </SecondaryText>
-              ))}
-          </View>
-
-          <SecondaryText styles={styles.label}>Name</SecondaryText>
-          <Input
-            placeholder="Name"
-            onChangeText={txt => isOwner && setName(txt)}
-            value={name}
-            autoCapitalize="words"
-            maxLength={50}
-            editable={isOwner}
-            styles={{ marginBottom: StyleConstants.smallMargin }}
-          />
-
-          <SecondaryText styles={styles.label}>Description</SecondaryText>
-          <Input
-            placeholder="Description"
-            onChangeText={txt => isOwner && setDescription(txt)}
-            value={description}
-            multiline={true}
-            maxLength={100}
-            editable={isOwner}
-            styles={{ marginBottom: StyleConstants.smallMargin }}
-            maxHeight={normalize.height(9)}
-            variant="textarea"
-          />
-
-          <PickerButton
-            label="Category"
-            onPress={onCatPress}
-            disabled={!isOwner}>
-            {category ? category : 'Category'}
-          </PickerButton>
-
-          <PrimaryButton onPress={onSubmit} styles={styles.btn}>
-            Next
-          </PrimaryButton>
-        </View>
-        <CustomPicker
-          open={!!picker}
-          setOpen={() => setPicker(PickerOptions.disable)}
-          value={renderPickerValue()}
-          pickerItems={renderPickeritems()}
-          setValue={onPickerValueChange}
+      </FlexBox>
+      {confirm ? (
+        <ConfirmModal
+          onConfirm={onDelete}
+          onDeny={() => setConfirm(false)}
+          header={`Are you sure you want to remove ${name}?`}
         />
-      </SafeAreaView>
+      ) : (
+        <></>
+      )}
+      <View
+        style={{
+          paddingLeft: StyleConstants.baseMargin,
+          paddingRight: StyleConstants.baseMargin,
+        }}>
+        <PrimaryText styles={styles.headerText}>Exercise Details</PrimaryText>
+        <SecondaryText styles={styles.headerSubText}>
+          Fill out the form below.
+        </SecondaryText>
+        {!isOwner && (
+          <View style={styles.infoContainer}>
+            <View style={styles.info}>
+              <InfoSvg fillColor={BaseColors.primary} />
+            </View>
+            <SecondaryText styles={styles.infoText}>
+              You have limited access.
+            </SecondaryText>
+          </View>
+        )}
+        <View style={styles.errorContainer}>
+          {errors.length > 0 &&
+            errors.map((e, i) => (
+              <SecondaryText styles={styles.errorText} key={Math.random()}>
+                *{e}
+              </SecondaryText>
+            ))}
+        </View>
+
+        <SecondaryText styles={styles.label}>Name</SecondaryText>
+        <Input
+          placeholder="Name"
+          onChangeText={txt => isOwner && setName(txt)}
+          value={name}
+          autoCapitalize="words"
+          maxLength={50}
+          editable={isOwner}
+          styles={{ marginBottom: StyleConstants.smallMargin }}
+        />
+
+        <SecondaryText styles={styles.label}>Description</SecondaryText>
+        <Input
+          placeholder="Description"
+          onChangeText={txt => isOwner && setDescription(txt)}
+          value={description}
+          multiline={true}
+          maxLength={100}
+          editable={isOwner}
+          styles={{ marginBottom: StyleConstants.smallMargin }}
+          maxHeight={normalize.height(9)}
+          variant="textarea"
+        />
+
+        <PickerButton label="Category" onPress={onCatPress} disabled={!isOwner}>
+          {category ? category : 'Category'}
+        </PickerButton>
+
+        <PrimaryButton onPress={onSubmit} styles={styles.btn}>
+          Next
+        </PrimaryButton>
+      </View>
+      <CustomPicker
+        open={!!picker}
+        setOpen={() => setPicker(PickerOptions.disable)}
+        value={renderPickerValue()}
+        pickerItems={renderPickeritems()}
+        setValue={onPickerValueChange}
+      />
     </ScreenTemplate>
   );
 };

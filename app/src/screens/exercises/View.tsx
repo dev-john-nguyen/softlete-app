@@ -159,6 +159,7 @@ const Exercise = ({
 
   return (
     <ScreenTemplate
+      isBackVisible
       rightContent={
         <FlexBox alignItems="flex-end" justifyContent="flex-start">
           {!offline && (
