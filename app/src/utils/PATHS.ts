@@ -110,6 +110,21 @@ export default {
       });
       return `api/workouts/get/exercise/data?userUid=${userUid}&fromDate=${FromDate}&toDate=${toDate}&${strArr}`;
     },
+    getExerciseDataByDates: (
+      dates: string[],
+      ids: string[],
+      userUid: string,
+    ) => {
+      let exerciseUids = ``;
+      let datesArrStr = ``;
+      dates.forEach(date => {
+        datesArrStr += `dates=${date}&`;
+      });
+      ids.forEach(id => {
+        exerciseUids += `exerciseUids=${id}&`;
+      });
+      return `api/workouts/get/exercise/data/dates?userUid=${userUid}&${datesArrStr}${exerciseUids}`;
+    },
     getAllHealthData: (userUid: string) => {
       return `api/workouts/get/health-data?userUid=${userUid}`;
     },
