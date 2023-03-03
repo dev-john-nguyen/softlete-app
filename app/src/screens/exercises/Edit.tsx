@@ -1,34 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Pressable,
-  Keyboard,
-  ScrollView,
-} from 'react-native';
-import {
-  normalize,
   validateUrl,
   capitalize,
   getYoutubeThumbNail,
   getYoutubeUrl,
 } from '../../utils/tools';
-import BaseColors from '../../utils/BaseColors';
 import {
   ExerciseActionProps,
   MeasCats,
   MeasSubCats,
   ExerciseFormProps,
-  ExerciseProps,
   MuscleGroups,
   Equipments,
-  ExerciseBaseProps,
   DisCats,
   TimeCats,
   WtCats,
 } from '../../services/exercises/types';
-import SecondaryText from '../../components/elements/SecondaryText';
 import {
   updateExercise,
   createNewExercise,
@@ -36,30 +24,26 @@ import {
   findExercise,
   fetchMusclesAndEquipments,
 } from '../../services/exercises/actions';
-import { connect } from 'react-redux';
-import TrashSvg from '../../assets/TrashSvg';
+import { connect, useSelector } from 'react-redux';
 import StyleConstants from '../../components/tools/StyleConstants';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
 import Input from '../../components/elements/Input';
 import { ReducerProps } from '../../services';
-import { UserProps } from '../../services/user/types';
-import InfoSvg from '../../assets/InfoSvg';
 import FastImage from 'react-native-fast-image';
-import CustomPicker from '../../components/elements/Picker';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
-import PrimaryText from '../../components/elements/PrimaryText';
-import SaveSvg from '../../assets/SaveSvg';
-import Constants from '../../utils/Constants';
 import { HomeStackScreens } from '../home/types';
 import { ProgramStackScreens } from '../program/types';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
-import { PickerButton } from '@app/elements';
+import { PickerButton, PrimaryText } from '@app/elements';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import { Colors, Constants } from '@app/utils';
+import useKeyboard from 'src/hooks/utils/useKeyboard';
+import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
 
 interface Props {
   navigation: any;
@@ -69,9 +53,6 @@ interface Props {
   removeExercise: ExerciseActionProps['removeExercise'];
   findExercise: ExerciseActionProps['findExercise'];
   fetchMusclesAndEquipments: ExerciseActionProps['fetchMusclesAndEquipments'];
-  user: UserProps;
-  equipments: ExerciseBaseProps['equipments'];
-  exerciseProps?: ExerciseProps;
 }
 
 enum PickerOptions {
@@ -88,11 +69,12 @@ const EditExercise = ({
   createNewExercise,
   removeExercise,
   findExercise,
-  user,
   fetchMusclesAndEquipments,
-  equipments,
-  exerciseProps,
 }: Props) => {
+  const { user, exerciseProps } = useSelector((state: ReducerProps) => ({
+    user: state.user,
+    exerciseProps: state.exercises.targetExercise,
+  }));
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [youtubeThumbnail, setYoutubeThumnnail] = useState('');
   const [measCat, setMeasCat] = useState<MeasCats>(MeasCats.weight);
@@ -101,14 +83,12 @@ const EditExercise = ({
     MuscleGroups.other,
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
-  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
   const [isOwner, setIsOwner] = useState(true);
-  const [keyboardShow, setKeyboardShow] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
-  const _keyboardHeight = useSharedValue(normalize.height(2));
-  const headerHeight = useHeaderHeight();
+  const keyboardHeight = useKeyboard();
+  const setBanner = useBanner();
 
   const handleNavigation = () => {
     if (route && route.params) {
@@ -158,7 +138,6 @@ const EditExercise = ({
     );
     //reset all states
     setLoading(false);
-    setErrors([]);
   }, [route]);
 
   useEffect(() => {
@@ -167,32 +146,16 @@ const EditExercise = ({
     }
   }, [youtubeUrl]);
 
-  useEffect(() => {
-    const showSub = Keyboard.addListener('keyboardWillShow', e => {
-      _keyboardHeight.value = e.endCoordinates.height;
-      setKeyboardShow(true);
-    });
-
-    const hideSub = Keyboard.addListener('keyboardWillHide', e => {
-      setKeyboardShow(false);
-    });
-
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
-
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      height: keyboardShow ? withTiming(_keyboardHeight.value) : withTiming(50),
+      height: withTiming(keyboardHeight),
     };
-  }, [keyboardShow]);
+  }, [keyboardHeight]);
 
   const onSubmit = async () => {
     if (loading || !exerciseProps) return;
 
-    let errorsStore = [];
+    let errorsStore = '';
 
     setLoading(true);
 
@@ -200,16 +163,16 @@ const EditExercise = ({
 
     if (youtubeUrl) {
       youtubeId = await fetchUrl();
-      if (!youtubeId) errorsStore.push('Invalid youtube url');
+      if (!youtubeId) {
+        errorsStore = 'The youtube URL provided was invalid. Please try again.';
+      }
     }
 
-    if (errorsStore.length > 0) {
+    if (errorsStore) {
       setLoading(false);
-      setErrors(errorsStore);
+      setBanner(errorsStore, BannerTypes.error);
       return;
     }
-
-    setErrors([]);
 
     let admin = false;
 
@@ -285,7 +248,38 @@ const EditExercise = ({
     return id;
   };
 
-  const renderPickeritems = useCallback(() => {
+  const onPickerValueChange = (val: any) => {
+    switch (picker) {
+      case PickerOptions.measCats:
+        return setMeasCat(val);
+      case PickerOptions.measSubCats:
+        return setMeasSubCat(val);
+      case PickerOptions.muscleGroup:
+        return setMuscleGroup(val);
+    }
+  };
+
+  const pickerItems = useMemo(() => {
+    const getMeasSubCat = () => {
+      switch (measCat) {
+        case MeasCats.distance:
+          return Object.values(DisCats).map(item => (
+            <Picker.Item label={capitalize(item)} value={item} key={item} />
+          ));
+        case MeasCats.time:
+          return Object.values(TimeCats).map(item => (
+            <Picker.Item label={capitalize(item)} value={item} key={item} />
+          ));
+        case MeasCats.weight:
+          return Object.values(WtCats).map(item => (
+            <Picker.Item label={capitalize(item)} value={item} key={item} />
+          ));
+        default:
+          return Object.values(MeasSubCats).map(item => (
+            <Picker.Item label={capitalize(item)} value={item} key={item} />
+          ));
+      }
+    };
     switch (picker) {
       case PickerOptions.measCats:
         return Object.values(MeasCats).map(item => (
@@ -299,41 +293,9 @@ const EditExercise = ({
         ));
     }
     return [];
-  }, [picker]);
+  }, [picker, measCat]);
 
-  const onPickerValueChange = (val: any) => {
-    switch (picker) {
-      case PickerOptions.measCats:
-        return setMeasCat(val);
-      case PickerOptions.measSubCats:
-        return setMeasSubCat(val);
-      case PickerOptions.muscleGroup:
-        return setMuscleGroup(val);
-    }
-  };
-
-  const getMeasSubCat = () => {
-    switch (measCat) {
-      case MeasCats.distance:
-        return Object.values(DisCats).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
-      case MeasCats.time:
-        return Object.values(TimeCats).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
-      case MeasCats.weight:
-        return Object.values(WtCats).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
-      default:
-        return Object.values(MeasSubCats).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
-    }
-  };
-
-  const renderPickerValue = useCallback(() => {
+  const pickerValue = useMemo(() => {
     switch (picker) {
       case PickerOptions.measCats:
         return measCat;
@@ -346,213 +308,115 @@ const EditExercise = ({
   }, [picker]);
 
   return (
-    <ScreenTemplate>
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.actionContainer, { height: headerHeight }]}>
+    <ScreenTemplate
+      isBackVisible
+      isPickerOpen={!!picker}
+      onPickerClose={() => setPicker(PickerOptions.disable)}
+      pickerValue={pickerValue}
+      pickerItems={pickerItems}
+      onPickerChangeValue={onPickerValueChange}
+      applyContentPadding
+      rightContent={
+        <FlexBox flex={1} justifyContent="flex-end">
           {loading ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ActivityIndicator color={BaseColors.white} />
-              <SecondaryText styles={[styles.label, { marginLeft: 10 }]}>
-                {saveMsg}
-              </SecondaryText>
-            </View>
+            <FlexBox alignItems="center">
+              <ActivityIndicator color={Colors.white} />
+              <PrimaryText marginLeft={5}>{saveMsg}</PrimaryText>
+            </FlexBox>
           ) : (
             <>
               {exerciseProps?._id && isOwner && (
-                <Pressable style={styles.svg} onPress={onDelete}>
-                  <TrashSvg fillColor={BaseColors.white} />
-                </Pressable>
+                <Icon
+                  icon="trash_bin"
+                  color={Colors.white}
+                  onPress={onDelete}
+                  size={20}
+                  containerStyles={{ marginRight: 15 }}
+                />
               )}
-
-              <Pressable style={styles.svg} onPress={onSubmit}>
-                <SaveSvg strokeColor={BaseColors.white} />
-              </Pressable>
+              <Icon
+                icon="save"
+                color={Colors.white}
+                onPress={onSubmit}
+                size={20}
+              />
             </>
           )}
-        </View>
+        </FlexBox>
+      }>
+      <ScrollView>
+        <PrimaryText size="large">Exercise Details</PrimaryText>
+        <PrimaryText>Optional Fields</PrimaryText>
+        {!isOwner && (
+          <FlexBox marginTop={10} marginBottom={5}>
+            <Icon icon="info" color={Colors.white} size={20} />
+            <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
+          </FlexBox>
+        )}
 
-        <ScrollView
-          style={{
-            paddingLeft: StyleConstants.baseMargin,
-            paddingRight: StyleConstants.baseMargin,
-          }}>
-          <PrimaryText styles={styles.headerText}>Exercise Details</PrimaryText>
-          <SecondaryText styles={styles.headerSubText}>
-            Optional Fields
-          </SecondaryText>
-          {!isOwner && (
-            <View style={styles.infoContainer}>
-              <View style={styles.info}>
-                <InfoSvg fillColor={BaseColors.white} />
-              </View>
-              <SecondaryText styles={styles.infoText}>
-                You have limited access.
-              </SecondaryText>
-            </View>
-          )}
-          <View style={styles.errorContainer}>
-            {errors.length > 0 &&
-              errors.map((e, i) => (
-                <SecondaryText styles={styles.errorText} key={Math.random()}>
-                  *{e}
-                </SecondaryText>
-              ))}
-          </View>
+        <PickerButton
+          label="Measurement Sub Category"
+          onPress={() => {
+            Keyboard.dismiss();
+            setPicker(PickerOptions.measSubCats);
+          }}
+          textTransform="capitalize">
+          {measSubCat}
+        </PickerButton>
 
+        {isOwner && (
           <PickerButton
-            label="Measurement Sub Category"
+            textTransform="capitalize"
+            label="Muscle Group"
             onPress={() => {
               Keyboard.dismiss();
-              setPicker(PickerOptions.measSubCats);
+              isOwner && setPicker(PickerOptions.muscleGroup);
             }}>
-            {measSubCat}
+            {muscleGroup}
           </PickerButton>
+        )}
 
-          {isOwner && (
-            <PickerButton
-              label="Muscle Group"
-              onPress={() => {
-                Keyboard.dismiss();
-                isOwner && setPicker(PickerOptions.muscleGroup);
-              }}>
-              {muscleGroup}
-            </PickerButton>
-          )}
+        {isOwner && (
+          <Input
+            label="Equipment"
+            placeholder=""
+            onChangeText={txt => isOwner && setEquipment(txt)}
+            value={equipment}
+            maxLength={200}
+            styles={{ marginBottom: StyleConstants.baseMargin }}
+          />
+        )}
 
-          {isOwner && (
-            <Input
-              label="Equipment"
-              placeholder=""
-              onChangeText={txt => isOwner && setEquipment(txt)}
-              value={equipment}
-              maxLength={200}
-              styles={{ marginBottom: StyleConstants.baseMargin }}
-            />
-          )}
+        {isOwner && (
+          <Input
+            label="Youtube Url (can also be found under share options)"
+            placeholder="Youtube URL"
+            onChangeText={txt => isOwner && setYoutubeUrl(txt)}
+            value={youtubeUrl}
+            maxLength={500}
+            editable={isOwner}
+          />
+        )}
 
-          {isOwner && (
-            <Input
-              label="Youtube Url (can also be found under share options)"
-              placeholder="Youtube URL"
-              onChangeText={txt => isOwner && setYoutubeUrl(txt)}
-              value={youtubeUrl}
-              maxLength={500}
-              editable={isOwner}
-            />
-          )}
-
-          <View style={styles.youtube}>
-            <FastImage
-              source={{ uri: youtubeThumbnail }}
-              style={styles.image}
-            />
-          </View>
-
-          <Animated.View style={animatedStyles} />
-        </ScrollView>
-        <CustomPicker
-          open={!!picker}
-          setOpen={() => setPicker(PickerOptions.disable)}
-          value={renderPickerValue()}
-          pickerItems={renderPickeritems()}
-          setValue={onPickerValueChange}
-        />
-      </SafeAreaView>
+        <FlexBox
+          alignSelf="flex-start"
+          borderRadius={5}
+          borderColor={Colors.white}
+          borderWidth={1}
+          marginTop={10}
+          {...Constants.videoSmallDim}>
+          <FastImage
+            source={{ uri: youtubeThumbnail }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </FlexBox>
+        <Animated.View style={animatedStyles} />
+      </ScrollView>
     </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerText: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.white,
-  },
-  headerSubText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  label: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.lightWhite,
-  },
-  actionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    paddingBottom: StyleConstants.smallMargin,
-    marginRight: StyleConstants.baseMargin,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  infoText: {
-    fontSize: StyleConstants.extraSmallFont,
-    margin: 5,
-  },
-  headerContainer: {
-    alignItems: 'flex-end',
-  },
-  errorContainer: {
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  svg: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    marginLeft: StyleConstants.baseMargin,
-  },
-  errorText: {
-    fontSize: normalize.width(30),
-  },
-  youtube: {
-    ...Constants.videoSmallDim,
-    alignSelf: 'flex-start',
-    top: 0,
-    marginTop: StyleConstants.smallMargin,
-    borderColor: BaseColors.lightGrey,
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  info: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    alignSelf: 'center',
-  },
-  image: {
-    height: '100%',
-    width: '100%',
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    backgroundColor: BaseColors.white,
-    padding: 15,
-    borderRadius: StyleConstants.borderRadius,
-    borderWidth: 1,
-    borderColor: BaseColors.lightGrey,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.black,
-    marginLeft: 5,
-    textTransform: 'capitalize',
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  user: state.user,
-  equipments: state.exercises.equipments,
-  exerciseProps: state.exercises.targetExercise,
-});
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   updateExercise,
   createNewExercise,
   removeExercise,

@@ -6,18 +6,25 @@ const svg = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/
 <rect x="3" y="3" width="18" height="18" rx="2"/>
 </svg>
 
-`
+`;
 
 interface Props {
-    strokeColor: string;
+  strokeColor?: string;
+  color?: string;
+  size?: number;
 }
 
-class BoxGraphSvg extends React.Component<Props, {}> {
-    render() {
-        return (
-            <SvgXml xml={svg} width='100%' height='100%' stroke={this.props.strokeColor} />
-        )
-    }
+class BoxGraphSvg extends React.Component<Props> {
+  render() {
+    return (
+      <SvgXml
+        xml={svg}
+        width={this.props.size || '100%'}
+        height={this.props.size || '100%'}
+        stroke={this.props.color || this.props.strokeColor}
+      />
+    );
+  }
 }
 
-export default BoxGraphSvg
+export default BoxGraphSvg;

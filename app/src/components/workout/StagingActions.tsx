@@ -17,16 +17,7 @@ const StagingActions = ({ status, onUpdateStatus, athlete }: Props) => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor:
-            status === WorkoutStatus.completed
-              ? rgba(Colors.greenRbg, 0.1)
-              : rgba(Colors.whiteRbg, 0.05),
-        },
-      ]}>
+    <View style={styles.container}>
       <Pressable
         style={({ pressed }) => [
           styles.tabContainer,
@@ -120,6 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 100,
     alignSelf: 'center',
+    backgroundColor: rgba(Colors.whiteRbg, 0.05),
   },
   tabContainer: {
     flex: 1,

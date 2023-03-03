@@ -6,15 +6,14 @@ import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
 } from 'react-native-health';
-import HealthProgressItem from './components/HealthItem';
 import SectionHeader from './components/SectionHeader';
 import { HomeStackScreens } from '../../screens/home/types';
 import HealthContainer from '../HealthDataVisual';
-import FilterBarsSvg from '../../assets/FilterBarsSvg';
 import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
+import { HealthCircle } from '@app/elements';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -107,21 +106,21 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
         desc="This is today's health report. You were able to recovery fully today!"
       />
       <FlexBox marginTop={30} marginBottom={30} justifyContent="space-between">
-        <HealthProgressItem
+        <HealthCircle
           name="Sleep"
           value={(sleepDuration || '0') + ' hrs'}
           progress={sleepPct}
           progressColor={BaseColors.blue}
           index={1}
         />
-        <HealthProgressItem
+        <HealthCircle
           name="Active"
           value={activeCals.toString() + ' kcal'}
           progress={0.75}
           progressColor={BaseColors.red}
           index={2}
         />
-        <HealthProgressItem
+        <HealthCircle
           name="Total"
           value={(activeCals + basal).toString() + ' kcal'}
           progress={0.75}

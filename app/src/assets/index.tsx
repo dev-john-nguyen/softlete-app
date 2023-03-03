@@ -51,6 +51,13 @@ import { default as Category } from './CategorySvg';
 import { default as Devices } from './DevicesSvg';
 import { default as AddImage } from './AddImageSvg';
 import { default as Sort } from './SortSvg';
+import { default as Error } from './ErrorSvg';
+import { default as Scale } from './ScaleSvg';
+import { default as BarChart } from './BarChartSvg';
+import { default as BoxGraph } from './BoxGraphSvg';
+import { default as Table } from './TableSvg';
+import { default as Search } from './SearchSvg';
+import Database from './Database';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -102,6 +109,13 @@ const Icons = {
   devices: (props: any) => <Devices {...props} />,
   add_image: (props: any) => <AddImage {...props} />,
   sort: (props: any) => <Sort {...props} />,
+  error: (props: any) => <Error {...props} />,
+  scale: (props: any) => <Scale {...props} />,
+  bar_chart: (props: any) => <BarChart {...props} />,
+  box_graph: (props: any) => <BoxGraph {...props} />,
+  box_table: (props: any) => <Table {...props} />,
+  search: (props: any) => <Search {...props} />,
+  database: (props: any) => <Database {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
@@ -111,7 +125,7 @@ type Props = {
   onPressIn?: () => void;
   onPressOut?: () => void;
   icon: IconOptions;
-  size: number;
+  size: number | string;
   strokeColor?: string;
   fillColor?: string;
   color?: string;

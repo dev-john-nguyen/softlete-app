@@ -1,23 +1,19 @@
 import React from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import BaseColors from '../../utils/BaseColors';
-import StyleConstants from '../tools/StyleConstants';
-import Constants from '../../utils/Constants';
 import VideoView from './Video';
-import {normalize} from '../../utils/tools';
+import { normalize } from '../../utils/tools';
 import AddImageSvg from '../../assets/AddImageSvg';
-import {AppDispatch} from '../../../App';
-import {setBanner} from '../../services/banner/actions';
-import {BannerTypes} from '../../services/banner/types';
+import { BannerTypes } from '../../services/banner/types';
+import useBanner from 'src/hooks/utils/useBanner';
+import { Colors, Constants, StyleConstants } from '@app/utils';
 
 interface Props {
   uri: string;
   setUri: (uri: string) => void;
-  dispatch: AppDispatch;
   thumbnail: string;
 }
 
@@ -30,11 +26,13 @@ const videoOptions: ImageLibraryOptions = {
   maxWidth: 1000,
 };
 
-const VideoPicker = ({uri, setUri, dispatch, thumbnail}: Props) => {
+const VideoPicker = ({ uri, setUri, thumbnail }: Props) => {
+  const setBanner = useBanner();
+
   const onSelectVideo = () => {
     launchImageLibrary(
       videoOptions,
-      ({errorCode, errorMessage, didCancel, assets}) => {
+      ({ errorCode, errorMessage, didCancel, assets }) => {
         if (didCancel) {
           //user canceled
           return;
@@ -53,14 +51,12 @@ const VideoPicker = ({uri, setUri, dispatch, thumbnail}: Props) => {
         const selected = assets[0];
 
         if (selected && selected.uri && selected.duration) {
-          if (selected.duration <= 30) {
+          if (selected.duration <= Constants.videoMaxDuration.value) {
             setUri(selected.uri);
           } else {
-            dispatch(
-              setBanner(
-                BannerTypes.warning,
-                'Video duration must be 30 secs or less.',
-              ),
+            setBanner(
+              'Video duration must be 30 secs or less.',
+              BannerTypes.warning,
             );
           }
         }
@@ -72,20 +68,20 @@ const VideoPicker = ({uri, setUri, dispatch, thumbnail}: Props) => {
 
   return (
     <View style={styles.content}>
-      {!!uri ? (
+      {uri ? (
         <VideoView url={uri} thumbnail={thumbnail} large />
       ) : (
         <View
           style={{
             ...Constants.videoDim,
-            borderColor: BaseColors.lightGrey,
+            borderColor: Colors.lightGrey,
             borderWidth: 1,
             borderRadius: StyleConstants.borderRadius,
           }}></View>
       )}
       <Pressable style={styles.image}>
         <Pressable style={styles.svg} onPress={onSelectVideo}>
-          <AddImageSvg fillColor={BaseColors.primary} />
+          <AddImageSvg fillColor={Colors.primary} />
         </Pressable>
       </Pressable>
     </View>
@@ -97,12 +93,12 @@ const styles = StyleSheet.create({
     marginTop: StyleConstants.baseMargin,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
   },
   image: {
     width: normalize.width(7),
     height: normalize.width(7),
-    backgroundColor: BaseColors.white,
+    backgroundColor: Colors.white,
     opacity: 0.8,
     borderRadius: 100,
     justifyContent: 'center',

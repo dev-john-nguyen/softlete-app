@@ -1,32 +1,20 @@
+import Icon from '@app/icons';
+import { FlexBox } from '@app/ui';
+import { Colors } from '@app/utils';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import BaseColors from '../../utils/BaseColors';
 import PrimaryText from '../elements/PrimaryText';
-import StyleConstants from '../tools/StyleConstants';
 
+const Empty = () => {
+  return (
+    <FlexBox column flex={1} marginTop={20} alignItems="center">
+      <FlexBox alignItems="center">
+        <Icon icon="database" color={Colors.white} size={30} />
+        <PrimaryText size="medium" marginLeft={5}>
+          Not Enough Data
+        </PrimaryText>
+      </FlexBox>
+    </FlexBox>
+  );
+};
 
-interface Props {
-
-}
-
-
-const Empty = ({ }: Props) => {
-    return (
-        <View style={styles.container}>
-            <PrimaryText styles={styles.text}>No Data</PrimaryText>
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center'
-    },
-    text: {
-        fontSize: StyleConstants.smallFont,
-        textTransform: 'uppercase',
-        color: BaseColors.white
-    }
-})
 export default Empty;

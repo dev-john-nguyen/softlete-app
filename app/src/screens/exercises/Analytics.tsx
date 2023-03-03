@@ -1,30 +1,18 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
-import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { ReducerProps } from '../../services';
+import React, { useEffect, useState, useCallback } from 'react';
+import { connect, useSelector } from 'react-redux';
 import {
   fetchExerciseAnalytics,
   fetchExerciseAnalyticsDates,
 } from '../../services/misc/actions';
 import { MiscActionProps, AnalyticsProps } from '../../services/misc/types';
-import BaseColors from '../../utils/BaseColors';
-import StyleConstants from '../../components/tools/StyleConstants';
 import DateTools from '../../utils/DateTools';
 import AnalyticsGraph from '../../components/analytics/Graph';
 import _ from 'lodash';
 import Loading from '../../components/elements/Loading';
 import {
-  AnalyticsFilters,
   DateSelectionTypes,
   DEFAULT_DATES,
 } from '../../components/analytics/types';
-import SecondaryText from '../../components/elements/SecondaryText';
-import { ExerciseProps } from '../../services/exercises/types';
 import {
   AnalyticDataProps,
   SelectedDateProps,
@@ -35,18 +23,19 @@ import {
   DateSelection,
   HealthProgress,
 } from '../../components/analytics';
-import PaginatedHorizontalList from '../../components/PaginatedHorizontalList';
-import BarChartSvg from '../../assets/BarChartSvg';
-import BoxGraphSvg from '../../assets/BoxGraphSvg';
-import TableSvg from '../../assets/TableSvg';
-import { ScreenTemplate } from '@app/elements';
+import {
+  PaginatedHorizontalList,
+  PrimaryText,
+  ScreenTemplate,
+} from '@app/elements';
+import { FlexBox } from '@app/ui';
+import { ReducerProps } from 'src/services';
 
 interface Props {
   route: any;
   navigation: any;
   fetchExerciseAnalytics: MiscActionProps['fetchExerciseAnalytics'];
   fetchExerciseAnalyticsDates: MiscActionProps['fetchExerciseAnalyticsDates'];
-  exercises: ExerciseProps[];
 }
 
 interface ExerciseObjProps {
@@ -57,9 +46,11 @@ const ExerciseAnalytics = ({
   route,
   navigation,
   fetchExerciseAnalytics,
-  exercises,
   fetchExerciseAnalyticsDates,
 }: Props) => {
+  const { exercises } = useSelector((state: ReducerProps) => ({
+    exercises: state.exercises.data,
+  }));
   const [analytics, setAnalytics] = useState<AnalyticsProps>();
   const [fromDate] = useState(DateTools.dateToStr(DEFAULT_DATES.start.date));
   const [toDate] = useState(DateTools.dateToStr(DEFAULT_DATES.end.date));
@@ -72,7 +63,6 @@ const ExerciseAnalytics = ({
   const [isFetching, setIsFetching] = useState(false);
   const [dates, setDates] = useState<Date[]>([]);
   const [data, setData] = useState<AnalyticDataProps[]>([]);
-  const [filter, setFilter] = useState<AnalyticsFilters>(AnalyticsFilters.AVG);
 
   const handleFetchedAnalytics = (
     fetchedAnalytics: void | AnalyticsProps[],
@@ -117,13 +107,6 @@ const ExerciseAnalytics = ({
     onFetchAndInitiate();
   }, [route]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTintColor: BaseColors.black,
-      headerTitle: analytics?.exercise?.name || 'Analytics',
-    });
-  }, [analytics, data]);
-
   const initiateData = (analyticsProps: AnalyticsProps) => {
     if (analyticsProps) {
       //dealing with same dates
@@ -132,7 +115,7 @@ const ExerciseAnalytics = ({
         (result: any, value) => {
           const key = value.date as string;
 
-          let mapData: number[] = value.data
+          const mapData: number[] = value.data
             .filter(dta => dta.performVal && !dta.warmup)
             .map(dta => dta.performVal) as number[];
 
@@ -149,23 +132,21 @@ const ExerciseAnalytics = ({
         {},
       );
 
-      let dataStore: AnalyticDataProps[] = [];
+      const dataStore: AnalyticDataProps[] = [];
 
-      for (var key in exercisesObj) {
-        if (exercisesObj.hasOwnProperty(key)) {
-          let performVals = exercisesObj[key];
+      for (const key in exercisesObj) {
+        const performVals = exercisesObj[key];
 
-          let mean = _.mean(performVals);
-          let max = _.max(performVals);
-          let min = _.min(performVals);
+        const mean = _.mean(performVals);
+        const max = _.max(performVals);
+        const min = _.min(performVals);
 
-          dataStore.push({
-            avg: mean ? mean : 0,
-            max: max ? max : 0,
-            min: min ? min : 0,
-            date: DateTools.UTCISOToLocalDate(key),
-          });
-        }
+        dataStore.push({
+          avg: mean ? mean : 0,
+          max: max ? max : 0,
+          min: min ? min : 0,
+          date: DateTools.UTCISOToLocalDate(key),
+        });
       }
 
       //sort dataStore by date
@@ -183,18 +164,6 @@ const ExerciseAnalytics = ({
       );
       setData(sortedDataStore);
       setDates(datesStore);
-    }
-  };
-
-  const renderData = () => {
-    switch (filter) {
-      case AnalyticsFilters.LOW:
-        return data.map(d => d.min);
-      case AnalyticsFilters.HIGH:
-        return data.map(d => d.max);
-      case AnalyticsFilters.AVG:
-      default:
-        return data.map(d => d.avg);
     }
   };
 
@@ -229,20 +198,25 @@ const ExerciseAnalytics = ({
   };
 
   return (
-    <ScreenTemplate headerPadding>
+    <ScreenTemplate
+      isBackVisible
+      leftContentFlex={0}
+      rightContentFlex={0}
+      middleContent={
+        <FlexBox flex={1} marginLeft={10}>
+          <PrimaryText size="large" variant="primary">
+            {analytics?.exercise?.name || 'Exercise Analytics'}
+          </PrimaryText>
+        </FlexBox>
+      }>
       {(() => {
         if (loading) return <Loading white />;
-
         return (
-          <View style={styles.container}>
-            <View
-              style={{
-                margin: StyleConstants.baseMargin,
-                marginBottom: StyleConstants.smallMargin,
-              }}>
-              <SecondaryText styles={styles.measText}>
+          <FlexBox flex={1} column>
+            <FlexBox paddingRight={15} paddingLeft={15} column>
+              <PrimaryText textTransform="capitalize">
                 Measurement: {analytics?.exercise?.measSubCat || 'N/A'}
-              </SecondaryText>
+              </PrimaryText>
               <DateSelection
                 dateFilters={dateFilters}
                 setDateFilters={setDateFilters}
@@ -252,47 +226,31 @@ const ExerciseAnalytics = ({
                 isFetching={isFetching}
               />
               <HealthProgress analytics={analytics} />
-            </View>
+            </FlexBox>
             {isFetching ? (
               <Loading white />
             ) : (
               <PaginatedHorizontalList
                 childrens={[
-                  <StackedBarChart data={data} />,
-                  <DataTable data={analytics?.data || []} />,
-                  <AnalyticsGraph dates={dates} data={renderData()} />,
+                  <StackedBarChart data={data} key="stack-bar-chart" />,
+                  <DataTable data={analytics?.data || []} key="data-table" />,
+                  <AnalyticsGraph
+                    dates={dates}
+                    data={data}
+                    key="analytics-graph"
+                  />,
                 ]}
-                navItems={[
-                  <BarChartSvg strokeColor={BaseColors.white} />,
-                  <TableSvg strokeColor={BaseColors.white} />,
-                  <BoxGraphSvg strokeColor={BaseColors.white} />,
-                ]}
+                navItems={['bar_chart', 'box_table', 'box_graph']}
               />
             )}
-          </View>
+          </FlexBox>
         );
       })()}
     </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  measText: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.white,
-    textTransform: 'uppercase',
-    opacity: 0.8,
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  exercises: state.exercises.data,
-});
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   fetchExerciseAnalytics,
   fetchExerciseAnalyticsDates,
 })(ExerciseAnalytics);

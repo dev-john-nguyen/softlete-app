@@ -18,7 +18,7 @@ const CircleAdd = ({ onPress, style, size }: Props) => {
           width: size ? moderateScale(size) : moderateScale(20),
           height: size ? moderateScale(size) : moderateScale(20),
         }}>
-        <PlusSvg strokeColor={Colors.lightPrimary} />
+        <PlusSvg strokeColor={Colors.white} />
       </View>
     </Pressable>
   );
@@ -27,7 +27,7 @@ const CircleAdd = ({ onPress, style, size }: Props) => {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 100,
-    backgroundColor: rgba(Colors.whiteRbg, 1),
+    backgroundColor: Colors.blendWhite,
     padding: moderateScale(8),
     alignSelf: 'center',
     position: 'absolute',

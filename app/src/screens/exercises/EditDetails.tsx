@@ -1,13 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Pressable,
-  Keyboard,
-} from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ActivityIndicator, Keyboard } from 'react-native';
 import { normalize, capitalize } from '../../utils/tools';
-import BaseColors, { rgba } from '../../utils/BaseColors';
 import {
   ExerciseActionProps,
   Categories,
@@ -15,14 +8,10 @@ import {
 } from '../../services/exercises/types';
 import { removeExercise, findExercise } from '../../services/exercises/actions';
 import { connect } from 'react-redux';
-import TrashSvg from '../../assets/TrashSvg';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
 import { UserProps } from '../../services/user/types';
-import InfoSvg from '../../assets/InfoSvg';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { HomeStackScreens } from '../home/types';
 import { ProgramStackScreens } from '../program/types';
 import { AppDispatch } from '../../../App';
@@ -34,9 +23,12 @@ import {
   PrimaryButton,
   PrimaryText,
   ScreenTemplate,
-  SecondaryText,
 } from '@app/elements';
-import CustomPicker from 'src/components/elements/Picker';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
+import { Colors } from '@app/utils';
 
 interface Props {
   navigation: any;
@@ -65,13 +57,12 @@ const EditExerciseDetails = ({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Categories>(Categories.other);
-  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [isOwner, setIsOwner] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
-  const headerHeight = useHeaderHeight();
+  const setBanner = useBanner();
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -134,15 +125,12 @@ const EditExerciseDetails = ({
     //reset all states
     setConfirm(false);
     setLoading(false);
-    setErrors([]);
   }, [route]);
 
   const onSubmit = async () => {
     if (!exerciseProps) return;
 
-    let errorsStore = [];
-
-    if (!name) errorsStore.push('Name is required.');
+    if (!name) return setBanner('Name is required.', BannerTypes.error);
 
     if (
       (exerciseProps._id &&
@@ -150,12 +138,8 @@ const EditExerciseDetails = ({
       !exerciseProps._id
     ) {
       const isValid = await validateName();
-      if (!isValid) errorsStore.push('This name is already used.');
-    }
-
-    if (errorsStore.length > 0) {
-      setErrors(errorsStore);
-      return;
+      if (!isValid)
+        return setBanner('This name is already used.', BannerTypes.error);
     }
 
     dispatch({
@@ -197,7 +181,7 @@ const EditExerciseDetails = ({
     return true;
   };
 
-  const renderPickeritems = useCallback(() => {
+  const pickerItems = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
         return Object.values(Categories).map(item => (
@@ -214,7 +198,7 @@ const EditExerciseDetails = ({
     }
   };
 
-  const renderPickerValue = useCallback(() => {
+  const pickerValue = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
         return category;
@@ -227,181 +211,91 @@ const EditExerciseDetails = ({
     isOwner && setPicker(PickerOptions.cats);
   };
 
-  return (
-    <ScreenTemplate>
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.actionContainer, { height: headerHeight }]}>
-          {loading ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ActivityIndicator color={BaseColors.white} />
-            </View>
-          ) : (
-            <>
-              {exerciseProps?._id && isOwner && (
-                <Pressable style={styles.svg} onPress={onDelete}>
-                  <TrashSvg fillColor={BaseColors.white} />
-                </Pressable>
-              )}
-            </>
-          )}
-        </View>
-
-        {confirm && (
-          <ConfirmModal
-            onConfirm={onDelete}
-            onDeny={() => setConfirm(false)}
-            header={`Are you sure you want to remove ${name}?`}
-          />
-        )}
-        <View
-          style={{
-            paddingLeft: StyleConstants.baseMargin,
-            paddingRight: StyleConstants.baseMargin,
-          }}>
-          <PrimaryText styles={styles.headerText}>Exercise Details</PrimaryText>
-          <SecondaryText styles={styles.headerSubText}>
-            Fill out the form below.
-          </SecondaryText>
-          {!isOwner && (
-            <View style={styles.infoContainer}>
-              <View style={styles.info}>
-                <InfoSvg fillColor={BaseColors.primary} />
-              </View>
-              <SecondaryText styles={styles.infoText}>
-                You have limited access.
-              </SecondaryText>
-            </View>
-          )}
-          <View style={styles.errorContainer}>
-            {errors.length > 0 &&
-              errors.map((e, i) => (
-                <SecondaryText styles={styles.errorText} key={Math.random()}>
-                  *{e}
-                </SecondaryText>
-              ))}
-          </View>
-
-          <SecondaryText styles={styles.label}>Name</SecondaryText>
-          <Input
-            placeholder="Name"
-            onChangeText={txt => isOwner && setName(txt)}
-            value={name}
-            autoCapitalize="words"
-            maxLength={50}
-            editable={isOwner}
-            styles={{ marginBottom: StyleConstants.smallMargin }}
-          />
-
-          <SecondaryText styles={styles.label}>Description</SecondaryText>
-          <Input
-            placeholder="Description"
-            onChangeText={txt => isOwner && setDescription(txt)}
-            value={description}
-            multiline={true}
-            maxLength={100}
-            editable={isOwner}
-            styles={{ marginBottom: StyleConstants.smallMargin }}
-            maxHeight={normalize.height(9)}
-            variant="textarea"
-          />
-
-          <PickerButton
-            label="Category"
-            onPress={onCatPress}
-            disabled={!isOwner}>
-            {category ? category : 'Category'}
-          </PickerButton>
-
-          <PrimaryButton onPress={onSubmit} styles={styles.btn}>
-            Next
-          </PrimaryButton>
-        </View>
-        <CustomPicker
-          open={!!picker}
-          setOpen={() => setPicker(PickerOptions.disable)}
-          value={renderPickerValue()}
-          pickerItems={renderPickeritems()}
-          setValue={onPickerValueChange}
+  const rightContent = useMemo(() => {
+    if (loading) return <ActivityIndicator color={Colors.white} />;
+    if (exerciseProps?._id && isOwner) {
+      return (
+        <Icon
+          icon="trash_bin"
+          onPress={onDelete}
+          size={20}
+          color={Colors.white}
         />
-      </SafeAreaView>
+      );
+    }
+  }, [loading, exerciseProps, isOwner]);
+
+  return (
+    <ScreenTemplate
+      applyContentPadding
+      isBackVisible
+      isPickerOpen={!!picker}
+      onPickerClose={() => setPicker(PickerOptions.disable)}
+      pickerValue={pickerValue}
+      pickerItems={pickerItems}
+      onPickerChangeValue={onPickerValueChange}
+      rightContent={
+        <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
+          {rightContent}
+        </FlexBox>
+      }>
+      {confirm ? (
+        <ConfirmModal
+          onConfirm={onDelete}
+          onDeny={() => setConfirm(false)}
+          header={`Are you sure you want to remove ${name}?`}
+        />
+      ) : (
+        <></>
+      )}
+      <PrimaryText size="large">Exercise Details</PrimaryText>
+      <PrimaryText>Fill out the form below.</PrimaryText>
+      {!isOwner ? (
+        <FlexBox>
+          <Icon icon="info" color={Colors.white} size={20} />
+          <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
+        </FlexBox>
+      ) : (
+        <></>
+      )}
+      <Input
+        label="Name"
+        placeholder="Name"
+        onChangeText={txt => isOwner && setName(txt)}
+        value={name}
+        autoCapitalize="words"
+        maxLength={50}
+        editable={isOwner}
+        styles={{ marginBottom: StyleConstants.smallMargin }}
+      />
+
+      <Input
+        label="Description"
+        placeholder="Description"
+        onChangeText={txt => isOwner && setDescription(txt)}
+        value={description}
+        multiline={true}
+        maxLength={100}
+        editable={isOwner}
+        styles={{ marginBottom: StyleConstants.smallMargin }}
+        maxHeight={normalize.height(9)}
+        variant="textarea"
+      />
+
+      <PickerButton
+        label="Category"
+        onPress={onCatPress}
+        disabled={!isOwner}
+        textTransform="capitalize">
+        {category ? category : 'Category'}
+      </PickerButton>
+
+      <PrimaryButton onPress={onSubmit} alignSelf="flex-end">
+        Next
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerText: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.white,
-  },
-  headerSubText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  label: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.lightWhite,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  actionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    paddingBottom: StyleConstants.smallMargin,
-    marginRight: StyleConstants.baseMargin,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  infoText: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.black,
-    margin: 5,
-  },
-  errorContainer: {
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  svg: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    marginLeft: StyleConstants.baseMargin,
-  },
-  errorText: {
-    fontSize: normalize.width(30),
-    color: BaseColors.red,
-  },
-  info: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    alignSelf: 'center',
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    padding: 15,
-    borderRadius: StyleConstants.borderRadius,
-    borderWidth: 1,
-    borderColor: rgba(BaseColors.whiteRbg, 0.8),
-    marginBottom: StyleConstants.smallMargin,
-    backgroundColor: 'transparent',
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.white,
-    marginLeft: 5,
-    textTransform: 'capitalize',
-  },
-  btn: {
-    alignSelf: 'flex-end',
-    marginTop: StyleConstants.baseMargin,
-  },
-});
 
 const mapStateToProps = (state: ReducerProps) => ({
   user: state.user,

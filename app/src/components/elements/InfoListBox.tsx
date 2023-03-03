@@ -18,6 +18,7 @@ type Props = {
   flex?: number;
   marginRight?: number;
   opacity?: number;
+  textTransform?: 'capitalize';
 };
 
 const InfoListBox: FC<Props> = ({
@@ -34,6 +35,7 @@ const InfoListBox: FC<Props> = ({
   flex,
   marginRight,
   opacity = 1,
+  textTransform,
 }) => {
   if (secondary) {
     return (
@@ -53,7 +55,9 @@ const InfoListBox: FC<Props> = ({
         <Icon icon={icon || 'checked'} size={20} color={color} />
         <FlexBox column marginTop={10}>
           <PrimaryText opacity={0.6}>{label}</PrimaryText>
-          <PrimaryText size="medium">{desc}</PrimaryText>
+          <PrimaryText size="medium" textTransform={textTransform}>
+            {desc}
+          </PrimaryText>
         </FlexBox>
         {onPress && (
           <FlexBox
@@ -104,7 +108,12 @@ const InfoListBox: FC<Props> = ({
       ) : (
         <Icon icon={icon || 'checked'} size={20} color={color} />
       )}
-      <PrimaryText color={color} size="small" variant="secondary" marginTop={5}>
+      <PrimaryText
+        color={color}
+        size="small"
+        variant="secondary"
+        marginTop={5}
+        textTransform={textTransform}>
         {desc}
       </PrimaryText>
       {onPress && (

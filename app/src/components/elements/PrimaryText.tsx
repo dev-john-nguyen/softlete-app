@@ -22,7 +22,7 @@ const PrimaryText: FC<Props & StyleProp<any>> = ({
   styles,
   children,
   numberOfLines,
-  variant = 'primary',
+  variant = 'secondary',
   bold,
   size = 'small',
   ...styleProps
@@ -45,7 +45,13 @@ const PrimaryText: FC<Props & StyleProp<any>> = ({
       letterSpacing = 1;
     }
 
-    if (variant === 'secondary' || size === 'small' || size === 'medium') {
+    if (variant === 'primary' || size === 'large') {
+      fontFamily = Fonts.primary;
+    } else if (
+      variant === 'secondary' ||
+      size === 'small' ||
+      size === 'medium'
+    ) {
       fontFamily = bold ? Fonts.secondaryBold : Fonts.secondary;
     }
 

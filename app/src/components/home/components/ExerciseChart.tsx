@@ -1,4 +1,4 @@
-import { GraphPlaceholder } from '@app/elements';
+import { ChartBanner, GraphPlaceholder } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { moderateScale } from '@app/utils';
 import unionWith from 'lodash/unionWith';
@@ -9,7 +9,6 @@ import BaseColors from '../../../utils/BaseColors';
 import Constants from '../../../utils/Constants';
 import Fonts from '../../../utils/Fonts';
 import { normalize } from '../../../utils/tools';
-import ExerciseChartItem from './ExerciseChartItem';
 
 interface Props {
   data: {
@@ -63,11 +62,11 @@ const ExerciseChart = ({ data }: Props) => {
         segments={4}
         bezier
         renderDotContent={props => (
-          <ExerciseChartItem
+          <ChartBanner
             key={props.index}
             props={props}
             isActive={activeDot === props.index}
-            data={data}
+            data={data.map(({ date }) => date)}
           />
         )}
         onDataPointClick={props => setActiveDot(props.index)}

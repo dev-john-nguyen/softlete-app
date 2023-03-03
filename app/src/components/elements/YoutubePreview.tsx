@@ -6,6 +6,7 @@ import FastImage from 'react-native-fast-image';
 import Constants from '../../utils/Constants';
 import { getYoutubeThumbNail, getYoutubeUrl } from '../../utils/tools';
 import { FlexBox } from '@app/ui';
+import PlaceholderImage from './PlaceholderImage';
 
 interface Props {
   id: string | undefined;
@@ -61,7 +62,9 @@ const ExerciseYoutubePreview = ({ id, small }: Props) => {
           />
         </Pressable>
       ) : (
-        <View style={videoStyle} />
+        <View style={videoStyle}>
+          <PlaceholderImage size={30} />
+        </View>
       )}
     </FlexBox>
   );

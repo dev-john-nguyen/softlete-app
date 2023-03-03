@@ -9,3 +9,4 @@ export * from './hooks';
 export { default as Fonts } from './Fonts';
 export * from './format';
 export { default as TimeConverter } from './TimeConverter';
+export { default as AutoId } from './AutoId';

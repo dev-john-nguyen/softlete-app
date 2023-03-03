@@ -1,8 +1,7 @@
+import { Colors, rgba } from '@app/utils';
 import React from 'react';
-import {Switch} from 'react-native';
-import {StyleProp, StyleSheet} from 'react-native';
-import {normalize} from '../../utils/tools';
-import BaseColors, {rgba} from '../../utils/BaseColors';
+import { Switch } from 'react-native';
+import { StyleProp } from 'react-native';
 
 interface Props {
   styles?: StyleProp<any>;
@@ -10,10 +9,13 @@ interface Props {
   active: boolean;
 }
 
-export default ({styles, onSwitch, active}: Props) => (
+const CustomSwitch = ({ styles, onSwitch, active }: Props) => (
   <Switch
-    trackColor={{false: rgba(BaseColors.whiteRbg, 0.5), true: BaseColors.white}}
-    thumbColor={active ? BaseColors.primary : BaseColors.white}
+    trackColor={{
+      false: rgba(Colors.whiteRbg, 0.5),
+      true: rgba(Colors.whiteRbg, 0.1),
+    }}
+    thumbColor={active ? Colors.white : rgba(Colors.whiteRbg, 0.5)}
     ios_backgroundColor={'transparent'}
     onValueChange={onSwitch}
     value={active}
@@ -21,10 +23,4 @@ export default ({styles, onSwitch, active}: Props) => (
   />
 );
 
-const baseStyles = StyleSheet.create({
-  base: {
-    height: normalize.width(20),
-    width: normalize.width(20),
-    borderRadius: 100,
-  },
-});
+export default CustomSwitch;
