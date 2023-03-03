@@ -101,7 +101,7 @@ const ScreenTemplate = ({
             paddingLeft={15}
             paddingRight={15}
             zIndex={100}>
-            <FlexBox flex={leftContentFlex ?? 0.3}>
+            <FlexBox flex={leftContentFlex ?? 0.3} alignItems="center">
               {isBackVisible && (
                 <BackButton
                   onPress={goBackHandler}

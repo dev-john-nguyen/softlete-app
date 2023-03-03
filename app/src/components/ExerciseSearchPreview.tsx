@@ -1,5 +1,5 @@
 import { FlexBox } from '@app/ui';
-import { rgba } from '@app/utils';
+import { Colors, rgba } from '@app/utils';
 import {
   PrimaryText,
   ProfileImage,
@@ -9,7 +9,6 @@ import {
 import React from 'react';
 import { UserProps } from 'src/services/absolute-exports';
 import { ExerciseProps } from 'src/services/exercises/types';
-import BaseColors from 'src/utils/BaseColors';
 import Icon from '@app/icons';
 
 interface Props {
@@ -29,15 +28,17 @@ const ExerciseSearchPreview = ({
     <FlexBox
       onPress={onPress}
       borderBottomWidth={1}
-      borderBottomColor={rgba(BaseColors.whiteRbg, 0.2)}
+      borderBottomColor={rgba(Colors.whiteRbg, 0.2)}
       justifyContent="space-between"
       alignItems="center"
       padding={15}>
-      <FlexBox>
+      <FlexBox
+        height={25}
+        width={25}
+        alignItems="center"
+        justifyContent="center">
         {user.uid === exercise.userUid && !exercise.softlete ? (
-          <FlexBox width={15} height={15}>
-            <ProfileImage imageUri={user.imageUri} />
-          </FlexBox>
+          <ProfileImage imageUri={user.imageUri} />
         ) : (
           <Icon icon="logo" size={25} variant="secondary" />
         )}
@@ -60,7 +61,6 @@ const ExerciseSearchPreview = ({
             return <ExerciseVideo props={exercise} small />;
           }
         }
-
         return <YoutubePreview id={exercise.youtubeId} small />;
       })()}
     </FlexBox>

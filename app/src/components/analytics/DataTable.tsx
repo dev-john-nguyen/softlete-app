@@ -34,39 +34,35 @@ const DataTable = ({ data }: Props) => {
         <PrimaryText flex={0.5}>Rep</PrimaryText>
         <PrimaryText flex={1}>Weight</PrimaryText>
       </FlexBox>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 10 }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}>
-        {data.length > 0 ? (
-          <>
-            {data.map((d, i) => (
-              <View key={d.workoutExerciseUid}>
-                {d.data.map(({ performVal, reps, _id }, i) => (
-                  <FlexBox
-                    key={_id || i}
-                    backgroundColor={
-                      i % 2 === 0
-                        ? rgba(BaseColors.whiteRbg, 0.2)
-                        : 'transparent'
-                    }
-                    justifyContent="space-between"
-                    marginBottom={5}
-                    padding={10}>
-                    <PrimaryText flex={0.5}>{renderDate(d.date)}</PrimaryText>
-                    <PrimaryText flex={0.5}>{i + 1}</PrimaryText>
-                    <PrimaryText flex={0.5}>{reps}</PrimaryText>
-                    <PrimaryText flex={1}>{performVal}</PrimaryText>
-                  </FlexBox>
-                ))}
-              </View>
-            ))}
-          </>
-        ) : (
-          <Empty />
-        )}
-      </ScrollView>
+      {data.length > 0 ? (
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 10 }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
+          {data.map((d, i) => (
+            <View key={d.workoutExerciseUid}>
+              {d.data.map(({ performVal, reps, _id }, i) => (
+                <FlexBox
+                  key={_id || i}
+                  backgroundColor={
+                    i % 2 === 0 ? rgba(BaseColors.whiteRbg, 0.2) : 'transparent'
+                  }
+                  justifyContent="space-between"
+                  marginBottom={5}
+                  padding={10}>
+                  <PrimaryText flex={0.5}>{renderDate(d.date)}</PrimaryText>
+                  <PrimaryText flex={0.5}>{i + 1}</PrimaryText>
+                  <PrimaryText flex={0.5}>{reps}</PrimaryText>
+                  <PrimaryText flex={1}>{performVal}</PrimaryText>
+                </FlexBox>
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+      ) : (
+        <Empty />
+      )}
     </FlexBox>
   );
 };

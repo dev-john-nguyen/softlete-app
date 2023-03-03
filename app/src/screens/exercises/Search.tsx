@@ -58,8 +58,6 @@ const Exercises = ({
       offline: state.global.offline,
       demoState: state.global.demoState,
     }));
-
-  const [searchLimit] = useState(10);
   const [exercises, setExercises] = useState<
     { title: string; data: ExerciseProps[] }[]
   >([]);
@@ -80,7 +78,7 @@ const Exercises = ({
       (a, b) => a._id === b.exerciseUid,
     );
 
-    let pinStore: { title: string; data: ExerciseProps[] } = {
+    const pinStore: { title: string; data: ExerciseProps[] } = {
       title: 'Pinned',
       data: [],
     };
@@ -275,6 +273,9 @@ const Exercises = ({
     <ScreenTemplate
       isBackVisible
       onGoBack={onGoBackHandler}
+      middleContentFlex={1}
+      leftContentFlex={0}
+      rightContentFlex={0}
       middleContent={<SearchHeader onSearch={onSearch} onChange={onSearch} />}>
       <DashboardDemo screen={HomeStackScreens.SearchExercises} />
       <SearchFilter
@@ -324,8 +325,10 @@ const Exercises = ({
         )}
         stickySectionHeadersEnabled={false}
       />
-      {!offline && (
-        <CircleAdd onPress={onAddExerciessPress} style={{ bottom: '5%' }} />
+      {!offline ? (
+        <CircleAdd onPress={onAddExerciessPress} style={{ bottom: '3%' }} />
+      ) : (
+        <></>
       )}
     </ScreenTemplate>
   );

@@ -57,6 +57,7 @@ import { default as BarChart } from './BarChartSvg';
 import { default as BoxGraph } from './BoxGraphSvg';
 import { default as Table } from './TableSvg';
 import { default as Search } from './SearchSvg';
+import Database from './Database';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -114,6 +115,7 @@ const Icons = {
   box_graph: (props: any) => <BoxGraph {...props} />,
   box_table: (props: any) => <Table {...props} />,
   search: (props: any) => <Search {...props} />,
+  database: (props: any) => <Database {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
@@ -123,7 +125,7 @@ type Props = {
   onPressIn?: () => void;
   onPressOut?: () => void;
   icon: IconOptions;
-  size: number;
+  size: number | string;
   strokeColor?: string;
   fillColor?: string;
   color?: string;
