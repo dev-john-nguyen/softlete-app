@@ -141,8 +141,7 @@ const Home = ({
 
     analytics.forEach(p => {
       const e = exercises.find(e => e._id === p.exerciseUid);
-      //only add exercise if analytics items is more than 3
-      if (e && p.data.length > 3) {
+      if (e) {
         exStore.push(e);
       }
     });
@@ -229,7 +228,7 @@ const Home = ({
       </ScrollView>
       <CustomPicker
         pickerItems={renderPickerItems()}
-        setOpen={o => setPicker(undefined)}
+        setOpen={() => setPicker(undefined)}
         open={picker ? true : false}
         value={''}
         setValue={onPickerChange}

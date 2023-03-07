@@ -2,6 +2,7 @@ import React from 'react';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
 import Icon from '@app/icons';
+import PrimaryText from './PrimaryText';
 
 const GraphPlaceholder = () => {
   return (
@@ -9,12 +10,12 @@ const GraphPlaceholder = () => {
       width="100%"
       height="100%"
       alignItems="center"
-      justifyContent="center"
-      borderLeftWidth={1}
-      borderLeftColor={rgba(Colors.whiteRbg, 0.5)}
-      borderBottomColor={rgba(Colors.whiteRbg, 0.5)}
-      borderBottomWidth={1}>
-      <Icon icon="hide" size={20} color={rgba(Colors.whiteRbg, 0.5)} />
+      backgroundColor={rgba(Colors.whiteRbg, 0.1)}
+      borderRadius={5}
+      padding={10}
+      justifyContent="center">
+      <Icon icon="bar_chart" size={25} color={Colors.white} />
+      <PrimaryText marginLeft={5}>Not Enough Data</PrimaryText>
     </FlexBox>
   );
 };
