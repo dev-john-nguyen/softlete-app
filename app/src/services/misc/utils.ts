@@ -35,7 +35,7 @@ export function insertOrUpdateAnalytics(
 export function calcAnalytics(
   exercises: WorkoutExerciseProps[],
 ): ExercisesAnalyticsProps {
-  let performVals: number[] = [];
+  const performVals: number[] = [];
 
   exercises.forEach(e => {
     e.data.forEach(({ performVal, warmup }) => {
@@ -49,7 +49,7 @@ export function calcAnalytics(
 }
 
 export function calcAnalyticsData(data: AnalyticsProps['data']) {
-  let performVals: number[] = [];
+  const performVals: number[] = [];
 
   data.forEach(d => {
     d.data.forEach(({ performVal, warmup }) => {
@@ -63,10 +63,10 @@ export function calcAnalyticsData(data: AnalyticsProps['data']) {
 }
 
 export function calcAnalyticsInfo(performVals: number[]) {
-  let min = _.min(performVals);
-  let max = _.max(performVals);
-  let avg = _.mean(performVals);
-  let sum = _.sumBy(performVals);
+  const min = _.min(performVals);
+  const max = _.max(performVals);
+  const avg = _.mean(performVals);
+  const sum = _.sumBy(performVals);
 
   return {
     min: min ? _.round(min, 2) : 0,
@@ -120,9 +120,10 @@ export const handleAnalyticsFetched =
 
       let analyticsArr: AnalyticsProps[] = [];
 
-      for (var key in exercisesObj) {
+      for (const key in exercisesObj) {
+        // eslint-disable-next-line no-prototype-builtins
         if (exercisesObj.hasOwnProperty(key)) {
-          let exercises = exercisesObj[key];
+          const exercises = exercisesObj[key];
           analyticsArr.push({
             exerciseUid: key,
             analytics: calcAnalytics(exercises),

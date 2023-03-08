@@ -20,6 +20,7 @@ export default {
   medGrey: '#D9D9D9',
   lightGrey: '#E8E8E8',
   darkGrey: '#D9D9D9',
+  darkerGrey: '#9A9A9A',
   yellow: '#F7FF00',
   primaryBoxShadow: {
     shadowOffset: {

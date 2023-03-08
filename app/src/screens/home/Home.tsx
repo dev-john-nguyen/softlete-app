@@ -51,6 +51,7 @@ import { useApiHooks } from '../../hooks/home/api.hooks';
 import HomeBackground from '../../components/home/Background';
 import { ScreenTemplate, Picker as CustomPicker } from '@app/elements';
 import { useMemo } from 'react';
+import { Colors, rgba } from '@app/utils';
 
 interface Props {
   route: any;
@@ -91,15 +92,21 @@ const Home = ({
   route,
   processNotification,
 }: Props) => {
-  const { user, workouts, offline, healthData, analytics, exercises } =
-    useSelector((state: ReducerProps) => ({
-      user: state.user,
-      workouts: state.workout.workouts,
-      offline: state.global.offline,
-      healthData: state.workout.healthData,
-      exercises: state.exercises.data,
-      analytics: state.misc.pinExercisesAnalytics,
-    }));
+  const {
+    user,
+    workouts,
+    offline,
+    healthData,
+    pinExercisesAnalytics,
+    exercises,
+  } = useSelector((state: ReducerProps) => ({
+    user: state.user,
+    workouts: state.workout.workouts,
+    offline: state.global.offline,
+    healthData: state.workout.healthData,
+    exercises: state.exercises.data,
+    pinExercisesAnalytics: state.misc.pinExercisesAnalytics,
+  }));
   const [picker, setPicker] = useState<string | undefined>();
   const [chartFilter, setChartFilter] = useState('avg');
   const [selectedEx, setSelectedEx] = useState<ExerciseProps>();
@@ -136,18 +143,14 @@ const Home = ({
     }
   }, [route]);
 
-  const getFilteredAnalExs = () => {
-    const exStore: ExerciseProps[] = [];
-
-    analytics.forEach(p => {
-      const e = exercises.find(e => e._id === p.exerciseUid);
-      if (e) {
-        exStore.push(e);
-      }
-    });
-
-    return exStore;
-  };
+  const pinnedExerciseProps = useMemo(() => {
+    const pinnedExerciseProps = user.pinExercises
+      .map(p => {
+        return exercises.find(e => e._id === p.exerciseUid);
+      })
+      .filter(e => !!e);
+    return pinnedExerciseProps as ExerciseProps[];
+  }, [exercises]);
 
   const renderPickerItems = () => {
     if (picker && picker === 'chartFilter') {
@@ -157,15 +160,20 @@ const Home = ({
       return items;
     }
 
-    const exStore: ExerciseProps[] = getFilteredAnalExs();
-
-    const items = exStore
+    const items = pinnedExerciseProps
       .filter(d => d.name && d._id)
       .map(d => (
         <Picker.Item value={d._id} label={_.capitalize(d.name)} key={d._id} />
       ));
 
-    items.unshift(<Picker.Item value={undefined} label={''} key={'nothing'} />);
+    items.unshift(
+      <Picker.Item
+        value={undefined}
+        label={'Choose an exercise'}
+        key={'Choose an exericse'}
+        color={Colors.secondary}
+      />,
+    );
     return items;
   };
 
@@ -173,8 +181,7 @@ const Home = ({
     if (picker && picker === 'chartFilter') {
       setChartFilter(id);
     } else {
-      const exStore: ExerciseProps[] = getFilteredAnalExs();
-      const picked = exStore.find(d => d._id === id);
+      const picked = pinnedExerciseProps.find(d => d._id === id);
       setSelectedEx(picked);
     }
   };
@@ -220,7 +227,7 @@ const Home = ({
         <HomeHealth healthData={healthData} navigation={navigation} />
         <HomeWorkouts wos={wos} deviceWos={deviceWos} desc={bannerTxt} />
         <HomeExercises
-          pinAnalytics={analytics}
+          pinAnalytics={pinExercisesAnalytics}
           setPicker={setPicker}
           chartFilter={chartFilter}
           selectedEx={selectedEx}
