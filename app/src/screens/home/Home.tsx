@@ -41,17 +41,15 @@ import {
 import { WorkoutActionProps } from '../../services/workout/types';
 import { normalize } from '../../utils/tools';
 import { HomeStackScreens } from './types';
-import { Picker } from '@react-native-picker/picker';
-import _ from 'lodash';
 import HomeHealth from '../../components/home/Health';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { useNotifeeListener } from '../../hooks/home/notifee.hooks';
 import { useActiveWos } from '../../hooks/home/workout.hooks';
 import { useApiHooks } from '../../hooks/home/api.hooks';
 import HomeBackground from '../../components/home/Background';
-import { ScreenTemplate, Picker as CustomPicker } from '@app/elements';
+import { ScreenTemplate } from '@app/elements';
 import { useMemo } from 'react';
-import { Colors, rgba } from '@app/utils';
+import { Colors } from '@app/utils';
 
 interface Props {
   route: any;
@@ -152,30 +150,30 @@ const Home = ({
     return pinnedExerciseProps as ExerciseProps[];
   }, [exercises]);
 
-  const renderPickerItems = () => {
+  const pickerOptions = useMemo(() => {
     if (picker && picker === 'chartFilter') {
-      const items = ['avg', 'min', 'max'].map(s => (
-        <Picker.Item value={s} label={_.capitalize(s)} key={s} />
-      ));
+      const items = ['avg', 'min', 'max'].map(s => ({
+        value: s,
+        label: s,
+      }));
       return items;
     }
 
     const items = pinnedExerciseProps
       .filter(d => d.name && d._id)
-      .map(d => (
-        <Picker.Item value={d._id} label={_.capitalize(d.name)} key={d._id} />
-      ));
+      .map(d => ({
+        value: d._id as string,
+        label: d.name as string,
+        color: '',
+      }));
 
-    items.unshift(
-      <Picker.Item
-        value={undefined}
-        label={'Choose an exercise'}
-        key={'Choose an exericse'}
-        color={Colors.secondary}
-      />,
-    );
+    items.unshift({
+      value: '',
+      label: 'Choose an exericse',
+      color: Colors.secondary,
+    });
     return items;
-  };
+  }, [picker, pinnedExerciseProps]);
 
   const onPickerChange = (id: string) => {
     if (picker && picker === 'chartFilter') {
@@ -210,7 +208,12 @@ const Home = ({
   }, [wos, deviceWos]);
 
   return (
-    <ScreenTemplate>
+    <ScreenTemplate
+      pickerOptions={pickerOptions}
+      isPickerOpen={picker ? true : false}
+      onPickerClose={() => setPicker(undefined)}
+      pickerValue={''}
+      onPickerChangeValue={onPickerChange}>
       <HomeBackground />
       <DashboardDemo screen={HomeStackScreens.Home} />
       <HomeHeader />
@@ -233,14 +236,6 @@ const Home = ({
           selectedEx={selectedEx}
         />
       </ScrollView>
-      <CustomPicker
-        pickerItems={renderPickerItems()}
-        setOpen={() => setPicker(undefined)}
-        open={picker ? true : false}
-        value={''}
-        setValue={onPickerChange}
-        hidebgColor
-      />
     </ScreenTemplate>
   );
 };

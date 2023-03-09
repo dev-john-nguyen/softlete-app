@@ -87,13 +87,13 @@ const HomeExercises = ({
             borderColor={Colors.white}
             alignItems="center"
             justifyContent="center"
+            opacity={selectedEx ? 1 : 0.2}
             onPress={onNavToExercise}>
             <Icon
               size={10}
               strokeColor={Colors.white}
               direction="right"
               icon="chevron"
-              opacity={selectedEx ? 1 : 0.5}
             />
           </FlexBox>
         </FlexBox>

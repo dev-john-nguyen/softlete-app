@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import CustomPicker from './Picker';
+import CustomPicker, { PickerOptionProp } from './Picker';
 import DatePicker from 'react-native-date-picker';
 import { Colors, moderateScale } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
@@ -27,7 +27,7 @@ interface Props {
   isPickerOpen?: boolean;
   onPickerClose?: () => void;
   pickerValue?: string;
-  pickerItems?: React.ReactElement[];
+  pickerOptions?: PickerOptionProp[];
   onPickerChangeValue?: (value: string) => void;
   isDatePickerOpen?: boolean;
   datePickerValue?: Date;
@@ -54,7 +54,7 @@ const ScreenTemplate = ({
   isPickerOpen = false,
   onPickerClose,
   pickerValue = '',
-  pickerItems = [],
+  pickerOptions = [],
   onPickerChangeValue,
   isDatePickerOpen = false,
   datePickerValue,
@@ -160,7 +160,7 @@ const ScreenTemplate = ({
         open={isPickerOpen}
         setOpen={() => onPickerClose && onPickerClose()}
         value={pickerValue}
-        pickerItems={pickerItems}
+        pickerOptions={pickerOptions}
         setValue={value => onPickerChangeValue && onPickerChangeValue(value)}
       />
       <DatePicker
