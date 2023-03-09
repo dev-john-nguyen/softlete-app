@@ -212,7 +212,7 @@ const Home = ({
       pickerOptions={pickerOptions}
       isPickerOpen={picker ? true : false}
       onPickerClose={() => setPicker(undefined)}
-      pickerValue={''}
+      pickerValue={picker === 'chartFilter' ? chartFilter : selectedEx?._id}
       onPickerChangeValue={onPickerChange}>
       <HomeBackground />
       <DashboardDemo screen={HomeStackScreens.Home} />

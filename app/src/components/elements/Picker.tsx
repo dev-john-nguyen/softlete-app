@@ -1,5 +1,5 @@
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -42,14 +42,13 @@ const CustomPicker = ({
   const fullHeight = useSharedValue(normalize.height(1));
   const [pickerValue, setPickerValue] = useState('');
   const [pickerOptions, setPickerOptions] = useState<PickerOptionProp[]>([]);
-  const [filteredValue, setFilteredValue] = useState('');
   const keyboardHeight = useKeyboard();
   const pickerRef = useRef<any>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPickerValue(value);
     setPickerOptions(pickerOptionProp);
-  }, [value, pickerOptionProp]);
+  }, [open, value, pickerOptionProp]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -75,21 +74,23 @@ const CustomPicker = ({
   }, [open]);
 
   const filteredOptionItems = useMemo(() => {
-    return pickerOptions
-      .filter(
-        a => a.label.toLowerCase().indexOf(filteredValue.toLowerCase()) > -1,
-      )
-      .map(o => (
-        <Picker.Item
-          label={capitalize(o.label)}
-          value={o.value}
-          key={o.value}
-          color={o.color}
-        />
-      ));
-  }, [pickerOptions, filteredValue]);
+    return pickerOptions.map(o => (
+      <Picker.Item
+        label={capitalize(o.label)}
+        value={o.value}
+        key={o.value}
+        color={o.color}
+      />
+    ));
+  }, [pickerOptions]);
 
-  const onSearch = async (value: string) => setFilteredValue(value);
+  const onSearch = async (value: string) => {
+    const newOptions = pickerOptions.filter(
+      a => a.label.toLowerCase().indexOf(value.toLowerCase()) > -1,
+    );
+    setPickerOptions(newOptions);
+    if (newOptions.length > 0) setPickerValue(newOptions[0].value as string);
+  };
 
   return (
     <Animated.View style={animatedStyles}>
@@ -121,7 +122,9 @@ const CustomPicker = ({
           itemStyle={styles.itemStyle}
           style={[styles.pickerContainer, animatedPickerStyles]}
           enabled={false}
-          onValueChange={(itemValue: any) => setPickerValue(itemValue)}>
+          onValueChange={(itemValue: any) => {
+            setPickerValue(itemValue);
+          }}>
           {filteredOptionItems}
         </AnimatedPicker>
       </FlexBox>
