@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -16,38 +16,39 @@ import useKeyboard from 'src/hooks/utils/useKeyboard';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 
+export type PickerOptionProp = {
+  value: string | number;
+  label: string;
+  color?: string;
+};
+
 interface Props {
   setValue: (val: string) => void;
   setOpen: (active: boolean) => void;
-  pickerItems?: React.ReactElement[];
   value: string;
   open: boolean;
-  hidebgColor?: boolean;
-  options?: string[];
+  pickerOptions: PickerOptionProp[];
 }
 
 const AnimatedPicker = Animated.createAnimatedComponent(Picker);
 
 const CustomPicker = ({
-  pickerItems,
   value,
   setOpen,
   setValue,
   open,
-  hidebgColor,
-  options,
+  pickerOptions: pickerOptionProp,
 }: Props) => {
-  const fullWidth = useSharedValue(normalize.width(1));
   const fullHeight = useSharedValue(normalize.height(1));
   const [pickerValue, setPickerValue] = useState('');
-  const [pickerOptions, setPickerOptions] = useState<string[] | undefined>([]);
+  const [pickerOptions, setPickerOptions] = useState<PickerOptionProp[]>([]);
   const keyboardHeight = useKeyboard();
   const pickerRef = useRef<any>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPickerValue(value);
-    setPickerOptions(options);
-  }, [value, options]);
+    setPickerOptions(pickerOptionProp);
+  }, [open, value, pickerOptionProp]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -72,22 +73,23 @@ const CustomPicker = ({
     };
   }, [open]);
 
-  const optionItems = useMemo(() => {
-    return pickerOptions?.map(o => (
-      <Picker.Item label={capitalize(o)} value={o} key={o} />
+  const filteredOptionItems = useMemo(() => {
+    return pickerOptions.map(o => (
+      <Picker.Item
+        label={capitalize(o.label)}
+        value={o.value}
+        key={o.value}
+        color={o.color}
+      />
     ));
   }, [pickerOptions]);
 
-  const getFilteredOptions = (value: string) =>
-    options?.filter(s => s.toLowerCase().includes(value.toLowerCase())) || [];
-
-  const onChange = async (searchValue: string) => {
-    setPickerOptions(getFilteredOptions(searchValue));
-  };
-
-  const onSearch = async (searchValue: string) => {
-    const filtered = getFilteredOptions(searchValue);
-    if (filtered.length > 0) setPickerValue(filtered[0]);
+  const onSearch = async (value: string) => {
+    const newOptions = pickerOptionProp.filter(
+      a => a.label.toLowerCase().indexOf(value.toLowerCase()) > -1,
+    );
+    setPickerOptions(newOptions);
+    if (newOptions.length > 0) setPickerValue(newOptions[0].value as string);
   };
 
   return (
@@ -110,7 +112,7 @@ const CustomPicker = ({
             iconColor={BaseColors.primary}
             color={BaseColors.lightBlack}
             containerStyles={styles.search}
-            onChange={onChange}
+            onChange={onSearch}
             onSearch={onSearch}
           />
         )}
@@ -120,8 +122,10 @@ const CustomPicker = ({
           itemStyle={styles.itemStyle}
           style={[styles.pickerContainer, animatedPickerStyles]}
           enabled={false}
-          onValueChange={(itemValue: any) => setPickerValue(itemValue)}>
-          {pickerItems || optionItems}
+          onValueChange={(itemValue: any) => {
+            setPickerValue(itemValue);
+          }}>
+          {filteredOptionItems}
         </AnimatedPicker>
       </FlexBox>
     </Animated.View>

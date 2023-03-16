@@ -1,18 +1,17 @@
 /* eslint-disable no-case-declarations */
-import React, { useCallback, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import BaseColors from '../utils/BaseColors';
 import StyleConstants from './tools/StyleConstants';
 import PrimaryText from './elements/PrimaryText';
 import SecondaryText from './elements/SecondaryText';
 import { capitalize, normalize } from '../utils/tools';
-import CustomPicker from './elements/Picker';
+import CustomPicker, { PickerOptionProp } from './elements/Picker';
 import {
   Categories,
   Equipments,
   MuscleGroups,
 } from '../services/exercises/types';
-import { Picker } from '@react-native-picker/picker';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -60,46 +59,37 @@ const SearchFilter = ({
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.none);
   const insets = useSafeAreaInsets();
 
-  const renderPickerItems = useCallback(() => {
-    const render = [];
+  const pickerOptions = useMemo(() => {
+    const render: PickerOptionProp[] = [];
     switch (picker) {
       case PickerOptions.category:
         let keyC: keyof typeof Categories;
         for (keyC in Categories) {
-          render.push(
-            <Picker.Item
-              label={capitalize(Categories[keyC])}
-              value={keyC}
-              key={keyC}
-            />,
-          );
+          render.push({
+            label: capitalize(Categories[keyC]),
+            value: keyC,
+          });
         }
         break;
       case PickerOptions.muscleGroup:
         let keyM: keyof typeof MuscleGroups;
         for (keyM in MuscleGroups) {
-          render.push(
-            <Picker.Item
-              label={capitalize(MuscleGroups[keyM])}
-              value={keyM}
-              key={keyM}
-            />,
-          );
+          render.push({
+            label: capitalize(MuscleGroups[keyM]),
+            value: keyM,
+          });
         }
         break;
       case PickerOptions.equipment:
         let keyE: keyof typeof Equipments;
         for (keyE in Equipments) {
-          render.push(
-            <Picker.Item
-              label={capitalize(Equipments[keyE])}
-              value={keyE}
-              key={keyE}
-            />,
-          );
+          render.push({
+            label: capitalize(Equipments[keyE]),
+            value: keyE,
+          });
         }
     }
-    render.unshift(<Picker.Item label={''} value={''} key={'empty'} />);
+    render.unshift({ label: 'Choose an option', value: '' });
     return render;
   }, [picker]);
 
@@ -119,7 +109,7 @@ const SearchFilter = ({
     setPicker(PickerOptions.none);
   };
 
-  const renderPickerValue = () => {
+  const pickerValue = useMemo(() => {
     switch (picker) {
       case PickerOptions.category:
         return catFilter;
@@ -129,7 +119,7 @@ const SearchFilter = ({
         return mGFilter;
     }
     return '';
-  };
+  }, [picker, mGFilter, catFilter, equipFilter]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -217,8 +207,8 @@ const SearchFilter = ({
       <CustomPicker
         open={picker ? true : false}
         setOpen={() => setPicker(PickerOptions.none)}
-        value={renderPickerValue()}
-        pickerItems={renderPickerItems()}
+        value={pickerValue}
+        pickerOptions={pickerOptions}
         setValue={onPickerChangeValue}
       />
     </>

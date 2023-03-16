@@ -29,7 +29,8 @@ export default (state: any = INITIAL_STATE, action: any) => {
         pinExercisesAnalytics: [...action.payload],
       };
     case UPDATE_ANALYTICS:
-      let fetchedAnalytics = insertOrUpdateAnalytics(
+      // eslint-disable-next-line no-case-declarations
+      const fetchedAnalytics = insertOrUpdateAnalytics(
         cloneDeep(state.fetchedAnalytics),
         action.payload,
       );

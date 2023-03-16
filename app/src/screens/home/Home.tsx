@@ -41,16 +41,15 @@ import {
 import { WorkoutActionProps } from '../../services/workout/types';
 import { normalize } from '../../utils/tools';
 import { HomeStackScreens } from './types';
-import { Picker } from '@react-native-picker/picker';
-import _ from 'lodash';
 import HomeHealth from '../../components/home/Health';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { useNotifeeListener } from '../../hooks/home/notifee.hooks';
 import { useActiveWos } from '../../hooks/home/workout.hooks';
 import { useApiHooks } from '../../hooks/home/api.hooks';
 import HomeBackground from '../../components/home/Background';
-import { ScreenTemplate, Picker as CustomPicker } from '@app/elements';
+import { ScreenTemplate } from '@app/elements';
 import { useMemo } from 'react';
+import { Colors } from '@app/utils';
 
 interface Props {
   route: any;
@@ -91,15 +90,21 @@ const Home = ({
   route,
   processNotification,
 }: Props) => {
-  const { user, workouts, offline, healthData, analytics, exercises } =
-    useSelector((state: ReducerProps) => ({
-      user: state.user,
-      workouts: state.workout.workouts,
-      offline: state.global.offline,
-      healthData: state.workout.healthData,
-      exercises: state.exercises.data,
-      analytics: state.misc.pinExercisesAnalytics,
-    }));
+  const {
+    user,
+    workouts,
+    offline,
+    healthData,
+    pinExercisesAnalytics,
+    exercises,
+  } = useSelector((state: ReducerProps) => ({
+    user: state.user,
+    workouts: state.workout.workouts,
+    offline: state.global.offline,
+    healthData: state.workout.healthData,
+    exercises: state.exercises.data,
+    pinExercisesAnalytics: state.misc.pinExercisesAnalytics,
+  }));
   const [picker, setPicker] = useState<string | undefined>();
   const [chartFilter, setChartFilter] = useState('avg');
   const [selectedEx, setSelectedEx] = useState<ExerciseProps>();
@@ -136,46 +141,45 @@ const Home = ({
     }
   }, [route]);
 
-  const getFilteredAnalExs = () => {
-    const exStore: ExerciseProps[] = [];
+  const pinnedExerciseProps = useMemo(() => {
+    const pinnedExerciseProps = user.pinExercises
+      .map(p => {
+        return exercises.find(e => e._id === p.exerciseUid);
+      })
+      .filter(e => !!e);
+    return pinnedExerciseProps as ExerciseProps[];
+  }, [exercises]);
 
-    analytics.forEach(p => {
-      const e = exercises.find(e => e._id === p.exerciseUid);
-      //only add exercise if analytics items is more than 3
-      if (e && p.data.length > 3) {
-        exStore.push(e);
-      }
-    });
-
-    return exStore;
-  };
-
-  const renderPickerItems = () => {
+  const pickerOptions = useMemo(() => {
     if (picker && picker === 'chartFilter') {
-      const items = ['avg', 'min', 'max'].map(s => (
-        <Picker.Item value={s} label={_.capitalize(s)} key={s} />
-      ));
+      const items = ['avg', 'min', 'max'].map(s => ({
+        value: s,
+        label: s,
+      }));
       return items;
     }
 
-    const exStore: ExerciseProps[] = getFilteredAnalExs();
-
-    const items = exStore
+    const items = pinnedExerciseProps
       .filter(d => d.name && d._id)
-      .map(d => (
-        <Picker.Item value={d._id} label={_.capitalize(d.name)} key={d._id} />
-      ));
+      .map(d => ({
+        value: d._id as string,
+        label: d.name as string,
+        color: '',
+      }));
 
-    items.unshift(<Picker.Item value={undefined} label={''} key={'nothing'} />);
+    items.unshift({
+      value: '',
+      label: 'Choose an exericse',
+      color: Colors.secondary,
+    });
     return items;
-  };
+  }, [picker, pinnedExerciseProps]);
 
   const onPickerChange = (id: string) => {
     if (picker && picker === 'chartFilter') {
       setChartFilter(id);
     } else {
-      const exStore: ExerciseProps[] = getFilteredAnalExs();
-      const picked = exStore.find(d => d._id === id);
+      const picked = pinnedExerciseProps.find(d => d._id === id);
       setSelectedEx(picked);
     }
   };
@@ -204,7 +208,12 @@ const Home = ({
   }, [wos, deviceWos]);
 
   return (
-    <ScreenTemplate>
+    <ScreenTemplate
+      pickerOptions={pickerOptions}
+      isPickerOpen={picker ? true : false}
+      onPickerClose={() => setPicker(undefined)}
+      pickerValue={picker === 'chartFilter' ? chartFilter : selectedEx?._id}
+      onPickerChangeValue={onPickerChange}>
       <HomeBackground />
       <DashboardDemo screen={HomeStackScreens.Home} />
       <HomeHeader />
@@ -221,20 +230,12 @@ const Home = ({
         <HomeHealth healthData={healthData} navigation={navigation} />
         <HomeWorkouts wos={wos} deviceWos={deviceWos} desc={bannerTxt} />
         <HomeExercises
-          pinAnalytics={analytics}
+          pinAnalytics={pinExercisesAnalytics}
           setPicker={setPicker}
           chartFilter={chartFilter}
           selectedEx={selectedEx}
         />
       </ScrollView>
-      <CustomPicker
-        pickerItems={renderPickerItems()}
-        setOpen={o => setPicker(undefined)}
-        open={picker ? true : false}
-        value={''}
-        setValue={onPickerChange}
-        hidebgColor
-      />
     </ScreenTemplate>
   );
 };

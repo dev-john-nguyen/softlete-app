@@ -1,6 +1,5 @@
-import { Picker } from '@react-native-picker/picker';
 import _, { capitalize } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +11,9 @@ import {
   GroupedProps,
   Stats,
 } from '../../components/data-overview/types';
-import CustomPicker from '../../components/elements/Picker';
+import CustomPicker, {
+  PickerOptionProp,
+} from '../../components/elements/Picker';
 import SecondaryText from '../../components/elements/SecondaryText';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
@@ -91,11 +92,12 @@ const DataOverview = ({ healthData }: Props) => {
     [data, filter],
   );
 
-  const renderPickerItems = () => {
-    return Object.values(Stats).map(item => (
-      <Picker.Item label={capitalize(item)} value={item} key={item} />
-    ));
-  };
+  const pickerItems: PickerOptionProp[] = useMemo(() => {
+    return Object.values(Stats).map(item => ({
+      label: item as string,
+      value: item as string,
+    }));
+  }, []);
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
@@ -121,7 +123,7 @@ const DataOverview = ({ healthData }: Props) => {
       />
 
       <CustomPicker
-        pickerItems={renderPickerItems()}
+        pickerOptions={pickerItems}
         value={filter}
         setValue={val => setFilter(val as Stats)}
         open={picker}

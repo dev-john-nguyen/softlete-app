@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { FlexBox } from '@app/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import SecondaryText from '../../components/elements/SecondaryText';
@@ -13,8 +13,6 @@ import StyleConstants, {
 } from '../../components/tools/StyleConstants';
 import BaseColors, { rgba } from '../../utils/BaseColors';
 import CustomPicker from '../../components/elements/Picker';
-import { Picker } from '@react-native-picker/picker';
-import SaveSvg from '../../assets/SaveSvg';
 import {
   Input,
   ScreenTemplate,
@@ -26,17 +24,12 @@ import { BannerTypes } from 'src/services/banner/types';
 import { capitalize, Colors } from '@app/utils';
 import Icon from '@app/icons';
 
-interface Props {
-  navigation: any;
-  route: any;
-}
-
 enum AthleteTypes {
   athlete = 'athlete',
   trainer = 'trainer',
 }
 
-const EditProfile = ({}: Props) => {
+const EditProfile = () => {
   const user = useSelector((state: ReducerProps) => state.user);
   const dispatch: any = useDispatch();
   const [name, setName] = useState(user.name);
@@ -87,10 +80,11 @@ const EditProfile = ({}: Props) => {
       });
   };
 
-  const renderPickerItems = useCallback(() => {
-    return Object.values(AthleteTypes).map(item => (
-      <Picker.Item label={capitalize(item)} value={item} key={item} />
-    ));
+  const pickerOptions = useMemo(() => {
+    return Object.values(AthleteTypes).map(item => ({
+      label: capitalize(item),
+      value: item,
+    }));
   }, [athlete]);
 
   return (
@@ -158,7 +152,7 @@ const EditProfile = ({}: Props) => {
         open={picker}
         setOpen={() => setPicker(false)}
         value={athlete}
-        pickerItems={renderPickerItems()}
+        pickerOptions={pickerOptions}
         setValue={txt => setAthlete(txt)}
       />
     </ScreenTemplate>

@@ -89,11 +89,13 @@ const WoExerciseChart = ({
       : 'N/A';
 
   return (
-    <FlexBox marginTop={10} column>
+    <FlexBox marginTop={10} column flex={1}>
       <FlexBox
         marginBottom={10}
         alignItems="center"
-        justifyContent="space-between">
+        justifyContent="space-between"
+        marginLeft={20}
+        marginRight={20}>
         <FlexBox
           onPress={() => setPicker('chartFilter')}
           alignSelf="flex-start"

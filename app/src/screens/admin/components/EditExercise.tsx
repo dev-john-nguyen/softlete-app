@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -34,7 +34,6 @@ import StyleConstants, {
   moderateScale,
 } from '../../../components/tools/StyleConstants';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
@@ -42,8 +41,9 @@ import { IndexStackList } from '../../types';
 import Input from '../../../components/elements/Input';
 import { ReducerProps } from '../../../services';
 import FastImage from 'react-native-fast-image';
-import CustomPicker from '../../../components/elements/Picker';
-import { Picker } from '@react-native-picker/picker';
+import CustomPicker, {
+  PickerOptionProp,
+} from '../../../components/elements/Picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import PrimaryText from '../../../components/elements/PrimaryText';
@@ -148,7 +148,7 @@ const EditExercise = ({
   const onSubmit = async () => {
     if (loading || !exerciseProps) return;
 
-    let errorsStore = [];
+    const errorsStore = [];
 
     setLoading(true);
 
@@ -243,17 +243,17 @@ const EditExercise = ({
     return id;
   };
 
-  const pickerItems = useMemo(() => {
+  const pickerOptions: PickerOptionProp[] = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
-        return Object.values(Categories);
+        return Object.values(Categories).map(v => ({ value: v, label: v }));
       case PickerOptions.equipment:
-        return equipments;
+        return equipments.map(v => ({ value: v, label: v }));
       case PickerOptions.muscleGroup:
-        return Object.values(MuscleGroups);
+        return Object.values(MuscleGroups).map(v => ({ value: v, label: v }));
     }
     return [];
-  }, [picker]);
+  }, [picker, equipments]);
 
   const onPickerValueChange = (val: any) => {
     switch (picker) {
@@ -266,7 +266,7 @@ const EditExercise = ({
     }
   };
 
-  const renderPickerValue = useCallback(() => {
+  const pickerValue = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
         return category;
@@ -298,7 +298,7 @@ const EditExercise = ({
               )}
 
               <Pressable style={styles.svg} onPress={onSubmit}>
-                <SaveSvg strokeColor={BaseColors.white} />
+                <SaveSvg color={BaseColors.white} size="100%" />
               </Pressable>
             </>
           )}
@@ -397,9 +397,9 @@ const EditExercise = ({
         <CustomPicker
           open={!!picker}
           setOpen={() => setPicker(PickerOptions.disable)}
-          value={renderPickerValue()}
+          value={pickerValue}
           setValue={onPickerValueChange}
-          options={pickerItems}
+          pickerOptions={pickerOptions}
         />
       </SafeAreaView>
     </ScreenTemplate>

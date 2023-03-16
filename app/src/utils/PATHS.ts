@@ -105,8 +105,8 @@ export default {
       exerciseUids: string[],
     ) => {
       let strArr = ``;
-      exerciseUids.forEach(id => {
-        strArr += `exerciseUids=${id}&`;
+      exerciseUids.forEach((id, i) => {
+        strArr += `${i > 0 ? '&' : ''}exerciseUids=${id}`;
       });
       return `api/workouts/get/exercise/data?userUid=${userUid}&fromDate=${FromDate}&toDate=${toDate}&${strArr}`;
     },

@@ -36,8 +36,8 @@ function isUidInvalid(exerciseUids?: string | [string]) {
   if (typeof exerciseUids === 'string') {
     if (!mongoose.Types.ObjectId.isValid(exerciseUids)) return true;
   } else if (exerciseUids instanceof Array) {
-    const isInvalid = exerciseUids.some(uid =>
-      mongoose.Types.ObjectId.isValid(uid),
+    const isInvalid = exerciseUids.some(
+      uid => !mongoose.Types.ObjectId.isValid(uid),
     );
     if (isInvalid) return true;
   } else {
@@ -113,7 +113,10 @@ router.get(
         const mapDocs = handleMappingDocs(docs);
         res.send(mapDocs);
       })
-      .catch(err => errorCatch(err, res, next));
+      .catch(err => {
+        console.log(err);
+        errorCatch(err, res, next);
+      });
   },
 );
 

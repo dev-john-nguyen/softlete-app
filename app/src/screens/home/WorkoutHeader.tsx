@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { FlexBox } from '@app/ui';
 import {
   Input,
@@ -27,11 +27,11 @@ import {
 import { updateWorkoutHeader } from '../../services/workout/actions';
 import { updateProgramWorkoutHeader } from '../../services/program/actions';
 import { HomeStackScreens } from './types';
-import { Picker } from '@react-native-picker/picker';
 import { HealthActivity } from 'react-native-health';
 import { renderHealthActivityName } from '../../utils/format';
 import DashboardDemo from '../../components/demo/Demo';
 import { DemoStates } from '../../services/global/types';
+import useBanner from 'src/hooks/utils/useBanner';
 
 interface Props {
   genPrograms: GeneratedProgramProps[];
@@ -60,10 +60,10 @@ const WorkoutHeader = ({
   const [description, setDescription] = useState('');
   const [programUid, setProgramUid] = useState('');
   const [date, setDate] = useState(new Date());
-  const [error, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [picker, setPicker] = useState('');
   const [datePicker, setDatePicker] = useState(false);
+  const setBanner = useBanner();
 
   const init = useCallback(() => {
     if (workoutHeader) {
@@ -94,25 +94,13 @@ const WorkoutHeader = ({
     //check values
     if (loading) return;
 
-    const errors = [];
-
     if (!name && type === WorkoutTypes.TraditionalStrengthTraining) {
-      errors.push('Name required.');
+      return setBanner('Name is required.');
+    } else if (!type) {
+      return setBanner('Type is required.');
+    } else if (!date) {
+      return setBanner('Date is required.');
     }
-
-    if (!type) {
-      errors.push('type is required.');
-    }
-
-    if (!date) {
-      errors.push('Date is required.');
-    }
-
-    if (errors.length > 0) {
-      return setErrors(errors);
-    }
-
-    setErrors([]);
 
     setLoading(true);
 
@@ -150,32 +138,29 @@ const WorkoutHeader = ({
     if (program) return program.name;
   };
 
-  const renderPickerItems = useCallback(() => {
+  const pickerOptions = useMemo(() => {
     switch (picker) {
       case 'type':
         return Object.values(WorkoutTypes).map(type => {
-          return (
-            <Picker.Item
-              label={renderHealthActivityName(type)}
-              value={type}
-              key={type}
-            />
-          );
+          return {
+            label: renderHealthActivityName(type),
+            value: type,
+          };
         });
       case 'program':
     }
 
-    const generatedPrograms = genPrograms.map(item => (
-      <Picker.Item
-        label={capitalize(item.name)}
-        value={item._id}
-        key={item._id}
-      />
-    ));
-    return [
-      <Picker.Item label={'None'} value={''} key={'none'} />,
-      ...generatedPrograms,
-    ];
+    const generatedPrograms = genPrograms.map(item => ({
+      label: capitalize(item.name),
+      value: item._id,
+    }));
+
+    generatedPrograms.unshift({
+      label: 'None',
+      value: '',
+    });
+
+    return generatedPrograms;
   }, [genPrograms, picker]);
 
   const getPickerValue = () => {
@@ -217,7 +202,7 @@ const WorkoutHeader = ({
       rotateBack="-90deg"
       onPickerClose={() => setPicker('')}
       pickerValue={getPickerValue()}
-      pickerItems={renderPickerItems()}
+      pickerOptions={pickerOptions}
       onPickerChangeValue={onPickerChangeValue}
       isDatePickerOpen={datePicker}
       datePickerValue={date}
@@ -229,16 +214,6 @@ const WorkoutHeader = ({
         <PrimaryText size="small" marginBottom={10}>
           Fill out the form below.
         </PrimaryText>
-
-        {error.length > 0 && (
-          <FlexBox marginBottom={10} column>
-            {error.map(e => (
-              <PrimaryText key={Math.random()} size="small" color={Colors.red}>
-                *{e}
-              </PrimaryText>
-            ))}
-          </FlexBox>
-        )}
 
         {type === WorkoutTypes.TraditionalStrengthTraining && (
           <Input
