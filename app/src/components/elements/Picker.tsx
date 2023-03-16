@@ -85,7 +85,7 @@ const CustomPicker = ({
   }, [pickerOptions]);
 
   const onSearch = async (value: string) => {
-    const newOptions = pickerOptions.filter(
+    const newOptions = pickerOptionProp.filter(
       a => a.label.toLowerCase().indexOf(value.toLowerCase()) > -1,
     );
     setPickerOptions(newOptions);
