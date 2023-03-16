@@ -1,60 +1,57 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, StyleSheet, SectionList} from 'react-native';
-import {ReducerProps} from '../../services';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { SectionList } from 'react-native';
+import { ReducerProps } from '../../services';
 import {
   FriendProps,
-  UserProps,
   FriendStatus,
   UserActionProps,
 } from '../../services/user/types';
-import SecondaryText from '../../components/elements/SecondaryText';
-import {connect} from 'react-redux';
-import {AppDispatch} from '../../../App';
+import { connect, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../App';
 import {
   AthleteProfileProps,
   AthleteActionProps,
 } from '../../services/athletes/types';
-import StyleConstants from '../../components/tools/StyleConstants';
-import BaseColors from '../../utils/BaseColors';
-import {sendFriendRequest} from '../../services/athletes/actions';
-import {NetworkStackScreens} from './types';
-import {SET_CURRENT_ATHLETE} from '../../services/athletes/actionTypes';
+import { sendFriendRequest } from '../../services/athletes/actions';
+import { NetworkStackScreens } from '../network/types';
+import { SET_CURRENT_ATHLETE } from '../../services/athletes/actionTypes';
 import {
   NotificationActionProps,
   NotificationProps,
 } from '../../services/notifications/types';
 import NotificationItem from '../../components/notifications/NotificationItem';
 import FriendItem from '../../components/notifications/FriendItem';
-import {fetchNotifications} from '../../services/notifications/actions';
-import {getFriends} from '../../services/user/actions';
+import { fetchNotifications } from '../../services/notifications/actions';
+import { getFriends } from '../../services/user/actions';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
 
 interface Props {
   navigation: any;
   route: any;
-  user: UserProps;
   dispatch: AppDispatch;
-  athletes: AthleteProfileProps[];
   sendFriendRequest: AthleteActionProps['sendFriendRequest'];
-  notifications: NotificationProps[];
   fetchNotifications: NotificationActionProps['fetchNotifications'];
   getFriends: UserActionProps['getFriends'];
 }
 
 const Notifications = ({
   navigation,
-  user,
   dispatch,
-  athletes,
   sendFriendRequest,
-  notifications,
   fetchNotifications,
   getFriends,
 }: Props) => {
-  const [data, setData] = useState<{title: string; data: any[]}[]>([]);
+  const [data, setData] = useState<{ title: string; data: any[] }[]>([]);
   const [fetching, setFetching] = useState(false);
   const mount = useRef(false);
   const fetchCount = useRef(0);
+  const { user, athletes, notifications } = useSelector(
+    (state: ReducerProps) => ({
+      user: state.user,
+      athletes: state.athletes.profiles,
+      notifications: state.notifications.notifications,
+    }),
+  );
 
   useEffect(() => {
     mount.current = true;
@@ -99,7 +96,7 @@ const Notifications = ({
       athObj = JSON.parse(athlete as string);
     }
 
-    dispatch({type: SET_CURRENT_ATHLETE, payload: athObj});
+    dispatch({ type: SET_CURRENT_ATHLETE, payload: athObj });
     navigation.navigate(NetworkStackScreens.AthleteDashboard, {
       athlete: athObj,
     });
@@ -121,7 +118,7 @@ const Notifications = ({
   );
 
   const renderNotificationItem = useCallback(
-    ({item, index}: {item: NotificationProps; index: number}) => {
+    ({ item, index }: { item: NotificationProps; index: number }) => {
       return (
         <NotificationItem
           notification={item}
@@ -145,10 +142,10 @@ const Notifications = ({
     }: {
       item: any;
       index: number;
-      section: {title: string; data: any[]};
+      section: { title: string; data: any[] };
     }) => {
       if (section.title === 'Notifications') {
-        return renderNotificationItem({item, index});
+        return renderNotificationItem({ item, index });
       } else {
         return renderFriendsItem(item, index);
       }
@@ -182,39 +179,11 @@ const Notifications = ({
         sections={data}
         keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
         renderItem={renderItem}
-        renderSectionHeader={({section: {title}}) => (
-          <View style={styles.titleContainer}>
-            <SecondaryText styles={styles.title}>{title}</SecondaryText>
-          </View>
-        )}
         stickySectionHeadersEnabled={false}
       />
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  titleContainer: {
-    paddingTop: StyleConstants.smallMargin,
-    paddingBottom: StyleConstants.smallMargin,
-    paddingLeft: StyleConstants.baseMargin,
-    paddingRight: StyleConstants.baseMargin,
-    borderBottomWidth: 0.2,
-    borderBottomColor: BaseColors.lightGrey,
-  },
-  title: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.secondary,
-    textTransform: 'capitalize',
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  user: state.user,
-  athletes: state.athletes.profiles,
-  notifications: state.notifications.notifications,
-});
 
 const mapDispatchToProps = (dispatch: any) => ({
   sendFriendRequest: (userUid: string, status: FriendStatus) =>
@@ -224,4 +193,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default connect(null, mapDispatchToProps)(Notifications);

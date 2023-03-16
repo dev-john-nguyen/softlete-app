@@ -12,7 +12,7 @@ import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
 import ExerciseAnalytics from '../exercises/Analytics';
 import Exercise from '../exercises/View';
-import BaseColors, { rgba } from '../../utils/BaseColors';
+import BaseColors from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
 import WorkoutModal from './modals/WorkoutModal';
 import GoOnlineModal from './modals/GoOnlineModal';
@@ -27,6 +27,7 @@ import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
 import { FlexBox } from '@app/ui';
+import Notifications from '../common/Notifications';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -39,6 +40,16 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.Home}
           component={Home}
+          options={{
+            headerTitle: '',
+            headerTransparent: true,
+            headerRight: undefined,
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.Notifications}
+          component={Notifications}
           options={{
             headerTitle: '',
             headerTransparent: true,

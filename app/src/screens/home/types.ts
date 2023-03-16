@@ -5,7 +5,7 @@ import { ExerciseProps } from '../../services/exercises/types';
 export type NavigationProps = {
   goBack(): void;
   params: any;
-  push(screen: HomeStackScreens, arg1: any): unknown;
+  push(screen: HomeStackScreens, arg1?: any): unknown;
 };
 
 export interface MyRouteProps extends RouteProp<ParamListBase, ''> {
@@ -43,6 +43,7 @@ export type HomeStackParamsList = {
   Health: undefined;
   DeviceActivities: undefined;
   WorkoutActivitySummary: undefined;
+  Notifications: undefined;
 };
 
 export enum HomeStackScreens {
@@ -66,6 +67,7 @@ export enum HomeStackScreens {
   Health = 'Health',
   DeviceActivities = 'DeviceActivities',
   WorkoutActivitySummary = 'WorkoutActivitySummary',
+  Notifications = 'Notifications',
 }
 
 export enum HomeStackScreenTitle {

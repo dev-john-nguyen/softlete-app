@@ -5,6 +5,12 @@ import { Colors, StyleConstants, rgba, normalize, Constants } from '@app/utils';
 import Icon from '@app/icons';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
+import { useNavigation } from '@react-navigation/native';
+import {
+  HomeStackParamsList,
+  HomeStackScreens,
+  NavigationProps,
+} from 'src/screens/home/types';
 
 type HomeNavBarProps = {
   currentIndex: number;
@@ -68,6 +74,7 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
 };
 
 export const HomeHeader = () => {
+  const navigation = useNavigation<NavigationProps>();
   const { user } = useSelector((state: ReducerProps) => ({
     user: state.user,
     offline: state.global.offline,
@@ -82,18 +89,28 @@ export const HomeHeader = () => {
   return (
     <FlexBox paddingLeft={15} paddingRight={15} marginBottom={15}>
       <FlexBox flex={1} column>
-        <PrimaryText size="large" fontSize={30}>
-          Welcome,
-        </PrimaryText>
-        <PrimaryText size="large" fontSize={30}>
-          {user.username}!
-        </PrimaryText>
-        <FlexBox alignItems="center" marginTop={10}>
-          <Icon icon="calendar" size={20} color={Colors.white} />
-          <PrimaryText size="medium" variant="secondary" marginLeft={5}>
-            {todaysDate}
+        <FlexBox column>
+          <PrimaryText size="large" fontSize={30}>
+            Welcome,
           </PrimaryText>
+          <PrimaryText size="large" fontSize={30}>
+            {user.username}!
+          </PrimaryText>
+          <FlexBox alignItems="center" marginTop={10}>
+            <Icon icon="calendar" size={20} color={Colors.white} />
+            <PrimaryText size="medium" variant="secondary" marginLeft={5}>
+              {todaysDate}
+            </PrimaryText>
+          </FlexBox>
         </FlexBox>
+      </FlexBox>
+      <FlexBox marginTop={5}>
+        <Icon
+          icon="bell"
+          size={25}
+          color={Colors.white}
+          onPress={() => navigation.push(HomeStackScreens.Notifications)}
+        />
       </FlexBox>
     </FlexBox>
   );
