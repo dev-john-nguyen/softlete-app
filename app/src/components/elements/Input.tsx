@@ -79,7 +79,7 @@ const Input = ({
 
     return {
       fontSize: numbers ? StyleConstants.numFont : StyleConstants.smallFont,
-      paddingTop: multiline ? 15 : undefined,
+      paddingTop: multiline ? 10 : undefined,
       borderBottomColor:
         editable || editable == null
           ? rgba(BaseColors.whiteRbg, 0.7)

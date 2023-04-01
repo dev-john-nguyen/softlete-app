@@ -11,7 +11,7 @@ import WorkoutExerciseRestructure from './ExerciseRestructure';
 import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
 import ExerciseAnalytics from '../exercises/Analytics';
-import Exercise from '../exercises/View';
+import Exercise from '../exercises/Profile';
 import BaseColors, { rgba } from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
 import WorkoutModal from './modals/WorkoutModal';
@@ -27,6 +27,7 @@ import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
 import { FlexBox } from '@app/ui';
+import GoalForm from '../exercises/GoalForm';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -178,6 +179,18 @@ function HomeStack(parentProps: any) {
             headerRight: undefined,
             headerTransparent: true,
             headerTintColor: BaseColors.black,
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.GoalFormModal}
+          component={GoalForm}
+          options={{
+            headerTitle: '',
+            headerRight: undefined,
+            headerTransparent: true,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            presentation: 'modal',
           }}
         />
 

@@ -50,7 +50,7 @@ const PrimaryButton = ({
             padding: 10,
             paddingLeft: 20,
             paddingRight: 20,
-            borderRadius: 10,
+            borderRadius: 5,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',

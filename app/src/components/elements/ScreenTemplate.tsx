@@ -172,7 +172,7 @@ const ScreenTemplate = ({
           onDatePickerClose && onDatePickerClose();
           onDatePickerChange && onDatePickerChange(date);
         }}
-        onCancel={onDatePickerClose}
+        onCancel={() => onDatePickerClose && onDatePickerClose()}
       />
     </>
   );

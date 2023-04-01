@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../services/exercises/types';
 import { normalize } from '../../utils/tools';
 import { ReducerProps } from '../../services';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { updatePinExercises } from '../../services/user/actions';
 import { PinExerciseProps } from '../../services/misc/types';
 import { HomeStackScreens } from '../home/types';
@@ -28,6 +28,120 @@ import {
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { StyleConstants } from '@app/utils';
+import { useNavigation } from '@react-navigation/native';
+
+type IconMenuOptionsProps = {
+  exercise: ExerciseProps;
+  athlete: boolean;
+  route: any;
+  user: UserProps;
+  offline: boolean;
+  athleteProps: AthleteProfileProps;
+};
+
+const IconMenuOptions: FC<IconMenuOptionsProps> = ({
+  exercise,
+  athlete,
+  route,
+  user,
+  offline,
+  athleteProps,
+}) => {
+  const navigation: any = useNavigation();
+  const dispatch = useDispatch();
+
+  const onNavigateToUpdate = () => {
+    if (athlete) return;
+    if (!exercise) return navigation.goBack();
+
+    dispatch({ type: SET_TARGET_EXERCISE, payload: exercise });
+
+    if (route.params && route.params.programStack) {
+      if (exercise.userUid !== user.uid) {
+        if (exercise.softlete && user.admin) {
+          return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+        } else {
+          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
+        }
+      } else {
+        return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+      }
+    }
+
+    if (exercise.userUid !== user.uid) {
+      if (exercise.softlete && user.admin) {
+        return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+      } else {
+        return navigation.navigate(HomeStackScreens.EditExercise);
+      }
+    } else {
+      return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+    }
+  };
+
+  const onReportImage = () => {
+    exercise && reportExercise(athleteProps.uid, user.uid, exercise?._id);
+  };
+
+  const onNavigateToAnalytics = () => {
+    if (!exercise) return;
+    if (athlete) {
+      navigation.navigate(NetworkStackScreens.AthleteAnalytics, {
+        exerciseUid: exercise._id,
+      });
+    } else {
+      if (route.params && route.params.programStack) {
+        navigation.navigate(ProgramStackScreens.ProgramExerciseAnalytics, {
+          exerciseUid: exercise._id,
+        });
+      } else {
+        navigation.navigate(HomeStackScreens.ExerciseAnalytics, {
+          exerciseUid: exercise._id,
+        });
+      }
+    }
+  };
+
+  return (
+    <FlexBox alignItems="flex-end" justifyContent="flex-start">
+      {!offline && (
+        <>
+          <Icon
+            icon="graph"
+            color={Colors.white}
+            size={20}
+            onPress={onNavigateToAnalytics}
+            containerStyles={{ marginRight: 20 }}
+          />
+          <Icon
+            icon="target"
+            size={20}
+            color={Colors.white}
+            onPress={() =>
+              navigation.navigate(HomeStackScreens.GoalFormModal, { exercise })
+            }
+            containerStyles={{ marginRight: 20 }}
+          />
+          {athlete ? (
+            <Icon
+              icon="error"
+              color={Colors.white}
+              size={20}
+              onPress={onReportImage}
+            />
+          ) : (
+            <Icon
+              icon="pencil"
+              color={Colors.white}
+              size={20}
+              onPress={onNavigateToUpdate}
+            />
+          )}
+        </>
+      )}
+    </FlexBox>
+  );
+};
 
 interface Props {
   route: any;
@@ -103,92 +217,20 @@ const Exercise = ({
     dispatch(updatePinExercises({ exerciseUid: exercise._id, exercise }, pin));
   };
 
-  const onNavigateToUpdate = () => {
-    if (athlete) return;
-    if (!exercise) return navigation.goBack();
-
-    dispatch({ type: SET_TARGET_EXERCISE, payload: exercise });
-
-    if (route.params && route.params.programStack) {
-      if (exercise.userUid !== user.uid) {
-        if (exercise.softlete && user.admin) {
-          return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
-        } else {
-          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
-        }
-      } else {
-        return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
-      }
-    }
-
-    if (exercise.userUid !== user.uid) {
-      if (exercise.softlete && user.admin) {
-        return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
-      } else {
-        return navigation.navigate(HomeStackScreens.EditExercise);
-      }
-    } else {
-      return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
-    }
-  };
-
-  const onNavigateToAnalytics = () => {
-    if (!exercise) return;
-    if (athlete) {
-      navigation.navigate(NetworkStackScreens.AthleteAnalytics, {
-        exerciseUid: exercise._id,
-      });
-    } else {
-      if (route.params && route.params.programStack) {
-        navigation.navigate(ProgramStackScreens.ProgramExerciseAnalytics, {
-          exerciseUid: exercise._id,
-        });
-      } else {
-        navigation.navigate(HomeStackScreens.ExerciseAnalytics, {
-          exerciseUid: exercise._id,
-        });
-      }
-    }
-  };
-
-  const onReportImage = () => {
-    exercise && reportExercise(athleteProps.uid, user.uid, exercise?._id);
-  };
-
   if (!exercise) return <Loading />;
 
   return (
     <ScreenTemplate
       isBackVisible
       rightContent={
-        <FlexBox alignItems="flex-end" justifyContent="flex-start">
-          {!offline && (
-            <>
-              <Icon
-                icon="graph"
-                color={Colors.white}
-                size={20}
-                onPress={onNavigateToAnalytics}
-                containerStyles={{ marginRight: 20 }}
-              />
-              {athlete ? (
-                <Icon
-                  icon="error"
-                  color={Colors.white}
-                  size={20}
-                  onPress={onReportImage}
-                />
-              ) : (
-                <Icon
-                  icon="pencil"
-                  color={Colors.white}
-                  size={20}
-                  onPress={onNavigateToUpdate}
-                />
-              )}
-            </>
-          )}
-        </FlexBox>
+        <IconMenuOptions
+          athleteProps={athleteProps}
+          route={route}
+          athlete={athlete}
+          exercise={exercise}
+          user={user}
+          offline={offline}
+        />
       }>
       <ScrollView
         style={styles.container}

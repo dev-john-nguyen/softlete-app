@@ -184,9 +184,10 @@ const EditExerciseDetails = ({
   const pickerItems = useMemo(() => {
     switch (picker) {
       case PickerOptions.cats:
-        return Object.values(Categories).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
+        return Object.values(Categories).map(item => ({
+          label: capitalize(item),
+          value: item,
+        }));
     }
     return [];
   }, [picker]);
@@ -232,7 +233,7 @@ const EditExerciseDetails = ({
       isPickerOpen={!!picker}
       onPickerClose={() => setPicker(PickerOptions.disable)}
       pickerValue={pickerValue}
-      pickerItems={pickerItems}
+      pickerOptions={pickerItems}
       onPickerChangeValue={onPickerValueChange}
       rightContent={
         <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
