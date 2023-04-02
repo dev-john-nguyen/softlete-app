@@ -9,6 +9,7 @@ import miscReducer from './misc/reducer';
 import athletesReducer from './athletes/reducer';
 import chatReducer from './chat/reducer';
 import notificationReducer from './notifications/reducer';
+import goalsReducer from './goals/slice';
 
 import { MiscProps } from './misc/types';
 import { UserProps } from './user/types';
@@ -20,6 +21,8 @@ import { RootProgramProps } from './program/types';
 import { AthletesRootProps } from './athletes/types';
 import { ChatRootProps } from './chat/types';
 import { NotificationRootProps } from './notifications/types';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action } from '@reduxjs/toolkit';
 
 export default combineReducers({
   user: userReducer,
@@ -32,6 +35,7 @@ export default combineReducers({
   athletes: athletesReducer,
   chat: chatReducer,
   notifications: notificationReducer,
+  goals: goalsReducer,
 });
 
 export interface ReducerProps {
@@ -46,3 +50,5 @@ export interface ReducerProps {
   chat: ChatRootProps;
   notifications: NotificationRootProps;
 }
+
+export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;

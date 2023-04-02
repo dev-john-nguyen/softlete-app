@@ -6,6 +6,7 @@ import messages from './messages';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { SERVERURL } from '../../utils/PATHS';
 import { BannerTypes } from '../banner/types';
+import { AnyAction, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 export function setAuthHeader(authToken: string) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
@@ -93,7 +94,7 @@ export async function sendRequest(
 export default async function request(
   method: Method,
   path: string,
-  dispatch: AppDispatch,
+  dispatch: AppDispatch | ThunkDispatch<unknown, unknown, AnyAction>,
   data?: any,
 ): Promise<{ data?: any; networkError?: boolean }> {
   //check auth and update if no there

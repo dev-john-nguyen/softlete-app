@@ -17,6 +17,10 @@ export default {
   bug: {
     create: 'api/bug/create',
   },
+  goals: {
+    create: 'api/goals/update',
+    get: (userUid: string) => `api/goals/get/${userUid}`,
+  },
   subscription: {
     getPubKey: 'api/subscription/pub-key',
     createSubscription: 'api/subscription/create',
