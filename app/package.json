@@ -56,7 +56,6 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-unimodules": "^0.14.8",
     "react-native-video": "^5.2.0",
-    "react-native-video-processing": "^2.0.0",
     "react-native-webview": "^11.13.0",
     "react-redux": "^7.2.4",
     "redux-devtools-extension": "^2.13.9",

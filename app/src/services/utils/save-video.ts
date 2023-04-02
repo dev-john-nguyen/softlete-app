@@ -2,7 +2,7 @@
 import storage from '@react-native-firebase/storage';
 import { AppDispatch } from '../../../App';
 // @ts-ignore
-import { ProcessingManager } from 'react-native-video-processing';
+// import { ProcessingManager } from 'react-native-video-processing';
 import request from './request';
 import PATHS from '../../utils/PATHS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -204,11 +204,11 @@ const compressVideo = async (uri: string) => {
   //             minimumBitrate: 300000,
   //         })
   //     })
-  const compressedVideo = await ProcessingManager.compress(uri, {
-    bitrateMultiplier: 5,
-    minimumBitrate: 500000,
-  });
-  return compressedVideo as string;
+  // const compressedVideo = await ProcessingManager.compress(uri, {
+  //   bitrateMultiplier: 5,
+  //   minimumBitrate: 500000,
+  // });
+  return uri as string;
 };
 
 export default saveVideos;
