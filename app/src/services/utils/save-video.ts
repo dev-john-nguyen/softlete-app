@@ -1,8 +1,7 @@
 /* eslint-disable */
 import storage from '@react-native-firebase/storage';
 import { AppDispatch } from '../../../App';
-// @ts-ignore
-import { ProcessingManager } from 'react-native-video-processing';
+import { Video as VideoCompressor } from 'react-native-compressor';
 import request from './request';
 import PATHS from '../../utils/PATHS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -141,7 +140,7 @@ const notifyError = async (
 };
 
 const updateExerciseVideoBatch = async (
-  batch: ExercisesVideoBatchProps,
+  batchProps: ExercisesVideoBatchProps,
   dispatch: AppDispatch,
   getState: () => ReducerProps,
   remove?: boolean,
@@ -150,6 +149,7 @@ const updateExerciseVideoBatch = async (
   const exercisesVideoBatch = _.cloneDeep(
     getState().global.exercisesVideoBatch,
   );
+  const batch = _.cloneDeep(batchProps);
 
   const batchIndex = exercisesVideoBatch.findIndex(
     item => item.videoId === batch.videoId,
@@ -193,22 +193,10 @@ const saveVideoToStorage = async (path: string, compressedUri: string) => {
 };
 
 const compressVideo = async (uri: string) => {
-  // const compressedVideo = await ProcessingManager.trim(uri, {
-  //     quality: VideoPlayer.Constants.quality.QUALITY_MEDIUM
-  // })
-  //     .then((data: string) => {
-  //         return ProcessingManager.compress(data, {
-  //             width: Constants.videoDim.width,
-  //             height: Constants.videoDim.height,
-  //             bitrateMultiplier: 3,
-  //             minimumBitrate: 300000,
-  //         })
-  //     })
-  const compressedVideo = await ProcessingManager.compress(uri, {
-    bitrateMultiplier: 5,
-    minimumBitrate: 500000,
+  const result = await VideoCompressor.compress(uri, {
+    compressionMethod: 'auto',
   });
-  return compressedVideo as string;
+  return result;
 };
 
 export default saveVideos;
