@@ -17,12 +17,10 @@ router.post(
   '/',
   (req: Request<{}, {}, RequestBody>, res: Response, next: NextFunction) => {
     const { uid } = req.headers;
+
     if (!uid) return res.status(401).send('cannot find user id.');
 
-    const { userUid, name, description, goal, startDate, endDate } = req.body;
-
-    if (!userUid || typeof userUid !== 'string')
-      return res.status(400).send('Invalid user id.');
+    const { name, description, goal, startDate, endDate } = req.body;
 
     if (
       !DateTools.isValidDateStr(startDate) ||
@@ -31,13 +29,16 @@ router.post(
       return res.status(400).send('Invalid date requests');
     }
 
+    if (typeof goal !== 'number')
+      return res.status(400).send('Invalid goal request');
+
     const options = {
       new: true,
-      upset: true,
+      upsert: true,
     };
 
     const filter = {
-      userUid: userUid,
+      userUid: uid,
     };
 
     const update = {

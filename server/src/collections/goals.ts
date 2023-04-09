@@ -11,7 +11,7 @@ export interface ExerciseGoalProps {
   status: GoalStatus;
 }
 
-export interface HealthGoalsProps {
+export interface GoalProps {
   _id?: mongoose.Types.ObjectId;
   userUid: string;
   sleep: number;
@@ -25,7 +25,7 @@ export enum GoalStatus {
   completed = 'completed',
 }
 
-const healthGoalsTemplateSchema: mongoose.Schema<HealthGoalsProps> =
+const healthGoalsTemplateSchema: mongoose.Schema<GoalProps> =
   new mongoose.Schema(
     {
       userUid: {
@@ -68,7 +68,4 @@ const healthGoalsTemplateSchema: mongoose.Schema<HealthGoalsProps> =
     },
   );
 
-export default mongoose.model<HealthGoalsProps>(
-  'Health-Goal',
-  healthGoalsTemplateSchema,
-);
+export default mongoose.model<GoalProps>('Goal', healthGoalsTemplateSchema);

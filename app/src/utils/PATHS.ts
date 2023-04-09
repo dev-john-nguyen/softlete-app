@@ -18,7 +18,7 @@ export default {
     create: 'api/bug/create',
   },
   goals: {
-    create: 'api/goals/update',
+    update_exercise: 'api/goals/update-exercise',
     get: (userUid: string) => `api/goals/get/${userUid}`,
   },
   subscription: {

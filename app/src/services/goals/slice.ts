@@ -24,12 +24,15 @@ const initialState: GoalsState = {
 export const addGoalAsync = createAsyncThunk(
   'goals/addGoalAsync',
   async (goal: Goal, { dispatch }) => {
-    const { data: newGoal } = await request(
+    const { data: newGoal }: { data?: Goal } = await request(
       'POST',
-      PATHS.goals.create,
+      PATHS.goals.update_exercise,
       dispatch,
       goal,
     );
+    if (!newGoal) {
+      throw new Error('Failed to add goal');
+    }
     return newGoal;
   },
 );
