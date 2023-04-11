@@ -28,20 +28,40 @@ const GoalForm = () => {
   const setBanner = useBanner();
   const { exercise } = route.params as { exercise: ExerciseProps };
 
+  const validateGoal = () => {
+    if (goalName.length === 0) {
+      setBanner('Please enter a name for your goal.', BannerTypes.error);
+      return false;
+    }
+    if (!goalTarget || typeof goalTarget !== 'number' || goalTarget <= 0) {
+      setBanner('Please enter a valid goal target.', BannerTypes.error);
+      return false;
+    }
+    if (goalStartDate.getTime() > goalEndDate.getTime()) {
+      setBanner('Please enter a valid date range.', BannerTypes.error);
+      return false;
+    }
+    return true;
+  };
+
   const onCreateGoal = async () => {
     if (!exercise._id) {
       setBanner('Exercise ID is not defined', BannerTypes.error);
       navigation.goBack();
       return;
     }
+
+    if (!validateGoal()) return;
+
     const newGoal = {
       name: goalName,
       description: goalDescription,
-      target: goalTarget,
+      goal: goalTarget,
       startDate: goalStartDate,
       endDate: goalEndDate,
       exerciseId: exercise._id as string,
     };
+
     try {
       await dispatch(addGoalAsync(newGoal)).unwrap();
       setBanner('Goal created successfully!', BannerTypes.success);
@@ -54,6 +74,7 @@ const GoalForm = () => {
 
   return (
     <ScreenTemplate
+      applyKeyboardDismiss
       isDatePickerOpen={!!isDatePickerOpen}
       datePickerValue={
         isDatePickerOpen === 'goalStartDate' ? goalStartDate : goalEndDate

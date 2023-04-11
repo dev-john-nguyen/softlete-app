@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import PATHS from 'src/utils/PATHS';
 import { ReducerProps } from '..';
 import request from '../utils/request';
@@ -7,7 +7,7 @@ interface Goal {
   _id?: number;
   startDate: Date;
   endDate: Date;
-  target: number;
+  goal: number;
   description: string;
   name: string;
   exerciseId: string;
@@ -78,15 +78,18 @@ const goalsSlice = createSlice({
   name: 'goals',
   initialState,
   reducers: {
-    addGoal: (state, action) => {
+    setGoals: (state, action: PayloadAction<Goal[]>) => {
+      state.goals = action.payload;
+    },
+    addGoal: (state, action: PayloadAction<Goal>) => {
       state.goals.push(action.payload);
     },
-    removeGoal: (state, action) => {
+    removeGoal: (state, action: PayloadAction<number>) => {
       state.goals = state.goals.filter(goal => goal._id !== action.payload);
     },
-    updateGoal: (state, action) => {
+    updateGoal: (state, action: PayloadAction<Goal>) => {
       const index = state.goals.findIndex(
-        goal => goal._id === action.payload.id,
+        goal => goal._id === action.payload._id,
       );
       if (index !== -1) {
         state.goals[index] = action.payload;

@@ -29,8 +29,9 @@ router.post(
       return res.status(400).send('Invalid date requests');
     }
 
-    if (typeof goal !== 'number')
+    if (typeof goal !== 'number') {
       return res.status(400).send('Invalid goal request');
+    }
 
     const options = {
       new: true,
