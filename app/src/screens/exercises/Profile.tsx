@@ -3,9 +3,8 @@ import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../services/exercises/types';
 import { normalize } from '../../utils/tools';
 import { ReducerProps } from '../../services';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updatePinExercises } from '../../services/user/actions';
-import { PinExerciseProps } from '../../services/misc/types';
 import { HomeStackScreens } from '../home/types';
 import { NetworkStackScreens } from '../network/types';
 import BodySvg from '../../assets/body/BodySvg';
@@ -27,8 +26,9 @@ import {
   YoutubePreview,
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { DateTools, StyleConstants } from '@app/utils';
+import { StyleConstants } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
+import { ProfileGoalItem } from 'src/components/exercise-profile';
 
 type IconMenuOptionsProps = {
   exercise: ExerciseProps;
@@ -312,23 +312,9 @@ const Exercise = ({ route, navigation }: Props) => {
           contentContainerStyle={{ alignItems: 'flex-start' }}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}>
-          {goals.map((goal, index) => {
-            return (
-              <InfoListBox
-                key={goal._id ?? index}
-                secondary
-                icon="target"
-                color={Colors.white}
-                label={DateTools.convertLocalStrToFormatStr(
-                  goal.endDate,
-                  '/',
-                  'd',
-                  false,
-                )}
-                desc={String(goal.goal)}
-              />
-            );
-          })}
+          {goals.map((goal, index) => (
+            <ProfileGoalItem key={goal._id || index} {...goal} />
+          ))}
         </ScrollView>
       </ScrollView>
     </ScreenTemplate>
