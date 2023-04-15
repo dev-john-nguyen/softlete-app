@@ -12,8 +12,9 @@ import { FlexBox } from '@app/ui';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { useDispatch } from 'react-redux';
-import { addGoalAsync } from 'src/services/goals/slice';
+import { addExerciseGoalAsync } from 'src/services/goals/slice';
 import { ThunkAppDispatch } from 'src/services';
+import { GoalStatus } from 'src/services/goals/types';
 
 const GoalForm = () => {
   const dispatch = useDispatch<ThunkAppDispatch>();
@@ -32,9 +33,28 @@ const GoalForm = () => {
     if (goalName.length === 0) {
       setBanner('Please enter a name for your goal.', BannerTypes.error);
       return false;
+    } else if (goalName.length >= 200) {
+      setBanner(
+        'Goal name must be less than 200 characters long.',
+        BannerTypes.error,
+      );
+      return false;
     }
-    if (!goalTarget || typeof goalTarget !== 'number' || goalTarget <= 0) {
+    if (
+      !goalTarget ||
+      typeof goalTarget !== 'number' ||
+      goalTarget <= 0 ||
+      goalTarget > 99999999
+    ) {
       setBanner('Please enter a valid goal target.', BannerTypes.error);
+      return false;
+    }
+
+    if (goalDescription.length >= 500) {
+      setBanner(
+        'Goal description cannot exceed 500 characters.',
+        BannerTypes.error,
+      );
       return false;
     }
     if (goalStartDate.getTime() > goalEndDate.getTime()) {
@@ -57,13 +77,14 @@ const GoalForm = () => {
       name: goalName,
       description: goalDescription,
       goal: goalTarget,
-      startDate: goalStartDate,
-      endDate: goalEndDate,
+      startDate: goalStartDate.toISOString(),
+      endDate: goalEndDate.toISOString(),
       exerciseId: exercise._id as string,
+      status: GoalStatus.pending,
     };
 
     try {
-      await dispatch(addGoalAsync(newGoal)).unwrap();
+      await dispatch(addExerciseGoalAsync(newGoal)).unwrap();
       setBanner('Goal created successfully!', BannerTypes.success);
       navigation.goBack();
     } catch (err) {

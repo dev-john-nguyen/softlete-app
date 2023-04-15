@@ -54,7 +54,9 @@ const InfoListBox: FC<Props> = ({
         column>
         <Icon icon={icon || 'checked'} size={20} color={color} />
         <FlexBox column marginTop={10}>
-          <PrimaryText opacity={0.6}>{label}</PrimaryText>
+          <PrimaryText opacity={0.6} marginBottom={2}>
+            {label}
+          </PrimaryText>
           <PrimaryText size="medium" textTransform={textTransform}>
             {desc}
           </PrimaryText>

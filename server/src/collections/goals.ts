@@ -48,9 +48,15 @@ const healthGoalsTemplateSchema: mongoose.Schema<GoalProps> =
         type: [
           {
             exerciseUid: mongoose.Types.ObjectId,
-            name: String,
-            description: String,
-            goal: Number,
+            name: {
+              type: String,
+              maxLength: 200,
+            },
+            description: {
+              type: String,
+              maxLength: 500,
+            },
+            goal: { type: Number, maxLength: 99999999 },
             startDate: Date,
             endDate: Date,
             status: {

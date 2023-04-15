@@ -55,7 +55,7 @@ class WorkoutTracker {
 
   getDate() {
     if (!this.healthData) return '12/31/9999';
-    return DateTools.convertStrToDateToFormatStr(this.healthData.date, '/');
+    return DateTools.convertUTCStrToLocalStr(this.healthData.date, '/');
   }
 
   getAltitudes() {

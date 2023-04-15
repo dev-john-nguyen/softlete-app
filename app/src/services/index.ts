@@ -11,6 +11,7 @@ import chatReducer from './chat/reducer';
 import notificationReducer from './notifications/reducer';
 import goalsReducer from './goals/slice';
 
+import { GoalsRootStateProps } from './goals/types';
 import { MiscProps } from './misc/types';
 import { UserProps } from './user/types';
 import { BannersProps } from './banner/types';
@@ -49,6 +50,7 @@ export interface ReducerProps {
   athletes: AthletesRootProps;
   chat: ChatRootProps;
   notifications: NotificationRootProps;
+  goals: GoalsRootStateProps;
 }
 
 export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;

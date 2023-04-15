@@ -40,12 +40,22 @@ class DateTools {
     return new Date(d);
   }
 
-  convertStrToDateToFormatStr(d: string, formatType = '-', formatOrder = 'd') {
+  convertUTCStrToLocalStr(d: string, formatType = '-', formatOrder = 'd') {
     const date = this.UTCStrToLocal(d);
     return this.dateToStr(date, formatType, formatOrder);
   }
 
-  dateToStr(d: Date, formatType = '-', formatOrder = 'm') {
+  convertLocalStrToFormatStr(
+    d: string,
+    formatType = '-',
+    formatOrder = 'd',
+    showYear = true,
+  ) {
+    const date = new Date(d);
+    return this.dateToStr(date, formatType, formatOrder, showYear);
+  }
+
+  dateToStr(d: Date, formatType = '-', formatOrder = 'm', showYear = true) {
     let month: any = d.getMonth() + 1;
     if (month < 10) {
       month = '0' + month;
@@ -55,10 +65,12 @@ class DateTools {
       day = '0' + day;
     }
     if (formatOrder === 'd') {
-      return month + formatType + day + formatType + d.getFullYear();
+      const str = month + formatType + day;
+      if (showYear) return str + formatType + d.getFullYear();
+      return str;
     }
-
-    return d.getFullYear() + formatType + month + formatType + day;
+    const str = showYear ? d.getFullYear() + formatType : '';
+    return str + month + formatType + day;
   }
 
   strToDate(dStr: string): Date {

@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../services/exercises/types';
 import { normalize } from '../../utils/tools';
 import { ReducerProps } from '../../services';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { updatePinExercises } from '../../services/user/actions';
 import { PinExerciseProps } from '../../services/misc/types';
 import { HomeStackScreens } from '../home/types';
@@ -27,7 +27,7 @@ import {
   YoutubePreview,
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { StyleConstants } from '@app/utils';
+import { DateTools, StyleConstants } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
 
 type IconMenuOptionsProps = {
@@ -146,12 +146,6 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
 interface Props {
   route: any;
   navigation: any;
-  pinExercises: PinExerciseProps[];
-  exercisesStore: ExerciseProps[];
-  offline: boolean;
-  dispatch: AppDispatch;
-  user: UserProps;
-  athleteProps: AthleteProfileProps;
 }
 
 const Description = ({ description }: { description?: string }) => {
@@ -174,16 +168,18 @@ const Description = ({ description }: { description?: string }) => {
   );
 };
 
-const Exercise = ({
-  route,
-  navigation,
-  pinExercises,
-  exercisesStore,
-  offline,
-  dispatch,
-  user,
-  athleteProps,
-}: Props) => {
+const Exercise = ({ route, navigation }: Props) => {
+  const { pinExercises, exercisesStore, offline, user, athleteProps, goals } =
+    useSelector((state: ReducerProps) => ({
+      pinExercises: state.user.pinExercises,
+      exercisesStore: state.exercises.data,
+      offline: state.global.offline,
+      user: state.user,
+      athleteProps: state.athletes.curAthlete,
+      goals: state.goals.user.exercises,
+    }));
+  const dispatch = useDispatch<AppDispatch>();
+
   const [exercise, setExercise] = useState<ExerciseProps>();
   const [isPin, setIsPin] = useState(false);
   const [athlete, setAthlete] = useState(false);
@@ -309,6 +305,31 @@ const Exercise = ({
             textTransform="capitalize"
           />
         </ScrollView>
+
+        <ScrollView
+          horizontal
+          style={{ marginTop: StyleConstants.baseMargin }}
+          contentContainerStyle={{ alignItems: 'flex-start' }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          {goals.map((goal, index) => {
+            return (
+              <InfoListBox
+                key={goal._id ?? index}
+                secondary
+                icon="target"
+                color={Colors.white}
+                label={DateTools.convertLocalStrToFormatStr(
+                  goal.endDate,
+                  '/',
+                  'd',
+                  false,
+                )}
+                desc={String(goal.goal)}
+              />
+            );
+          })}
+        </ScrollView>
       </ScrollView>
     </ScreenTemplate>
   );
@@ -410,12 +431,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: ReducerProps) => ({
-  pinExercises: state.user.pinExercises,
-  exercisesStore: state.exercises.data,
-  offline: state.global.offline,
-  user: state.user,
-  athleteProps: state.athletes.curAthlete,
-});
-
-export default connect(mapStateToProps)(Exercise);
+export default Exercise;
