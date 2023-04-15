@@ -30,16 +30,20 @@ export const addExerciseGoalAsync = createAsyncThunk(
   },
 );
 
-// export const removeGoalAsync = createAsyncThunk(
-//   'goals/removeGoalAsync',
-//   async (goalId: number) => {
-//     const response = await fetch(`/api/goals/${goalId}`, {
-//       method: 'DELETE',
-//     });
-//     const data = await response.json();
-//     return data;
-//   },
-// );
+export const removeExerciseGoalAsync = createAsyncThunk(
+  'goals/removeExerciseGoalAsync',
+  async (exerciseGoalUid: string, { dispatch }) => {
+    const { data: updatedGoal }: { data?: GoalStateProps } = await request(
+      'DELETE',
+      PATHS.goals.delete_exercise(exerciseGoalUid),
+      dispatch,
+    );
+    if (!updatedGoal) {
+      throw new Error('Oops, failed to remove goal');
+    }
+    return updatedGoal;
+  },
+);
 
 // export const updateGoalAsync = createAsyncThunk(
 //   'goals/updateGoalAsync',
@@ -80,6 +84,9 @@ const goalsSlice = createSlice({
         state.user = formatHandlerOfGoalResp(action.payload);
       })
       .addCase(addExerciseGoalAsync.fulfilled, (state, action) => {
+        state.user = formatHandlerOfGoalResp(action.payload);
+      })
+      .addCase(removeExerciseGoalAsync.fulfilled, (state, action) => {
         state.user = formatHandlerOfGoalResp(action.payload);
       });
     // .addCase(removeGoalAsync.fulfilled, (state, action) => {

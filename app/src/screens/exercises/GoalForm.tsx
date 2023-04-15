@@ -79,7 +79,7 @@ const GoalForm = () => {
       goal: goalTarget,
       startDate: goalStartDate.toISOString(),
       endDate: goalEndDate.toISOString(),
-      exerciseId: exercise._id as string,
+      exerciseUid: exercise._id as string,
       status: GoalStatus.pending,
     };
 

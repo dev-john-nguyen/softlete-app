@@ -20,6 +20,8 @@ export default {
   goals: {
     update_exercise: 'api/goals/update-exercise',
     get: (userUid: string) => `api/goals/get/${userUid}`,
+    delete_exercise: (exerciseUid: string) =>
+      `api/goals/delete-exercise/${exerciseUid}`,
   },
   subscription: {
     getPubKey: 'api/subscription/pub-key',

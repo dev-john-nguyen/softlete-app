@@ -2,6 +2,7 @@ import Express, { Request, Response, NextFunction } from 'express';
 import Goals from '../../collections/goals';
 import DateTools from '../../utils/DateTools';
 import errorCatch from '../../utils/error-catch';
+import mongoose from 'mongoose';
 const router = Express.Router();
 
 type RequestBody = {
@@ -11,6 +12,7 @@ type RequestBody = {
   goal: number;
   startDate: string;
   endDate: string;
+  exerciseUid: string;
 };
 
 router.post(
@@ -20,7 +22,12 @@ router.post(
 
     if (!uid) return res.status(401).send('cannot find user id.');
 
-    const { name, description, goal, startDate, endDate } = req.body;
+    const { name, description, goal, startDate, endDate, exerciseUid } =
+      req.body;
+
+    if (!exerciseUid || !mongoose.Types.ObjectId.isValid(exerciseUid)) {
+      return res.status(400).send('Invalid exerciseUid request');
+    }
 
     if (
       !DateTools.isValidDateStr(startDate) ||

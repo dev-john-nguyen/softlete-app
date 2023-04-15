@@ -4,9 +4,38 @@ import { FlexBox } from '@app/ui';
 import PrimaryText from '../elements/PrimaryText';
 import { ExerciseGoal } from 'src/services/goals/types';
 import { Colors, DateTools } from '@app/utils';
+import { Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'App';
+import { removeExerciseGoalAsync } from 'src/services/goals/slice';
 
 const ProfileGoalItem: FC<ExerciseGoal> = goal => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onDeleteConfirmation = () => {
+    if (!goal._id) return;
+    dispatch(removeExerciseGoalAsync(goal._id))
+      .unwrap()
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const onDelete = () => {
+    Alert.alert(
+      'Confirmation',
+      "Are you sure you want to delete this goal? You can't undo this action.",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: onDeleteConfirmation },
+      ],
+    );
+  };
+
   return (
     <FlexBox
       borderRadius={5}
@@ -14,7 +43,17 @@ const ProfileGoalItem: FC<ExerciseGoal> = goal => {
       padding={15}
       column
       onPress={() => setIsExpanded(!isExpanded)}>
-      <Icon icon="target" size={20} color={Colors.white} />
+      <FlexBox justifyContent="space-between">
+        <Icon icon="target" size={20} color={Colors.white} />
+        {isExpanded && (
+          <Icon
+            icon="trash_bin"
+            size={16}
+            color={Colors.white}
+            onPress={onDelete}
+          />
+        )}
+      </FlexBox>
       <FlexBox column marginTop={10}>
         <PrimaryText opacity={0.6} marginBottom={2}>
           {DateTools.convertLocalStrToFormatStr(goal.endDate, '/', 'd', false)}

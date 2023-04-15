@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../services/exercises/types';
 import { normalize } from '../../utils/tools';
@@ -213,6 +213,11 @@ const Exercise = ({ route, navigation }: Props) => {
     dispatch(updatePinExercises({ exerciseUid: exercise._id, exercise }, pin));
   };
 
+  const exerciseGoals = useMemo(() => {
+    if (!exercise || !goals) return [];
+    return goals;
+  }, [goals, exercise]);
+
   if (!exercise) return <Loading />;
 
   return (
@@ -312,7 +317,7 @@ const Exercise = ({ route, navigation }: Props) => {
           contentContainerStyle={{ alignItems: 'flex-start' }}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}>
-          {goals.map((goal, index) => (
+          {exerciseGoals.map((goal, index) => (
             <ProfileGoalItem key={goal._id || index} {...goal} />
           ))}
         </ScrollView>

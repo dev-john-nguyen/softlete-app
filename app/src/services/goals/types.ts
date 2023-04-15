@@ -11,7 +11,7 @@ export type ExerciseGoal = {
   goal: number;
   description: string;
   name: string;
-  exerciseId: string;
+  exerciseUid: string;
   status: GoalStatus;
 };
 
