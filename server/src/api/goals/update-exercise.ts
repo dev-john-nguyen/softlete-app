@@ -43,6 +43,7 @@ router.post(
     const options = {
       new: true,
       upsert: true,
+      runValidators: true,
     };
 
     const filter = {
@@ -51,7 +52,7 @@ router.post(
 
     const update = {
       $push: {
-        exercises: { name, description, goal, startDate, endDate },
+        exercises: { name, description, goal, startDate, endDate, exerciseUid },
       },
     };
 

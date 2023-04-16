@@ -215,7 +215,7 @@ const Exercise = ({ route, navigation }: Props) => {
 
   const exerciseGoals = useMemo(() => {
     if (!exercise || !goals) return [];
-    return goals;
+    return goals.filter(g => g.exerciseUid === exercise._id);
   }, [goals, exercise]);
 
   if (!exercise) return <Loading />;

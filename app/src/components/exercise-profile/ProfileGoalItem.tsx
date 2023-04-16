@@ -38,6 +38,7 @@ const ProfileGoalItem: FC<ExerciseGoal> = goal => {
 
   return (
     <FlexBox
+      backgroundColor={Colors.lightPrimary}
       borderRadius={5}
       marginRight={10}
       padding={15}
@@ -48,7 +49,7 @@ const ProfileGoalItem: FC<ExerciseGoal> = goal => {
         {isExpanded && (
           <Icon
             icon="trash_bin"
-            size={16}
+            size={18}
             color={Colors.white}
             onPress={onDelete}
           />
