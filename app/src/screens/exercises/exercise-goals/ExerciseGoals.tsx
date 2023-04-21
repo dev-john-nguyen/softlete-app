@@ -34,7 +34,6 @@ const ExerciseGoals = () => {
   const [activeGoal, setActiveGoal] = useState<string>();
 
   const exerciseGoals = useMemo(() => {
-    return goals;
     if (!exercise) return [];
     return goals.filter(goal => goal.exerciseUid === exercise._id);
   }, [exercise]);
