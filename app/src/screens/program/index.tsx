@@ -5,7 +5,7 @@ import Templates from './Templates';
 import { ProgramStackParamsList, ProgramStackScreens } from './types';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit';
-import Exercise from '../exercises/Profile';
+import Exercise from '../exercises/profile/Profile';
 import ExerciseAnalytics from '../exercises/Analytics';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import ProgramTemplate from './ProgramTemplate';

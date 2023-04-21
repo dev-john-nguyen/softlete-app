@@ -1,21 +1,21 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { ExerciseProps } from '../../services/exercises/types';
-import { normalize } from '../../utils/tools';
-import { ReducerProps } from '../../services';
+import { ExerciseProps } from '../../../services/exercises/types';
+import { normalize } from '../../../utils/tools';
+import { ReducerProps } from '../../../services';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePinExercises } from '../../services/user/actions';
-import { HomeStackScreens } from '../home/types';
-import { NetworkStackScreens } from '../network/types';
-import BodySvg from '../../assets/body/BodySvg';
-import { AppDispatch } from '../../../App';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
-import { UserProps } from '../../services/user/types';
-import ExerciseVideo from '../../components/elements/ExerciseVideo';
-import { AthleteProfileProps } from '../../services/athletes/types';
-import { ProgramStackScreens } from '../program/types';
-import reportExercise from '../utils/report-exercise';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import { updatePinExercises } from '../../../services/user/actions';
+import { HomeStackScreens } from '../../home/types';
+import { NetworkStackScreens } from '../../network/types';
+import BodySvg from '../../../assets/body/BodySvg';
+import { AppDispatch } from '../../../../App';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
+import { UserProps } from '../../../services/user/types';
+import ExerciseVideo from '../../../components/elements/ExerciseVideo';
+import { AthleteProfileProps } from '../../../services/athletes/types';
+import { ProgramStackScreens } from '../../program/types';
+import reportExercise from '../../utils/report-exercise';
+import ScreenTemplate from '../../../components/elements/ScreenTemplate';
 import Icon from '@app/icons';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {
@@ -28,7 +28,7 @@ import {
 import { FlexBox } from '@app/ui';
 import { StyleConstants } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
-import { ProfileGoalItem } from 'src/components/exercise-profile';
+import ProfileGoalItem from './components/ProfileGoalItem';
 
 type IconMenuOptionsProps = {
   exercise: ExerciseProps;
@@ -103,7 +103,7 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
   };
 
   return (
-    <FlexBox alignItems="flex-end" justifyContent="flex-start">
+    <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
       {!offline && (
         <>
           <Icon
@@ -118,7 +118,7 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
             size={20}
             color={Colors.white}
             onPress={() =>
-              navigation.navigate(HomeStackScreens.GoalFormModal, { exercise })
+              navigation.navigate(HomeStackScreens.ExerciseGoal, { exercise })
             }
             containerStyles={{ marginRight: 20 }}
           />
@@ -223,6 +223,7 @@ const Exercise = ({ route, navigation }: Props) => {
   return (
     <ScreenTemplate
       isBackVisible
+      rightContentFlex={1}
       rightContent={
         <IconMenuOptions
           athleteProps={athleteProps}

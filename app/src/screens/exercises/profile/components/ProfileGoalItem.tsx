@@ -1,7 +1,7 @@
 import Icon from '@app/icons';
 import React, { FC, useState } from 'react';
 import { FlexBox } from '@app/ui';
-import PrimaryText from '../elements/PrimaryText';
+import PrimaryText from '../../../../components/elements/PrimaryText';
 import { ExerciseGoal } from 'src/services/goals/types';
 import { Colors, DateTools } from '@app/utils';
 import { Alert } from 'react-native';

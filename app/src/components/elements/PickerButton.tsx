@@ -1,4 +1,4 @@
-import Icon from '@app/icons';
+import Icon, { IconOptions } from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import React from 'react';
@@ -19,6 +19,7 @@ type Props = {
   marginBottom?: number;
   isActive?: boolean;
   textTransform?: 'capitalize';
+  icon?: IconOptions;
 };
 
 const PickerButton: React.FC<Props> = props => {
@@ -53,6 +54,14 @@ const PickerButton: React.FC<Props> = props => {
         {props.arrow && (
           <Icon
             icon="chevron"
+            size={12}
+            color={BaseColors.lightWhite}
+            direction={props.arrowDirection || 'right'}
+          />
+        )}
+        {props.icon && (
+          <Icon
+            icon={props.icon}
             size={12}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}

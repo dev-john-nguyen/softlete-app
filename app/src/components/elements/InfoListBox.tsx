@@ -52,8 +52,15 @@ const InfoListBox: FC<Props> = ({
         marginBottom={marginBottom}
         marginTop={marginTop}
         column>
-        <Icon icon={icon || 'checked'} size={20} color={color} />
-        <FlexBox column marginTop={10}>
+        {icon && (
+          <Icon
+            icon={icon || 'checked'}
+            size={20}
+            color={color}
+            containerStyles={{ marginBottom: 10 }}
+          />
+        )}
+        <FlexBox column>
           <PrimaryText opacity={0.6} marginBottom={2}>
             {label}
           </PrimaryText>

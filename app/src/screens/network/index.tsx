@@ -10,7 +10,7 @@ import SearchAthletes from './Search';
 import AthleteDashboard from './Dashboard';
 import BaseColors from '../../utils/BaseColors';
 import AthleteWorkout from './Workout';
-import Exercise from '../exercises/Profile';
+import Exercise from '../exercises/profile/Profile';
 import AthleteAnalytics from '../exercises/Analytics';
 import AthleteProgramTemplate from './ProgramTemplate';
 import Message from './Message';

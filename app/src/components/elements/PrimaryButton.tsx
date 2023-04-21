@@ -64,6 +64,7 @@ const PrimaryButton = ({
       }}
       onPress={onPress}>
       <PrimaryText
+        textTransform={stylesProps.textTransform}
         color={variant === 'secondary' ? Colors.white : Colors.white}
         variant={fontVariant}
         size={fontSize}>
