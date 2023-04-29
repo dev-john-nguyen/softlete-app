@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Input,
   PrimaryButton,
@@ -24,10 +24,19 @@ const GoalForm = () => {
   const [goalStartDate, setGoalStartDate] = useState<Date>(new Date());
   const [goalEndDate, setGoalEndDate] = useState<Date>(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState<string>('');
+  const [exercise, setExercise] = useState<ExerciseProps>();
   const navigation = useNavigation();
   const route = useRoute<any>();
   const setBanner = useBanner();
-  const { exercise } = route.params as { exercise: ExerciseProps };
+
+  useEffect(() => {
+    if (route.params && route.params.exercise) {
+      setExercise(route.params.exercise);
+    } else {
+      setBanner('There was not exercise data provided.', BannerTypes.error);
+      navigation.goBack();
+    }
+  }, [route]);
 
   const validateGoal = () => {
     if (goalName.length === 0) {
@@ -65,7 +74,7 @@ const GoalForm = () => {
   };
 
   const onCreateGoal = async () => {
-    if (!exercise._id) {
+    if (!exercise || !exercise._id) {
       setBanner('Exercise ID is not defined', BannerTypes.error);
       navigation.goBack();
       return;
@@ -119,7 +128,7 @@ const GoalForm = () => {
             size="large"
             variant="primary"
             textTransform="capitalize">
-            {exercise.name}
+            {exercise?.name}
           </PrimaryText>
         </FlexBox>
       }>

@@ -34,7 +34,7 @@ export type HomeStackParamsList = {
   Calendar: undefined;
   ExerciseAnalytics: undefined;
   WorkoutModal: undefined;
-  GoalFormModal: undefined;
+  GoalFormModal: { exercise: ExerciseProps };
   GoOnlineModal: undefined;
   OverviewModal: undefined;
   DataOverview: undefined;

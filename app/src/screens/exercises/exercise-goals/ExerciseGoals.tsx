@@ -1,11 +1,10 @@
-import {
-  InfoListBox,
-  PickerButton,
-  PrimaryText,
-  ScreenTemplate,
-} from '@app/elements';
+import { PickerButton, PrimaryText, ScreenTemplate } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  NavigationProp,
+} from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
@@ -14,6 +13,9 @@ import { GoalStatus } from 'src/services/goals/types';
 import GoalFilterItem from './components/GoalFilteredItem';
 import { ScrollView } from 'react-native';
 import GoalProfile from './components/GoalProfile';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
+import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 
 const GoalStatusFilters = [
   { label: 'All', value: 'all' },
@@ -25,6 +27,7 @@ const GoalStatusFilters = [
 
 const ExerciseGoals = () => {
   const route = useRoute();
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const { exercise } = route.params as { exercise?: ExerciseProps };
   const goals = useSelector(
     (state: ReducerProps) => state.goals.user.exercises,
@@ -36,7 +39,12 @@ const ExerciseGoals = () => {
   const exerciseGoals = useMemo(() => {
     if (!exercise) return [];
     return goals.filter(goal => goal.exerciseUid === exercise._id);
-  }, [exercise]);
+  }, [exercise, goals]);
+
+  const onNavigateToForm = () => {
+    if (!exercise) return;
+    navigation.navigate(HomeStackScreens.GoalFormModal, { exercise: exercise });
+  };
 
   const goalProfile = exerciseGoals.find(goal => goal._id === activeGoal);
 
@@ -49,7 +57,16 @@ const ExerciseGoals = () => {
       onPickerChangeValue={(value: string) => setActiveFilter(value)}
       applyContentPadding
       leftContentFlex={0}
-      rightContentFlex={0}
+      rightContent={
+        <FlexBox flex={1} justifyContent="flex-end" alignItems="flex-end">
+          <Icon
+            icon="add_ring"
+            size={30}
+            color={Colors.white}
+            onPress={onNavigateToForm}
+          />
+        </FlexBox>
+      }
       middleContent={
         <FlexBox flex={1} marginLeft={10}>
           <PrimaryText size="large" variant="primary">
@@ -79,12 +96,9 @@ const ExerciseGoals = () => {
           })}
         </ScrollView>
       </FlexBox>
-      {goalProfile && <GoalProfile goal={goalProfile} />}
-      <FlexBox marginTop={20}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <InfoListBox secondary label="12/23" desc={'100'} />
-        </ScrollView>
-      </FlexBox>
+      {goalProfile && exercise?._id && (
+        <GoalProfile goal={goalProfile} exerciseUid={exercise?._id} />
+      )}
     </ScreenTemplate>
   );
 };

@@ -40,9 +40,14 @@ class DateTools {
     return new Date(d);
   }
 
-  convertUTCStrToLocalStr(d: string, formatType = '-', formatOrder = 'd') {
+  convertUTCStrToLocalStr(
+    d: string,
+    formatType = '-',
+    formatOrder = 'd',
+    showYear = true,
+  ) {
     const date = this.UTCStrToLocal(d);
-    return this.dateToStr(date, formatType, formatOrder);
+    return this.dateToStr(date, formatType, formatOrder, showYear);
   }
 
   convertLocalStrToFormatStr(

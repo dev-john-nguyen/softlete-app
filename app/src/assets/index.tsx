@@ -60,6 +60,7 @@ import { default as Search } from './SearchSvg';
 import Database from './Database';
 import Target from './Target';
 import { default as Filter } from './FilterSvg';
+import AddRing from './AddRing';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -120,6 +121,7 @@ const Icons = {
   database: (props: any) => <Database {...props} />,
   target: (props: any) => <Target {...props} />,
   filter: (props: any) => <Filter {...props} />,
+  add_ring: (props: any) => <AddRing {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

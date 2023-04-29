@@ -1,29 +1,38 @@
 import React from 'react';
-import { LogBox, StatusBar, useColorScheme, View } from 'react-native';
+import { LogBox, StatusBar, View } from 'react-native';
 import Home from './src';
 import { Provider } from 'react-redux';
 import reducers from './src/services';
 import store from './src/utils/init-redux';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof reducers>
+const queryClient = new QueryClient();
 
-LogBox.ignoreLogs(['Warning: Function components cannot be given refs', 'Could not locate shadow', "Sending `healthKit"])
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof reducers>;
+
+LogBox.ignoreLogs([
+  'Warning: Function components cannot be given refs',
+  'Could not locate shadow',
+  'Sending `healthKit',
+]);
 
 const App = () => {
   // const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    flex: 1
+    flex: 1,
   };
 
   return (
-    <Provider store={store}>
-      <View style={backgroundStyle}>
-        <StatusBar barStyle={'light-content'} />
-        <Home />
-      </View>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <View style={backgroundStyle}>
+          <StatusBar barStyle={'light-content'} />
+          <Home />
+        </View>
+      </Provider>
+    </QueryClientProvider>
   );
 };
 

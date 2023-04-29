@@ -10,3 +10,5 @@ export { default as Fonts } from './Fonts';
 export * from './format';
 export { default as TimeConverter } from './TimeConverter';
 export { default as AutoId } from './AutoId';
+export * from '../services/utils/request';
+export { default as PATHS } from './PATHS';

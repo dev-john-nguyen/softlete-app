@@ -6,7 +6,11 @@ import messages from './messages';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { SERVERURL } from '../../utils/PATHS';
 import { BannerTypes } from '../banner/types';
-import { AnyAction, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+
+export function getRequestURL(path: string) {
+  return SERVERURL + path;
+}
 
 export function setAuthHeader(authToken: string) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;

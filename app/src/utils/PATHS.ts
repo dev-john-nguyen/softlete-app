@@ -22,6 +22,8 @@ export default {
     get: (userUid: string) => `api/goals/get/${userUid}`,
     delete_exercise: (exerciseUid: string) =>
       `api/goals/delete-exercise/${exerciseUid}`,
+    get_exercise_goal_analytics: (exerciseUid: string, goal: string) =>
+      `api/goals/exercise-goal-analytics/${exerciseUid}?goal=${goal}`,
   },
   subscription: {
     getPubKey: 'api/subscription/pub-key',
