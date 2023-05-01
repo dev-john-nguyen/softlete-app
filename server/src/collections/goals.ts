@@ -1,91 +1,81 @@
 import mongoose from 'mongoose';
+import { GoalDurationType, GoalTypes } from './types';
 
-export interface ExerciseGoalProps {
-  _id?: mongoose.Types.ObjectId;
-  exerciseUid: mongoose.Types.ObjectId;
+export interface GoalInitProps {
+  _id?: string;
+  type: GoalTypes;
+  durationType: GoalDurationType;
+  userUid: string;
+  exerciseUid?: string;
   name: string;
-  description: string;
+  description?: string;
   goal: number;
-  startDate: Date;
-  endDate: Date;
-  status: GoalStatus;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface GoalProps {
   _id?: mongoose.Types.ObjectId;
+  type: GoalTypes;
+  durationType: GoalDurationType;
   userUid: string;
-  sleep: number;
-  activeCalories: number;
-  exercises: ExerciseGoalProps[];
+  exerciseUid?: mongoose.Types.ObjectId;
+  name: string;
+  description?: string;
+  goal: number;
+  startDate?: Date;
+  endDate?: Date;
+  isActive: boolean;
 }
 
-export enum GoalStatus {
-  pending = 'pending',
-  inProgress = 'inProgress',
-  completed = 'completed',
-}
-
-const healthGoalsTemplateSchema: mongoose.Schema<GoalProps> =
-  new mongoose.Schema(
-    {
-      userUid: {
-        type: String,
-        required: true,
-        maxLength: 100,
-        unique: true,
-      },
-      sleep: {
-        type: Number,
-        maxLength: 100,
-        default: 8,
-      },
-      activeCalories: {
-        type: Number,
-        maxLength: 99999999,
-        default: 0,
-      },
-      exercises: {
-        type: [
-          {
-            exerciseUid: {
-              type: mongoose.Types.ObjectId,
-              required: true,
-            },
-            name: {
-              required: true,
-              type: String,
-              maxLength: 200,
-            },
-            description: {
-              type: String,
-              maxLength: 500,
-            },
-            goal: {
-              required: true,
-              type: Number,
-              maxLength: 99999999,
-            },
-            startDate: {
-              required: true,
-              type: Date,
-            },
-            endDate: {
-              required: true,
-              type: Date,
-            },
-            status: {
-              type: String,
-              enum: GoalStatus,
-              default: GoalStatus.pending,
-            },
-          },
-        ],
-        default: [],
-      },
+const GoalsSchema: mongoose.Schema<GoalProps> = new mongoose.Schema(
+  {
+    userUid: {
+      type: String,
+      required: true,
+      maxLength: 100,
     },
-    {
-      timestamps: true,
+    type: {
+      type: String,
+      required: true,
+      enum: GoalTypes,
     },
-  );
+    durationType: {
+      type: String,
+      required: true,
+      enum: GoalDurationType,
+    },
+    exerciseUid: {
+      type: mongoose.Types.ObjectId,
+    },
+    name: {
+      required: true,
+      type: String,
+      maxLength: 200,
+    },
+    description: {
+      type: String,
+      maxLength: 500,
+    },
+    goal: {
+      required: true,
+      type: Number,
+      maxLength: 99999999999999,
+    },
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-export default mongoose.model<GoalProps>('Goal', healthGoalsTemplateSchema);
+export default mongoose.model<GoalProps>('Goal', GoalsSchema);

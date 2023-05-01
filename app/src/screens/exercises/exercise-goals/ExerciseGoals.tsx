@@ -96,8 +96,8 @@ const ExerciseGoals = () => {
           })}
         </ScrollView>
       </FlexBox>
-      {goalProfile && exercise?._id && (
-        <GoalProfile goal={goalProfile} exerciseUid={exercise?._id} />
+      {goalProfile && exercise && (
+        <GoalProfile goal={goalProfile} exercise={exercise} />
       )}
     </ScreenTemplate>
   );

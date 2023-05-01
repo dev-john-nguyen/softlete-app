@@ -14,15 +14,19 @@ import { BannerTypes } from 'src/services/banner/types';
 import { useDispatch } from 'react-redux';
 import { addExerciseGoalAsync } from 'src/services/goals/slice';
 import { ThunkAppDispatch } from 'src/services';
-import { GoalStatus } from 'src/services/goals/types';
+import { GoalInitProps } from 'src/services/goals/types';
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
 
 const GoalForm = () => {
   const dispatch = useDispatch<ThunkAppDispatch>();
   const [goalName, setGoalName] = useState<string>('');
   const [goalDescription, setGoalDescription] = useState<string>('');
   const [goalTarget, setGoalTarget] = useState<number>(0);
-  const [goalStartDate, setGoalStartDate] = useState<Date>(new Date());
-  const [goalEndDate, setGoalEndDate] = useState<Date>(new Date());
+  const [goalStartDate, setGoalStartDate] = useState<Date>(today);
+  const [goalEndDate, setGoalEndDate] = useState<Date>(tomorrow);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState<string>('');
   const [exercise, setExercise] = useState<ExerciseProps>();
   const navigation = useNavigation();
@@ -66,7 +70,10 @@ const GoalForm = () => {
       );
       return false;
     }
-    if (goalStartDate.getTime() > goalEndDate.getTime()) {
+    if (
+      DateTools.isSameDate(goalStartDate, goalEndDate) ||
+      goalStartDate.getTime() > goalEndDate.getTime()
+    ) {
       setBanner('Please enter a valid date range.', BannerTypes.error);
       return false;
     }
@@ -82,14 +89,13 @@ const GoalForm = () => {
 
     if (!validateGoal()) return;
 
-    const newGoal = {
+    const newGoal: GoalInitProps = {
       name: goalName,
       description: goalDescription,
       goal: goalTarget,
       startDate: goalStartDate.toISOString(),
       endDate: goalEndDate.toISOString(),
       exerciseUid: exercise._id as string,
-      status: GoalStatus.pending,
     };
 
     try {

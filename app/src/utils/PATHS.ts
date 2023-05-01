@@ -18,7 +18,7 @@ export default {
     create: 'api/bug/create',
   },
   goals: {
-    update_exercise: 'api/goals/update-exercise',
+    upsert_exercise: 'api/goals/upsert-exercise',
     get: (userUid: string) => `api/goals/get/${userUid}`,
     delete_exercise: (exerciseUid: string) =>
       `api/goals/delete-exercise/${exerciseUid}`,

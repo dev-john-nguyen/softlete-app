@@ -12,21 +12,16 @@ router.get(
   '/:userUid',
   (req: Request<QueryParams>, res: Response, next: NextFunction) => {
     const { uid } = req.headers;
-    if (!uid) return res.status(401).send('cannot find user id.');
+    if (!uid) return res.status(401).send('Cannot find user id.');
 
     const { userUid } = req.params;
 
-    if (!userUid || typeof userUid !== 'string')
+    if (!userUid || typeof userUid !== 'string') {
       return res.status(400).send('Invalid user id.');
+    }
 
-    Goals.findOne({ userUid: userUid })
-      .then(doc => {
-        if (doc) {
-          res.send(doc.toObject());
-        } else {
-          res.send({});
-        }
-      })
+    Goals.find({ userUid: userUid, isActive: true })
+      .then(docs => res.send(docs))
       .catch(err => errorCatch(err, res, next));
   },
 );

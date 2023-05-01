@@ -2,31 +2,35 @@ import { InfoListBox, PrimaryButton, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, DateTools, PATHS, getRequestURL } from '@app/utils';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
-import { ExerciseGoal } from 'src/services/goals/types';
+import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
+import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseGoalProps, GoalStatus } from 'src/services/goals/types';
 import { WorkoutExerciseProps } from 'src/services/workout/types';
 
 type Props = {
-  goal: ExerciseGoal;
-  exerciseUid: string;
+  goal: ExerciseGoalProps;
+  exercise: ExerciseProps;
 };
-const GoalProfile: React.FC<Props> = ({ goal, exerciseUid }) => {
+const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const { data = [], isFetching } = useQuery<WorkoutExerciseProps[]>(
-    ['exercise-goals-data', { exerciseUid, goalUid: goal._id }],
+    ['exercise-goals-data', { exerciseUid: exercise._id, goalUid: goal._id }],
     () =>
       axios
         .get(
           getRequestURL(
             PATHS.goals.get_exercise_goal_analytics(
-              exerciseUid,
+              exercise._id as string,
               String(goal.goal),
             ),
           ),
           {
-            params: { exerciseUid },
+            params: { exerciseUid: exercise._id },
           },
         )
         .then(res => res.data),
@@ -36,10 +40,24 @@ const GoalProfile: React.FC<Props> = ({ goal, exerciseUid }) => {
     },
   );
 
+  const onEdit = () => {
+    navigation.navigate(HomeStackScreens.GoalFormModal, { exercise, goal });
+  };
+
+  const goalStatus = useMemo(() => {
+    return GoalStatus.pending;
+  }, [goal]);
+
   return (
     <FlexBox column flex={1}>
-      <FlexBox column marginTop={20} alignItems="flex-start">
-        <PrimaryButton textTransform="capitalize">{goal.status}</PrimaryButton>
+      <FlexBox column marginTop={10} alignItems="flex-start">
+        <FlexBox
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%">
+          <PrimaryButton textTransform="capitalize">{goalStatus}</PrimaryButton>
+          <Icon icon="pencil" size={20} color={Colors.white} onPress={onEdit} />
+        </FlexBox>
         <PrimaryText opacity={0.6} marginTop={10}>
           Name:
         </PrimaryText>
@@ -58,10 +76,10 @@ const GoalProfile: React.FC<Props> = ({ goal, exerciseUid }) => {
         <FlexBox marginTop={5}>
           <PrimaryText opacity={0.6}>Date Range: </PrimaryText>
           <PrimaryText>
-            {`${DateTools.convertUTCStrToLocalStr(
+            {`${DateTools.convertLocalStrToFormatStr(
               goal.startDate,
               '/',
-            )} - ${DateTools.convertUTCStrToLocalStr(goal.endDate, '/')}`}
+            )} - ${DateTools.convertLocalStrToFormatStr(goal.endDate, '/')}`}
           </PrimaryText>
         </FlexBox>
 

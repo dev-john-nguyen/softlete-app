@@ -2,24 +2,28 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import PATHS from 'src/utils/PATHS';
 import { ReducerProps } from '..';
 import request from '../utils/request';
-import { formatHandlerOfGoalResp } from './helpers';
-import { ExerciseGoal, GoalStateProps, GoalsRootStateProps } from './types';
+import { formatHandlerOfGoalResp, formatHandlerOfGoalsResp } from './helpers';
+import {
+  ExerciseGoalProps,
+  GoalInitProps,
+  GoalRespProps,
+  GoalsRootStateProps,
+} from './types';
 
 const initialState: GoalsRootStateProps = {
   user: {
-    _id: '',
-    sleep: 0,
-    activeCalories: 0,
     exercises: [],
+    endurances: [],
+    healths: [],
   },
 };
 
 export const addExerciseGoalAsync = createAsyncThunk(
   'goals/addExerciseGoalAsync',
-  async (goal: ExerciseGoal, { dispatch }) => {
-    const { data: newGoal }: { data?: GoalStateProps } = await request(
+  async (goal: GoalInitProps, { dispatch }) => {
+    const { data: newGoal }: { data?: GoalRespProps } = await request(
       'POST',
-      PATHS.goals.update_exercise,
+      PATHS.goals.upsert_exercise,
       dispatch,
       goal,
     );
@@ -33,15 +37,12 @@ export const addExerciseGoalAsync = createAsyncThunk(
 export const removeExerciseGoalAsync = createAsyncThunk(
   'goals/removeExerciseGoalAsync',
   async (exerciseGoalUid: string, { dispatch }) => {
-    const { data: updatedGoal }: { data?: GoalStateProps } = await request(
+    await request(
       'DELETE',
       PATHS.goals.delete_exercise(exerciseGoalUid),
       dispatch,
     );
-    if (!updatedGoal) {
-      throw new Error('Oops, failed to remove goal');
-    }
-    return updatedGoal;
+    return exerciseGoalUid;
   },
 );
 
@@ -62,7 +63,7 @@ export const fetchGoalsAsync = createAsyncThunk(
   'goals/fetchGoalsAsync',
   async (_, { getState, dispatch }) => {
     const { user } = getState() as ReducerProps;
-    const { data: goals }: { data?: GoalStateProps } = await request(
+    const { data: goals }: { data?: GoalRespProps[] } = await request(
       'GET',
       PATHS.goals.get(user.uid),
       dispatch,
@@ -81,13 +82,19 @@ const goalsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchGoalsAsync.fulfilled, (state, action) => {
-        state.user = formatHandlerOfGoalResp(action.payload);
+        state.user = formatHandlerOfGoalsResp(action.payload);
       })
       .addCase(addExerciseGoalAsync.fulfilled, (state, action) => {
-        state.user = formatHandlerOfGoalResp(action.payload);
+        const formatted = formatHandlerOfGoalResp(action.payload);
+        state.user.exercises.push(formatted as ExerciseGoalProps);
       })
       .addCase(removeExerciseGoalAsync.fulfilled, (state, action) => {
-        state.user = formatHandlerOfGoalResp(action.payload);
+        const index = state.user.exercises.findIndex(
+          goal => goal._id === action.payload,
+        );
+        if (index !== -1) {
+          state.user.exercises.splice(index, 1);
+        }
       });
     // .addCase(removeGoalAsync.fulfilled, (state, action) => {
     //   state.goals = state.goals.filter(goal => goal._id !== action.payload);

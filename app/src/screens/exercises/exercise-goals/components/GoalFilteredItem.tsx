@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { FlexBox } from '@app/ui';
-import { ExerciseGoal } from 'src/services/goals/types';
+import { ExerciseGoalProps } from 'src/services/goals/types';
 import { PrimaryText } from '@app/elements';
 import { Colors, DateTools, rgba } from '@app/utils';
 
 type Props = {
-  goal: ExerciseGoal;
+  goal: ExerciseGoalProps;
   active?: boolean;
   onPress: () => void;
 };
@@ -26,7 +26,7 @@ const GoalFilterItem: FC<Props> = ({ goal, active, onPress }) => {
         End Date:
       </PrimaryText>
       <PrimaryText marginBottom={5}>
-        {DateTools.convertLocalStrToFormatStr(goal.endDate)}
+        {DateTools.convertLocalStrToFormatStr(goal.endDate, '/')}
       </PrimaryText>
       <PrimaryText opacity={0.6} marginBottom={2}>
         Name:
