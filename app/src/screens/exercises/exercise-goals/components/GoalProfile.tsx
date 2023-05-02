@@ -1,9 +1,9 @@
 import { InfoListBox, PrimaryText } from '@app/elements';
 import Icon, { IconOptions } from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, DateTools, rgba } from '@app/utils';
+import { Colors, DateTools } from '@app/utils';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import useBanner from 'src/hooks/utils/useBanner';
@@ -12,11 +12,12 @@ import { ThunkAppDispatch } from 'src/services';
 import { BannerTypes } from 'src/services/banner/types';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
-import { ExerciseGoalProps, GoalStatus } from 'src/services/goals/types';
+import { ExerciseGoalProps } from 'src/services/goals/types';
 import { useGoalExerciseAnalytics } from '../hooks';
+import { GoalStatusProps } from '../types';
 
 type Props = {
-  goal: ExerciseGoalProps;
+  goal: ExerciseGoalProps & GoalStatusProps;
   exercise: ExerciseProps;
 };
 const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
@@ -55,32 +56,6 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
     );
   };
 
-  const goalStatusAttr = useMemo(() => {
-    const today = new Date();
-    const startDate = new Date(goal.startDate);
-    const endDate = new Date(goal.endDate);
-
-    if (DateTools.compareTwoDates(today, startDate) === 'before') {
-      return {
-        status: GoalStatus.pending,
-        color: rgba(Colors.whiteRbg, 0.5),
-        icon: 'pause',
-      };
-    } else if (DateTools.compareTwoDates(today, endDate) === 'after') {
-      return {
-        status: GoalStatus.completed,
-        color: Colors.green,
-        icon: 'checked',
-      };
-    } else {
-      return {
-        status: GoalStatus.inProgress,
-        color: Colors.white,
-        icon: 'ellipsis',
-      };
-    }
-  }, [goal]);
-
   return (
     <FlexBox column flex={1}>
       <FlexBox column marginTop={10} alignItems="flex-start">
@@ -91,16 +66,16 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
           <FlexBox
             padding={10}
             borderWidth={1}
-            borderColor={goalStatusAttr.color}
+            borderColor={goal.color}
             borderRadius={5}
             alignItems="center">
-            <PrimaryText color={goalStatusAttr.color} marginRight={5}>
-              {goalStatusAttr.status}
+            <PrimaryText color={goal.color} marginRight={5}>
+              {goal.status}
             </PrimaryText>
             <Icon
-              icon={goalStatusAttr.icon as IconOptions}
+              icon={goal.icon as IconOptions}
               size={15}
-              color={goalStatusAttr.color}
+              color={goal.color}
             />
           </FlexBox>
           <FlexBox>

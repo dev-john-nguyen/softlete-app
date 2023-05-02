@@ -16,6 +16,7 @@ import GoalProfile from './components/GoalProfile';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
+import { getGoalStatus } from './helpers';
 
 const GoalStatusFilters = [
   { label: 'All', value: 'all' },
@@ -29,8 +30,11 @@ const ExerciseGoals = () => {
   const route = useRoute();
   const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const { exercise } = route.params as { exercise?: ExerciseProps };
-  const goals = useSelector(
-    (state: ReducerProps) => state.goals.user.exercises,
+  const goals = useSelector((state: ReducerProps) =>
+    state.goals.user.exercises.map(goal => ({
+      ...goal,
+      ...getGoalStatus(goal),
+    })),
   );
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState(GoalStatusFilters[0].value);
@@ -38,8 +42,17 @@ const ExerciseGoals = () => {
 
   const exerciseGoals = useMemo(() => {
     if (!exercise) return [];
-    return goals.filter(goal => goal.exerciseUid === exercise._id);
-  }, [exercise, goals]);
+    return goals
+      .filter(goal => {
+        if (goal.exerciseUid !== exercise._id) return false;
+        if (activeFilter === 'all') return true;
+        if (goal.status === activeFilter) return true;
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+      );
+  }, [exercise, goals, activeFilter]);
 
   const onNavigateToForm = () => {
     if (!exercise) return;
@@ -55,6 +68,7 @@ const ExerciseGoals = () => {
       pickerOptions={GoalStatusFilters}
       onPickerClose={() => setIsPickerOpen(false)}
       onPickerChangeValue={(value: string) => setActiveFilter(value)}
+      pickerValue={activeFilter}
       applyContentPadding
       leftContentFlex={0}
       rightContent={

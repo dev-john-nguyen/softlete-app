@@ -3,9 +3,10 @@ import { FlexBox } from '@app/ui';
 import { ExerciseGoalProps } from 'src/services/goals/types';
 import { PrimaryText } from '@app/elements';
 import { Colors, DateTools, rgba } from '@app/utils';
+import { GoalStatusProps } from '../types';
 
 type Props = {
-  goal: ExerciseGoalProps;
+  goal: ExerciseGoalProps & GoalStatusProps;
   active?: boolean;
   onPress: () => void;
 };
@@ -19,7 +20,7 @@ const GoalFilterItem: FC<Props> = ({ goal, active, onPress }) => {
       backgroundColor={Colors.lightPrimary}
       borderRadius={5}
       borderWidth={1}
-      borderColor={rgba(Colors.whiteRbg, active ? 0.6 : 0)}
+      borderColor={active ? goal.color : rgba(Colors.whiteRbg, 0)}
       applyBoxShadow
       marginRight={20}>
       <PrimaryText opacity={0.6} marginBottom={2}>
