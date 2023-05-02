@@ -17,11 +17,10 @@ import { ThunkAppDispatch } from 'src/services';
 import { GoalInitProps } from 'src/services/goals/types';
 import { HomeStackParamsList } from '../home/types';
 
-const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
-
 const GoalForm = () => {
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
   const dispatch = useDispatch<ThunkAppDispatch>();
   const [goalName, setGoalName] = useState<string>('');
   const [goalDescription, setGoalDescription] = useState<string>('');

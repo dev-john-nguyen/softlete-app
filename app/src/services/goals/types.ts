@@ -58,7 +58,7 @@ export interface ExerciseGoalProps extends GoalProps {
 
 // goal status is not an attribute in goal schema, but a calculated value
 export enum GoalStatus {
-  pending = 'pending',
-  inProgress = 'inProgress',
-  completed = 'completed',
+  pending = 'Pending',
+  inProgress = 'In Progress',
+  completed = 'Completed',
 }

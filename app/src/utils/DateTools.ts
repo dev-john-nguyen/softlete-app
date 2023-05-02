@@ -1,4 +1,34 @@
 class DateTools {
+  compareTwoDates(date1: Date, date2: Date) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+
+    // Get year, month, and day values
+    const year1 = d1.getFullYear();
+    const month1 = d1.getMonth();
+    const day1 = d1.getDate();
+
+    const year2 = d2.getFullYear();
+    const month2 = d2.getMonth();
+    const day2 = d2.getDate();
+
+    if (
+      year1 < year2 ||
+      (year1 === year2 && month1 < month2) ||
+      (year1 === year2 && month1 === month2 && day1 < day2)
+    ) {
+      return 'before';
+    } else if (
+      year1 > year2 ||
+      (year1 === year2 && month1 > month2) ||
+      (year1 === year2 && month1 === month2 && day1 > day2)
+    ) {
+      return 'after';
+    } else {
+      return 'same';
+    }
+  }
+
   strToMMDD(dStr: string) {
     return dStr.substring(5, dStr.length).replace('-', '/');
   }

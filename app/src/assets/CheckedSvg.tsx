@@ -1,9 +1,10 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
 
-const svg = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6" stroke-width="2" stroke-linecap="round"/>
+const svg = `<svg viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1 9L4.23309 11.4248C4.66178 11.7463 5.26772 11.6728 5.60705 11.2581L14 1" stroke-width="2" stroke-linecap="round"/>
 </svg>
+
 `;
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   size: number | string;
 }
 
-class CheckedSvg extends React.Component<Props, {}> {
+class CheckedSvg extends React.Component<Props> {
   render() {
     return (
       <SvgXml

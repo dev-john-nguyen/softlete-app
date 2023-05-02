@@ -61,6 +61,7 @@ import Database from './Database';
 import Target from './Target';
 import { default as Filter } from './FilterSvg';
 import AddRing from './AddRing';
+import PauseSvg from './PauseSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -122,6 +123,7 @@ const Icons = {
   target: (props: any) => <Target {...props} />,
   filter: (props: any) => <Filter {...props} />,
   add_ring: (props: any) => <AddRing {...props} />,
+  pause: (props: any) => <PauseSvg {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
