@@ -20,8 +20,7 @@ export default {
   goals: {
     upsert_exercise: 'api/goals/upsert-exercise',
     get: (userUid: string) => `api/goals/get/${userUid}`,
-    delete_exercise: (exerciseUid: string) =>
-      `api/goals/delete-exercise/${exerciseUid}`,
+    delete_exercise: (goalId: string) => `api/goals/delete-exercise/${goalId}`,
     get_exercise_goal_analytics: (exerciseUid: string, goal: string) =>
       `api/goals/exercise-goal-analytics/${exerciseUid}?goal=${goal}`,
   },

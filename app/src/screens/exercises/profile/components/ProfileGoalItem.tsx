@@ -2,14 +2,14 @@ import Icon from '@app/icons';
 import React, { FC, useState } from 'react';
 import { FlexBox } from '@app/ui';
 import PrimaryText from '../../../../components/elements/PrimaryText';
-import { ExerciseGoal } from 'src/services/goals/types';
+import { ExerciseGoalProps } from 'src/services/goals/types';
 import { Colors, DateTools } from '@app/utils';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'App';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
 
-const ProfileGoalItem: FC<ExerciseGoal> = goal => {
+const ProfileGoalItem: FC<ExerciseGoalProps> = goal => {
   const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 

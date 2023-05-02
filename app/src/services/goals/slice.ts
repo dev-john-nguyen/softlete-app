@@ -36,13 +36,9 @@ export const upsertExerciseGoalAsync = createAsyncThunk(
 
 export const removeExerciseGoalAsync = createAsyncThunk(
   'goals/removeExerciseGoalAsync',
-  async (exerciseGoalUid: string, { dispatch }) => {
-    await request(
-      'DELETE',
-      PATHS.goals.delete_exercise(exerciseGoalUid),
-      dispatch,
-    );
-    return exerciseGoalUid;
+  async (goalId: string, { dispatch }) => {
+    await request('DELETE', PATHS.goals.delete_exercise(goalId), dispatch);
+    return goalId;
   },
 );
 export const fetchGoalsAsync = createAsyncThunk(
