@@ -5,16 +5,17 @@ import {
   PrimaryText,
   ScreenTemplate,
 } from '@app/elements';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { Colors, DateTools } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { useDispatch } from 'react-redux';
-import { addExerciseGoalAsync } from 'src/services/goals/slice';
+import { upsertExerciseGoalAsync } from 'src/services/goals/slice';
 import { ThunkAppDispatch } from 'src/services';
 import { GoalInitProps } from 'src/services/goals/types';
+import { HomeStackParamsList } from '../home/types';
 
 const today = new Date();
 const tomorrow = new Date(today);
@@ -30,7 +31,7 @@ const GoalForm = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState<string>('');
   const [exercise, setExercise] = useState<ExerciseProps>();
   const navigation = useNavigation();
-  const route = useRoute<any>();
+  const route = useRoute<RouteProp<HomeStackParamsList, 'GoalFormModal'>>();
   const setBanner = useBanner();
 
   useEffect(() => {
@@ -39,6 +40,15 @@ const GoalForm = () => {
     } else {
       setBanner('There was not exercise data provided.', BannerTypes.error);
       navigation.goBack();
+    }
+
+    if (route.params.goal) {
+      const { goal } = route.params;
+      setGoalName(goal.name);
+      setGoalDescription(goal.description ?? '');
+      setGoalTarget(goal.goal);
+      setGoalStartDate(new Date(goal.startDate));
+      setGoalEndDate(new Date(goal.endDate));
     }
   }, [route]);
 
@@ -98,8 +108,13 @@ const GoalForm = () => {
       exerciseUid: exercise._id as string,
     };
 
+    // update goal if route params has goal
+    if (route.params.goal && route.params.goal._id) {
+      newGoal._id = route.params.goal._id;
+    }
+
     try {
-      await dispatch(addExerciseGoalAsync(newGoal)).unwrap();
+      await dispatch(upsertExerciseGoalAsync(newGoal)).unwrap();
       setBanner('Goal created successfully!', BannerTypes.success);
       navigation.goBack();
     } catch (err) {
@@ -139,12 +154,13 @@ const GoalForm = () => {
         </FlexBox>
       }>
       <PrimaryText marginBottom={10}>
-        Create a new goal to challenge yourself.
+        {`"Setting goals is the first step in turning the invisible into the visible." - Tony Robbins`}
       </PrimaryText>
       <Input
         label="Name"
         placeholder="Enter a name for your goal"
         onChangeText={value => setGoalName(value)}
+        defaultValue={goalName}
         mb={5}
       />
       <Input
@@ -152,12 +168,14 @@ const GoalForm = () => {
         placeholder="Enter your target goal"
         keyboardType="numeric"
         onChangeText={value => setGoalTarget(parseInt(value) ?? 0)}
+        defaultValue={goalTarget.toString()}
         mb={5}
       />
       <Input
         label="Description"
         placeholder="Enter a brief description"
         onChangeText={value => setGoalDescription(value)}
+        defaultValue={goalDescription}
         mb={5}
         multiline
       />
@@ -186,7 +204,7 @@ const GoalForm = () => {
         </FlexBox>
       </FlexBox>
       <PrimaryButton onPress={onCreateGoal} marginTop={20}>
-        Create
+        Submit
       </PrimaryButton>
     </ScreenTemplate>
   );

@@ -18,19 +18,19 @@ const initialState: GoalsRootStateProps = {
   },
 };
 
-export const addExerciseGoalAsync = createAsyncThunk(
-  'goals/addExerciseGoalAsync',
+export const upsertExerciseGoalAsync = createAsyncThunk(
+  'goals/upsertExerciseGoalAsync',
   async (goal: GoalInitProps, { dispatch }) => {
-    const { data: newGoal }: { data?: GoalRespProps } = await request(
+    const { data: respGoal }: { data?: GoalRespProps } = await request(
       'POST',
       PATHS.goals.upsert_exercise,
       dispatch,
       goal,
     );
-    if (!newGoal) {
+    if (!respGoal) {
       throw new Error('Failed to add goal');
     }
-    return newGoal;
+    return { respGoal, updated: goal._id ? true : false };
   },
 );
 
@@ -45,20 +45,6 @@ export const removeExerciseGoalAsync = createAsyncThunk(
     return exerciseGoalUid;
   },
 );
-
-// export const updateGoalAsync = createAsyncThunk(
-//   'goals/updateGoalAsync',
-//   async (updatedGoal: Goal) => {
-//     const response = await fetch(`/api/goals/${updatedGoal._id}`, {
-//       method: 'PUT',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(updatedGoal),
-//     });
-//     const data = await response.json();
-//     return data;
-//   },
-// );
-
 export const fetchGoalsAsync = createAsyncThunk(
   'goals/fetchGoalsAsync',
   async (_, { getState, dispatch }) => {
@@ -84,10 +70,24 @@ const goalsSlice = createSlice({
       .addCase(fetchGoalsAsync.fulfilled, (state, action) => {
         state.user = formatHandlerOfGoalsResp(action.payload);
       })
-      .addCase(addExerciseGoalAsync.fulfilled, (state, action) => {
-        const formatted = formatHandlerOfGoalResp(action.payload);
-        state.user.exercises.push(formatted as ExerciseGoalProps);
-      })
+      .addCase(
+        upsertExerciseGoalAsync.fulfilled,
+        (state, { payload: { respGoal, updated } }) => {
+          const formatted = formatHandlerOfGoalResp(
+            respGoal,
+          ) as ExerciseGoalProps;
+          if (updated) {
+            const index = state.user.exercises.findIndex(
+              goal => goal._id === formatted._id,
+            );
+            if (index !== -1) {
+              state.user.exercises[index] = formatted;
+            }
+          } else {
+            state.user.exercises.push(formatted as ExerciseGoalProps);
+          }
+        },
+      )
       .addCase(removeExerciseGoalAsync.fulfilled, (state, action) => {
         const index = state.user.exercises.findIndex(
           goal => goal._id === action.payload,

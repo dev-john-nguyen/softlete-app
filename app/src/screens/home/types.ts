@@ -1,7 +1,7 @@
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { HealthDataProps } from 'src/services/workout/types';
 import { ExerciseProps } from '../../services/exercises/types';
-import { ExerciseGoal } from 'src/services/goals/types';
+import { ExerciseGoalProps } from 'src/services/goals/types';
 
 export type NavigationProps = {
   goBack(): void;
@@ -35,7 +35,7 @@ export type HomeStackParamsList = {
   Calendar: undefined;
   ExerciseAnalytics: undefined;
   WorkoutModal: undefined;
-  GoalFormModal: { exercise: ExerciseProps; goal?: ExerciseGoal };
+  GoalFormModal: { exercise: ExerciseProps; goal?: ExerciseGoalProps };
   GoOnlineModal: undefined;
   OverviewModal: undefined;
   DataOverview: undefined;
