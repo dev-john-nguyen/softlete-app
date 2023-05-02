@@ -5,7 +5,7 @@ import { Colors, DateTools, PATHS, getRequestURL } from '@app/utils';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import useBanner from 'src/hooks/utils/useBanner';
@@ -25,22 +25,45 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
   const dispatch = useDispatch<ThunkAppDispatch>();
   const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const setBanner = useBanner();
-  const { data = [], isFetching } = useQuery<WorkoutExerciseProps[]>(
-    ['exercise-goals-data', { exerciseUid: exercise._id, goalUid: goal._id }],
-    () =>
-      axios
-        .get(
-          getRequestURL(
-            PATHS.goals.get_exercise_goal_analytics(
-              exercise._id as string,
-              String(goal.goal),
-            ),
+  const fetchAnalytics = useCallback(async () => {
+    const startDateStr = DateTools.convertLocalStrToFormatStr(
+      goal.startDate,
+      undefined,
+      'm',
+    );
+    const endDateSTr = DateTools.convertLocalStrToFormatStr(
+      goal.endDate,
+      undefined,
+      'm',
+    );
+    return axios
+      .get(
+        getRequestURL(
+          PATHS.goals.get_exercise_goal_analytics(
+            exercise._id as string,
+            String(goal.goal),
+            startDateStr,
+            endDateSTr,
           ),
-          {
-            params: { exerciseUid: exercise._id },
-          },
-        )
-        .then(res => res.data),
+        ),
+        {
+          params: { exerciseUid: exercise._id },
+        },
+      )
+      .then(res => res.data);
+  }, [goal, exercise]);
+
+  const { data = [], isFetching } = useQuery<WorkoutExerciseProps[]>(
+    [
+      'exercise-goals-data',
+      {
+        exerciseUid: exercise._id,
+        goalUid: goal._id,
+        startDate: goal.startDate,
+        endDate: goal.endDate,
+      },
+    ],
+    fetchAnalytics,
     {
       refetchOnMount: true,
       staleTime: 60000,

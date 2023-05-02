@@ -168,7 +168,7 @@ const GoalForm = () => {
         placeholder="Enter your target goal"
         keyboardType="numeric"
         onChangeText={value => setGoalTarget(parseInt(value) ?? 0)}
-        defaultValue={goalTarget.toString()}
+        defaultValue={isNaN(Number(goalTarget)) ? '' : goalTarget.toString()}
         mb={5}
       />
       <Input
