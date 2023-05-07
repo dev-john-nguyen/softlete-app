@@ -15,6 +15,7 @@ import { removeExerciseGoalAsync } from 'src/services/goals/slice';
 import { ExerciseGoalProps } from 'src/services/goals/types';
 import { useGoalExerciseAnalytics } from '../hooks';
 import { GoalStatusProps } from '../types';
+import GoalAnalytics from './GoalAnalytics';
 
 type Props = {
   goal: ExerciseGoalProps & GoalStatusProps;
@@ -140,47 +141,9 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
       ) : (
         <FlexBox marginTop={10} flex={1}>
           <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
-            {data.map(item => {
-              const date = DateTools.convertUTCStrToLocalStr(
-                item.date as string,
-                '/',
-                'd',
-                false,
-              );
-              return (
-                <FlexBox key={item._id || date} alignItems="center">
-                  <FlexBox
-                    column
-                    alignItems="center"
-                    marginRight={10}
-                    opacity={0.8}>
-                    <Icon size={20} icon="calendar" color={Colors.white} />
-                    <PrimaryText variant="primary" size="small">
-                      {date}
-                    </PrimaryText>
-                  </FlexBox>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    nestedScrollEnabled
-                    style={{ marginBottom: 10 }}>
-                    {item.data.map((data, set) => {
-                      if ((data.performVal ?? 0) > goal.goal) {
-                        const label = set + 1 + ' x ' + data.reps;
-                        return (
-                          <InfoListBox
-                            key={data._id || label}
-                            secondary
-                            label={label}
-                            desc={(data.performVal ?? 0).toString()}
-                          />
-                        );
-                      }
-                    })}
-                  </ScrollView>
-                </FlexBox>
-              );
-            })}
+            {data.map((item, index) => (
+              <GoalAnalytics key={item._id || index} item={item} goal={goal} />
+            ))}
           </ScrollView>
         </FlexBox>
       )}

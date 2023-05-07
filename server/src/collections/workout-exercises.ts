@@ -19,24 +19,33 @@ export interface WorkoutExercisesProps {
 }
 
 export interface WorkoutExerciseDataProps {
+  _id?: mongoose.Types.ObjectId;
   reps: Number;
-  performVal: mongoose.Types.Decimal128;
-  predictVal: mongoose.Types.Decimal128;
+  performVal: Number;
+  predictVal: Number;
   pct: Number;
   warmup: Boolean;
 }
 
-function dataFormatHanlder(data?: any) {
+function formatHandler(value: mongoose.Types.Decimal128) {
+  return value ? parseFloat(value.toString()) : 0;
+}
+
+function dataFormatHandler(data?: any) {
   if (!data) return [];
   return data.map((doc: any) => {
-    const d = doc.toObject();
+    const docJSON = doc.toJSON();
     const formatted = {
-      ...d,
-      performVal: d.performVal ? parseFloat(d.performVal.toString()) : 0,
-      predictVal: d.predictVal ? parseFloat(d.predictVal.toString()) : 0,
+      ...docJSON,
+      performVal: formatHandler(docJSON.performVal),
+      predictVal: formatHandler(docJSON.predictVal),
     };
     return formatted;
   });
+}
+
+function calcRefFormatHandler(ref: mongoose.Types.Decimal128) {
+  return formatHandler(ref);
 }
 
 const workoutExercisesSchema = new mongoose.Schema(
@@ -70,7 +79,7 @@ const workoutExercisesSchema = new mongoose.Schema(
         'exceeds the data limit of 50',
       ],
       required: true,
-      get: dataFormatHanlder,
+      get: dataFormatHandler,
       default: [],
     },
     date: {
@@ -95,6 +104,7 @@ const workoutExercisesSchema = new mongoose.Schema(
     },
     calcRef: {
       type: mongoose.Types.Decimal128,
+      get: calcRefFormatHandler,
     },
     group: {
       type: Number,

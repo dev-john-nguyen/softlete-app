@@ -227,6 +227,35 @@ export const removeWorkoutExercise =
       .catch(err => console.log(err));
   };
 
+export const fetchWorkout =
+  (workoutUid: string) =>
+  async (dispatch: AppDispatch, getState: () => ReducerProps) => {
+    const uid = getState().user.uid;
+
+    const { data: workout }: { data?: WorkoutProps } = await request(
+      'GET',
+      PATHS.workouts.fetchOne(uid, workoutUid),
+      dispatch,
+    ).catch(err => {
+      console.log(err);
+      return { data: undefined };
+    });
+
+    if (workout) {
+      prefetchWoImages([workout]);
+      const workouts = await insertExercisesIntoWorkouts([workout])(
+        dispatch,
+        getState,
+      );
+      dispatch({ type: UPDATE_WORKOUTS, payload: workouts });
+      dispatch({
+        type: UPDATE_WORKOUTS,
+        payload: [workout],
+      });
+    }
+    return workout;
+  };
+
 export const fetchWorkouts =
   (fromDate: string, toDate: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
@@ -439,10 +468,18 @@ export const setViewWorkout =
         payload: clonedWorkout,
       });
     } else {
-      dispatch({
-        type: SET_VIEW_WORKOUT,
-        payload: viewWorkout,
-      });
+      // fetch workout if it doesn't already exist in store
+      // Note: I haven't configured the isProgram aspect to this yet. I don't think I need to. Just a reminder.
+      try {
+        const workout = await fetchWorkout(workoutUid)(dispatch, getState);
+        if (!workout) return;
+        dispatch({
+          type: SET_VIEW_WORKOUT,
+          payload: workout,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

@@ -96,6 +96,9 @@ export default {
     create: 'api/workouts/create',
     fetch: (FromDate: string, toDate: string, userUid: string) =>
       `api/workouts/get/${userUid}?fromDate=${FromDate}&toDate=${toDate}`,
+    fetchOne: (userUid: string, workoutUid: string) => {
+      return `api/workouts/get/${userUid}/${workoutUid}`;
+    },
     remove: 'api/workouts/remove',
     removeExercise: 'api/workouts/remove/exercise',
     duplicate: 'api/workouts/duplicate',
