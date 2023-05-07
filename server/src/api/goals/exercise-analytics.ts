@@ -4,6 +4,7 @@ import WorkoutExercises from '../../collections/workout-exercises';
 import errorCatch from '../../utils/error-catch';
 import mongoose from 'mongoose';
 import DateTools from '../../utils/DateTools';
+import { WorkoutStatus } from '../../collections/workouts';
 
 /*
  get all workout exercise goals that match exerciseUid
@@ -53,7 +54,23 @@ router.get(
       'data.performVal': { $gte: goal },
       date: { $gte: startDate, $lte: endDate },
     })
-      .then(data => res.send(data))
+      .populate({
+        path: 'workoutUid',
+        match: { status: WorkoutStatus.completed },
+      })
+      .then(data => {
+        if (data.length < 1) return res.status(200).send([]);
+        const filteredDocs = data
+          .filter(doc => doc.workoutUid !== null)
+          .map(doc => {
+            const { workoutUid, ...docJSON } = doc.toJSON();
+            return {
+              ...docJSON,
+              workout: workoutUid,
+            };
+          });
+        return res.status(200).send(filteredDocs);
+      })
       .catch(err => errorCatch(err, res, next));
   },
 );

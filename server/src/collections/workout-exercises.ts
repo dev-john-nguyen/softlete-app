@@ -96,6 +96,7 @@ const workoutExercisesSchema = new mongoose.Schema(
     },
     workoutUid: {
       type: mongoose.Types.ObjectId,
+      ref: 'Workout',
       required: true,
     },
     exerciseUid: {
@@ -123,6 +124,9 @@ const workoutExercisesSchema = new mongoose.Schema(
   {
     timestamps: true,
     toJSON: {
+      getters: true,
+    },
+    toObject: {
       getters: true,
     },
   },

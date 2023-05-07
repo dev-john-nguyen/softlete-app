@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useCallback } from 'react';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { ExerciseGoalProps } from 'src/services/goals/types';
-import { WorkoutExerciseProps } from 'src/services/workout/types';
+import { RespWorkoutExerciseProps } from './types';
 
 export const useGoalExerciseAnalytics = (
   goal: ExerciseGoalProps,
@@ -38,7 +38,7 @@ export const useGoalExerciseAnalytics = (
       .then(res => res.data);
   }, [goal, exercise]);
 
-  const { data = [], isFetching } = useQuery<WorkoutExerciseProps[]>(
+  const { data = [], isFetching } = useQuery<RespWorkoutExerciseProps[]>(
     [
       'exercise-goals-data',
       {

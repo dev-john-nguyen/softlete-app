@@ -10,10 +10,10 @@ import { HomeStackScreens } from 'src/screens/home/types';
 import { ReducerProps } from 'src/services';
 import { ExerciseGoalProps } from 'src/services/goals/types';
 import { setViewWorkout } from 'src/services/workout/actions';
-import { WorkoutExerciseProps } from 'src/services/workout/types';
+import { RespWorkoutExerciseProps } from '../types';
 
 const GoalAnalytics: FC<{
-  item: WorkoutExerciseProps;
+  item: RespWorkoutExerciseProps;
   goal: ExerciseGoalProps;
 }> = ({ goal, item }) => {
   const navigation = useNavigation<any>();
@@ -21,9 +21,9 @@ const GoalAnalytics: FC<{
   const reducerState = useSelector((state: ReducerProps) => state);
 
   const onNavigateToWorkout = async () => {
-    if (!item.workoutUid) return;
+    if (!item.workout._id) return;
     try {
-      await setViewWorkout(item.workoutUid)(dispatch, () => reducerState);
+      await setViewWorkout(item.workout._id)(dispatch, () => reducerState);
       navigation.push(HomeStackScreens.Workout);
     } catch (err) {
       console.log(err);
