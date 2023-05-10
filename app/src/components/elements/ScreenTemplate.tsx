@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -16,7 +16,7 @@ import useKeyboard from 'src/hooks/utils/useKeyboard';
 import PrimaryText from './PrimaryText';
 
 interface Props {
-  children: JSX.Element | JSX.Element[];
+  children: any;
   headerPadding?: boolean;
   applyContentPadding?: boolean;
   isBackVisible?: boolean;
@@ -172,7 +172,7 @@ const ScreenTemplate = ({
           onDatePickerClose && onDatePickerClose();
           onDatePickerChange && onDatePickerChange(date);
         }}
-        onCancel={onDatePickerClose}
+        onCancel={() => onDatePickerClose && onDatePickerClose()}
       />
     </>
   );

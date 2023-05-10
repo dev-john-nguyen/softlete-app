@@ -115,25 +115,20 @@ const Home = ({
 
   useNotifeeListener(navigation, processNotification, dispatch);
 
-  useApiHooks(
-    offline,
-    user,
-    {
-      fetchWorkouts,
-      fetchGeneratedPrograms,
-      getFriends,
-      getChats,
-      initSockets,
-      fetchLocalStoreExercisesToState,
-      fetchNotifications,
-      processBatches,
-      fetchAllUserExercises,
-      getAllHealthData,
-      getGlobalVars,
-      fetchPinExerciseAnalytics,
-    },
-    dispatch,
-  );
+  useApiHooks(offline, user, {
+    fetchWorkouts,
+    fetchGeneratedPrograms,
+    getFriends,
+    getChats,
+    initSockets,
+    fetchLocalStoreExercisesToState,
+    fetchNotifications,
+    processBatches,
+    fetchAllUserExercises,
+    getAllHealthData,
+    getGlobalVars,
+    fetchPinExerciseAnalytics,
+  });
 
   useEffect(() => {
     if (route.params && route.params.directToDash) {

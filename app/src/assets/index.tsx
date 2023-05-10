@@ -58,6 +58,10 @@ import { default as BoxGraph } from './BoxGraphSvg';
 import { default as Table } from './TableSvg';
 import { default as Search } from './SearchSvg';
 import Database from './Database';
+import Target from './Target';
+import { default as Filter } from './FilterSvg';
+import AddRing from './AddRing';
+import PauseSvg from './PauseSvg';
 
 const Icons = {
   chevron: (props: any) => <Chevron {...props} />,
@@ -116,6 +120,10 @@ const Icons = {
   box_table: (props: any) => <Table {...props} />,
   search: (props: any) => <Search {...props} />,
   database: (props: any) => <Database {...props} />,
+  target: (props: any) => <Target {...props} />,
+  filter: (props: any) => <Filter {...props} />,
+  add_ring: (props: any) => <AddRing {...props} />,
+  pause: (props: any) => <PauseSvg {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

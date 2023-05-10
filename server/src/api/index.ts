@@ -1,4 +1,5 @@
-const router = require('express').Router();
+import Express from 'express';
+const router = Express.Router();
 import signinRoutes from './signin';
 import userRoutes from './user';
 import exercisesRoutes from './exercises';
@@ -16,6 +17,7 @@ import videosRoutes from './videos';
 import imagesRoutes from './images';
 import globalRoutes from './global';
 import bugRoutes from './bug';
+import goalsRoutes from './goals';
 
 router.use('/signin', signinRoutes);
 router.use('/user', userRoutes);
@@ -34,9 +36,10 @@ router.use('/videos', videosRoutes);
 router.use('/images', imagesRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/global', globalRoutes);
+router.use('/goals', goalsRoutes);
 
 router.use('/', (req: any, res: any) => {
-    res.status(404).send('Route not found.')
-})
+  res.status(404).send('Route not found.');
+});
 
 export default router;

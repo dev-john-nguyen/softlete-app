@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { ExerciseProps } from '../../services/exercises/types';
-import { normalize } from '../../utils/tools';
-import { ReducerProps } from '../../services';
-import { connect } from 'react-redux';
-import { updatePinExercises } from '../../services/user/actions';
-import { PinExerciseProps } from '../../services/misc/types';
-import { HomeStackScreens } from '../home/types';
-import { NetworkStackScreens } from '../network/types';
-import BodySvg from '../../assets/body/BodySvg';
-import { AppDispatch } from '../../../App';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
-import { UserProps } from '../../services/user/types';
-import ExerciseVideo from '../../components/elements/ExerciseVideo';
-import { AthleteProfileProps } from '../../services/athletes/types';
-import { ProgramStackScreens } from '../program/types';
-import reportExercise from '../utils/report-exercise';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import { ExerciseProps } from '../../../services/exercises/types';
+import { normalize } from '../../../utils/tools';
+import { ReducerProps } from '../../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePinExercises } from '../../../services/user/actions';
+import { HomeStackScreens } from '../../home/types';
+import { NetworkStackScreens } from '../../network/types';
+import BodySvg from '../../../assets/body/BodySvg';
+import { AppDispatch } from '../../../../App';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
+import { UserProps } from '../../../services/user/types';
+import ExerciseVideo from '../../../components/elements/ExerciseVideo';
+import { AthleteProfileProps } from '../../../services/athletes/types';
+import { ProgramStackScreens } from '../../program/types';
+import reportExercise from '../../utils/report-exercise';
+import ScreenTemplate from '../../../components/elements/ScreenTemplate';
 import Icon from '@app/icons';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {
@@ -28,16 +27,125 @@ import {
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { StyleConstants } from '@app/utils';
+import { useNavigation } from '@react-navigation/native';
+import ProfileGoalItem from './components/ProfileGoalItem';
+
+type IconMenuOptionsProps = {
+  exercise: ExerciseProps;
+  athlete: boolean;
+  route: any;
+  user: UserProps;
+  offline: boolean;
+  athleteProps: AthleteProfileProps;
+};
+
+const IconMenuOptions: FC<IconMenuOptionsProps> = ({
+  exercise,
+  athlete,
+  route,
+  user,
+  offline,
+  athleteProps,
+}) => {
+  const navigation: any = useNavigation();
+  const dispatch = useDispatch();
+
+  const onNavigateToUpdate = () => {
+    if (athlete) return;
+    if (!exercise) return navigation.goBack();
+
+    dispatch({ type: SET_TARGET_EXERCISE, payload: exercise });
+
+    if (route.params && route.params.programStack) {
+      if (exercise.userUid !== user.uid) {
+        if (exercise.softlete && user.admin) {
+          return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+        } else {
+          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
+        }
+      } else {
+        return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+      }
+    }
+
+    if (exercise.userUid !== user.uid) {
+      if (exercise.softlete && user.admin) {
+        return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+      } else {
+        return navigation.navigate(HomeStackScreens.EditExercise);
+      }
+    } else {
+      return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+    }
+  };
+
+  const onReportImage = () => {
+    exercise && reportExercise(athleteProps.uid, user.uid, exercise?._id);
+  };
+
+  const onNavigateToAnalytics = () => {
+    if (!exercise) return;
+    if (athlete) {
+      navigation.navigate(NetworkStackScreens.AthleteAnalytics, {
+        exerciseUid: exercise._id,
+      });
+    } else {
+      if (route.params && route.params.programStack) {
+        navigation.navigate(ProgramStackScreens.ProgramExerciseAnalytics, {
+          exerciseUid: exercise._id,
+        });
+      } else {
+        navigation.navigate(HomeStackScreens.ExerciseAnalytics, {
+          exerciseUid: exercise._id,
+        });
+      }
+    }
+  };
+
+  return (
+    <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+      {!offline && (
+        <>
+          <Icon
+            icon="graph"
+            color={Colors.white}
+            size={20}
+            onPress={onNavigateToAnalytics}
+            containerStyles={{ marginRight: 20 }}
+          />
+          <Icon
+            icon="target"
+            size={20}
+            color={Colors.white}
+            onPress={() =>
+              navigation.navigate(HomeStackScreens.ExerciseGoal, { exercise })
+            }
+            containerStyles={{ marginRight: 20 }}
+          />
+          {athlete ? (
+            <Icon
+              icon="error"
+              color={Colors.white}
+              size={20}
+              onPress={onReportImage}
+            />
+          ) : (
+            <Icon
+              icon="pencil"
+              color={Colors.white}
+              size={20}
+              onPress={onNavigateToUpdate}
+            />
+          )}
+        </>
+      )}
+    </FlexBox>
+  );
+};
 
 interface Props {
   route: any;
   navigation: any;
-  pinExercises: PinExerciseProps[];
-  exercisesStore: ExerciseProps[];
-  offline: boolean;
-  dispatch: AppDispatch;
-  user: UserProps;
-  athleteProps: AthleteProfileProps;
 }
 
 const Description = ({ description }: { description?: string }) => {
@@ -60,16 +168,18 @@ const Description = ({ description }: { description?: string }) => {
   );
 };
 
-const Exercise = ({
-  route,
-  navigation,
-  pinExercises,
-  exercisesStore,
-  offline,
-  dispatch,
-  user,
-  athleteProps,
-}: Props) => {
+const Exercise = ({ route, navigation }: Props) => {
+  const { pinExercises, exercisesStore, offline, user, athleteProps, goals } =
+    useSelector((state: ReducerProps) => ({
+      pinExercises: state.user.pinExercises,
+      exercisesStore: state.exercises.data,
+      offline: state.global.offline,
+      user: state.user,
+      athleteProps: state.athletes.curAthlete,
+      goals: state.goals.user.exercises,
+    }));
+  const dispatch = useDispatch<AppDispatch>();
+
   const [exercise, setExercise] = useState<ExerciseProps>();
   const [isPin, setIsPin] = useState(false);
   const [athlete, setAthlete] = useState(false);
@@ -103,92 +213,26 @@ const Exercise = ({
     dispatch(updatePinExercises({ exerciseUid: exercise._id, exercise }, pin));
   };
 
-  const onNavigateToUpdate = () => {
-    if (athlete) return;
-    if (!exercise) return navigation.goBack();
-
-    dispatch({ type: SET_TARGET_EXERCISE, payload: exercise });
-
-    if (route.params && route.params.programStack) {
-      if (exercise.userUid !== user.uid) {
-        if (exercise.softlete && user.admin) {
-          return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
-        } else {
-          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
-        }
-      } else {
-        return navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
-      }
-    }
-
-    if (exercise.userUid !== user.uid) {
-      if (exercise.softlete && user.admin) {
-        return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
-      } else {
-        return navigation.navigate(HomeStackScreens.EditExercise);
-      }
-    } else {
-      return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
-    }
-  };
-
-  const onNavigateToAnalytics = () => {
-    if (!exercise) return;
-    if (athlete) {
-      navigation.navigate(NetworkStackScreens.AthleteAnalytics, {
-        exerciseUid: exercise._id,
-      });
-    } else {
-      if (route.params && route.params.programStack) {
-        navigation.navigate(ProgramStackScreens.ProgramExerciseAnalytics, {
-          exerciseUid: exercise._id,
-        });
-      } else {
-        navigation.navigate(HomeStackScreens.ExerciseAnalytics, {
-          exerciseUid: exercise._id,
-        });
-      }
-    }
-  };
-
-  const onReportImage = () => {
-    exercise && reportExercise(athleteProps.uid, user.uid, exercise?._id);
-  };
+  const exerciseGoals = useMemo(() => {
+    if (!exercise || !goals) return [];
+    return goals.filter(g => g.exerciseUid === exercise._id);
+  }, [goals, exercise]);
 
   if (!exercise) return <Loading />;
 
   return (
     <ScreenTemplate
       isBackVisible
+      rightContentFlex={1}
       rightContent={
-        <FlexBox alignItems="flex-end" justifyContent="flex-start">
-          {!offline && (
-            <>
-              <Icon
-                icon="graph"
-                color={Colors.white}
-                size={20}
-                onPress={onNavigateToAnalytics}
-                containerStyles={{ marginRight: 20 }}
-              />
-              {athlete ? (
-                <Icon
-                  icon="error"
-                  color={Colors.white}
-                  size={20}
-                  onPress={onReportImage}
-                />
-              ) : (
-                <Icon
-                  icon="pencil"
-                  color={Colors.white}
-                  size={20}
-                  onPress={onNavigateToUpdate}
-                />
-              )}
-            </>
-          )}
-        </FlexBox>
+        <IconMenuOptions
+          athleteProps={athleteProps}
+          route={route}
+          athlete={athlete}
+          exercise={exercise}
+          user={user}
+          offline={offline}
+        />
       }>
       <ScrollView
         style={styles.container}
@@ -266,6 +310,17 @@ const Exercise = ({
             icon="ruler"
             textTransform="capitalize"
           />
+        </ScrollView>
+
+        <ScrollView
+          horizontal
+          style={{ marginTop: StyleConstants.baseMargin }}
+          contentContainerStyle={{ alignItems: 'flex-start' }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          {exerciseGoals.map((goal, index) => (
+            <ProfileGoalItem key={goal._id || index} {...goal} />
+          ))}
         </ScrollView>
       </ScrollView>
     </ScreenTemplate>
@@ -368,12 +423,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: ReducerProps) => ({
-  pinExercises: state.user.pinExercises,
-  exercisesStore: state.exercises.data,
-  offline: state.global.offline,
-  user: state.user,
-  athleteProps: state.athletes.curAthlete,
-});
-
-export default connect(mapStateToProps)(Exercise);
+export default Exercise;

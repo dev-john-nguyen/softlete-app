@@ -6,7 +6,6 @@ import { Colors, rgba } from '@app/utils';
 import DatePicker from 'react-native-date-picker';
 import DateTools from '../../utils/DateTools';
 import CircleAdd from '../elements/CircleAdd';
-import Loading from '../elements/Loading';
 import PrimaryButton from '../elements/PrimaryButton';
 import StyleConstants, { moderateScale } from '../tools/StyleConstants';
 import {

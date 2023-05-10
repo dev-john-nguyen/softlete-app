@@ -145,7 +145,7 @@ router.post('/', async (req: any, res: any, next: any) => {
     const workoutDate = DateTools.addDaysToDate(startDateObj, daysFromStart);
     const workoutDateStr = DateTools.dateToStr(workoutDate);
 
-    const exercises: WorkoutExercisesProps[] = programExercises
+    const exercises = programExercises
       .filter(e => e.toObject().programWorkoutUid.equals(workoutUid))
       .map(e => {
         const { programWorkoutUid, ...eRest } = e.toObject();
@@ -162,9 +162,10 @@ router.post('/', async (req: any, res: any, next: any) => {
           calcRef: calcRef,
           data: eRest.data.map(d => ({
             ...d,
-            performVal: 0 as unknown as mongoose.Types.Decimal128,
+            predictValL: d.predictVal,
+            performVal: 0,
           })),
-        };
+        } as WorkoutExercisesProps;
       });
 
     //push to store to insert into collection

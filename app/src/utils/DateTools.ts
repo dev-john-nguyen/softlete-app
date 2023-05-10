@@ -1,4 +1,34 @@
 class DateTools {
+  compareTwoDates(date1: Date, date2: Date) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+
+    // Get year, month, and day values
+    const year1 = d1.getFullYear();
+    const month1 = d1.getMonth();
+    const day1 = d1.getDate();
+
+    const year2 = d2.getFullYear();
+    const month2 = d2.getMonth();
+    const day2 = d2.getDate();
+
+    if (
+      year1 < year2 ||
+      (year1 === year2 && month1 < month2) ||
+      (year1 === year2 && month1 === month2 && day1 < day2)
+    ) {
+      return 'before';
+    } else if (
+      year1 > year2 ||
+      (year1 === year2 && month1 > month2) ||
+      (year1 === year2 && month1 === month2 && day1 > day2)
+    ) {
+      return 'after';
+    } else {
+      return 'same';
+    }
+  }
+
   strToMMDD(dStr: string) {
     return dStr.substring(5, dStr.length).replace('-', '/');
   }
@@ -40,12 +70,27 @@ class DateTools {
     return new Date(d);
   }
 
-  convertStrToDateToFormatStr(d: string, formatType = '-', formatOrder = 'd') {
+  convertUTCStrToLocalStr(
+    d: string,
+    formatType = '-',
+    formatOrder = 'd',
+    showYear = true,
+  ) {
     const date = this.UTCStrToLocal(d);
-    return this.dateToStr(date, formatType, formatOrder);
+    return this.dateToStr(date, formatType, formatOrder, showYear);
   }
 
-  dateToStr(d: Date, formatType = '-', formatOrder = 'm') {
+  convertLocalStrToFormatStr(
+    d: string,
+    formatType = '-',
+    formatOrder = 'd',
+    showYear = true,
+  ) {
+    const date = new Date(d);
+    return this.dateToStr(date, formatType, formatOrder, showYear);
+  }
+
+  dateToStr(d: Date, formatType = '-', formatOrder = 'm', showYear = true) {
     let month: any = d.getMonth() + 1;
     if (month < 10) {
       month = '0' + month;
@@ -55,10 +100,12 @@ class DateTools {
       day = '0' + day;
     }
     if (formatOrder === 'd') {
-      return month + formatType + day + formatType + d.getFullYear();
+      const str = month + formatType + day;
+      if (showYear) return str + formatType + d.getFullYear();
+      return str;
     }
-
-    return d.getFullYear() + formatType + month + formatType + day;
+    const str = showYear ? d.getFullYear() + formatType : '';
+    return str + month + formatType + day;
   }
 
   strToDate(dStr: string): Date {

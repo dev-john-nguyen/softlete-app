@@ -35,6 +35,20 @@ export interface LocationProps {
   speedAccuracy: number;
 }
 
+export enum GoalTypes {
+  exercise = 'exercise',
+  endurance = 'endurance',
+  health = 'health',
+}
+
+export enum GoalDurationType {
+  daily = 'daily',
+  dateRange = 'dateRange',
+  weekly = 'weekly',
+  monthly = 'monthly',
+  yearly = 'yearly',
+}
+
 //4 exercise categories
 //endurance, strength, flexibility, and balance
 //sub categories?
