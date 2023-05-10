@@ -28,7 +28,6 @@ import {
 import { FlexBox } from '@app/ui';
 import { StyleConstants } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
-import ProfileGoalItem from './components/ProfileGoalItem';
 
 type IconMenuOptionsProps = {
   exercise: ExerciseProps;
@@ -169,14 +168,13 @@ const Description = ({ description }: { description?: string }) => {
 };
 
 const Exercise = ({ route, navigation }: Props) => {
-  const { pinExercises, exercisesStore, offline, user, athleteProps, goals } =
+  const { pinExercises, exercisesStore, offline, user, athleteProps } =
     useSelector((state: ReducerProps) => ({
       pinExercises: state.user.pinExercises,
       exercisesStore: state.exercises.data,
       offline: state.global.offline,
       user: state.user,
       athleteProps: state.athletes.curAthlete,
-      goals: state.goals.user.exercises,
     }));
   const dispatch = useDispatch<AppDispatch>();
 
@@ -213,11 +211,6 @@ const Exercise = ({ route, navigation }: Props) => {
     dispatch(updatePinExercises({ exerciseUid: exercise._id, exercise }, pin));
   };
 
-  const exerciseGoals = useMemo(() => {
-    if (!exercise || !goals) return [];
-    return goals.filter(g => g.exerciseUid === exercise._id);
-  }, [goals, exercise]);
-
   if (!exercise) return <Loading />;
 
   return (
@@ -239,7 +232,11 @@ const Exercise = ({ route, navigation }: Props) => {
         contentContainerStyle={{ paddingBottom: StyleConstants.baseMargin }}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
-        <PrimaryText size="large" variant="primary" textTransform="capitalize">
+        <PrimaryText
+          size="large"
+          variant="primary"
+          textTransform="capitalize"
+          marginTop={10}>
           {exercise.name}
         </PrimaryText>
         <Description description={exercise.description} />
@@ -310,17 +307,6 @@ const Exercise = ({ route, navigation }: Props) => {
             icon="ruler"
             textTransform="capitalize"
           />
-        </ScrollView>
-
-        <ScrollView
-          horizontal
-          style={{ marginTop: StyleConstants.baseMargin }}
-          contentContainerStyle={{ alignItems: 'flex-start' }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          {exerciseGoals.map((goal, index) => (
-            <ProfileGoalItem key={goal._id || index} {...goal} />
-          ))}
         </ScrollView>
       </ScrollView>
     </ScreenTemplate>

@@ -1,105 +1,107 @@
 import mongoose from 'mongoose';
 
 export interface WorkoutProps {
-    _id?: mongoose.Types.ObjectId;
-    type: string;
-    userUid: string;
-    programUid?: mongoose.Types.ObjectId;
-    name: string;
-    description: string;
-    isPrivate: boolean;
-    comment: string;
-    date: Date;
-    strainRating?: Number;
-    reflection?: string;
-    status: string;
-    likeUids?: string[];
-    imageId?: string;
-    sentNotification?: boolean;
-    localImageUri?: string;
+  _id?: mongoose.Types.ObjectId;
+  type: string;
+  userUid: string;
+  programUid?: mongoose.Types.ObjectId;
+  name: string;
+  description: string;
+  isPrivate: boolean;
+  comment: string;
+  date: Date;
+  strainRating?: number;
+  reflection?: string;
+  status: string;
+  likeUids?: string[];
+  imageId?: string;
+  sentNotification?: boolean;
+  localImageUri?: string;
 }
 
 export enum WorkoutTypes {
-    TraditionalStrengthTraining = "TraditionalStrengthTraining",
-    Cycling = "Cycling",
-    Swimming = "Swimming",
-    Yoga = "Yoga",
-    Walking = "Walking",
-    Hiking = "Hiking",
-    Activity = "Activity"
+  TraditionalStrengthTraining = 'TraditionalStrengthTraining',
+  Cycling = 'Cycling',
+  Swimming = 'Swimming',
+  Yoga = 'Yoga',
+  Walking = 'Walking',
+  Hiking = 'Hiking',
+  Activity = 'Activity',
 }
-
 
 export enum WorkoutStatus {
-    pending = 'pending',
-    inProgress = 'inProgress',
-    completed = 'completed'
+  pending = 'pending',
+  inProgress = 'inProgress',
+  completed = 'completed',
 }
 
-const workoutSchema: mongoose.Schema<WorkoutProps> = new mongoose.Schema({
+const workoutSchema: mongoose.Schema<WorkoutProps> = new mongoose.Schema(
+  {
     userUid: {
-        type: String,
-        required: true,
-        maxLength: 100,
+      type: String,
+      required: true,
+      maxLength: 100,
     },
     programUid: {
-        type: mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
     },
     date: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     status: {
-        type: String,
-        enum: WorkoutStatus,
-        default: WorkoutStatus.pending
+      type: String,
+      enum: WorkoutStatus,
+      default: WorkoutStatus.pending,
     },
     type: {
-        type: String,
-        maxLength: 200,
-        default: WorkoutTypes.TraditionalStrengthTraining
+      type: String,
+      maxLength: 200,
+      default: WorkoutTypes.TraditionalStrengthTraining,
     },
     name: {
-        type: String,
-        required: true,
-        lowercase: true,
-        maxLength: 100
+      type: String,
+      required: true,
+      lowercase: true,
+      maxLength: 100,
     },
     description: {
-        type: String,
-        maxLength: 100
+      type: String,
+      maxLength: 100,
     },
     comment: {
-        type: String,
-        maxLength: 200
+      type: String,
+      maxLength: 200,
     },
     reflection: {
-        type: String,
-        maxLength: 500
+      type: String,
+      maxLength: 500,
     },
     isPrivate: {
-        type: Boolean
+      type: Boolean,
     },
     strainRating: {
-        type: Number,
-        max: 5
+      type: Number,
+      max: 5,
     },
     likeUids: {
-        type: [String],
-        default: []
+      type: [String],
+      default: [],
     },
     imageId: {
-        type: String
+      type: String,
     },
     localImageUri: {
-        type: String
+      type: String,
     },
     sentNotification: {
-        type: Boolean,
-        default: false
-    }
-}, {
-    timestamps: true
-})
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-export default mongoose.model<WorkoutProps>("Workout", workoutSchema);
+export default mongoose.model<WorkoutProps>('Workout', workoutSchema);
