@@ -64,20 +64,11 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
           justifyContent="space-between"
           alignItems="center"
           width="100%">
-          <FlexBox
-            padding={10}
-            borderWidth={1}
-            borderColor={goal.color}
-            borderRadius={5}
-            alignItems="center">
-            <PrimaryText color={goal.color} marginRight={5}>
+          <FlexBox>
+            <PrimaryText opacity={0.6}>Status:</PrimaryText>
+            <PrimaryText color={goal.color} marginLeft={5}>
               {goal.status}
             </PrimaryText>
-            <Icon
-              icon={goal.icon as IconOptions}
-              size={15}
-              color={goal.color}
-            />
           </FlexBox>
           <FlexBox>
             <Icon
@@ -95,7 +86,8 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
             />
           </FlexBox>
         </FlexBox>
-        <PrimaryText opacity={0.6} marginTop={10}>
+
+        <PrimaryText opacity={0.6} marginTop={5}>
           Name:
         </PrimaryText>
         <PrimaryText>{goal.name}</PrimaryText>
