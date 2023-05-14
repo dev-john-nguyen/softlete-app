@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { HealthDataProps } from '../../services/workout/types';
-import BaseColors from '../../utils/BaseColors';
+import { HealthDataProps } from '../../../../services/workout/types';
+import BaseColors from '../../../../utils/BaseColors';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
 } from 'react-native-health';
-import SectionHeader from './components/SectionHeader';
-import { HomeStackScreens } from '../../screens/home/types';
-import HealthContainer from '../HealthDataVisual';
+import SectionHeader from '../../../../components/home/components/SectionHeader';
+import { HomeStackScreens } from '../../types';
+import HealthContainer from '../../../../components/HealthDataVisual';
 import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';

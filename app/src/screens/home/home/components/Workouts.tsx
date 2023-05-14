@@ -3,30 +3,33 @@ import { ScrollView } from 'react-native';
 import { Colors, moderateScale } from '@app/utils';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { AppDispatch } from '../../../App';
-import { HomeStackScreens } from '../../screens/home/types';
-import { INITIATE_WORKOUT_HEADER } from '../../services/workout/actionTypes';
+import { AppDispatch } from '../../../../../App';
+import { HomeStackScreens } from '../../types';
+import { INITIATE_WORKOUT_HEADER } from '../../../../services/workout/actionTypes';
 import {
   HealthDataProps,
   WorkoutActionProps,
   WorkoutHeaderProps,
   WorkoutProps,
-} from '../../services/workout/types';
-import DateTools from '../../utils/DateTools';
-import WoAdd from './components/WoAdd';
-import WoItem from './components/WoItem';
-import DeviceWo from './components/DeviceWo';
-import SectionHeader from './components/SectionHeader';
-import { handleDeviceActivityImport } from '../../helpers/route.helpers';
+} from '../../../../services/workout/types';
+import DateTools from '../../../../utils/DateTools';
+import WoAdd from '../../../../components/home/components/WoAdd';
+import WoItem from '../../../../components/home/components/WoItem';
+import DeviceWo from '../../../../components/home/components/DeviceWo';
+import SectionHeader from '../../../../components/home/components/SectionHeader';
+import { handleDeviceActivityImport } from '../../../../helpers/route.helpers';
 import { connect } from 'react-redux';
 import {
   setViewWorkout,
   updateWoHealthData,
   updateWorkoutHeader,
   updateWoWorkoutRoute,
-} from '../../services/workout/actions';
-import { setBanner } from '../../services/banner/actions';
-import { BannerActionsProps, BannerTypes } from '../../services/banner/types';
+} from '../../../../services/workout/actions';
+import { setBanner } from '../../../../services/banner/actions';
+import {
+  BannerActionsProps,
+  BannerTypes,
+} from '../../../../services/banner/types';
 import { LocationValue } from 'react-native-health';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@app/icons';

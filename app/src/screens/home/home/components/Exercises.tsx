@@ -2,16 +2,13 @@ import React from 'react';
 import Icon from '@app/icons';
 import { Colors, rgba } from '@app/utils';
 import { FlexBox } from '@app/ui';
-import { ExerciseProps } from '../../services/exercises/types';
-import { AnalyticsProps } from '../../services/misc/types';
-import WoExerciseChart from './components/WoExerciseChart';
-import {
-  HomeStackParamsList,
-  HomeStackScreens,
-} from '../../screens/home/types';
-import SectionHeader from './components/SectionHeader';
+import { ExerciseProps } from '../../../../services/exercises/types';
+import { AnalyticsProps } from '../../../../services/misc/types';
+import WoExerciseChart from '../../../../components/home/components/WoExerciseChart';
+import { HomeStackParamsList, HomeStackScreens } from '../../types';
+import SectionHeader from '../../../../components/home/components/SectionHeader';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import PrimaryText from '../elements/PrimaryText';
+import PrimaryText from '../../../../components/elements/PrimaryText';
 
 interface Props {
   pinAnalytics: AnalyticsProps[];

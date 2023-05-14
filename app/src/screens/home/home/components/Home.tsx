@@ -1,55 +1,58 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../App';
-import DashboardDemo from '../../components/demo/Demo';
-import HomeExercises from '../../components/home/Exercises';
-import { HomeHeader, HomeNavBar } from '../../components/home/Header';
-import HomeWorkouts from '../../components/home/Workouts';
-import { ReducerProps } from '../../services';
-import { getChats } from '../../services/chat/actions';
-import { ChatActionProps } from '../../services/chat/types';
+import { AppDispatch } from '../../../../../App';
+import DashboardDemo from '../../../../components/demo/Demo';
+import HomeExercises from './Exercises';
+import HomeWorkouts from './Workouts';
+import { ReducerProps } from '../../../../services';
+import { getChats } from '../../../../services/chat/actions';
+import { ChatActionProps } from '../../../../services/chat/types';
 import {
   fetchLocalStoreExercisesToState,
   fetchAllUserExercises,
-} from '../../services/exercises/actions';
+} from '../../../../services/exercises/actions';
 import {
   ExerciseActionProps,
   ExerciseProps,
-} from '../../services/exercises/types';
+} from '../../../../services/exercises/types';
 import {
   getGlobalVars,
   goOffline,
   processBatches,
-} from '../../services/global/actions';
-import { fetchPinExerciseAnalytics } from '../../services/misc/actions';
-import { MiscActionProps, PinExerciseProps } from '../../services/misc/types';
+} from '../../../../services/global/actions';
+import { fetchPinExerciseAnalytics } from '../../../../services/misc/actions';
+import {
+  MiscActionProps,
+  PinExerciseProps,
+} from '../../../../services/misc/types';
 import {
   fetchNotifications,
   processNotification,
-} from '../../services/notifications/actions';
-import { NotificationActionProps } from '../../services/notifications/types';
-import { fetchGeneratedPrograms } from '../../services/program/actions';
-import { ProgramActionProps } from '../../services/program/types';
-import { initSockets } from '../../services/sockets/actions';
-import { getFriends } from '../../services/user/actions';
-import { UserActionProps } from '../../services/user/types';
+} from '../../../../services/notifications/actions';
+import { NotificationActionProps } from '../../../../services/notifications/types';
+import { fetchGeneratedPrograms } from '../../../../services/program/actions';
+import { ProgramActionProps } from '../../../../services/program/types';
+import { initSockets } from '../../../../services/sockets/actions';
+import { getFriends } from '../../../../services/user/actions';
+import { UserActionProps } from '../../../../services/user/types';
 import {
   fetchWorkouts,
   getAllHealthData,
-} from '../../services/workout/actions';
-import { WorkoutActionProps } from '../../services/workout/types';
-import { normalize } from '../../utils/tools';
-import { HomeStackScreens } from './types';
-import HomeHealth from '../../components/home/Health';
-import StyleConstants from '../../components/tools/StyleConstants';
-import { useNotifeeListener } from '../../hooks/home/notifee.hooks';
-import { useActiveWos } from '../../hooks/home/workout.hooks';
-import { useApiHooks } from '../../hooks/home/api.hooks';
-import HomeBackground from '../../components/home/Background';
+} from '../../../../services/workout/actions';
+import { WorkoutActionProps } from '../../../../services/workout/types';
+import { normalize } from '../../../../utils/tools';
+import { HomeStackScreens } from '../../types';
+import HomeHealth from './Health';
+import StyleConstants from '../../../../components/tools/StyleConstants';
+import { useNotifeeListener } from '../../../../hooks/home/notifee.hooks';
+import { useActiveWos } from '../../../../hooks/home/workout.hooks';
+import { useApiHooks } from '../../../../hooks/home/api.hooks';
+import HomeBackground from './Background';
 import { ScreenTemplate } from '@app/elements';
 import { useMemo } from 'react';
 import { Colors } from '@app/utils';
+import { HomeHeader, HomeNavBar } from './Header';
 
 interface Props {
   route: any;
