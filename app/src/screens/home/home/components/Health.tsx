@@ -7,26 +7,27 @@ import AppleHealthKit, {
   HealthValue,
 } from 'react-native-health';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
-import { HomeStackScreens } from '../../types';
+import { HomeStackParamsList, HomeStackScreens } from '../../types';
 import HealthContainer from '../../../../components/HealthDataVisual';
 import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
 import { Colors, normalize } from '@app/utils';
 import { HealthCircle } from '@app/elements';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface Props {
   healthData: HealthDataProps[];
-  navigation: any;
 }
 
-const HomeHealth = ({ healthData, navigation }: Props) => {
+const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
   const [sleepDuration, setSleepDuration] = useState('');
   const [sleepPct, setSleepPct] = useState(0);
   const d = new Date();
   const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
 
   const fetchHealthData = async () => {
     const options: HealthInputOptions = {
@@ -84,6 +85,10 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
     navigation.navigate(HomeStackScreens.Health);
   };
 
+  const onNavToEditGoalForm = () => {
+    navigation.navigate(HomeStackScreens.HealthGoalForm);
+  };
+
   return (
     <FlexBox
       flexDirection="column"
@@ -94,6 +99,14 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
         title="Health"
         RightElement={
           <FlexBox>
+            <Icon
+              icon="pencil"
+              color={Colors.white}
+              size={20}
+              onPress={onNavToEditGoalForm}
+              hitSlop={10}
+              containerStyles={{ marginRight: 10 }}
+            />
             <Icon
               icon="filter_bars"
               color={Colors.white}
