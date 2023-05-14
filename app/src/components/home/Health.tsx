@@ -12,7 +12,7 @@ import HealthContainer from '../HealthDataVisual';
 import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
-import { Colors } from '@app/utils';
+import { Colors, normalize } from '@app/utils';
 import { HealthCircle } from '@app/elements';
 
 interface Props {
@@ -105,13 +105,22 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
         }
         desc="This is today's health report. You were able to recovery fully today!"
       />
-      <FlexBox marginTop={30} marginBottom={30} justifyContent="space-between">
+      <FlexBox
+        marginTop={30}
+        marginBottom={30}
+        justifyContent="space-between"
+        marginRight={10}
+        marginLeft={10}>
         <HealthCircle
           name="Sleep"
           value={(sleepDuration || '0') + ' hrs'}
           progress={sleepPct}
           progressColor={BaseColors.blue}
+          size={normalize.width(3)}
+          circleWidth={13}
+          icon="crescent_moon"
           index={1}
+          secondary
         />
         <HealthCircle
           name="Active"
@@ -119,13 +128,10 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
           progress={0.75}
           progressColor={BaseColors.red}
           index={2}
-        />
-        <HealthCircle
-          name="Total"
-          value={(activeCals + basal).toString() + ' kcal'}
-          progress={0.75}
-          progressColor={BaseColors.green}
-          index={2}
+          size={normalize.width(3)}
+          icon="fire"
+          circleWidth={13}
+          secondary
         />
       </FlexBox>
       <HealthContainer
