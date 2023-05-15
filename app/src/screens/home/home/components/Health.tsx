@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { HealthDataProps } from '../../../../services/workout/types';
-import BaseColors from '../../../../utils/BaseColors';
+import BaseColors, { rgba } from '../../../../utils/BaseColors';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
@@ -15,6 +15,8 @@ import Icon from '@app/icons';
 import { Colors, normalize } from '@app/utils';
 import { HealthCircle } from '@app/elements';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -23,11 +25,16 @@ interface Props {
 const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
-  const [sleepDuration, setSleepDuration] = useState('');
-  const [sleepPct, setSleepPct] = useState(0);
+  const [sleepDuration, setSleepDuration] = useState(0);
   const d = new Date();
   const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const { sleepGoal, activeCaloriesGoal } = useSelector(
+    (state: ReducerProps) => ({
+      sleepGoal: state.goals.user.healths.sleep,
+      activeCaloriesGoal: state.goals.user.healths.activeCalories,
+    }),
+  );
 
   const fetchHealthData = async () => {
     const options: HealthInputOptions = {
@@ -40,10 +47,8 @@ const HomeHealth = ({ healthData }: Props) => {
 
     const sleepAmt = sleepStore.length > 0 ? sleepStore[0].value : 0;
     9;
-    setSleepDuration(sleepAmt.toString());
-    // 8 represents daily goal
-    // Should be changed in the future
-    setSleepPct(sleepAmt / 8);
+
+    setSleepDuration(sleepAmt);
 
     AppleHealthKit.getBasalEnergyBurned(
       options,
@@ -105,7 +110,7 @@ const HomeHealth = ({ healthData }: Props) => {
               size={20}
               onPress={onNavToEditGoalForm}
               hitSlop={10}
-              containerStyles={{ marginRight: 10 }}
+              containerStyles={{ marginRight: 15 }}
             />
             <Icon
               icon="filter_bars"
@@ -116,7 +121,7 @@ const HomeHealth = ({ healthData }: Props) => {
             />
           </FlexBox>
         }
-        desc="This is today's health report. You were able to recovery fully today!"
+        desc="An overview of your health today. See how you're progressing towards your goals."
       />
       <FlexBox
         marginTop={30}
@@ -126,31 +131,33 @@ const HomeHealth = ({ healthData }: Props) => {
         marginLeft={10}>
         <HealthCircle
           name="Sleep"
-          value={(sleepDuration || '0') + ' hrs'}
-          progress={sleepPct}
+          value={String(sleepDuration) + ' hrs'}
+          progress={sleepDuration / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
           size={normalize.width(3)}
           circleWidth={13}
           icon="crescent_moon"
           index={1}
           secondary
+          backgroundColor={rgba(Colors.blueRgb, 0.2)}
         />
         <HealthCircle
           name="Active"
-          value={activeCals.toString() + ' kcal'}
-          progress={0.75}
+          value={String(activeCals) + ' kcal'}
+          progress={activeCals / (activeCaloriesGoal?.goal ?? 200)}
           progressColor={BaseColors.red}
           index={2}
           size={normalize.width(3)}
           icon="fire"
           circleWidth={13}
           secondary
+          backgroundColor={rgba(Colors.redRgb, 0.2)}
         />
       </FlexBox>
       <HealthContainer
         setActiveItem={() => undefined}
         activeItem={''}
-        sleepVal={sleepDuration}
+        sleepVal={String(sleepDuration)}
         hrvVal={'50'}
         rhrVal={'80'}
         rrVal={'78.3'}

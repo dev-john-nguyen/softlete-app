@@ -7,13 +7,59 @@ import {
 import { FlexBox } from '@app/ui';
 import React, { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useDispatch, useSelector } from 'react-redux';
+import useBanner from 'src/hooks/utils/useBanner';
+import { ReducerProps, ThunkAppDispatch } from 'src/services';
+import { BannerTypes } from 'src/services/banner/types';
+import { updateHealthGoalsAsync } from 'src/services/goals/slice';
 
 const HealthGoalForm = () => {
   const [sleep, setSleep] = useState(0);
   const [activeCalories, setActiveCalories] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const { sleep: sleepGlobal, activeCalories: activeCaloriesGlobal } =
+    useSelector((state: ReducerProps) => ({
+      sleep: state.goals.user.healths.sleep,
+      activeCalories: state.goals.user.healths.activeCalories,
+    }));
+  const dispatch = useDispatch<ThunkAppDispatch>();
+  const setBanner = useBanner();
 
-  const onSave = () => {
-    console.log(sleep, activeCalories);
+  const onSave = async () => {
+    if (
+      !sleep ||
+      !activeCalories ||
+      typeof sleep !== 'number' ||
+      typeof activeCalories !== 'number'
+    ) {
+      return setBanner('Please enter a valid number.', BannerTypes.error);
+    }
+    if (
+      sleep === sleepGlobal?.goal &&
+      activeCalories === activeCaloriesGlobal?.goal
+    ) {
+      return setBanner('No changes were made to your health goals.');
+    }
+
+    if (sleep > 23) {
+      return setBanner(
+        'Please enter a valid sleep duration.',
+        BannerTypes.error,
+      );
+    }
+    setLoading(true);
+    try {
+      await dispatch(
+        updateHealthGoalsAsync({ sleep, activeCalories }),
+      ).unwrap();
+    } catch (error) {
+      console.error(error);
+      setBanner(
+        "Oops! Sorry, couldn't save your goal. Please try again.",
+        BannerTypes.error,
+      );
+    }
+    setLoading(false);
   };
 
   return (
@@ -49,7 +95,7 @@ const HealthGoalForm = () => {
         <Input
           label="Hours"
           onChangeText={numStr => setSleep(parseInt(numStr) ?? 0)}
-          defaultValue={String(activeCalories)}
+          placeholder={String(sleepGlobal?.goal ?? 0)}
           keyboardType="numeric"
         />
       </FlexBox>
@@ -69,11 +115,13 @@ const HealthGoalForm = () => {
         <Input
           label="Kcal"
           onChangeText={numStr => setActiveCalories(parseInt(numStr) ?? 0)}
-          defaultValue={String(sleep)}
+          placeholder={String(activeCaloriesGlobal?.goal ?? 0)}
           keyboardType="numeric"
         />
       </FlexBox>
-      <PrimaryButton marginTop={30}>Save</PrimaryButton>
+      <PrimaryButton marginTop={30} onPress={onSave} loading={loading}>
+        Save
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };

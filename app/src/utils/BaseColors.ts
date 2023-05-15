@@ -17,6 +17,7 @@ export default {
   lightGreen: '#b7f0cb',
   greenRbg: '18, 206, 82',
   red: '#CE1212',
+  redRgb: '206,18,18',
   medGrey: '#D9D9D9',
   lightGrey: '#E8E8E8',
   darkGrey: '#D9D9D9',

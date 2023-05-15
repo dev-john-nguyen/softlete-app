@@ -19,6 +19,7 @@ interface Props {
   circleWidth?: number;
   secondary?: boolean;
   icon?: IconOptions;
+  backgroundColor?: string;
 }
 
 const HealthProgressItem = ({
@@ -31,6 +32,7 @@ const HealthProgressItem = ({
   circleWidth: circleWidthProp,
   secondary,
   icon = 'checked',
+  backgroundColor = rgba(BaseColors.whiteRbg, 0.2),
 }: Props) => {
   const circleSize = size
     ? size
@@ -50,7 +52,7 @@ const HealthProgressItem = ({
         <ProgressCircle
           progress={progress}
           progressColor={progressColor}
-          backgroundColor={rgba(BaseColors.whiteRbg, 0.2)}
+          backgroundColor={backgroundColor}
           startAngle={0}
           cornerRadius={45}
           style={{
@@ -80,7 +82,7 @@ const HealthProgressItem = ({
       <ProgressCircle
         progress={progress}
         progressColor={progressColor}
-        backgroundColor={rgba(BaseColors.whiteRbg, 0.2)}
+        backgroundColor={backgroundColor}
         startAngle={0}
         cornerRadius={45}
         style={{
