@@ -110,6 +110,7 @@ const WoItem = ({ wo, onPress, onViewRoute }: Props) => {
               onPress={onPress}
               color={BaseColors.lightWhite}
               onViewRoute={onViewRoute}
+              disablePressIcon
             />
           )}
         </ScrollView>

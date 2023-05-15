@@ -16,6 +16,7 @@ interface Props {
   showDate?: boolean;
   onViewRoute?: () => void;
   onViewSummary?: () => void;
+  disablePressIcon?: boolean;
 }
 
 const WoAerobic = ({
@@ -25,6 +26,7 @@ const WoAerobic = ({
   showDate,
   onViewRoute,
   onViewSummary,
+  disablePressIcon,
 }: Props) => {
   const getDateAsString = () => {
     if (!healthData || !healthData.end) return '12/31/9999';
@@ -39,12 +41,14 @@ const WoAerobic = ({
           desc={getDateAsString()}
           onPress={onPress}
           color={color}
+          disablePressIcon={disablePressIcon}
         />
       )}
       <InfoListBox
         icon="clock"
         color={color}
         onPress={onPress}
+        disablePressIcon={disablePressIcon}
         desc={
           healthData
             ? (TimeConverter.convertSecondsToTimeFormat(
@@ -60,6 +64,7 @@ const WoAerobic = ({
           healthData?.disMeas ? healthData.disMeas : 'mi'
         }`}
         onPress={onPress}
+        disablePressIcon={disablePressIcon}
         color={color}
       />
 
@@ -67,6 +72,7 @@ const WoAerobic = ({
         icon="heart"
         desc={`${renderHeartRateAvg(healthData?.heartRates)} bpm`}
         onPress={onPress}
+        disablePressIcon={disablePressIcon}
         color={color}
       />
 
@@ -74,12 +80,14 @@ const WoAerobic = ({
         icon="fire"
         desc={healthData ? renderCalories(healthData.calories) : '0 kcal'}
         onPress={onPress}
+        disablePressIcon={disablePressIcon}
         color={color}
       />
 
       <InfoListBox
         icon="notebook"
         desc="View Summary"
+        disablePressIcon={disablePressIcon}
         onPress={onViewSummary}
         color={color}
       />
@@ -89,6 +97,7 @@ const WoAerobic = ({
           icon="compass"
           desc={'View Map'}
           onPress={onViewRoute}
+          disablePressIcon={disablePressIcon}
           color={color}
         />
       )}

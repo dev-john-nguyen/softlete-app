@@ -19,6 +19,7 @@ type Props = {
   marginRight?: number;
   opacity?: number;
   textTransform?: 'capitalize';
+  disablePressIcon?: boolean;
 };
 
 const InfoListBox: FC<Props> = ({
@@ -36,6 +37,7 @@ const InfoListBox: FC<Props> = ({
   marginRight,
   opacity = 1,
   textTransform,
+  disablePressIcon,
 }) => {
   if (secondary) {
     return (
@@ -68,7 +70,7 @@ const InfoListBox: FC<Props> = ({
             {desc}
           </PrimaryText>
         </FlexBox>
-        {onPress && (
+        {!disablePressIcon && onPress && (
           <FlexBox
             position="absolute"
             right={5}
@@ -125,7 +127,7 @@ const InfoListBox: FC<Props> = ({
         textTransform={textTransform}>
         {desc}
       </PrimaryText>
-      {onPress && (
+      {!disablePressIcon && onPress && (
         <FlexBox
           position="absolute"
           right={5}
