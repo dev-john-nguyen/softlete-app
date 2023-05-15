@@ -19,7 +19,7 @@ import GoOnlineModal from './modals/GoOnlineModal';
 import OverviewModal from './modals/OverviewModal';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import DataOverview from './DataOverview';
-import Home from './Home';
+import { Home } from './home';
 import EditExerciseDetails from '../exercises/EditDetails';
 import Subscribe from './Subscribe';
 import Map from './Map';
@@ -29,6 +29,7 @@ import WorkoutActivitySummary from './WorkoutActivitySummary';
 import { FlexBox } from '@app/ui';
 import GoalForm from '../exercises/GoalForm';
 import ExerciseGoal from '../exercises/exercise-goals/ExerciseGoals';
+import { HealthGoalForm } from './health-goal';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -51,6 +52,17 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.DeviceActivities}
           component={DeviceActivities}
+          options={{
+            headerTitle: '',
+            headerRight: undefined,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            gestureDirection: 'vertical',
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.HealthGoalForm}
+          component={HealthGoalForm}
           options={{
             headerTitle: '',
             headerRight: undefined,

@@ -2,14 +2,21 @@ export interface GoalsRootStateProps {
   user: {
     exercises: ExerciseGoalProps[];
     endurances: GoalProps[];
-    healths: GoalProps[];
+    healths: HealthGoalProps;
   };
 }
+
+export type HealthGoalProps = {
+  sleep?: GoalProps;
+  activeCalories?: GoalProps;
+};
 
 export enum GoalTypes {
   exercise = 'exercise',
   endurance = 'endurance',
   health = 'health',
+  sleep = 'sleep',
+  active_calories = 'active_calories',
 }
 
 export enum GoalDurationType {

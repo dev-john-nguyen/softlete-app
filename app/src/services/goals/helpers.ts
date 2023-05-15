@@ -14,7 +14,12 @@ export function formatHandlerOfGoalsResp(goals: GoalRespProps[]) {
       g => g.type === GoalTypes.exercise,
     ) as ExerciseGoalProps[],
     endurances: formattedGoals.filter(g => g.type === GoalTypes.endurance),
-    healths: formattedGoals.filter(g => g.type === GoalTypes.health),
+    healths: {
+      activeCalories: formattedGoals.filter(
+        g => g.type === GoalTypes.active_calories,
+      )[0],
+      sleep: formattedGoals.filter(g => g.type === GoalTypes.sleep)[0],
+    },
   };
 
   return userGoals;

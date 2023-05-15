@@ -6,7 +6,9 @@ import { formatHandlerOfGoalResp, formatHandlerOfGoalsResp } from './helpers';
 import {
   ExerciseGoalProps,
   GoalInitProps,
+  GoalProps,
   GoalRespProps,
+  GoalTypes,
   GoalsRootStateProps,
 } from './types';
 
@@ -14,7 +16,10 @@ const initialState: GoalsRootStateProps = {
   user: {
     exercises: [],
     endurances: [],
-    healths: [],
+    healths: {
+      activeCalories: undefined,
+      sleep: undefined,
+    },
   },
 };
 
@@ -57,6 +62,21 @@ export const fetchGoalsAsync = createAsyncThunk(
   },
 );
 
+export const updateHealthGoalsAsync = createAsyncThunk(
+  'goals/updateHealthGoalsAsync',
+  async (goal: { sleep: number; activeCalories: number }, { dispatch }) => {
+    // this should return an array of two goals ( sleep & activeCalories )
+    const { data }: { data?: GoalProps[] } = await request(
+      'POST',
+      PATHS.goals.upsert_health,
+      dispatch,
+      goal,
+    );
+    if (!data) throw new Error('Failted to update health goals');
+    return data;
+  },
+);
+
 const goalsSlice = createSlice({
   name: 'goals',
   initialState,
@@ -91,21 +111,16 @@ const goalsSlice = createSlice({
         if (index !== -1) {
           state.user.exercises.splice(index, 1);
         }
+      })
+      .addCase(updateHealthGoalsAsync.fulfilled, (state, action) => {
+        state.user.healths.sleep = action.payload.find(
+          goal => goal.type === GoalTypes.sleep,
+        );
+        state.user.healths.activeCalories = action.payload.find(
+          goal => goal.type === GoalTypes.active_calories,
+        );
       });
-    // .addCase(removeGoalAsync.fulfilled, (state, action) => {
-    //   state.goals = state.goals.filter(goal => goal._id !== action.payload);
-    // })
-    // .addCase(updateGoalAsync.fulfilled, (state, action) => {
-    //   const index = state.goals.findIndex(
-    //     goal => goal._id === action.payload.id,
-    //   );
-    //   if (index !== -1) {
-    //     state.goals[index] = action.payload;
-    //   }
-    // });
   },
 });
-
-// export const { } = goalsSlice.actions;
 
 export default goalsSlice.reducer;

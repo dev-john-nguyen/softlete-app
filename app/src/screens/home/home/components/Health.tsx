@@ -1,32 +1,40 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { HealthDataProps } from '../../services/workout/types';
-import BaseColors from '../../utils/BaseColors';
+import { HealthDataProps } from '../../../../services/workout/types';
+import BaseColors, { rgba } from '../../../../utils/BaseColors';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
 } from 'react-native-health';
-import SectionHeader from './components/SectionHeader';
-import { HomeStackScreens } from '../../screens/home/types';
-import HealthContainer from '../HealthDataVisual';
+import SectionHeader from '../../../../components/home/components/SectionHeader';
+import { HomeStackParamsList, HomeStackScreens } from '../../types';
+import HealthContainer from '../../../../components/HealthDataVisual';
 import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
-import { Colors } from '@app/utils';
+import { Colors, normalize } from '@app/utils';
 import { HealthCircle } from '@app/elements';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
 
 interface Props {
   healthData: HealthDataProps[];
-  navigation: any;
 }
 
-const HomeHealth = ({ healthData, navigation }: Props) => {
+const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
-  const [sleepDuration, setSleepDuration] = useState('');
-  const [sleepPct, setSleepPct] = useState(0);
+  const [sleepDuration, setSleepDuration] = useState(0);
   const d = new Date();
   const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const { sleepGoal, activeCaloriesGoal } = useSelector(
+    (state: ReducerProps) => ({
+      sleepGoal: state.goals.user.healths.sleep,
+      activeCaloriesGoal: state.goals.user.healths.activeCalories,
+    }),
+  );
 
   const fetchHealthData = async () => {
     const options: HealthInputOptions = {
@@ -39,10 +47,8 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
 
     const sleepAmt = sleepStore.length > 0 ? sleepStore[0].value : 0;
     9;
-    setSleepDuration(sleepAmt.toString());
-    // 8 represents daily goal
-    // Should be changed in the future
-    setSleepPct(sleepAmt / 8);
+
+    setSleepDuration(sleepAmt);
 
     AppleHealthKit.getBasalEnergyBurned(
       options,
@@ -84,6 +90,10 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
     navigation.navigate(HomeStackScreens.Health);
   };
 
+  const onNavToEditGoalForm = () => {
+    navigation.navigate(HomeStackScreens.HealthGoalForm);
+  };
+
   return (
     <FlexBox
       flexDirection="column"
@@ -95,6 +105,14 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
         RightElement={
           <FlexBox>
             <Icon
+              icon="pencil"
+              color={Colors.white}
+              size={20}
+              onPress={onNavToEditGoalForm}
+              hitSlop={10}
+              containerStyles={{ marginRight: 15 }}
+            />
+            <Icon
               icon="filter_bars"
               color={Colors.white}
               size={20}
@@ -103,35 +121,43 @@ const HomeHealth = ({ healthData, navigation }: Props) => {
             />
           </FlexBox>
         }
-        desc="This is today's health report. You were able to recovery fully today!"
+        desc="An overview of your health today. See how you're progressing towards your goals."
       />
-      <FlexBox marginTop={30} marginBottom={30} justifyContent="space-between">
+      <FlexBox
+        marginTop={30}
+        marginBottom={30}
+        justifyContent="space-between"
+        marginRight={10}
+        marginLeft={10}>
         <HealthCircle
           name="Sleep"
-          value={(sleepDuration || '0') + ' hrs'}
-          progress={sleepPct}
+          value={String(sleepDuration) + ' hrs'}
+          progress={sleepDuration / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
+          size={normalize.width(3)}
+          circleWidth={13}
+          icon="crescent_moon"
           index={1}
+          secondary
+          backgroundColor={rgba(Colors.blueRgb, 0.2)}
         />
         <HealthCircle
           name="Active"
-          value={activeCals.toString() + ' kcal'}
-          progress={0.75}
+          value={String(activeCals) + ' kcal'}
+          progress={activeCals / (activeCaloriesGoal?.goal ?? 200)}
           progressColor={BaseColors.red}
           index={2}
-        />
-        <HealthCircle
-          name="Total"
-          value={(activeCals + basal).toString() + ' kcal'}
-          progress={0.75}
-          progressColor={BaseColors.green}
-          index={2}
+          size={normalize.width(3)}
+          icon="fire"
+          circleWidth={13}
+          secondary
+          backgroundColor={rgba(Colors.redRgb, 0.2)}
         />
       </FlexBox>
       <HealthContainer
         setActiveItem={() => undefined}
         activeItem={''}
-        sleepVal={sleepDuration}
+        sleepVal={String(sleepDuration)}
         hrvVal={'50'}
         rhrVal={'80'}
         rrVal={'78.3'}

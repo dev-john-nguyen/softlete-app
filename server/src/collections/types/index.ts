@@ -39,6 +39,8 @@ export enum GoalTypes {
   exercise = 'exercise',
   endurance = 'endurance',
   health = 'health',
+  sleep = 'sleep',
+  active_calories = 'active_calories',
 }
 
 export enum GoalDurationType {
