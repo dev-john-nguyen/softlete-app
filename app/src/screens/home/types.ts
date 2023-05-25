@@ -37,7 +37,6 @@ export type HomeStackParamsList = {
   WorkoutModal: undefined;
   GoalFormModal: { exercise: ExerciseProps; goal?: ExerciseGoalProps };
   GoOnlineModal: undefined;
-  OverviewModal: undefined;
   DataOverview: undefined;
   Home: undefined;
   Subscribe: undefined;
@@ -62,7 +61,6 @@ export enum HomeStackScreens {
   GoalFormModal = 'GoalFormModal',
   ExerciseGoal = 'ExerciseGoals',
   GoOnlineModal = 'GoOnlineModal',
-  OverviewModal = 'OverviewModal',
   UploadExerciseVideo = 'UploadExerciseVideo',
   DataOverview = 'DataOverview',
   EditExerciseDetails = 'EditExerciseDetails',

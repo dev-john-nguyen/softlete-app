@@ -16,7 +16,6 @@ import BaseColors from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
 import WorkoutModal from './modals/WorkoutModal';
 import GoOnlineModal from './modals/GoOnlineModal';
-import OverviewModal from './modals/OverviewModal';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import DataOverview from './DataOverview';
 import { Home } from './home';
@@ -272,17 +271,6 @@ function HomeStack(parentProps: any) {
             headerTransparent: true,
             presentation: 'modal',
             gestureEnabled: false,
-          }}
-        />
-
-        <Tab.Screen
-          name={HomeStackScreens.OverviewModal}
-          component={OverviewModal}
-          options={{
-            title: '',
-            headerRight: undefined,
-            headerTransparent: true,
-            presentation: 'modal',
           }}
         />
       </Tab.Group>
