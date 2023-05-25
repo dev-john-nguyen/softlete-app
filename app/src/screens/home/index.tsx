@@ -29,6 +29,7 @@ import { FlexBox } from '@app/ui';
 import GoalForm from '../exercises/GoalForm';
 import ExerciseGoal from '../exercises/exercise-goals/ExerciseGoals';
 import { HealthGoalForm } from './health-goal';
+import { EnduranceAnalytics } from './endurance';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -51,6 +52,17 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.DeviceActivities}
           component={DeviceActivities}
+          options={{
+            headerTitle: '',
+            headerRight: undefined,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            gestureDirection: 'vertical',
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.EnduranceAnalytics}
+          component={EnduranceAnalytics}
           options={{
             headerTitle: '',
             headerRight: undefined,

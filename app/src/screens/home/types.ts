@@ -46,6 +46,7 @@ export type HomeStackParamsList = {
   WorkoutActivitySummary: undefined;
   ExerciseGoals: undefined;
   HealthGoalForm: undefined;
+  EnduranceAnalytics: undefined;
 };
 
 export enum HomeStackScreens {
@@ -71,6 +72,7 @@ export enum HomeStackScreens {
   DeviceActivities = 'DeviceActivities',
   WorkoutActivitySummary = 'WorkoutActivitySummary',
   HealthGoalForm = 'HealthGoalForm',
+  EnduranceAnalytics = 'EnduranceAnalytics',
 }
 
 export enum HomeStackScreenTitle {

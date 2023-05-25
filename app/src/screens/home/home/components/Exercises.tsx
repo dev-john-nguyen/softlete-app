@@ -31,6 +31,9 @@ const HomeExercises = ({
   const onNavToExercise = () =>
     selectedEx && navigate(HomeStackScreens.Exercise, { exercise: selectedEx });
 
+  const onNavToEnduranceAnalytics = () =>
+    navigate(HomeStackScreens.EnduranceAnalytics);
+
   return (
     <FlexBox column screenWidth>
       <FlexBox column paddingLeft={20} paddingRight={20}>
@@ -40,7 +43,15 @@ const HomeExercises = ({
           RightElement={
             <FlexBox>
               <Icon
-                icon="dumb_bell"
+                icon="cardio"
+                size={20}
+                color={Colors.white}
+                onPress={onNavToEnduranceAnalytics}
+                hitSlop={10}
+                containerStyles={{ marginRight: 10 }}
+              />
+              <Icon
+                icon="kettlebell"
                 size={20}
                 color={Colors.white}
                 onPress={onNavigateToSearchExercises}

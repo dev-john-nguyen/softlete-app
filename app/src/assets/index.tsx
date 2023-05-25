@@ -62,8 +62,12 @@ import Target from './Target';
 import { default as Filter } from './FilterSvg';
 import AddRing from './AddRing';
 import PauseSvg from './PauseSvg';
+import Cardio from './Cardio';
+import KettleBell from './KettleBell';
 
 const Icons = {
+  kettlebell: (props: any) => <KettleBell {...props} />,
+  cardio: (props: any) => <Cardio {...props} />,
   chevron: (props: any) => <Chevron {...props} />,
   checked: (props: any) => <Checked {...props} />,
   person: (props: any) => <Person {...props} />,

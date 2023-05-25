@@ -1,23 +1,29 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
 
-const svg = (strokeColor: string) => `<svg viewBox="0 0 397 512" xmlns="http://www.w3.org/2000/svg">
-<path d="M109.209 126.06L109.208 126.06C99.5195 130.16 90.1836 134.886 81.2266 140.218C80.1447 133.741 79.5938 127.157 79.5938 120.488C79.5938 54.8792 132.973 1.5 198.582 1.5C264.191 1.5 317.57 54.8792 317.57 120.488C317.57 127.157 317.019 133.741 315.937 140.218C306.98 134.886 297.645 130.16 287.956 126.06L287.955 126.06C280.583 122.942 273.092 120.241 265.502 117.927C264.15 82.175 234.663 53.5 198.582 53.5C162.501 53.5 133.019 82.1747 131.666 117.927C124.071 120.238 116.581 122.942 109.209 126.06Z" stroke=${strokeColor} stroke-width="10"/>
-<path d="M198.582 141.008C307.152 141.008 395.164 229.02 395.164 337.59C395.164 412.272 353.512 477.228 292.171 510.5H104.993C43.6486 477.228 2 412.272 2 337.59C2 229.02 90.012 141.008 198.582 141.008Z" stroke=${strokeColor} stroke-width="10"/>
-</svg>`
-
+const svg = `<svg viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 27H17C19.4 25.2 21 22.3 21 19C21 13.5 16.5 9 11 9C5.5 9 1 13.5 1 19C1 22.3 2.6 25.2 5 27Z"  stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M4 11.9V8C4 4.2 7.1 1 11 1C14.8 1 18 4.1 18 8V11.9"  stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.2998 14C15.3998 14.7 16.2998 15.9 16.6998 17.2"  stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
 
 interface Props {
-    strokeColor: string;
-    fillColor: string;
+  size?: number;
+  color: string;
 }
 
-class KettleBell extends React.Component<Props, {}> {
-    render() {
-        return (
-            <SvgXml xml={svg(this.props.strokeColor)} width='100%' height='100%' fill={this.props.fillColor} />
-        )
-    }
+class KettleBell extends React.Component<Props> {
+  render() {
+    return (
+      <SvgXml
+        xml={svg}
+        width={this.props.size || '100%'}
+        height={this.props.size || '100%'}
+        stroke={this.props.color}
+      />
+    );
+  }
 }
 
 export default KettleBell;
