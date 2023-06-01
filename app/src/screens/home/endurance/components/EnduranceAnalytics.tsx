@@ -1,13 +1,62 @@
-import { PrimaryText, ScreenTemplate } from '@app/elements';
+import { PickerButton, PrimaryText, ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
-import React from 'react';
+import React, { useState } from 'react';
+import { DateSelection } from 'src/components/analytics';
+import {
+  DEFAULT_DATES,
+  DateSelectionTypes,
+  SelectedDateProps,
+} from 'src/components/analytics/types';
+import { EnduranceOptions, EnduranceFilterOptions } from '../types';
+import { useEnduranceAnalytics } from '../hook';
+
+enum ActivePickers {
+  EnduranceType,
+  FilterType,
+}
 
 const EnduranceAnalytics = () => {
+  const [enduranceType, setEnduranceType] = useState('');
+  const [filterType, setFilterType] = useState('');
+  const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
+    DEFAULT_DATES.start,
+    DEFAULT_DATES.end,
+  ]);
+  const [selectionType, setSelectionType] = useState(DateSelectionTypes.range);
+  const [activePickerType, setActivePickerType] = useState<ActivePickers>();
+  const { data, isFetching, refetch } = useEnduranceAnalytics(
+    enduranceType,
+    selectionType,
+    dateFilters,
+  );
+
+  const pickerOptions =
+    activePickerType === ActivePickers.EnduranceType
+      ? EnduranceOptions
+      : EnduranceFilterOptions;
+
+  console.log(data);
+
   return (
     <ScreenTemplate
       isBackVisible
+      pickerOptions={pickerOptions}
+      isPickerOpen={activePickerType !== undefined}
+      onPickerClose={() => setActivePickerType(undefined)}
+      pickerValue={
+        activePickerType === ActivePickers.EnduranceType
+          ? enduranceType
+          : filterType
+      }
+      onPickerChangeValue={value => {
+        if (activePickerType === ActivePickers.EnduranceType) {
+          setEnduranceType(value);
+        } else {
+          setFilterType(value);
+        }
+      }}
       rotateBack="-90deg"
       leftContentFlex={0}
       middleContentFlex={1}
@@ -21,7 +70,36 @@ const EnduranceAnalytics = () => {
           <Icon icon="target" color={Colors.white} size={20} />
         </FlexBox>
       }>
-      <FlexBox></FlexBox>
+      <FlexBox column marginRight={15} marginLeft={15}>
+        <PickerButton
+          valueOpacity={enduranceType ? 1 : 0.5}
+          containerStyles={{ marginTop: 10 }}
+          arrow
+          arrowDirection="down"
+          onPress={() => setActivePickerType(ActivePickers.EnduranceType)}>
+          {enduranceType
+            ? EnduranceOptions.find(o => o.value === enduranceType)?.label
+            : 'Select Endurance Type'}
+        </PickerButton>
+        <PickerButton
+          valueOpacity={filterType ? 1 : 0.5}
+          marginBottom={0}
+          arrow
+          arrowDirection="down"
+          onPress={() => setActivePickerType(ActivePickers.FilterType)}>
+          {filterType
+            ? EnduranceFilterOptions.find(o => o.value === filterType)?.label
+            : 'Select Filter Type'}
+        </PickerButton>
+        <DateSelection
+          dateFilters={dateFilters}
+          setDateFilters={setDateFilters}
+          onDatesSubmission={refetch}
+          selectionType={selectionType}
+          setSelectionType={setSelectionType}
+          isFetching={false}
+        />
+      </FlexBox>
     </ScreenTemplate>
   );
 };

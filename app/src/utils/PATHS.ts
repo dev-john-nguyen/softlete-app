@@ -1,3 +1,4 @@
+import { DateSelectionTypes } from 'src/components/analytics/types';
 import { Categories } from '../services/exercises/types';
 
 export default {
@@ -114,6 +115,17 @@ export default {
       healthData: 'api/workouts/update/batch/health-data',
     },
     complete: 'api/workouts/complete',
+    getHealthAnalytics: (
+      enduranceType: any,
+      dateFilterType: DateSelectionTypes,
+      dates: string[],
+    ) => {
+      let datesArrStr = ``;
+      dates.forEach(date => {
+        datesArrStr += `dates=${date}&`;
+      });
+      return `api/workouts/get/health-analytics?enduranceType=${enduranceType}&dateFilterType=${dateFilterType}&${datesArrStr}`;
+    },
     getExerciseData: (
       FromDate: string,
       toDate: string,

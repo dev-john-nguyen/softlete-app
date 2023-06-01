@@ -20,6 +20,7 @@ type Props = {
   isActive?: boolean;
   textTransform?: 'capitalize';
   icon?: IconOptions;
+  valueOpacity?: number;
 };
 
 const PickerButton: React.FC<Props> = props => {
@@ -46,6 +47,7 @@ const PickerButton: React.FC<Props> = props => {
         borderBottomColor={BaseColors.lightGrey}
         onPress={props.disabled ? undefined : props.onPress}>
         <PrimaryText
+          opacity={props.valueOpacity ?? 1}
           variant="secondary"
           size="small"
           textTransform={props.textTransform}>
@@ -57,6 +59,7 @@ const PickerButton: React.FC<Props> = props => {
             size={12}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}
+            containerStyles={{ opacity: props.valueOpacity ?? 1 }}
           />
         )}
         {props.icon && (

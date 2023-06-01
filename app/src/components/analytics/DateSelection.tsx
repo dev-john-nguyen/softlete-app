@@ -129,7 +129,7 @@ const DateSelection = ({
                     </PrimaryButton>
                   )}
                   <FlexBox
-                    width={20}
+                    width={10}
                     height={2}
                     marginRight={10}
                     marginLeft={10}

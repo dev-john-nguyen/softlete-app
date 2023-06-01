@@ -37,6 +37,7 @@ const WorkoutHealthData = new mongoose.Schema(
     },
     workoutUid: {
       type: mongoose.Types.ObjectId,
+      ref: 'Workout',
       required: true,
       unqiue: true,
     },
