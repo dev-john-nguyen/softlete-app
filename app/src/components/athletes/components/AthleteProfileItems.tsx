@@ -13,7 +13,7 @@ import { FriendProps } from '../../../services/user/types';
 import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
 import BaseColors from '../../../utils/BaseColors';
 import StyleConstants from '../../tools/StyleConstants';
-import { convertMsToTime } from '../../../utils/format';
+import { convertTimeToFormatTime } from '../../../utils/format';
 import AthleteProfileItem from './AthleteProfileItem';
 
 interface Props {
@@ -85,7 +85,7 @@ const AthletProfileItems = ({
       />
       <AthleteProfileItem
         label="Time"
-        value={convertMsToTime(dur)}
+        value={convertTimeToFormatTime(dur, undefined, 'sec') as string}
         svg={<ClockSvg fillColor={BaseColors.primary} />}
       />
       <AthleteProfileItem

@@ -51,15 +51,21 @@ export const renderHeartRateAvg = (heartRates?: number[]) => {
   return 0;
 };
 
-export const convertMsToTime = (msec: number, output?: 'string' | 'minute') => {
-  if (output === 'minute') return msec / 60000;
+export const convertTimeToFormatTime = (
+  value: number,
+  output?: 'string' | 'minute',
+  type: 'ms' | 'sec' = 'ms',
+) => {
+  let v = type === 'ms' ? value : value * 1000;
 
-  const hh = Math.floor(msec / 1000 / 60 / 60);
-  msec -= hh * 1000 * 60 * 60;
-  const mm = Math.floor(msec / 1000 / 60);
-  msec -= mm * 1000 * 60;
-  const ss = Math.floor(msec / 1000);
-  msec -= ss * 1000;
+  if (output === 'minute') return v / 60000;
+
+  const hh = Math.floor(v / 1000 / 60 / 60);
+  v -= hh * 1000 * 60 * 60;
+  const mm = Math.floor(v / 1000 / 60);
+  v -= mm * 1000 * 60;
+  const ss = Math.floor(v / 1000);
+  v -= ss * 1000;
 
   if (hh > 0) {
     return hh + '.' + mm + ' hrs';

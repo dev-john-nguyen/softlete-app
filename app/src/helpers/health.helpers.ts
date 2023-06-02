@@ -6,7 +6,7 @@ import AppleHealthKit, {
   HealthActivity,
   WorkoutRouteQueryResults,
 } from 'react-native-health';
-import { convertMsToTime } from '../utils/format';
+import { convertTimeToFormatTime } from '../utils/format';
 import { DateValueProps, HealthDataProps } from '../services/workout/types';
 
 export enum SleepValueProps {
@@ -180,7 +180,7 @@ export const filerSleepSamples = async (startDate: Date, endDate: Date) => {
 
       if (diffSamples > 3600000 * 6) {
         //greater than 6 hours assume new sleep cycle
-        const time = convertMsToTime(totalSleep) as string;
+        const time = convertTimeToFormatTime(totalSleep) as string;
         const sleepAmt = parseFloat(time.split(' ')[0]);
         sleepStore.push({
           value: sleepAmt ? sleepAmt : 0,
@@ -266,7 +266,7 @@ export const getSleepDailyAmts = async (startDate: Date, endDate: Date) => {
 
     if (diffSamples > 3600000 * 6) {
       //greater than 6 hours assume new sleep cycle
-      const time = convertMsToTime(totalSleep) as string;
+      const time = convertTimeToFormatTime(totalSleep) as string;
       const sleepAmt = parseFloat(time.split(' ')[0]);
       sleepStore.push({
         value: sleepAmt ? sleepAmt : 0,
