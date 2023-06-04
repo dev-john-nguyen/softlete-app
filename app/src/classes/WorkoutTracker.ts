@@ -37,9 +37,14 @@ class WorkoutTracker {
   public coordinates: LatLng[] = [];
   public healthData: HealthDataProps | undefined;
 
+  constructor(workoutId?: string) {
+    this.workoutId = workoutId;
+  }
+
   initializeHealthData(healthData: HealthDataProps) {
     this.healthData = healthData;
     this.calculateAveragePace();
+    // not sure why I need this? This doesn't make sense
     this.workoutId = healthData.activityId;
     if (healthData.heartRates) {
       this.statistics.averageHeartRate = mean(this.healthData.heartRates || []);
@@ -53,9 +58,14 @@ class WorkoutTracker {
     this.statistics.averageAltitude = mean(this.getAltitudes());
   }
 
-  getDate() {
+  getDate(formatType = '/', formatOrder = 'd', showYear = true) {
     if (!this.healthData) return '12/31/9999';
-    return DateTools.convertUTCStrToLocalStr(this.healthData.date, '/');
+    return DateTools.convertUTCStrToLocalStr(
+      this.healthData.date,
+      formatType,
+      formatOrder,
+      showYear,
+    );
   }
 
   getAltitudes() {
@@ -70,7 +80,7 @@ class WorkoutTracker {
     const duration = TimeConverter.convertSecondsToTimeFormat(
       this.healthData.duration,
     );
-    const distance = `${renderDistance(this.healthData.distance)} miles`;
+    const distance = `${renderDistance(this.healthData.distance)} mi`;
     const averageAltitude = `${
       this.statistics.averageAltitude.toFixed(2) || 0
     } m`;

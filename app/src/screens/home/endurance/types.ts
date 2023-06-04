@@ -1,5 +1,9 @@
 import { PickerOptionProp } from 'src/components/elements/Picker';
-import { HealthDataProps, WorkoutTypes } from 'src/services/workout/types';
+import {
+  HealthDataProps,
+  WorkoutProps,
+  WorkoutTypes,
+} from 'src/services/workout/types';
 
 export const EnduranceOptions: PickerOptionProp[] = [
   {
@@ -18,25 +22,32 @@ export const EnduranceOptions: PickerOptionProp[] = [
     })),
 ];
 
+export enum EnduranceFilterValues {
+  pace = 'pace',
+  distance = 'distance',
+  duration = 'duration',
+  null = '',
+}
+
 export const EnduranceFilterOptions: PickerOptionProp[] = [
   {
     value: '',
     label: '',
   },
   {
-    value: 'pace',
+    value: EnduranceFilterValues.pace,
     label: 'Pace',
   },
   {
-    value: 'distance',
+    value: EnduranceFilterValues.distance,
     label: 'Distance',
   },
   {
-    value: 'duration',
+    value: EnduranceFilterValues.duration,
     label: 'Duration',
   },
 ];
 
 export interface HealthDataAnalytics extends HealthDataProps {
-  workout: string;
+  workout: WorkoutProps;
 }

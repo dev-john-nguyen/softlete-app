@@ -9,8 +9,13 @@ import {
   DateSelectionTypes,
   SelectedDateProps,
 } from 'src/components/analytics/types';
-import { EnduranceOptions, EnduranceFilterOptions } from '../types';
+import {
+  EnduranceOptions,
+  EnduranceFilterOptions,
+  EnduranceFilterValues,
+} from '../types';
 import { useEnduranceAnalytics } from '../hook';
+import AnalyticsVisuals from './AnalyticsVisuals';
 
 enum ActivePickers {
   EnduranceType,
@@ -19,7 +24,9 @@ enum ActivePickers {
 
 const EnduranceAnalytics = () => {
   const [enduranceType, setEnduranceType] = useState('');
-  const [filterType, setFilterType] = useState('');
+  const [filterType, setFilterType] = useState<EnduranceFilterValues>(
+    EnduranceFilterValues.null,
+  );
   const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
     DEFAULT_DATES.start,
     DEFAULT_DATES.end,
@@ -37,8 +44,6 @@ const EnduranceAnalytics = () => {
       ? EnduranceOptions
       : EnduranceFilterOptions;
 
-  console.log(data);
-
   return (
     <ScreenTemplate
       isBackVisible
@@ -54,7 +59,7 @@ const EnduranceAnalytics = () => {
         if (activePickerType === ActivePickers.EnduranceType) {
           setEnduranceType(value);
         } else {
-          setFilterType(value);
+          setFilterType(value as EnduranceFilterValues);
         }
       }}
       rotateBack="-90deg"
@@ -100,6 +105,7 @@ const EnduranceAnalytics = () => {
           isFetching={false}
         />
       </FlexBox>
+      <AnalyticsVisuals data={data} filterType={filterType} />
     </ScreenTemplate>
   );
 };
