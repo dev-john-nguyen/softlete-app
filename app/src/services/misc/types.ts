@@ -20,11 +20,11 @@ export type AnalyticalDataProps<T> = {
   data: T;
 };
 
-export interface AnalyticsProps<T = WorkoutExerciseDataProps> {
+export interface AnalyticsProps {
   exerciseUid: string;
   exercise?: ExerciseProps;
   analytics?: ExercisesAnalyticsProps;
-  data: AnalyticalDataProps<T>[];
+  data: AnalyticalDataProps<WorkoutExerciseDataProps>[];
 }
 
 export interface ExercisesAnalyticsProps {

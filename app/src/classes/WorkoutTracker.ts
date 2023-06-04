@@ -30,6 +30,8 @@ class WorkoutTracker {
   private locations: LocationValue[] = [];
   private currentMile = { distance: 0, duration: 0, averageAltitude: 0 };
   public averagePace = 'N/A';
+  public averagePaceInSec = 0;
+  public averagePaceInMin = 0;
   public statistics: StatisticsProps = {
     averageAltitude: 0,
     averageHeartRate: 0,
@@ -178,7 +180,8 @@ class WorkoutTracker {
     // Calculate the number of minutes and seconds
     const minutes = Math.floor(paceInSeconds / 60);
     const seconds = Math.round(paceInSeconds % 60);
-
+    this.averagePaceInMin = minutes;
+    this.averagePaceInSec = seconds;
     // Return the pace in the format of minutes:seconds
     this.averagePace = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
