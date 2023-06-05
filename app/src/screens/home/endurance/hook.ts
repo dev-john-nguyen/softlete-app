@@ -34,7 +34,6 @@ export const useEnduranceAnalytics = (
     },
     {
       enabled: false,
-      cacheTime: 0,
     },
   );
 

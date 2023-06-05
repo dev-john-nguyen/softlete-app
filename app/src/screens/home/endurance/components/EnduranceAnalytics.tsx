@@ -78,6 +78,7 @@ const EnduranceAnalytics = () => {
       <FlexBox column marginRight={15} marginLeft={15}>
         <PickerButton
           valueOpacity={enduranceType ? 1 : 0.5}
+          marginBottom={5}
           containerStyles={{ marginTop: 10 }}
           arrow
           arrowDirection="down"
@@ -86,9 +87,18 @@ const EnduranceAnalytics = () => {
             ? EnduranceOptions.find(o => o.value === enduranceType)?.label
             : 'Select Endurance Type'}
         </PickerButton>
+        <DateSelection
+          dateFilters={dateFilters}
+          setDateFilters={setDateFilters}
+          onDatesSubmission={refetch}
+          selectionType={selectionType}
+          setSelectionType={setSelectionType}
+          isFetching={isFetching}
+        />
         <PickerButton
           valueOpacity={filterType ? 1 : 0.5}
           marginBottom={0}
+          containerStyles={{ marginTop: 20 }}
           arrow
           arrowDirection="down"
           onPress={() => setActivePickerType(ActivePickers.FilterType)}>
@@ -96,14 +106,6 @@ const EnduranceAnalytics = () => {
             ? EnduranceFilterOptions.find(o => o.value === filterType)?.label
             : 'Select Filter Type'}
         </PickerButton>
-        <DateSelection
-          dateFilters={dateFilters}
-          setDateFilters={setDateFilters}
-          onDatesSubmission={refetch}
-          selectionType={selectionType}
-          setSelectionType={setSelectionType}
-          isFetching={false}
-        />
       </FlexBox>
       <AnalyticsVisuals data={data} filterType={filterType} />
     </ScreenTemplate>

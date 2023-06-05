@@ -61,6 +61,7 @@ const CustomLineChart = ({
       onDataPointClick={props => setActiveDot(props.index)}
       fromZero
       widthDots
+      paddingRight={10}
       {...chartLayout}
     />
   );
