@@ -2,22 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { FlexBox } from '@app/ui';
 import _ from 'lodash';
-import { Constants, TimeConverter, renderDistance } from '@app/utils';
+import { Constants } from '@app/utils';
 import { ChartBanner, LineChartGraph } from '@app/elements';
 import Empty from 'src/components/analytics/Empty';
-import { EnduranceFilterValues } from '../types';
-
-const convertSecondsToPace = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
-
-  const formattedHours = hours > 0 ? hours.toString() + ':' : '';
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = secs.toString().padStart(2, '0');
-
-  return `${formattedHours}${formattedMinutes}:${formattedSeconds}`;
-};
 
 type DataProps = {
   value: number;
@@ -31,14 +18,12 @@ interface CustomLineChartProps {
     width: number;
     height: number;
   };
-  filterType: EnduranceFilterValues;
 }
 
 const CustomLineChart = ({
   data,
   dates,
   chartLayout,
-  filterType,
 }: CustomLineChartProps) => {
   const [activeDot, setActiveDot] = useState<number | undefined>();
 
@@ -76,7 +61,6 @@ const CustomLineChart = ({
       onDataPointClick={props => setActiveDot(props.index)}
       fromZero
       widthDots
-      paddingRight={20}
       {...chartLayout}
     />
   );
@@ -85,10 +69,9 @@ const CustomLineChart = ({
 interface Props {
   data: DataProps[];
   dates: Date[];
-  filterType: EnduranceFilterValues;
 }
 
-const Graph = ({ dates, data, filterType }: Props) => {
+const Graph = ({ dates, data }: Props) => {
   const [chartLayout, setChartLayout] = useState<{
     width: number;
     height: number;
@@ -100,14 +83,13 @@ const Graph = ({ dates, data, filterType }: Props) => {
   };
 
   return (
-    <FlexBox flex={1} onLayout={getChartLayoutHandler}>
+    <FlexBox
+      flex={1}
+      onLayout={getChartLayoutHandler}
+      marginRight={20}
+      marginLeft={5}>
       {data.length > 0 && chartLayout ? (
-        <CustomLineChart
-          data={data}
-          dates={dates}
-          chartLayout={chartLayout}
-          filterType={filterType}
-        />
+        <CustomLineChart data={data} dates={dates} chartLayout={chartLayout} />
       ) : (
         <Empty />
       )}

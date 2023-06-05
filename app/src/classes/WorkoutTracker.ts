@@ -1,9 +1,4 @@
-import {
-  renderDistance,
-  TimeConverter,
-  DateTools,
-  convertSecondsToPace,
-} from '@app/utils';
+import { renderDistance, TimeConverter, DateTools } from '@app/utils';
 import { getDistance } from 'geolib';
 import mean from 'lodash/mean';
 import { LocationValue } from 'react-native-health';
@@ -11,6 +6,22 @@ import { LatLng } from 'react-native-maps';
 import { HealthDataProps } from 'src/services/workout/types';
 import { MarkerProps } from 'src/types/route/route.types';
 import BaseColors from 'src/utils/BaseColors';
+
+const convertSecondsToPace = (seconds: number, withLabel = true) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  const formattedHours = hours.toString();
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = secs.toString().padStart(2, '0');
+
+  if (formattedHours !== '0') {
+    return `${formattedHours}:${formattedMinutes}` + (withLabel ? ' hr' : '');
+  }
+
+  return `${formattedMinutes}:${formattedSeconds}` + (withLabel ? ' min' : '');
+};
 
 type MileProps = {
   pace: number;

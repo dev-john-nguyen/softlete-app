@@ -70,9 +70,7 @@ const DataTable = ({ data, type = DataType.workout }: Props) => {
             </PrimaryText>
             <PrimaryText flex={1}>{formatted?.duration}</PrimaryText>
             <PrimaryText flex={0.8}>{formatted?.distance}</PrimaryText>
-            <PrimaryText flex={0.8}>
-              {healthWorkout.averagePace} min
-            </PrimaryText>
+            <PrimaryText flex={0.8}>{healthWorkout.averagePace}</PrimaryText>
           </FlexBox>
         );
       });

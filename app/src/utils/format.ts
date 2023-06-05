@@ -75,17 +75,3 @@ export const convertTimeToFormatTime = (
     return ss + ' secs';
   }
 };
-
-export const convertSecondsToPace = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
-
-  const formattedHours = hours.toString();
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = secs.toString().padStart(2, '0');
-
-  return `${
-    formattedHours ? formattedHours + ':' : ''
-  }${formattedMinutes}:${formattedSeconds}`;
-};

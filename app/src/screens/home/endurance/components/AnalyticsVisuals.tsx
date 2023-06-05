@@ -86,7 +86,6 @@ const AnalyticsVisuals: React.FC<Props> = ({ data: dataProp, filterType }) => {
           <Graph
             dates={graphData.map(d => d.date)}
             data={graphData}
-            filterType={filterType}
             key="analytics-graph"
           />,
         ]}
