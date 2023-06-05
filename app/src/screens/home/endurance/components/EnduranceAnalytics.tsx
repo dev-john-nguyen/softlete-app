@@ -16,6 +16,7 @@ import {
 } from '../types';
 import { useEnduranceAnalytics } from '../hook';
 import AnalyticsVisuals from './AnalyticsVisuals';
+import useBanner from 'src/hooks/utils/useBanner';
 
 enum ActivePickers {
   EnduranceType,
@@ -25,7 +26,7 @@ enum ActivePickers {
 const EnduranceAnalytics = () => {
   const [enduranceType, setEnduranceType] = useState('');
   const [filterType, setFilterType] = useState<EnduranceFilterValues>(
-    EnduranceFilterValues.null,
+    EnduranceFilterValues.distance,
   );
   const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
     DEFAULT_DATES.start,
@@ -38,6 +39,14 @@ const EnduranceAnalytics = () => {
     selectionType,
     dateFilters,
   );
+  const setBanner = useBanner();
+
+  const onDatesSubmission = () => {
+    if (enduranceType) {
+      return refetch();
+    }
+    setBanner('Please select an endurance type!');
+  };
 
   const pickerOptions =
     activePickerType === ActivePickers.EnduranceType
@@ -90,7 +99,7 @@ const EnduranceAnalytics = () => {
         <DateSelection
           dateFilters={dateFilters}
           setDateFilters={setDateFilters}
-          onDatesSubmission={refetch}
+          onDatesSubmission={onDatesSubmission}
           selectionType={selectionType}
           setSelectionType={setSelectionType}
           isFetching={isFetching}

@@ -26,7 +26,6 @@ export enum EnduranceFilterValues {
   pace = 'pace',
   distance = 'distance',
   duration = 'duration',
-  null = '',
 }
 
 export const EnduranceFilterOptions: PickerOptionProp[] = [
