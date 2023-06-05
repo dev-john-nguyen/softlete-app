@@ -1,59 +1,23 @@
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { Colors, DateTools, StyleConstants, rgba } from '@app/utils';
-import React, { FC, useMemo } from 'react';
+import { Colors, StyleConstants, rgba } from '@app/utils';
+import React, { FC } from 'react';
 import { ScrollView } from 'react-native';
 import Empty from 'src/components/analytics/Empty';
-import { AnalyticalDataProps } from 'src/services/misc/types';
-import { HealthDataProps } from 'src/services/workout/types';
-import { EnduranceFilterValues } from '../types';
-import WorkoutTracker from 'src/classes/WorkoutTracker';
 
-type Props = {
-  data: AnalyticalDataProps<HealthDataProps>[];
-  filterType: EnduranceFilterValues;
+type DataProps = {
+  date: Date;
+  dateFormatted: string;
+  value: number;
+  valueStr: string | undefined;
 };
 
-const StackedBarChart: FC<Props> = ({ data: dataProp, filterType }) => {
-  const { data, largestNum } = useMemo(() => {
-    let largestNum = 0;
-    const largestNumHandler = (num: number) => {
-      if (num > largestNum) {
-        largestNum = num;
-      }
-    };
-    const data = dataProp.map(d => {
-      const healthWorkout = new WorkoutTracker(d.data.workoutUid);
-      healthWorkout.initializeHealthData(d.data);
-      const formatted = healthWorkout.getFormattedData();
-      let value = d.data.duration;
-      let valueStr = formatted?.duration;
+type Props = {
+  data: DataProps[];
+  largestNum: number;
+};
 
-      switch (filterType) {
-        case EnduranceFilterValues.distance:
-          value = d.data.distance;
-          valueStr = formatted?.distance;
-          break;
-        case EnduranceFilterValues.duration:
-          value = d.data.duration;
-          valueStr = formatted?.duration;
-          break;
-        case EnduranceFilterValues.pace:
-          value = healthWorkout.averagePaceInSec;
-          valueStr = formatted?.averagePace;
-          break;
-      }
-      largestNumHandler(value);
-      return {
-        date: DateTools.strToDate(d.date),
-        dateFormatted: healthWorkout.getDate(undefined, undefined, false),
-        value,
-        valueStr,
-      };
-    });
-    return { data, largestNum };
-  }, [dataProp, filterType]);
-
+const StackedBarChart: FC<Props> = ({ data, largestNum }) => {
   return (
     <FlexBox column flex={1} padding={15}>
       {data.length > 0 ? (
@@ -77,7 +41,7 @@ const StackedBarChart: FC<Props> = ({ data: dataProp, filterType }) => {
                   borderTopRightRadius={10}
                   borderBottomRightRadius={10}
                 />
-                <PrimaryText position="absolute" right={0} fontSize="small">
+                <PrimaryText position="absolute" right={0} size="small">
                   {valueStr}
                 </PrimaryText>
               </FlexBox>

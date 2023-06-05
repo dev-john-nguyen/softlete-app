@@ -1,4 +1,9 @@
-import { renderDistance, TimeConverter, DateTools } from '@app/utils';
+import {
+  renderDistance,
+  TimeConverter,
+  DateTools,
+  convertSecondsToPace,
+} from '@app/utils';
 import { getDistance } from 'geolib';
 import mean from 'lodash/mean';
 import { LocationValue } from 'react-native-health';
@@ -174,7 +179,11 @@ class WorkoutTracker {
     // Calculate the pace in seconds per mile
     if (!this.healthData) return;
     const { duration, distance } = this.healthData;
-    if (!distance) return;
+    if (!distance || !duration) {
+      this.averagePace = '0';
+      return;
+    }
+
     const paceInSeconds = duration / distance;
 
     // Calculate the number of minutes and seconds
@@ -183,7 +192,7 @@ class WorkoutTracker {
     this.averagePaceInMin = minutes;
     this.averagePaceInSec = seconds;
     // Return the pace in the format of minutes:seconds
-    this.averagePace = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    this.averagePace = convertSecondsToPace(paceInSeconds);
   }
 
   getPaceInMinutesSeconds(pace: number, typeDecimal = false) {

@@ -9,17 +9,15 @@ class TimeConverter {
     const secs = Math.floor(seconds % 60);
     let time = '';
     if (hours >= 1) {
-      time = `${hours.toString().padStart(2, '0')}:${minutes
-        .toString()
-        .padStart(2, '0')} ${withoutLabel ? '' : 'hrs'}`;
-    } else if (minutes >= 1) {
-      time = `${minutes.toString().padStart(2, '0')}:${secs
-        .toString()
-        .padStart(2, '0')} ${withoutLabel ? '' : 'mins'}`;
-    } else {
-      time = `${secs.toString().padStart(2, '0')} ${
-        withoutLabel ? '' : 'secs'
+      time = `${hours.toString()}:${minutes.toString().padStart(2, '0')} ${
+        withoutLabel ? '' : 'hrs'
       }`;
+    } else if (minutes >= 1) {
+      time = `${minutes.toString()}:${secs.toString().padStart(2, '0')} ${
+        withoutLabel ? '' : 'mins'
+      }`;
+    } else {
+      time = `${secs.toString()} ${withoutLabel ? '' : 'secs'}`;
     }
     return time;
   }

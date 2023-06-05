@@ -76,15 +76,16 @@ export const convertTimeToFormatTime = (
   }
 };
 
-export function calculatePace(totalTime: number, distance: number) {
-  if (!totalTime || !distance) return '0:00';
-  // Calculate the pace in seconds per mile
-  const paceInSeconds = totalTime / distance;
+export const convertSecondsToPace = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
 
-  // Calculate the number of minutes and seconds
-  const minutes = Math.floor(paceInSeconds / 60);
-  const seconds = Math.round(paceInSeconds % 60);
+  const formattedHours = hours.toString();
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = secs.toString().padStart(2, '0');
 
-  // Return the pace in the format of minutes:seconds
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
+  return `${
+    formattedHours ? formattedHours + ':' : ''
+  }${formattedMinutes}:${formattedSeconds}`;
+};

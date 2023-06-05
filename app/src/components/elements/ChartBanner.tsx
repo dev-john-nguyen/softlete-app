@@ -13,9 +13,16 @@ interface Props {
   isActive: boolean;
   data: Date[];
   direction?: 'top' | 'bottom';
+  valueStr?: string;
 }
 
-const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
+const ChartBanner = ({
+  props,
+  isActive,
+  data,
+  direction = 'top',
+  valueStr,
+}: Props) => {
   const formattedDate = useMemo(() => {
     if (data && props.index < data.length) {
       const date = data[props.index];
@@ -45,7 +52,7 @@ const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
         {formattedDate}
       </PrimaryText>
       <PrimaryText size="small" fontSize={10} bold>
-        {props.indexData}
+        {valueStr ?? props.indexData}
       </PrimaryText>
     </FlexBox>
   );

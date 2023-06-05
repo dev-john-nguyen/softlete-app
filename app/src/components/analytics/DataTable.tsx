@@ -13,11 +13,7 @@ import {
   WorkoutExerciseDataProps,
 } from 'src/services/workout/types';
 import WorkoutTracker from 'src/classes/WorkoutTracker';
-
-export enum DataType {
-  health = 'health',
-  workout = 'workout',
-}
+import { DataType } from './types';
 
 interface Props {
   data: AnalyticalDataProps<unknown>[];

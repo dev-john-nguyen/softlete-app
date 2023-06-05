@@ -34,6 +34,7 @@ interface Props {
   widthDots?: boolean;
   height?: number;
   width?: number;
+  formatYLabel?: (value: string) => string;
 }
 
 const LineChartGraph: FC<Props> = ({
@@ -49,6 +50,7 @@ const LineChartGraph: FC<Props> = ({
   widthDots = false,
   height = normalize.height(5),
   width = normalize.width(1),
+  formatYLabel,
 }) => {
   const chartPaddingRight = useMemo(() => {
     if (paddingRight) return paddingRight;
@@ -93,6 +95,7 @@ const LineChartGraph: FC<Props> = ({
           height={height}
           withVerticalLines={false}
           bezier
+          formatYLabel={formatYLabel}
           segments={4}
           onDataPointClick={onDataPointClick}
           fromZero={fromZero}
