@@ -33,7 +33,7 @@ const GoalList: React.FC<Props> = ({ activeFilter }) => {
     return goals
       .filter(goal => {
         if (isExercise) {
-          if (goal.exerciseUid !== exercise._id) return false;
+          if (goal.exerciseUid !== exercise?._id) return false;
         }
         if (activeFilter === 'all') return true;
         if (goal.status === activeFilter) return true;
