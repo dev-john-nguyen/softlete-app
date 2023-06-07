@@ -14,8 +14,8 @@ import { BannerTypes } from 'src/services/banner/types';
 import { useDispatch } from 'react-redux';
 import { upsertExerciseGoalAsync } from 'src/services/goals/slice';
 import { ThunkAppDispatch } from 'src/services';
-import { GoalInitProps } from 'src/services/goals/types';
-import { HomeStackParamsList } from '../home/types';
+import { GoalInitProps, GoalTypes } from 'src/services/goals/types';
+import { HomeStackParamsList } from '../../home/types';
 
 const GoalForm = () => {
   const today = new Date();
@@ -34,11 +34,13 @@ const GoalForm = () => {
   const setBanner = useBanner();
 
   useEffect(() => {
-    if (route.params && route.params.exercise) {
-      setExercise(route.params.exercise);
-    } else {
-      setBanner('There was not exercise data provided.', BannerTypes.error);
-      navigation.goBack();
+    if (route.params.type === GoalTypes.exercise) {
+      if (route.params && route.params.exercise) {
+        setExercise(route.params.exercise);
+      } else {
+        setBanner('There was not exercise data provided.', BannerTypes.error);
+        navigation.goBack();
+      }
     }
 
     if (route.params.goal) {
@@ -90,7 +92,10 @@ const GoalForm = () => {
   };
 
   const onCreateGoal = async () => {
-    if (!exercise || !exercise._id) {
+    if (
+      route.params.type === GoalTypes.exercise &&
+      (!exercise || !exercise._id)
+    ) {
       setBanner('Exercise ID is not defined', BannerTypes.error);
       navigation.goBack();
       return;
@@ -104,7 +109,9 @@ const GoalForm = () => {
       goal: goalTarget,
       startDate: goalStartDate.toISOString(),
       endDate: goalEndDate.toISOString(),
-      exerciseUid: exercise._id as string,
+      exerciseUid:
+        route.params.type === GoalTypes.exercise ? exercise?._id : undefined,
+      type: route.params.type,
     };
 
     // update goal if route params has goal
@@ -148,7 +155,9 @@ const GoalForm = () => {
             size="large"
             variant="primary"
             textTransform="capitalize">
-            {exercise?.name}
+            {route.params.type === GoalTypes.exercise
+              ? exercise?.name
+              : 'Endurance'}
           </PrimaryText>
         </FlexBox>
       }>

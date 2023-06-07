@@ -1,7 +1,7 @@
 import { Colors, DateTools, rgba } from '@app/utils';
-import { ExerciseGoalProps, GoalStatus } from 'src/services/goals/types';
+import { GoalProps, GoalStatus } from 'src/services/goals/types';
 
-export function getGoalStatus(goal: ExerciseGoalProps) {
+export function getGoalStatus(goal: GoalProps) {
   const today = new Date();
   const startDate = new Date(goal.startDate);
   const endDate = new Date(goal.endDate);

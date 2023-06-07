@@ -1,5 +1,5 @@
-import { InfoListBox, PrimaryText } from '@app/elements';
-import Icon, { IconOptions } from '@app/icons';
+import { PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, DateTools } from '@app/utils';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -12,13 +12,13 @@ import { ThunkAppDispatch } from 'src/services';
 import { BannerTypes } from 'src/services/banner/types';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps } from 'src/services/goals/types';
 import { useGoalExerciseAnalytics } from '../hooks';
 import { GoalStatusProps } from '../types';
 import GoalAnalytics from './GoalAnalytics';
 
 type Props = {
-  goal: ExerciseGoalProps & GoalStatusProps;
+  goal: GoalProps & GoalStatusProps;
   exercise: ExerciseProps;
 };
 const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {

@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useCallback } from 'react';
 import { ExerciseProps } from 'src/services/exercises/types';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps } from 'src/services/goals/types';
 import { RespWorkoutExerciseProps } from './types';
 
 export const useGoalExerciseAnalytics = (
-  goal: ExerciseGoalProps,
+  goal: GoalProps,
   exercise: ExerciseProps,
 ) => {
   const fetchAnalytics = useCallback(async () => {

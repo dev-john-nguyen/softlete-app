@@ -26,8 +26,7 @@ import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
 import { FlexBox } from '@app/ui';
-import GoalForm from '../exercises/GoalForm';
-import ExerciseGoal from '../exercises/exercise-goals/ExerciseGoals';
+import { Goals, GoalForm } from '../goals';
 import { HealthGoalForm } from './health-goal';
 import { EnduranceAnalytics } from './endurance';
 
@@ -219,8 +218,8 @@ function HomeStack(parentProps: any) {
         />
 
         <Tab.Screen
-          name={HomeStackScreens.ExerciseGoal}
-          component={ExerciseGoal}
+          name={HomeStackScreens.Goals}
+          component={Goals}
           options={{
             headerTitle: '',
             headerRight: undefined,

@@ -1,6 +1,6 @@
 export interface GoalsRootStateProps {
   user: {
-    exercises: ExerciseGoalProps[];
+    exercises: GoalProps[];
     endurances: GoalProps[];
     healths: HealthGoalProps;
   };
@@ -35,6 +35,7 @@ export interface GoalInitProps {
   goal: number;
   startDate?: string;
   endDate?: string;
+  type: GoalTypes;
 }
 
 export interface GoalProps {
@@ -46,8 +47,8 @@ export interface GoalProps {
   name: string;
   description?: string;
   goal: number;
-  startDate?: string;
-  endDate?: string;
+  startDate: string;
+  endDate: string;
   isActive: boolean;
 }
 
@@ -56,11 +57,6 @@ export interface GoalRespProps
   _id: string;
   startDate?: string;
   endDate?: string;
-}
-
-export interface ExerciseGoalProps extends GoalProps {
-  startDate: string;
-  endDate: string;
 }
 
 // goal status is not an attribute in goal schema, but a calculated value

@@ -18,7 +18,7 @@ router.post(
 
     const { sleep, activeCalories } = req.body;
 
-    const formatGoalHanlder = (
+    const formatGoalHandler = (
       type: GoalTypes.active_calories | GoalTypes.sleep,
       goal: number,
     ) => {
@@ -36,8 +36,8 @@ router.post(
       runValidators: true,
     };
 
-    const sleepFormatted = formatGoalHanlder(GoalTypes.sleep, sleep);
-    const activeCaloriesFormatted = formatGoalHanlder(
+    const sleepFormatted = formatGoalHandler(GoalTypes.sleep, sleep);
+    const activeCaloriesFormatted = formatGoalHandler(
       GoalTypes.active_calories,
       activeCalories,
     );

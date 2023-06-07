@@ -15,6 +15,7 @@ type RequestBody = {
   startDate: string;
   endDate: string;
   exerciseUid: string;
+  type: GoalTypes;
 };
 
 router.post(
@@ -24,11 +25,26 @@ router.post(
 
     if (!uid) return res.status(401).send('cannot find user id.');
 
-    const { _id, name, description, goal, startDate, endDate, exerciseUid } =
-      req.body;
+    const {
+      _id,
+      name,
+      description,
+      goal,
+      startDate,
+      endDate,
+      exerciseUid,
+      type,
+    } = req.body;
 
-    if (!exerciseUid || !mongoose.Types.ObjectId.isValid(exerciseUid)) {
-      return res.status(400).send('Invalid exerciseUid request');
+    if (type !== GoalTypes.endurance && type !== GoalTypes.exercise) {
+      return res.status(400).send('Invalid goal type provided.');
+    }
+
+    if (type === GoalTypes.exercise) {
+      // validate data for exercise
+      if (!exerciseUid || !mongoose.Types.ObjectId.isValid(exerciseUid)) {
+        return res.status(400).send('Invalid exerciseUid request');
+      }
     }
 
     if (
@@ -51,7 +67,7 @@ router.post(
     const updatedExercise: GoalInitProps = {
       name,
       userUid: uid,
-      type: GoalTypes.exercise,
+      type: type,
       durationType: GoalDurationType.dateRange,
       description,
       goal,

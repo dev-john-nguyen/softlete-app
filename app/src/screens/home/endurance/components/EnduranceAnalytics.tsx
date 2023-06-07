@@ -17,6 +17,8 @@ import {
 import { useEnduranceAnalytics } from '../hook';
 import AnalyticsVisuals from './AnalyticsVisuals';
 import useBanner from 'src/hooks/utils/useBanner';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { HomeStackParamsList, HomeStackScreens } from '../../types';
 
 enum ActivePickers {
   EnduranceType,
@@ -24,6 +26,7 @@ enum ActivePickers {
 }
 
 const EnduranceAnalytics = () => {
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const [enduranceType, setEnduranceType] = useState('');
   const [filterType, setFilterType] = useState<EnduranceFilterValues>(
     EnduranceFilterValues.distance,
@@ -46,6 +49,10 @@ const EnduranceAnalytics = () => {
       return refetch();
     }
     setBanner('Please select an endurance type!');
+  };
+
+  const onNavToGoals = () => {
+    navigation.navigate(HomeStackScreens.Goals, { type: 'endurance' });
   };
 
   const pickerOptions =
@@ -81,7 +88,12 @@ const EnduranceAnalytics = () => {
       }
       rightContent={
         <FlexBox alignItems="center" justifyContent="flex-end" flex={1}>
-          <Icon icon="target" color={Colors.white} size={20} />
+          <Icon
+            icon="target"
+            color={Colors.white}
+            size={20}
+            onPress={onNavToGoals}
+          />
         </FlexBox>
       }>
       <FlexBox column marginRight={15} marginLeft={15}>

@@ -8,13 +8,13 @@ import { ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { ReducerProps } from 'src/services';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps } from 'src/services/goals/types';
 import { setViewWorkout } from 'src/services/workout/actions';
 import { RespWorkoutExerciseProps } from '../types';
 
 const GoalAnalytics: FC<{
   item: RespWorkoutExerciseProps;
-  goal: ExerciseGoalProps;
+  goal: GoalProps;
 }> = ({ goal, item }) => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
