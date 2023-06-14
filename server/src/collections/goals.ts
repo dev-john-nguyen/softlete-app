@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
-import { GoalDurationType, GoalTypes } from './types';
+import {
+  GoalDurationType,
+  GoalSubTypes,
+  GoalTypes,
+  GoalMeasurements,
+} from './types';
 
 export interface GoalInitProps {
   _id?: string;
@@ -12,11 +17,15 @@ export interface GoalInitProps {
   goal: number;
   startDate?: string;
   endDate?: string;
+  measurement?: GoalMeasurements;
+  subType?: GoalSubTypes;
 }
 
 export interface GoalProps {
   _id?: mongoose.Types.ObjectId;
   type: GoalTypes;
+  subType?: GoalSubTypes;
+  measurement?: GoalMeasurements;
   durationType: GoalDurationType;
   userUid: string;
   exerciseUid?: mongoose.Types.ObjectId;
@@ -39,6 +48,14 @@ const GoalsSchema: mongoose.Schema<GoalProps> = new mongoose.Schema(
       type: String,
       required: true,
       enum: GoalTypes,
+    },
+    subType: {
+      type: String,
+      enum: GoalSubTypes,
+    },
+    measurement: {
+      type: String,
+      enum: GoalMeasurements,
     },
     durationType: {
       type: String,

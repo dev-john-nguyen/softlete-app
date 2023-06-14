@@ -36,7 +36,37 @@ export interface GoalInitProps {
   startDate?: string;
   endDate?: string;
   type: GoalTypes;
+  subType?: GoalSubTypes;
+  measurement?: GoalMeasurements;
 }
+
+export enum GoalMeasurements {
+  mi = 'mi',
+  min = 'min',
+  hr = 'hr',
+  mins_per_mi = 'mins_per_mi',
+}
+
+export enum GoalSubTypes {
+  endurance_distance = 'distance',
+  endurance_duration = 'duration',
+  endurance_avg_pace = 'avg_pace',
+}
+
+export const GoalSubTypesLabels = {
+  [GoalSubTypes.endurance_distance]: {
+    label: 'Distance',
+    value: GoalSubTypes.endurance_distance,
+  },
+  [GoalSubTypes.endurance_duration]: {
+    label: 'Duration',
+    value: GoalSubTypes.endurance_duration,
+  },
+  [GoalSubTypes.endurance_avg_pace]: {
+    label: 'Avg Pace',
+    value: GoalSubTypes.endurance_avg_pace,
+  },
+};
 
 export interface GoalProps {
   _id: string;

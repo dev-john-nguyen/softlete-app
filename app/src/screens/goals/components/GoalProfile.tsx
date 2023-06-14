@@ -12,7 +12,7 @@ import { ThunkAppDispatch } from 'src/services';
 import { BannerTypes } from 'src/services/banner/types';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
-import { GoalProps } from 'src/services/goals/types';
+import { GoalProps, GoalTypes } from 'src/services/goals/types';
 import { useGoalExerciseAnalytics } from '../hooks';
 import { GoalStatusProps } from '../types';
 import GoalAnalytics from './GoalAnalytics';
@@ -28,7 +28,11 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
   const { data, isFetching } = useGoalExerciseAnalytics(goal, exercise);
 
   const onEdit = () => {
-    navigation.navigate(HomeStackScreens.GoalFormModal, { exercise, goal });
+    navigation.navigate(HomeStackScreens.GoalFormModal, {
+      exercise,
+      goal,
+      type: GoalTypes.exercise,
+    });
   };
 
   const removeGoalHandler = () => {

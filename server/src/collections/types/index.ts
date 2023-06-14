@@ -43,12 +43,25 @@ export enum GoalTypes {
   active_calories = 'active_calories',
 }
 
+export enum GoalSubTypes {
+  endurance_distance = 'distance',
+  endurance_duration = 'duration',
+  endurance_avg_pace = 'avg_pace',
+}
+
 export enum GoalDurationType {
   daily = 'daily',
   dateRange = 'dateRange',
   weekly = 'weekly',
   monthly = 'monthly',
   yearly = 'yearly',
+}
+
+export enum GoalMeasurements {
+  mi = 'mi',
+  min = 'min',
+  hr = 'hr',
+  mins_per_mi = 'mins_per_mi',
 }
 
 //4 exercise categories
