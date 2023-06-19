@@ -1,7 +1,7 @@
 import { PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, DateTools } from '@app/utils';
+import { Colors, DateTools, rgba } from '@app/utils';
 import {
   NavigationProp,
   RouteProp,
@@ -71,7 +71,14 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
 
   return (
     <FlexBox column flex={1}>
-      <FlexBox column marginTop={10} alignItems="flex-start">
+      <FlexBox
+        column
+        marginTop={10}
+        alignItems="flex-start"
+        borderBottomWidth={1}
+        borderBottomColor={rgba(Colors.whiteRbg, 0.2)}
+        paddingBottom={10}
+        marginBottom={4}>
         <FlexBox
           justifyContent="space-between"
           alignItems="center"
@@ -114,7 +121,7 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
           </ScrollView>
         </FlexBox>
 
-        <FlexBox marginTop={5}>
+        <FlexBox column marginTop={5}>
           <PrimaryText opacity={0.6}>Date Range: </PrimaryText>
           <PrimaryText>
             {`${DateTools.convertLocalStrToFormatStr(
@@ -124,15 +131,12 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
           </PrimaryText>
         </FlexBox>
 
-        <FlexBox marginTop={5}>
+        <FlexBox column marginTop={5}>
           <PrimaryText opacity={0.6}>Target:</PrimaryText>
           <PrimaryText> {goal.goal}</PrimaryText>
         </FlexBox>
       </FlexBox>
 
-      <PrimaryText marginTop={10} opacity={0.6}>
-        *Dates Hit or Exceed Target Goal
-      </PrimaryText>
       {type === GoalTypes.exercise && exercise ? (
         <GoalAnalytics goal={goal} exercise={exercise} />
       ) : (
