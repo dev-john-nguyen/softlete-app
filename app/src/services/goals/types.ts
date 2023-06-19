@@ -71,6 +71,8 @@ export const GoalSubTypesLabels = {
 export interface GoalProps {
   _id: string;
   type: GoalTypes;
+  subType?: GoalSubTypes;
+  measurement?: GoalMeasurements;
   durationType: GoalDurationType;
   userUid: string;
   exerciseUid?: string;

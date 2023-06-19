@@ -62,9 +62,7 @@ const GoalList: React.FC<Props> = ({ activeFilter }) => {
           })}
         </ScrollView>
       </FlexBox>
-      {goalProfile && exercise && (
-        <GoalProfile goal={goalProfile} exercise={exercise} />
-      )}
+      {goalProfile && <GoalProfile goal={goalProfile} exercise={exercise} />}
     </React.Fragment>
   );
 };

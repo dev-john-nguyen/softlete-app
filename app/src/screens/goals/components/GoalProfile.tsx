@@ -2,9 +2,14 @@ import { PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, DateTools } from '@app/utils';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React from 'react';
-import { ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import useBanner from 'src/hooks/utils/useBanner';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
@@ -13,25 +18,28 @@ import { BannerTypes } from 'src/services/banner/types';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
 import { GoalProps, GoalTypes } from 'src/services/goals/types';
-import { useGoalExerciseAnalytics } from '../hooks';
 import { GoalStatusProps } from '../types';
 import GoalAnalytics from './GoalAnalytics';
+import GoalEnduranceAnalytics from './GoalEnduranceAnalytics';
 
 type Props = {
   goal: GoalProps & GoalStatusProps;
-  exercise: ExerciseProps;
+  exercise?: ExerciseProps;
 };
 const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
   const dispatch = useDispatch<ThunkAppDispatch>();
   const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
   const setBanner = useBanner();
-  const { data, isFetching } = useGoalExerciseAnalytics(goal, exercise);
+  const {
+    params: { type },
+  } = useRoute<RouteProp<HomeStackParamsList, 'Goals'>>();
 
   const onEdit = () => {
+    // need to edit for endurance
     navigation.navigate(HomeStackScreens.GoalFormModal, {
       exercise,
       goal,
-      type: GoalTypes.exercise,
+      type,
     });
   };
 
@@ -125,23 +133,10 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
       <PrimaryText marginTop={10} opacity={0.6}>
         *Dates Hit or Exceed Target Goal
       </PrimaryText>
-
-      {isFetching ? (
-        <FlexBox
-          marginTop={20}
-          alignItems="center"
-          justifyContent="center"
-          flex={1}>
-          <ActivityIndicator size={20} color={Colors.white} />
-        </FlexBox>
+      {type === GoalTypes.exercise && exercise ? (
+        <GoalAnalytics goal={goal} exercise={exercise} />
       ) : (
-        <FlexBox marginTop={10} flex={1}>
-          <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
-            {data.map((item, index) => (
-              <GoalAnalytics key={item._id || index} item={item} goal={goal} />
-            ))}
-          </ScrollView>
-        </FlexBox>
+        <GoalEnduranceAnalytics goal={goal} />
       )}
     </FlexBox>
   );

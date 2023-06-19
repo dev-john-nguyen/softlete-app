@@ -3,8 +3,48 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useCallback } from 'react';
 import { ExerciseProps } from 'src/services/exercises/types';
-import { GoalProps } from 'src/services/goals/types';
-import { RespWorkoutExerciseProps } from './types';
+import { GoalProps, GoalSubTypes } from 'src/services/goals/types';
+import { RespHealthDataProps, RespWorkoutExerciseProps } from './types';
+
+export const useGoalEnduranceAnalytics = (goal: GoalProps) => {
+  const request = useCallback(async () => {
+    const startDateStr = DateTools.convertLocalStrToFormatStr(
+      goal.startDate,
+      undefined,
+      'm',
+    );
+    const endDateSTr = DateTools.convertLocalStrToFormatStr(
+      goal.endDate,
+      undefined,
+      'm',
+    );
+    const url = getRequestURL(
+      PATHS.goals.endurance_goal_analytics(
+        goal.goal,
+        startDateStr,
+        endDateSTr,
+        goal.subType as GoalSubTypes,
+      ),
+    );
+    return axios.get(url).then(res => res.data);
+  }, [goal]);
+  const { data = [], isFetching } = useQuery<RespHealthDataProps[]>(
+    [
+      'exercise-goals-data',
+      {
+        goalUid: goal._id,
+        startDate: goal.startDate,
+        endDate: goal.endDate,
+      },
+    ],
+    request,
+    {
+      refetchOnMount: true,
+      staleTime: 60000,
+    },
+  );
+  return { data, isFetching };
+};
 
 export const useGoalExerciseAnalytics = (
   goal: GoalProps,

@@ -20,6 +20,7 @@ type Props = {
   opacity?: number;
   textTransform?: 'capitalize';
   disablePressIcon?: boolean;
+  hasBorder?: boolean;
 };
 
 const InfoListBox: FC<Props> = ({
@@ -38,6 +39,7 @@ const InfoListBox: FC<Props> = ({
   opacity = 1,
   textTransform,
   disablePressIcon,
+  hasBorder,
 }) => {
   if (secondary) {
     return (
@@ -53,6 +55,8 @@ const InfoListBox: FC<Props> = ({
         screenWidthPct={screenWidthPct}
         marginBottom={marginBottom}
         marginTop={marginTop}
+        borderColor={hasBorder ? Colors.white : undefined}
+        borderWidth={hasBorder ? 1 : undefined}
         column>
         {icon && (
           <Icon
@@ -94,6 +98,8 @@ const InfoListBox: FC<Props> = ({
       alignItems="center"
       padding={15}
       maxWidth={normalize.width(1.6)}
+      borderColor={hasBorder ? Colors.white : undefined}
+      borderWidth={hasBorder ? 1 : undefined}
       backgroundColor={Colors.lightPrimary}
       onPress={onPress}
       column>

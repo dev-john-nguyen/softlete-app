@@ -37,6 +37,10 @@ type StatisticsProps = {
   averageAltitude: number;
 };
 
+type FormattedDataProps = {
+  showYear?: boolean;
+};
+
 class WorkoutTracker {
   public workoutId: string | undefined;
   private metersInMile = 1609.34;
@@ -92,7 +96,7 @@ class WorkoutTracker {
     );
   }
 
-  getFormattedData() {
+  getFormattedData(props?: FormattedDataProps) {
     if (!this.healthData) return;
 
     const duration = TimeConverter.convertSecondsToTimeFormat(
@@ -115,6 +119,7 @@ class WorkoutTracker {
       averageHeartRate,
       averagePace: this.averagePace,
       calories,
+      formattedDate: this.getDate(undefined, undefined, props?.showYear),
     };
   }
 
