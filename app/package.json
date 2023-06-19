@@ -36,6 +36,7 @@
     "expo-in-app-purchases": "^11.0.1",
     "geolib": "^3.3.3",
     "lodash": "^4.17.21",
+    "patch-package": "^7.0.0",
     "react": "17.0.1",
     "react-native": "0.64.1",
     "react-native-calendars": "^1.1293.0",
