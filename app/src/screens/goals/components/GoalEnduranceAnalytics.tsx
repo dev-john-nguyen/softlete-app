@@ -3,7 +3,7 @@ import { GoalProps, GoalSubTypes } from 'src/services/goals/types';
 import { useGoalEnduranceAnalytics } from '../hooks';
 import { FlexBox } from '@app/ui';
 import { ActivityIndicator, ScrollView } from 'react-native';
-import { Colors, DateTools } from '@app/utils';
+import { Colors } from '@app/utils';
 import { setViewWorkout } from 'src/services/workout/actions';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { PrimaryText, InfoListBox } from '@app/elements';
@@ -39,7 +39,56 @@ const Item: FC<{
     return data;
   }, [item]);
 
-  console.log(goal.subType);
+  const ItemElements = useMemo(() => {
+    const elements = [
+      {
+        type: GoalSubTypes.endurance_duration,
+        element: (
+          <InfoListBox
+            secondary
+            label="Duration"
+            desc={workout?.duration ?? 'n/a'}
+            hasBorder={goal.subType === GoalSubTypes.endurance_duration}
+            key="endurance_duration"
+          />
+        ),
+      },
+      {
+        type: GoalSubTypes.endurance_avg_pace,
+        element: (
+          <InfoListBox
+            secondary
+            label="Pace (mi)"
+            desc={workout?.averagePace ?? 'n/a'}
+            hasBorder={goal.subType === GoalSubTypes.endurance_avg_pace}
+            key="avg_pace"
+          />
+        ),
+      },
+      {
+        type: GoalSubTypes.endurance_distance,
+        element: (
+          <InfoListBox
+            secondary
+            label="Distance"
+            desc={workout?.distance ?? 'n/a'}
+            hasBorder={goal.subType === GoalSubTypes.endurance_distance}
+            key="endurance_distance"
+          />
+        ),
+      },
+    ];
+    const firstItemIndex = elements.findIndex(
+      ({ type }) => type === GoalSubTypes.endurance_avg_pace,
+    );
+    if (firstItemIndex > -1) {
+      const itemToMove = elements[firstItemIndex];
+      elements.splice(firstItemIndex, 1);
+      elements.unshift(itemToMove);
+    }
+
+    return elements.map(({ element }) => element);
+  }, [goal, workout]);
 
   return (
     <FlexBox key={item._id} alignItems="center">
@@ -59,24 +108,7 @@ const Item: FC<{
         showsHorizontalScrollIndicator={false}
         nestedScrollEnabled
         style={{ marginBottom: 10 }}>
-        <InfoListBox
-          secondary
-          label="Duration"
-          desc={workout?.duration ?? 'n/a'}
-          hasBorder={goal.subType === GoalSubTypes.endurance_duration}
-        />
-        <InfoListBox
-          secondary
-          label="Pace (mi)"
-          desc={workout?.averagePace ?? 'n/a'}
-          hasBorder={goal.subType === GoalSubTypes.endurance_avg_pace}
-        />
-        <InfoListBox
-          secondary
-          label="Distance"
-          desc={workout?.distance ?? 'n/a'}
-          hasBorder={goal.subType === GoalSubTypes.endurance_distance}
-        />
+        {ItemElements}
       </ScrollView>
     </FlexBox>
   );
