@@ -7,8 +7,9 @@ import { AnalyticsProps } from '../../../../services/misc/types';
 import WoExerciseChart from '../../../../components/home/components/WoExerciseChart';
 import { HomeStackParamsList, HomeStackScreens } from '../../types';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import PrimaryText from '../../../../components/elements/PrimaryText';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
   pinAnalytics: AnalyticsProps[];
@@ -23,7 +24,8 @@ const HomeExercises = ({
   chartFilter,
   selectedEx,
 }: Props) => {
-  const { navigate } = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const { navigate } =
+    useNavigation<StackNavigationProp<HomeStackParamsList>>();
 
   const onNavigateToSearchExercises = () =>
     navigate(HomeStackScreens.SearchExercises);

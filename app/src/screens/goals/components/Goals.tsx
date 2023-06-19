@@ -1,11 +1,6 @@
 import { PickerButton, PrimaryText, ScreenTemplate } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import {
-  useNavigation,
-  useRoute,
-  NavigationProp,
-  RouteProp,
-} from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { GoalStatus, GoalTypes } from 'src/services/goals/types';
 import Icon from '@app/icons';
@@ -13,6 +8,7 @@ import { Colors } from '@app/utils';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import GoalList from './GoalList';
 import { ExerciseProps } from 'src/services/exercises/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const GoalStatusFilters = [
   { label: 'All', value: 'all' },
@@ -26,7 +22,7 @@ const Goals = () => {
   const {
     params: { exercise, type },
   } = useRoute<RouteProp<HomeStackParamsList, 'Goals'>>();
-  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState(GoalStatusFilters[0].value);
 

@@ -17,8 +17,10 @@ import {
 import { useEnduranceAnalytics } from '../hook';
 import AnalyticsVisuals from './AnalyticsVisuals';
 import useBanner from 'src/hooks/utils/useBanner';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { HomeStackParamsList, HomeStackScreens } from '../../types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { GoalTypes } from 'src/services/goals/types';
 
 enum ActivePickers {
   EnduranceType,
@@ -26,7 +28,7 @@ enum ActivePickers {
 }
 
 const EnduranceAnalytics = () => {
-  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const [enduranceType, setEnduranceType] = useState('');
   const [filterType, setFilterType] = useState<EnduranceFilterValues>(
     EnduranceFilterValues.distance,
@@ -52,7 +54,7 @@ const EnduranceAnalytics = () => {
   };
 
   const onNavToGoals = () => {
-    navigation.navigate(HomeStackScreens.Goals, { type: 'endurance' });
+    navigation.navigate(HomeStackScreens.Goals, { type: GoalTypes.endurance });
   };
 
   const pickerOptions =

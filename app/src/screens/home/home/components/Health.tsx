@@ -14,9 +14,10 @@ import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
 import { Colors, normalize } from '@app/utils';
 import { HealthCircle } from '@app/elements';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -28,7 +29,7 @@ const HomeHealth = ({ healthData }: Props) => {
   const [sleepDuration, setSleepDuration] = useState(0);
   const d = new Date();
   const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const { sleepGoal, activeCaloriesGoal } = useSelector(
     (state: ReducerProps) => ({
       sleepGoal: state.goals.user.healths.sleep,

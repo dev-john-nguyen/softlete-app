@@ -5,7 +5,7 @@ import { FlexBox } from '@app/ui';
 import { ActivityIndicator, ScrollView } from 'react-native';
 import { Colors } from '@app/utils';
 import { setViewWorkout } from 'src/services/workout/actions';
-import { HomeStackScreens } from 'src/screens/home/types';
+import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { PrimaryText, InfoListBox } from '@app/elements';
 import Icon from '@app/icons';
 import { useNavigation } from '@react-navigation/native';
@@ -13,12 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { RespHealthDataProps } from '../types';
 import WorkoutTracker from 'src/classes/WorkoutTracker';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Item: FC<{
   item: RespHealthDataProps;
   goal: GoalProps;
 }> = ({ goal, item }) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const dispatch = useDispatch();
   const reducerState = useSelector((state: ReducerProps) => state);
 
