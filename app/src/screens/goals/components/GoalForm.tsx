@@ -60,6 +60,7 @@ const GoalForm = () => {
       setGoalTarget(goal.goal);
       setGoalStartDate(new Date(goal.startDate));
       setGoalEndDate(new Date(goal.endDate));
+      setGoalSubType(goal.subType);
     }
   }, [route]);
 
