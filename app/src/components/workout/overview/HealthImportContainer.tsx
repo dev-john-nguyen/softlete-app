@@ -3,14 +3,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba, StyleConstants } from '@app/utils';
 import _ from 'lodash';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import AppleHealthKit, {
   HealthInputOptions,
@@ -293,7 +286,7 @@ const HealthImportContainer = ({
     setCustom(false);
   };
 
-  const renderDataOptions = useCallback(() => {
+  const renderDataOptions = useMemo(() => {
     return data.map((item, i) => (
       <ImportItem
         data={item}
@@ -343,7 +336,7 @@ const HealthImportContainer = ({
             style={{ flex: 1 }}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
-            {renderDataOptions()}
+            {renderDataOptions}
             <InfoListBox
               secondary
               icon="devices"
