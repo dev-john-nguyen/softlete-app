@@ -655,6 +655,10 @@ export const updateWoHealthData =
         new Date(healthData.start).getTime();
     }
 
+    // removing the Z part if it exists
+    const d = healthData.date.split('Z')[0];
+    const yyyyMMDD = DateTools.dateToStr(new Date(d));
+
     const healthObj: HealthDataProps = {
       workoutUid: workoutUid,
       activityId: healthData.activityId,
@@ -665,7 +669,8 @@ export const updateWoHealthData =
       distance: healthData.distance,
       heartRates: healthData.heartRates,
       disMeas: healthData.disMeas,
-      date: healthData.date,
+      date: yyyyMMDD,
+      time: healthData.date,
       workoutEvents: healthData?.workoutEvents || [],
     };
 

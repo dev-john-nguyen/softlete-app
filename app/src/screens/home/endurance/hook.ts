@@ -20,7 +20,7 @@ export const useEnduranceAnalytics = (
     isFetching,
     refetch,
   } = useQuery<HealthDataAnalytics[]>(
-    ['endurance-analytics', { enduranceType, dates, dateFilterType }],
+    ['endurance-analytics'],
     async () => {
       return request(
         'GET',

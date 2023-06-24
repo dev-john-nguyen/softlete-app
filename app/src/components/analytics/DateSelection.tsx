@@ -105,6 +105,7 @@ const DateSelection = ({
               size={15}
               color={Colors.white}
               onPress={onDatesSubmission}
+              hitSlop={5}
             />
           )}
         </FlexBox>
