@@ -8,7 +8,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import useBanner from 'src/hooks/utils/useBanner';
@@ -110,11 +110,18 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
           Name:
         </PrimaryText>
         <PrimaryText>{goal.name}</PrimaryText>
+        {goal.subType && (
+          <Fragment>
+            <PrimaryText opacity={0.6} marginTop={5}>
+              Type:
+            </PrimaryText>
+            <PrimaryText>{goal.subType}</PrimaryText>
+          </Fragment>
+        )}
 
         <PrimaryText opacity={0.6} marginTop={5}>
           Description:
         </PrimaryText>
-
         <FlexBox maxHeight={40}>
           <ScrollView>
             <PrimaryText>{goal.description}</PrimaryText>
@@ -133,7 +140,9 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
 
         <FlexBox column marginTop={5}>
           <PrimaryText opacity={0.6}>Target:</PrimaryText>
-          <PrimaryText> {goal.goal}</PrimaryText>
+          <PrimaryText>
+            {goal.goal} {goal.measurement}
+          </PrimaryText>
         </FlexBox>
       </FlexBox>
 

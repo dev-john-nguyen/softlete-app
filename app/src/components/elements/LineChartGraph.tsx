@@ -1,7 +1,7 @@
 import { GraphPlaceholder, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, normalize, rgba } from '@app/utils';
-import React, { FC, useMemo } from 'react';
+import React, { FC, Fragment, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
 import { Dataset } from 'react-native-chart-kit/dist/HelperTypes';
 
@@ -35,6 +35,10 @@ interface Props {
   height?: number;
   width?: number;
   formatYLabel?: (value: string) => string;
+  chartBannerElement?: JSX.Element | JSX.Element[];
+  bannerLabel?: string;
+  isBannerVisible?: boolean;
+  bannerValue?: string | number;
 }
 
 const LineChartGraph: FC<Props> = ({
@@ -51,7 +55,11 @@ const LineChartGraph: FC<Props> = ({
   height = normalize.height(5),
   width = normalize.width(1),
   formatYLabel,
+  bannerLabel,
+  bannerValue,
+  isBannerVisible = true,
 }) => {
+  const [bannerHeight, setBannerHeight] = React.useState(0);
   const chartPaddingRight = useMemo(() => {
     if (paddingRight) return paddingRight;
     const max = Math.max.apply(null, data);
@@ -61,6 +69,7 @@ const LineChartGraph: FC<Props> = ({
       return 30;
     }
   }, [data]);
+
   return (
     <FlexBox column>
       {(header || subHeader) && (
@@ -82,49 +91,67 @@ const LineChartGraph: FC<Props> = ({
           <GraphPlaceholder />
         </FlexBox>
       ) : (
-        <LineChart
-          data={{
-            labels: labels,
-            datasets: [
-              {
-                data: data,
+        <Fragment>
+          {isBannerVisible && (
+            <FlexBox
+              onLayoutExtract={({ height }: { height: number }) =>
+                setBannerHeight(height)
+              }
+              padding={5}
+              paddingLeft={10}
+              paddingRight={10}
+              borderColor={Colors.white}
+              borderWidth={1}
+              borderRadius={5}
+              alignSelf="center">
+              <PrimaryText>{bannerLabel}: </PrimaryText>
+              <PrimaryText>{bannerValue}</PrimaryText>
+            </FlexBox>
+          )}
+          <LineChart
+            data={{
+              labels: labels,
+              datasets: [
+                {
+                  data: data,
+                },
+              ],
+            }}
+            width={width}
+            height={height - bannerHeight}
+            withVerticalLines={false}
+            bezier
+            formatYLabel={formatYLabel}
+            segments={4}
+            onDataPointClick={onDataPointClick}
+            fromZero={fromZero}
+            renderDotContent={renderDotContent}
+            withDots={widthDots}
+            chartConfig={{
+              backgroundGradientFrom: 'transparent',
+              backgroundGradientTo: 'transparent',
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientToOpacity: 0,
+              decimalPlaces: decimalPlaces, // optional, defaults to 2dp
+              color: () => rgba(Colors.whiteRbg, 0.5),
+              labelColor: () => rgba(Colors.whiteRbg, 0.5),
+              style: {},
+              propsForLabels: {
+                fontSize: 10,
               },
-            ],
-          }}
-          width={width}
-          height={height}
-          withVerticalLines={false}
-          bezier
-          formatYLabel={formatYLabel}
-          segments={4}
-          onDataPointClick={onDataPointClick}
-          fromZero={fromZero}
-          renderDotContent={renderDotContent}
-          withDots={widthDots}
-          chartConfig={{
-            backgroundGradientFrom: 'transparent',
-            backgroundGradientTo: 'transparent',
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientToOpacity: 0,
-            decimalPlaces: decimalPlaces, // optional, defaults to 2dp
-            color: () => rgba(Colors.whiteRbg, 0.5),
-            labelColor: () => rgba(Colors.whiteRbg, 0.5),
-            style: {},
-            propsForLabels: {
-              fontSize: 10,
-            },
-            propsForDots: {
-              r: '.5',
-              strokeWidth: '10',
-              stroke: Colors.white,
-            },
-            strokeWidth: 1,
-          }}
-          style={{
-            paddingRight: moderateScale(chartPaddingRight),
-            overflow: 'visible',
-          }}
-        />
+              propsForDots: {
+                r: '.5',
+                strokeWidth: '10',
+                stroke: Colors.white,
+              },
+              strokeWidth: 1,
+            }}
+            style={{
+              paddingRight: moderateScale(chartPaddingRight),
+              overflow: 'visible',
+            }}
+          />
+        </Fragment>
       )}
     </FlexBox>
   );

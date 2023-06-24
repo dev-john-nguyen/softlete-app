@@ -1,7 +1,7 @@
-import { ChartBanner, GraphPlaceholder, LineChartGraph } from '@app/elements';
+import { GraphPlaceholder, LineChartGraph } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import unionWith from 'lodash/unionWith';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import Constants from '../../../utils/Constants';
 
@@ -60,17 +60,11 @@ const ExerciseChart = ({ data }: Props) => {
         <LineChartGraph
           data={values}
           labels={months.map(m => m.toUpperCase())}
-          renderDotContent={props => (
-            <ChartBanner
-              key={props.index}
-              props={props}
-              isActive={activeDot === props.index}
-              data={data.map(({ date }) => date)}
-            />
-          )}
           onDataPointClick={props => setActiveDot(props.index)}
           fromZero
           widthDots
+          bannerLabel="Value"
+          bannerValue={activeDot !== undefined ? values[activeDot] : undefined}
           {...chartLayout}
         />
       )}
