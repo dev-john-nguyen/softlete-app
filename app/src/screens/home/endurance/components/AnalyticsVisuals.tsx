@@ -68,6 +68,7 @@ const AnalyticsVisuals: React.FC<Props> = ({ data: dataProp, filterType }) => {
         dateFormatted: healthWorkout.getDate(undefined, undefined, false),
         value,
         valueStr,
+        _id: d.data._id,
       };
     });
     return { graphData, largestNum };

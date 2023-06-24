@@ -10,6 +10,7 @@ type DataProps = {
   dateFormatted: string;
   value: number;
   valueStr: string | undefined;
+  _id?: string;
 };
 
 type Props = {
@@ -22,11 +23,11 @@ const StackedBarChart: FC<Props> = ({ data, largestNum }) => {
     <FlexBox column flex={1} padding={15}>
       {data.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
-          {data.map(({ dateFormatted, date, value, valueStr }) => {
+          {data.map(({ dateFormatted, date, value, valueStr, _id }) => {
             let width = Math.round((value / largestNum) * 85);
             if (value !== 0 && width < 5) width = 1;
             return (
-              <FlexBox key={date.getTime()}>
+              <FlexBox key={_id ?? date.getTime()}>
                 <PrimaryText
                   styles={{
                     fontSize: StyleConstants.extraSmallFont,
