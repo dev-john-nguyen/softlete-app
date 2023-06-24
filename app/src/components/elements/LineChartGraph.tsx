@@ -57,7 +57,7 @@ const LineChartGraph: FC<Props> = ({
   formatYLabel,
   bannerLabel,
   bannerValue,
-  isBannerVisible = true,
+  isBannerVisible,
 }) => {
   const [bannerHeight, setBannerHeight] = React.useState(0);
   const chartPaddingRight = useMemo(() => {
