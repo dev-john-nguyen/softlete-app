@@ -117,7 +117,7 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
             size={20}
             color={Colors.white}
             onPress={() =>
-              navigation.navigate(HomeStackScreens.ExerciseGoal, { exercise })
+              navigation.navigate(HomeStackScreens.Goals, { exercise })
             }
             containerStyles={{ marginRight: 20 }}
           />

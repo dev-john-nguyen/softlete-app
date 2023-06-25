@@ -26,9 +26,9 @@ import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
 import { FlexBox } from '@app/ui';
-import GoalForm from '../exercises/GoalForm';
-import ExerciseGoal from '../exercises/exercise-goals/ExerciseGoals';
+import { Goals, GoalForm } from '../goals';
 import { HealthGoalForm } from './health-goal';
+import { EnduranceAnalytics } from './endurance';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -51,6 +51,17 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.DeviceActivities}
           component={DeviceActivities}
+          options={{
+            headerTitle: '',
+            headerRight: undefined,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            gestureDirection: 'vertical',
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.EnduranceAnalytics}
+          component={EnduranceAnalytics}
           options={{
             headerTitle: '',
             headerRight: undefined,
@@ -207,8 +218,8 @@ function HomeStack(parentProps: any) {
         />
 
         <Tab.Screen
-          name={HomeStackScreens.ExerciseGoal}
-          component={ExerciseGoal}
+          name={HomeStackScreens.Goals}
+          component={Goals}
           options={{
             headerTitle: '',
             headerRight: undefined,

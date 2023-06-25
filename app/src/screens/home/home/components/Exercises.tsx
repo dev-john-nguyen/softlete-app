@@ -7,8 +7,9 @@ import { AnalyticsProps } from '../../../../services/misc/types';
 import WoExerciseChart from '../../../../components/home/components/WoExerciseChart';
 import { HomeStackParamsList, HomeStackScreens } from '../../types';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import PrimaryText from '../../../../components/elements/PrimaryText';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
   pinAnalytics: AnalyticsProps[];
@@ -23,13 +24,17 @@ const HomeExercises = ({
   chartFilter,
   selectedEx,
 }: Props) => {
-  const { navigate } = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const { navigate } =
+    useNavigation<StackNavigationProp<HomeStackParamsList>>();
 
   const onNavigateToSearchExercises = () =>
     navigate(HomeStackScreens.SearchExercises);
 
   const onNavToExercise = () =>
     selectedEx && navigate(HomeStackScreens.Exercise, { exercise: selectedEx });
+
+  const onNavToEnduranceAnalytics = () =>
+    navigate(HomeStackScreens.EnduranceAnalytics);
 
   return (
     <FlexBox column screenWidth>
@@ -40,7 +45,15 @@ const HomeExercises = ({
           RightElement={
             <FlexBox>
               <Icon
-                icon="dumb_bell"
+                icon="cardio"
+                size={20}
+                color={Colors.white}
+                onPress={onNavToEnduranceAnalytics}
+                hitSlop={10}
+                containerStyles={{ marginRight: 10 }}
+              />
+              <Icon
+                icon="kettlebell"
                 size={20}
                 color={Colors.white}
                 onPress={onNavigateToSearchExercises}

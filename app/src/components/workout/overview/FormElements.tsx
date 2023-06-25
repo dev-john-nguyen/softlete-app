@@ -105,8 +105,8 @@ export const DurationForm = ({
   const [mins, setMins] = useState(0);
 
   const onSave = () => {
-    const ms = (hours * 60 * 60 + mins * 60) * 1000;
-    onDurationUpdate(ms);
+    const secs = hours * 3600 + mins * 60;
+    onDurationUpdate(secs);
     onClose();
   };
 

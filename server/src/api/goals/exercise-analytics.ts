@@ -63,10 +63,10 @@ router.get(
         const filteredDocs = data
           .filter(doc => doc.workoutUid !== null)
           .map(doc => {
-            const { workoutUid, ...docJSON } = doc.toJSON();
+            const { workoutUid: workoutProps, ...docJSON } = doc.toJSON();
             return {
               ...docJSON,
-              workout: workoutUid,
+              workout: workoutProps,
             };
           });
         return res.status(200).send(filteredDocs);

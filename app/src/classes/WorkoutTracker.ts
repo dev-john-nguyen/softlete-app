@@ -7,6 +7,22 @@ import { HealthDataProps } from 'src/services/workout/types';
 import { MarkerProps } from 'src/types/route/route.types';
 import BaseColors from 'src/utils/BaseColors';
 
+const convertSecondsToPace = (seconds: number, withLabel = true) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  const formattedHours = hours.toString();
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = secs.toString().padStart(2, '0');
+
+  if (formattedHours !== '0') {
+    return `${formattedHours}:${formattedMinutes}` + (withLabel ? ' hr' : '');
+  }
+
+  return `${formattedMinutes}:${formattedSeconds}` + (withLabel ? ' min' : '');
+};
+
 type MileProps = {
   pace: number;
   latitude: number;
@@ -21,6 +37,10 @@ type StatisticsProps = {
   averageAltitude: number;
 };
 
+type FormattedDataProps = {
+  showYear?: boolean;
+};
+
 class WorkoutTracker {
   public workoutId: string | undefined;
   private metersInMile = 1609.34;
@@ -30,6 +50,8 @@ class WorkoutTracker {
   private locations: LocationValue[] = [];
   private currentMile = { distance: 0, duration: 0, averageAltitude: 0 };
   public averagePace = 'N/A';
+  public averagePaceInSec = 0;
+  public averagePaceInMin = 0;
   public statistics: StatisticsProps = {
     averageAltitude: 0,
     averageHeartRate: 0,
@@ -37,9 +59,14 @@ class WorkoutTracker {
   public coordinates: LatLng[] = [];
   public healthData: HealthDataProps | undefined;
 
+  constructor(workoutId?: string) {
+    this.workoutId = workoutId;
+  }
+
   initializeHealthData(healthData: HealthDataProps) {
     this.healthData = healthData;
     this.calculateAveragePace();
+    // not sure why I need this? This doesn't make sense
     this.workoutId = healthData.activityId;
     if (healthData.heartRates) {
       this.statistics.averageHeartRate = mean(this.healthData.heartRates || []);
@@ -53,9 +80,14 @@ class WorkoutTracker {
     this.statistics.averageAltitude = mean(this.getAltitudes());
   }
 
-  getDate() {
+  getDate(formatType = '/', formatOrder = 'd', showYear = true) {
     if (!this.healthData) return '12/31/9999';
-    return DateTools.convertUTCStrToLocalStr(this.healthData.date, '/');
+    return DateTools.convertUTCStrToLocalStr(
+      this.healthData.date,
+      formatType,
+      formatOrder,
+      showYear,
+    );
   }
 
   getAltitudes() {
@@ -64,13 +96,13 @@ class WorkoutTracker {
     );
   }
 
-  getFormattedData() {
+  getFormattedData(props?: FormattedDataProps) {
     if (!this.healthData) return;
 
     const duration = TimeConverter.convertSecondsToTimeFormat(
       this.healthData.duration,
     );
-    const distance = `${renderDistance(this.healthData.distance)} miles`;
+    const distance = `${renderDistance(this.healthData.distance)} mi`;
     const averageAltitude = `${
       this.statistics.averageAltitude.toFixed(2) || 0
     } m`;
@@ -87,6 +119,7 @@ class WorkoutTracker {
       averageHeartRate,
       averagePace: this.averagePace,
       calories,
+      formattedDate: this.getDate(undefined, undefined, props?.showYear),
     };
   }
 
@@ -162,15 +195,20 @@ class WorkoutTracker {
     // Calculate the pace in seconds per mile
     if (!this.healthData) return;
     const { duration, distance } = this.healthData;
-    if (!distance) return;
+    if (!distance || !duration) {
+      this.averagePace = '0';
+      return;
+    }
+
     const paceInSeconds = duration / distance;
 
     // Calculate the number of minutes and seconds
     const minutes = Math.floor(paceInSeconds / 60);
     const seconds = Math.round(paceInSeconds % 60);
-
+    this.averagePaceInMin = minutes;
+    this.averagePaceInSec = seconds;
     // Return the pace in the format of minutes:seconds
-    this.averagePace = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    this.averagePace = convertSecondsToPace(paceInSeconds);
   }
 
   getPaceInMinutesSeconds(pace: number, typeDecimal = false) {

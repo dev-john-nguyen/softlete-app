@@ -11,7 +11,7 @@ interface Props {
   color?: string;
 }
 
-class HeartSvg extends React.Component<Props, {}> {
+class HeartSvg extends React.Component<Props> {
   render() {
     return (
       <SvgXml

@@ -111,6 +111,7 @@ export interface HealthDataProps {
   disMeas?: HealthDisMeas;
   userUid?: string;
   workoutEvents?: HKWorkoutEventType[];
+  time?: string;
 }
 
 export enum HealthDisMeas {

@@ -3,7 +3,12 @@ import Goals, { GoalInitProps } from '../../collections/goals';
 import DateTools from '../../utils/DateTools';
 import errorCatch from '../../utils/error-catch';
 import mongoose from 'mongoose';
-import { GoalDurationType, GoalTypes } from '../../collections/types';
+import {
+  GoalDurationType,
+  GoalMeasurements,
+  GoalSubTypes,
+  GoalTypes,
+} from '../../collections/types';
 const router = Express.Router();
 
 type RequestBody = {
@@ -15,6 +20,9 @@ type RequestBody = {
   startDate: string;
   endDate: string;
   exerciseUid: string;
+  type: GoalTypes;
+  subType?: GoalSubTypes;
+  measurement?: GoalMeasurements;
 };
 
 router.post(
@@ -24,11 +32,33 @@ router.post(
 
     if (!uid) return res.status(401).send('cannot find user id.');
 
-    const { _id, name, description, goal, startDate, endDate, exerciseUid } =
-      req.body;
+    const {
+      _id,
+      name,
+      description,
+      goal,
+      startDate,
+      endDate,
+      exerciseUid,
+      type,
+      subType,
+      measurement,
+    } = req.body;
 
-    if (!exerciseUid || !mongoose.Types.ObjectId.isValid(exerciseUid)) {
-      return res.status(400).send('Invalid exerciseUid request');
+    if (type !== GoalTypes.endurance && type !== GoalTypes.exercise) {
+      return res.status(400).send('Invalid goal type provided.');
+    }
+
+    if (type === GoalTypes.exercise) {
+      // validate data for exercise
+      if (!exerciseUid || !mongoose.Types.ObjectId.isValid(exerciseUid)) {
+        return res.status(400).send('Invalid exerciseUid request');
+      }
+    } else {
+      // validate data for endurance
+      if (!subType || !measurement) {
+        return res.status(400).send('Missing data in the request.');
+      }
     }
 
     if (
@@ -51,13 +81,15 @@ router.post(
     const updatedExercise: GoalInitProps = {
       name,
       userUid: uid,
-      type: GoalTypes.exercise,
+      type: type,
       durationType: GoalDurationType.dateRange,
       description,
       goal,
       startDate,
       endDate,
       exerciseUid,
+      subType,
+      measurement,
     };
 
     type Filter = {

@@ -1,7 +1,7 @@
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { HealthDataProps } from 'src/services/workout/types';
 import { ExerciseProps } from '../../services/exercises/types';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps, GoalTypes } from 'src/services/goals/types';
 
 export type NavigationProps = {
   goBack(): void;
@@ -35,7 +35,11 @@ export type HomeStackParamsList = {
   Calendar: undefined;
   ExerciseAnalytics: undefined;
   WorkoutModal: undefined;
-  GoalFormModal: { exercise: ExerciseProps; goal?: ExerciseGoalProps };
+  GoalFormModal: {
+    exercise?: ExerciseProps;
+    goal?: GoalProps;
+    type: GoalTypes;
+  };
   GoOnlineModal: undefined;
   DataOverview: undefined;
   Home: undefined;
@@ -44,8 +48,9 @@ export type HomeStackParamsList = {
   Health: undefined;
   DeviceActivities: undefined;
   WorkoutActivitySummary: undefined;
-  ExerciseGoals: undefined;
+  Goals: { type: GoalTypes; exercise?: ExerciseProps };
   HealthGoalForm: undefined;
+  EnduranceAnalytics: undefined;
 };
 
 export enum HomeStackScreens {
@@ -59,7 +64,7 @@ export enum HomeStackScreens {
   EditExercise = 'EditExercise',
   WorkoutModal = 'WorkoutModal',
   GoalFormModal = 'GoalFormModal',
-  ExerciseGoal = 'ExerciseGoals',
+  Goals = 'Goals',
   GoOnlineModal = 'GoOnlineModal',
   UploadExerciseVideo = 'UploadExerciseVideo',
   DataOverview = 'DataOverview',
@@ -71,6 +76,7 @@ export enum HomeStackScreens {
   DeviceActivities = 'DeviceActivities',
   WorkoutActivitySummary = 'WorkoutActivitySummary',
   HealthGoalForm = 'HealthGoalForm',
+  EnduranceAnalytics = 'EnduranceAnalytics',
 }
 
 export enum HomeStackScreenTitle {

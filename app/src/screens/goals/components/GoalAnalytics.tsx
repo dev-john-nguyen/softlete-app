@@ -4,17 +4,19 @@ import { FlexBox } from '@app/ui';
 import { Colors, DateTools } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
 import React, { FC } from 'react';
-import { ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { ReducerProps } from 'src/services';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps } from 'src/services/goals/types';
 import { setViewWorkout } from 'src/services/workout/actions';
-import { RespWorkoutExerciseProps } from '../types';
+import { GoalStatusProps, RespWorkoutExerciseProps } from '../types';
+import { useGoalExerciseAnalytics } from '../hooks';
+import { ExerciseProps } from 'src/services/exercises/types';
 
-const GoalAnalytics: FC<{
+const Item: FC<{
   item: RespWorkoutExerciseProps;
-  goal: ExerciseGoalProps;
+  goal: GoalProps;
 }> = ({ goal, item }) => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
@@ -68,6 +70,32 @@ const GoalAnalytics: FC<{
             );
           }
         })}
+      </ScrollView>
+    </FlexBox>
+  );
+};
+
+type AnalyticsProps = {
+  goal: GoalProps & GoalStatusProps;
+  exercise: ExerciseProps;
+};
+
+const GoalAnalytics: React.FC<AnalyticsProps> = ({ goal, exercise }) => {
+  const { data, isFetching } = useGoalExerciseAnalytics(goal, exercise);
+  return isFetching ? (
+    <FlexBox
+      marginTop={20}
+      alignItems="center"
+      justifyContent="center"
+      flex={1}>
+      <ActivityIndicator size={20} color={Colors.white} />
+    </FlexBox>
+  ) : (
+    <FlexBox marginTop={10} flex={1}>
+      <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
+        {data.map((item, index) => (
+          <Item key={item._id || index} item={item} goal={goal} />
+        ))}
       </ScrollView>
     </FlexBox>
   );

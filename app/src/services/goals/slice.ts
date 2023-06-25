@@ -4,7 +4,6 @@ import { ReducerProps } from '..';
 import request from '../utils/request';
 import { formatHandlerOfGoalResp, formatHandlerOfGoalsResp } from './helpers';
 import {
-  ExerciseGoalProps,
   GoalInitProps,
   GoalProps,
   GoalRespProps,
@@ -89,18 +88,18 @@ const goalsSlice = createSlice({
       .addCase(
         upsertExerciseGoalAsync.fulfilled,
         (state, { payload: { respGoal, updated } }) => {
-          const formatted = formatHandlerOfGoalResp(
-            respGoal,
-          ) as ExerciseGoalProps;
+          const formatted = formatHandlerOfGoalResp(respGoal) as GoalProps;
+          const goalState =
+            respGoal.type === GoalTypes.exercise ? 'exercises' : 'endurances';
           if (updated) {
-            const index = state.user.exercises.findIndex(
+            const index = state.user[goalState].findIndex(
               goal => goal._id === formatted._id,
             );
             if (index !== -1) {
-              state.user.exercises[index] = formatted;
+              state.user[goalState][index] = formatted;
             }
           } else {
-            state.user.exercises.push(formatted as ExerciseGoalProps);
+            state.user[goalState].push(formatted as GoalProps);
           }
         },
       )

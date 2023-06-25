@@ -76,7 +76,7 @@ class DateTools {
     formatOrder = 'd',
     showYear = true,
   ) {
-    const date = this.UTCStrToLocal(d);
+    const date = new Date(d.split('Z')[0]);
     return this.dateToStr(date, formatType, formatOrder, showYear);
   }
 
@@ -128,20 +128,6 @@ class DateTools {
 
   YYYYMMDDToMMDD(d: string) {
     return d.slice(5).replace('-', '/');
-  }
-
-  UTCStrToLocal(utcStr: string) {
-    const utcDate = new Date(utcStr);
-    const utc = Date.UTC(
-      utcDate.getFullYear(),
-      utcDate.getMonth(),
-      utcDate.getDate(),
-      utcDate.getHours(),
-      utcDate.getMinutes(),
-      utcDate.getSeconds(),
-    );
-    const localDate = new Date(utc);
-    return localDate;
   }
 
   // a and b are javascript Date objects

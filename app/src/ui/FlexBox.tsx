@@ -17,6 +17,12 @@ type FlexBoxProps = {
   screenWidthPct?: number;
   column?: boolean;
   onLayout?: (e: LayoutChangeEvent) => void;
+  onLayoutExtract?: (data: {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
+  }) => void;
   applyBoxShadow?: boolean;
 } & StyleProp<any>;
 
@@ -30,9 +36,17 @@ const FlexBox = ({
   column,
   onLayout,
   applyBoxShadow,
+  onLayoutExtract,
   ...stylesProp
 }: FlexBoxProps) => {
   const styles = useResizeStyles(stylesProp);
+
+  const onLayoutHandler = (e: LayoutChangeEvent) => {
+    if (!e) return;
+    onLayout && onLayout(e);
+    const { height, width, x, y } = e.nativeEvent.layout;
+    onLayoutExtract && onLayoutExtract({ height, width, x, y });
+  };
 
   const width = screenWidth
     ? normalize.width(1)
@@ -55,7 +69,7 @@ const FlexBox = ({
         onPress={onPress}
         onLongPress={onLongPress}
         hitSlop={5}
-        onLayout={onLayout}>
+        onLayout={onLayoutHandler}>
         {children}
       </Pressable>
     );
@@ -63,7 +77,7 @@ const FlexBox = ({
 
   return (
     <View
-      onLayout={onLayout}
+      onLayout={onLayoutHandler}
       style={[
         {
           flexDirection: direction,

@@ -21,6 +21,7 @@ export interface WorkoutHealthDataProps {
   heartRates?: number[];
   disMeas?: string;
   date: string;
+  time?: Date;
   workoutEvents?: WorkoutEventProps[];
 }
 
@@ -35,8 +36,12 @@ const WorkoutHealthData = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    time: {
+      type: Date,
+    },
     workoutUid: {
       type: mongoose.Types.ObjectId,
+      ref: 'Workout',
       required: true,
       unqiue: true,
     },

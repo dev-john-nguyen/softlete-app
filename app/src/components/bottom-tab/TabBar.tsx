@@ -14,12 +14,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsStackScreens } from '../../screens/settings/types';
 import { NetworkStackScreens } from '../../screens/network/types';
 import { ProgramStackScreens } from '../../screens/program/types';
+import axios from 'axios';
+import { SERVERURL } from 'src/utils/PATHS';
+import useBanner from 'src/hooks/utils/useBanner';
 
 const TabBar = ({
   state,
   navigation,
   isHidden,
 }: BottomTabBarProps & { isHidden?: boolean }) => {
+  const setBanner = useBanner();
   const navToHome = () => {
     if (isActive(IndexStackList.HomeStack)) {
       navigation.navigate(IndexStackList.HomeStack, {
@@ -54,6 +58,15 @@ const TabBar = ({
       });
     } else {
       navigation.navigate(IndexStackList.SettingsStack);
+    }
+  };
+
+  const clearCache = async () => {
+    try {
+      await axios.get(SERVERURL + '/clear-cache');
+      setBanner('Cache Cleared');
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -119,6 +132,12 @@ const TabBar = ({
             }
           />
         }
+        active={isActive(IndexStackList.SettingsStack)}
+      />
+
+      <Tab
+        onPress={clearCache}
+        icon={<GearSvg fillColor={rgba(Colors.greenRbg, 0.5)} />}
         active={isActive(IndexStackList.SettingsStack)}
       />
     </SafeAreaView>

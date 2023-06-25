@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { FlexBox } from '@app/ui';
-import { ExerciseGoalProps } from 'src/services/goals/types';
+import { GoalProps } from 'src/services/goals/types';
 import { PrimaryText } from '@app/elements';
 import { Colors, DateTools, rgba } from '@app/utils';
 import { GoalStatusProps } from '../types';
 
 type Props = {
-  goal: ExerciseGoalProps & GoalStatusProps;
+  goal: GoalProps & GoalStatusProps;
   active?: boolean;
   onPress: () => void;
 };

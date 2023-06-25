@@ -7,7 +7,7 @@ import {
 } from '../../../services/workout/types';
 import { FlexBox } from '@app/ui';
 import { InfoListBox, PrimaryButton } from '@app/elements';
-import { convertMsToTime, strToFloat } from '@app/utils';
+import { convertTimeToFormatTime, strToFloat } from '@app/utils';
 import { HealthActivity } from 'react-native-health';
 import AutoId from 'src/utils/AutoId';
 import { DurationForm, MeasForm, BaseForm } from './FormElements';
@@ -187,7 +187,13 @@ class HealthForm extends React.Component<Props, StateProps> {
             flex={1}
             icon="clock"
             label="Duration"
-            desc={convertMsToTime(this.state.duration) as string}
+            desc={
+              convertTimeToFormatTime(
+                this.state.duration,
+                undefined,
+                'sec',
+              ) as string
+            }
             onPress={() => this.setState({ editName: 'duration' })}
           />
           <InfoListBox

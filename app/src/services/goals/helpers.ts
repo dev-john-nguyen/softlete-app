@@ -1,10 +1,5 @@
 import { DateTools } from '@app/utils';
-import {
-  ExerciseGoalProps,
-  GoalProps,
-  GoalRespProps,
-  GoalTypes,
-} from './types';
+import { GoalProps, GoalRespProps, GoalTypes } from './types';
 
 export function formatHandlerOfGoalsResp(goals: GoalRespProps[]) {
   const formattedGoals: GoalProps[] = goals.map(formatHandlerOfGoalResp);
@@ -12,7 +7,7 @@ export function formatHandlerOfGoalsResp(goals: GoalRespProps[]) {
   const userGoals = {
     exercises: formattedGoals.filter(
       g => g.type === GoalTypes.exercise,
-    ) as ExerciseGoalProps[],
+    ) as GoalProps[],
     endurances: formattedGoals.filter(g => g.type === GoalTypes.endurance),
     healths: {
       activeCalories: formattedGoals.filter(
@@ -30,9 +25,9 @@ export function formatHandlerOfGoalResp(goal: GoalRespProps) {
     ...goal,
     startDate: goal.startDate
       ? DateTools.UTCISOToLocalDate(goal.startDate).toISOString()
-      : undefined,
+      : '',
     endDate: goal.endDate
       ? DateTools.UTCISOToLocalDate(goal.endDate).toISOString()
-      : undefined,
+      : '',
   };
 }

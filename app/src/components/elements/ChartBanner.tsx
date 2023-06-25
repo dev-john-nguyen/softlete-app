@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PrimaryText } from '@app/elements';
 import { Colors } from '@app/utils';
 import { FlexBox } from '@app/ui';
+import { LayoutChangeEvent } from 'react-native';
 
 interface Props {
   props: {
@@ -13,9 +14,26 @@ interface Props {
   isActive: boolean;
   data: Date[];
   direction?: 'top' | 'bottom';
+  valueStr?: string;
 }
 
-const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
+const ChartBanner = ({
+  props,
+  isActive,
+  data,
+  direction = 'top',
+  valueStr,
+}: Props) => {
+  const [chartLayout, setChartLayout] = useState<{
+    width: number;
+    height: number;
+  }>();
+
+  const getChartLayoutHandler = (e: LayoutChangeEvent) => {
+    const { width, height } = e.nativeEvent.layout;
+    setChartLayout({ width, height });
+  };
+
   const formattedDate = useMemo(() => {
     if (data && props.index < data.length) {
       const date = data[props.index];
@@ -26,9 +44,15 @@ const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
     return '';
   }, [data, props]);
 
+  const top = (() => {
+    const adjust = chartLayout?.height ?? 0;
+    return direction === 'top' ? props.y - adjust : props.y;
+  })();
+
   return (
     <FlexBox
       column
+      onLayout={getChartLayoutHandler}
       position="absolute"
       zIndex={100}
       borderColor={Colors.white}
@@ -38,14 +62,14 @@ const ChartBanner = ({ props, isActive, data, direction = 'top' }: Props) => {
       paddingBottom={5}
       borderRadius={5}
       alignItems="center"
-      left={props.x - 25}
-      top={direction === 'top' ? props.y - 50 : props.y + 10}
+      left={props.x}
+      top={top}
       opacity={isActive ? 1 : 0}>
       <PrimaryText size="small" fontSize={10}>
         {formattedDate}
       </PrimaryText>
       <PrimaryText size="small" fontSize={10} bold>
-        {props.indexData}
+        {valueStr ?? props.indexData}
       </PrimaryText>
     </FlexBox>
   );

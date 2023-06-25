@@ -1,11 +1,8 @@
 import uniqBy from 'lodash/uniqBy';
 import { useState, useEffect } from 'react';
-import { convertMsToTime } from 'src/components/workout/overview/helpers/format';
 import { hrvDesc, sleepDesc, rrDesc } from 'src/content/health';
 import {
   getHRSamples,
-  getSleepSamples,
-  SleepValueProps,
   getRRSamples,
   getRestingHeartRateSamples,
   getSleepDailyAmts,

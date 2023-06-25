@@ -2,7 +2,7 @@ import { PrimaryText } from '@app/elements';
 import Icon, { IconOptions } from '@app/icons';
 import { FlexBox } from '@app/ui';
 import {
-  convertMsToTime,
+  convertTimeToFormatTime,
   renderCalories,
   renderDistance,
   renderHeartRateAvg,
@@ -43,7 +43,15 @@ const PreviewAerobic = ({ data, color }: Props) => {
       />
       <Item
         icon="clock"
-        text={data ? convertMsToTime(data.duration) : '0 sec'}
+        text={
+          data
+            ? (convertTimeToFormatTime(
+                data.duration,
+                undefined,
+                'sec',
+              ) as string)
+            : '0 sec'
+        }
         color={color}
       />
       <Item

@@ -6,7 +6,7 @@ import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
 import { InfoListBox } from '@app/elements';
 import {
   Colors,
-  convertMsToTime,
+  convertTimeToFormatTime,
   renderCalories,
   renderDistance,
   renderHealthActivityName,
@@ -62,7 +62,15 @@ const HealthContainer = ({ data, workout }: Props) => {
         secondary
         icon="clock"
         label="Duration"
-        desc={data ? (convertMsToTime(data.duration) as string) : '0 sec'}
+        desc={
+          data
+            ? (convertTimeToFormatTime(
+                data.duration,
+                undefined,
+                'sec',
+              ) as string)
+            : '0 sec'
+        }
       />
 
       <InfoListBox

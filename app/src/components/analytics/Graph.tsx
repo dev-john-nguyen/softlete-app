@@ -8,7 +8,7 @@ import { ChartBanner, LineChartGraph, PickerButton } from '@app/elements';
 import { AnalyticDataProps, AnalyticsFilters } from './types';
 
 interface CustomLineChartProps {
-  data: any;
+  data: number[];
   dates: Date[];
   chartLayout: {
     width: number;

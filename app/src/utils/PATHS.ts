@@ -1,4 +1,6 @@
+import { DateSelectionTypes } from 'src/components/analytics/types';
 import { Categories } from '../services/exercises/types';
+import { GoalSubTypes } from 'src/services/goals/types';
 
 export default {
   video: {
@@ -22,6 +24,13 @@ export default {
     upsert_health: 'api/goals/upsert-health',
     get: (userUid: string) => `api/goals/get/${userUid}`,
     delete_exercise: (goalId: string) => `api/goals/delete-exercise/${goalId}`,
+    endurance_goal_analytics: (
+      goal: number,
+      startDate: string,
+      endDate: string,
+      type: GoalSubTypes,
+    ) =>
+      `api/goals/endurance-goal-analytics?goal=${goal}&startDate=${startDate}&endDate=${endDate}&type=${type}`,
     get_exercise_goal_analytics: (
       exerciseUid: string,
       goal: string,
@@ -114,6 +123,17 @@ export default {
       healthData: 'api/workouts/update/batch/health-data',
     },
     complete: 'api/workouts/complete',
+    getHealthAnalytics: (
+      enduranceType: any,
+      dateFilterType: DateSelectionTypes,
+      dates: string[],
+    ) => {
+      let datesArrStr = ``;
+      dates.forEach(date => {
+        datesArrStr += `dates=${date}&`;
+      });
+      return `api/workouts/get/health-analytics?enduranceType=${enduranceType}&dateFilterType=${dateFilterType}&${datesArrStr}`;
+    },
     getExerciseData: (
       FromDate: string,
       toDate: string,
