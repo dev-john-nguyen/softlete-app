@@ -80,7 +80,7 @@ const Item: FC<{
       },
     ];
     const firstItemIndex = elements.findIndex(
-      ({ type }) => type === GoalSubTypes.endurance_avg_pace,
+      ({ type }) => type === goal.subType,
     );
     if (firstItemIndex > -1) {
       const itemToMove = elements[firstItemIndex];
