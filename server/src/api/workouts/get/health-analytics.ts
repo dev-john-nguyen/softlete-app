@@ -9,8 +9,8 @@ const router = express.Router();
 const cache = apicache.middleware;
 
 enum DateFilterType {
-  range,
-  multiple,
+  range = 'range',
+  multiple = 'multiple',
 }
 
 type RequestQueryProps = {
@@ -26,7 +26,7 @@ type Query = {
 
 router.get(
   '/',
-  cache('10 minutes', cacheOnlyNonOwner),
+  cache('5 minutes', cacheOnlyNonOwner),
   async (
     req: Request<null, null, null, RequestQueryProps>,
     res: Response,
@@ -40,18 +40,27 @@ router.get(
     if (!enduranceType) return res.status(400).send('Invalid endurance type');
     if (!dateFilterType)
       return res.status(400).send('Invalid date filter type');
-    if (!dates || dates.some(d => !DateTools.isValidDateStr(d)))
-      return res.status(400).send('Invalid dates');
+    if (!dates) {
+      return res.status(400).send('Date required');
+    }
+
+    if (!Array.isArray(dates)) {
+      if (!DateTools.isValidDateStr(dates)) {
+        return res.status(400).send('Invalid date provided');
+      }
+    } else {
+      if (dates.some(d => !DateTools.isValidDateStr(d)))
+        return res.status(400).send('Invalid date provided');
+      dates.sort((a, b) => {
+        const aDate = DateTools.strToDate(a) as Date;
+        const bDate = DateTools.strToDate(b) as Date;
+        return aDate.getTime() - bDate.getTime();
+      });
+    }
 
     const query: Query = {
       userUid: uid,
     };
-
-    dates.sort((a, b) => {
-      const aDate = DateTools.strToDate(a) as Date;
-      const bDate = DateTools.strToDate(b) as Date;
-      return aDate.getTime() - bDate.getTime();
-    });
 
     if (dateFilterType === DateFilterType.multiple) {
       query.date = { $in: dates };
