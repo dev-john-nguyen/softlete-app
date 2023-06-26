@@ -209,6 +209,6 @@ export default {
   },
 };
 
-export const SERVERURL = 'http://localhost:3000/';
-// export const SERVERURL = 'http://192.168.86.38:3000/';
+// export const SERVERURL = 'http://localhost:3000/';
+export const SERVERURL = 'http://192.168.86.30:3000/';
 // export const SERVERURL = 'https://softlete-sandbox.herokuapp.com/';

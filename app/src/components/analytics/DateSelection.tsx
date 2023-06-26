@@ -195,6 +195,7 @@ const DateSelection = ({
         onConfirm={onDatePickerConfirm}
         onCancel={() => setIsOpen(false)}
         open={isOpen}
+        textColor={Colors.white}
       />
     </FlexBox>
   );
