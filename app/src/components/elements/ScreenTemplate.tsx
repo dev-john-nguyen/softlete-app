@@ -173,6 +173,7 @@ const ScreenTemplate = ({
           onDatePickerChange && onDatePickerChange(date);
         }}
         onCancel={() => onDatePickerClose && onDatePickerClose()}
+        textColor={Colors.white}
       />
     </>
   );
