@@ -1,0 +1,154 @@
+diff --git a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Queries.m b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Queries.m
+index 6302013..30ee64c 100644
+--- a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Queries.m
++++ b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Queries.m
+@@ -515,7 +515,8 @@ - (void)fetchAnchoredWorkouts:(HKSampleType *)type
+                         double energy =  [[sample totalEnergyBurned] doubleValueForUnit:[HKUnit kilocalorieUnit]];
+                         double distance = [[sample totalDistance] doubleValueForUnit:[HKUnit mileUnit]];
+                         NSString *type = [RCTAppleHealthKit stringForHKWorkoutActivityType:[sample workoutActivityType]];
+-
++                        NSArray *workoutEvents = [RCTAppleHealthKit formatWorkoutEvents:[sample workoutEvents]];
++                        NSTimeInterval duration = [sample duration];
+                         NSString *startDateString = [RCTAppleHealthKit buildISO8601StringFromDate:sample.startDate];
+                         NSString *endDateString = [RCTAppleHealthKit buildISO8601StringFromDate:sample.endDate];
+ 
+@@ -546,7 +547,9 @@ - (void)fetchAnchoredWorkouts:(HKSampleType *)type
+                                                @"device": device,
+                                                @"distance" : @(distance),
+                                                @"start" : startDateString,
+-                                               @"end" : endDateString
++                                               @"end" : endDateString,
++                                               @"duration": @(duration),
++                                               @"workoutEvents": workoutEvents
+                                                };
+ 
+                         [data addObject:elem];
+diff --git a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.h b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.h
+index 63abfd6..04035ab 100644
+--- a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.h
++++ b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.h
+@@ -37,7 +37,7 @@ extern NSString * const kMetadataKey;
+ + (HKWorkoutActivityType)hkWorkoutActivityTypeFromOptions: (NSDictionary *)options key: (NSString *)key withDefault: (HKWorkoutActivityType)defaultValue;
+ + (HKQuantity *)hkQuantityFromOptions:(NSDictionary *)options valueKey: (NSString *)valueKey unitKey: (NSString *)unitKey;
+ + (NSDictionary *)metadataFromOptions:(NSDictionary *)options withDefault:(NSDictionary *)defaultValue;
+-
+++ (NSArray *)formatWorkoutEvents:(NSArray *)workoutEvents;
+ + (NSMutableArray *)reverseNSMutableArray:(NSMutableArray *)array;
+ + (NSString*) stringForHKWorkoutActivityType:(int) enumValue;
+ 
+diff --git a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.m b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.m
+index f42ea62..dae97eb 100644
+--- a/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.m
++++ b/node_modules/react-native-health/RCTAppleHealthKit/RCTAppleHealthKit+Utils.m
+@@ -15,6 +15,56 @@ @implementation RCTAppleHealthKit (Utils)
+ 
+ #pragma mark - Utilities
+ 
+++ (NSArray *)formatWorkoutEvents:(NSArray *)workoutEvents
++{
++    NSMutableArray *formattedWorkEvents = [[NSMutableArray alloc] init];
++
++    for (id workoutEvent in workoutEvents) {
++        NSNumber *eventType = [workoutEvent valueForKey:@"type"];
++        NSString *eventDescription = @"";
++
++        switch([eventType intValue]) {
++            case (int)HKWorkoutEventTypePause:
++                eventDescription = @"pause";
++                break;
++            case (int)HKWorkoutEventTypeResume:
++                eventDescription = @"resume";
++                break;
++            case (int)HKWorkoutEventTypeMotionPaused:
++                eventDescription = @"motion paused";
++                break;
++            case (int)HKWorkoutEventTypeMotionResumed:
++                eventDescription = @"motion resumed";
++                break;
++            case (int)HKWorkoutEventTypePauseOrResumeRequest:
++                eventDescription = @"pause or resume request";
++                break;
++            case (int)HKWorkoutEventTypeLap:
++                eventDescription = @"lap";
++                break;
++            case (int)HKWorkoutEventTypeSegment:
++                eventDescription = @"segment";
++                break;
++            case (int)HKWorkoutEventTypeMarker:
++                eventDescription = @"marker";
++            default:
++                eventDescription = @"";
++        }
++
++
++        NSObject *formattedEvent = @{
++            @"eventTypeInt":eventType,
++            @"eventType": eventDescription,
++            @"startDate": [RCTAppleHealthKit buildISO8601StringFromDate:[[workoutEvent dateInterval] startDate]],
++            @"endDate": [RCTAppleHealthKit buildISO8601StringFromDate:[[workoutEvent dateInterval] endDate]]
++        };
++        [formattedWorkEvents addObject: formattedEvent];
++    }
++
++    return formattedWorkEvents;
++}
++
++
+ + (NSDate *)parseISO8601DateFromString:(NSString *)date
+ {
+     @try {
+diff --git a/node_modules/react-native-health/docs/getAnchoredWorkouts.md b/node_modules/react-native-health/docs/getAnchoredWorkouts.md
+index e6fdd8a..d8d80d0 100644
+--- a/node_modules/react-native-health/docs/getAnchoredWorkouts.md
++++ b/node_modules/react-native-health/docs/getAnchoredWorkouts.md
+@@ -59,5 +59,12 @@ The resulting workouts in the array will look as the following:
+   distance: Number, // [[sample totalDistance] doubleValueForUnit:[HKUnit mileUnit]]
+   start: String, // [RCTAppleHealthKit buildISO8601StringFromDate:sample.startDate];
+   end: String, // [RCTAppleHealthKit buildISO8601StringFromDate:sample.endDate];
++  duration: Number, // NSTimeInterval (seconds)
++  workoutEvents: {
++    endDate: String, // [RCTAppleHealthKit buildISO8601StringFromDate:sample.endDate];
++    startDate: String, // [RCTAppleHealthKit buildISO8601StringFromDate:sample.startDate]
++    eventTypeInt: Number,
++    eventType: String, // EventType enum
++  }[]
+ }
+ ```
+diff --git a/node_modules/react-native-health/index.d.ts b/node_modules/react-native-health/index.d.ts
+index 14f3fc6..16a8892 100644
+--- a/node_modules/react-native-health/index.d.ts
++++ b/node_modules/react-native-health/index.d.ts
+@@ -449,6 +449,24 @@ declare module 'react-native-health' {
+     speedAccuracy: number
+   }
+ 
++  export enum EventType {
++    Pause = 'pause',
++    Resume = 'resume',
++    MotionPaused = 'motion paused',
++    MotionResumed = 'motion resumed',
++    PausedOrResumeRequest = 'pause or resume request',
++    Lap = 'lap',
++    Segment = 'segment',
++    Marker = 'marker'
++  }
++
++  export type HKWorkoutEventType = {
++    endDate: string
++    startDate: string
++    eventTypeInt: number
++    eventType: EventType
++  }
++
+   export interface RecordMetadata {
+     HKBloodGlucoseMealTime?: BloodGlucoseMealTime
+     HKWasUserEntered?: boolean
+@@ -511,6 +529,8 @@ declare module 'react-native-health' {
+     distance: number
+     start: string
+     end: string
++    duration: number
++    workoutEvents: HKWorkoutEventType[]
+   }
+ 
+ 
