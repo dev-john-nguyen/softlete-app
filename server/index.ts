@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import admin from 'firebase-admin';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -68,11 +68,13 @@ app.get('/clear-cache', (req, res) => {
   return res.send('cleared');
 });
 
-app.use((error: any, request: Request, response: Response) => {
-  // Error handling middleware functionality
-  console.error(error.stack);
-  response.status(500).send('An unexpected error occurred!');
-});
+app.use(
+  (error: any, request: Request, response: Response, next: NextFunction) => {
+    // Error handling middleware functionality
+    console.error(error.stack);
+    response.status(500).send('An unexpected error occurred!');
+  },
+);
 
 const root = path.resolve(__dirname, 'client', 'build');
 app.use(express.static(root));
