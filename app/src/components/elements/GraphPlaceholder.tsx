@@ -12,10 +12,11 @@ const GraphPlaceholder = () => {
       alignItems="center"
       backgroundColor={rgba(Colors.whiteRbg, 0.1)}
       borderRadius={5}
-      padding={10}
       justifyContent="center">
-      <Icon icon="bar_chart" size={25} color={Colors.white} />
-      <PrimaryText marginLeft={5}>Not Enough Data</PrimaryText>
+      <FlexBox alignItems="center">
+        <Icon icon="bar_chart" size={25} color={Colors.white} />
+        <PrimaryText marginLeft={5}>Not Enough Data</PrimaryText>
+      </FlexBox>
     </FlexBox>
   );
 };
