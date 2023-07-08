@@ -125,7 +125,14 @@ const ScreenTemplate = ({
                 middleContent
               )}
             </FlexBox>
-            <FlexBox flex={headerTitleFormatted ? 0 : rightContentFlex ?? 0.3}>
+            <FlexBox
+              flex={
+                headerTitleFormatted
+                  ? rightContent
+                    ? 0.3
+                    : 0
+                  : rightContentFlex ?? 0.3
+              }>
               {rightContent}
             </FlexBox>
           </FlexBox>

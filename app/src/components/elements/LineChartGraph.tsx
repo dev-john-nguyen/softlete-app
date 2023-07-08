@@ -43,7 +43,14 @@ interface Props {
   autoLayoutWidth?: boolean;
   autoLayoutHeight?: boolean;
   applyHeaderPadding?: boolean;
+  getDotProps?: (value: any, index: number) => object;
 }
+
+export const defaultDotProps = {
+  r: '.5',
+  strokeWidth: '10',
+  stroke: Colors.white,
+};
 
 export function formatNumber(numStr: string): string {
   const num = parseFloat(numStr);
@@ -86,6 +93,7 @@ export const LineChartGraph: FC<Props> = ({
   autoLayoutHeight,
   autoLayoutWidth,
   applyHeaderPadding,
+  getDotProps,
 }) => {
   const [bannerHeight, setBannerHeight] = React.useState(0);
   const [chartLayout, setChartLayout] = React.useState<{
@@ -149,9 +157,9 @@ export const LineChartGraph: FC<Props> = ({
                 setBannerHeight(height)
               }
               padding={5}
-              paddingLeft={10}
-              paddingRight={10}
-              borderColor={Colors.white}
+              paddingLeft={15}
+              paddingRight={15}
+              borderColor={rgba(Colors.whiteRbg, 0.5)}
               borderWidth={1}
               borderRadius={5}
               alignSelf="center">
@@ -181,6 +189,7 @@ export const LineChartGraph: FC<Props> = ({
               fromZero={fromZero}
               renderDotContent={renderDotContent}
               withDots={widthDots}
+              getDotProps={getDotProps}
               chartConfig={{
                 backgroundGradientFrom: 'transparent',
                 backgroundGradientTo: 'transparent',
@@ -193,11 +202,7 @@ export const LineChartGraph: FC<Props> = ({
                 propsForLabels: {
                   fontSize: 10,
                 },
-                propsForDots: {
-                  r: '.5',
-                  strokeWidth: '10',
-                  stroke: Colors.white,
-                },
+                propsForDots: defaultDotProps,
                 strokeWidth: 1,
               }}
               style={{
