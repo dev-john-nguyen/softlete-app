@@ -3,7 +3,7 @@ import { LayoutChangeEvent } from 'react-native';
 import { FlexBox } from '@app/ui';
 import _ from 'lodash';
 import { Colors, Constants } from '@app/utils';
-import { ChartBanner, LineChartGraph, defaultDotProps } from '@app/elements';
+import { LineChartGraph, defaultDotProps } from '@app/elements';
 import Empty from 'src/components/analytics/Empty';
 
 type DataProps = {

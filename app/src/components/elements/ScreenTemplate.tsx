@@ -120,7 +120,9 @@ const ScreenTemplate = ({
               paddingLeft={headerTitleFormatted ? 10 : 0}
               justifyContent={headerTitleFormatted ? 'flex-start' : 'center'}>
               {headerTitleFormatted ? (
-                <PrimaryText size="large">{headerTitleFormatted}</PrimaryText>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <PrimaryText size="large">{headerTitleFormatted}</PrimaryText>
+                </ScrollView>
               ) : (
                 middleContent
               )}
@@ -129,7 +131,7 @@ const ScreenTemplate = ({
               flex={
                 headerTitleFormatted
                   ? rightContent
-                    ? 0.3
+                    ? 0.2
                     : 0
                   : rightContentFlex ?? 0.3
               }>
