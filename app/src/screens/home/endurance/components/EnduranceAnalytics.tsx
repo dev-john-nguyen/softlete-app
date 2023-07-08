@@ -1,4 +1,4 @@
-import { PickerButton, PrimaryText, ScreenTemplate } from '@app/elements';
+import { PickerButton, ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';

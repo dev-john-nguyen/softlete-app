@@ -24,5 +24,4 @@ export { default as GraphPlaceholder } from './GraphPlaceholder';
 export { default as ToolTip } from './ToolTip';
 export { default as PlaceholderImage } from './PlaceholderImage';
 export { default as PaginatedHorizontalList } from './PaginatedHorizontalList';
-export { default as ChartBanner } from './ChartBanner';
 export { default as HealthCircle } from './HealthCircle';

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -121,7 +121,9 @@ const ScreenTemplate = ({
               justifyContent={headerTitleFormatted ? 'flex-start' : 'center'}>
               {headerTitleFormatted ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <PrimaryText size="large">{headerTitleFormatted}</PrimaryText>
+                  <PrimaryText size="large" textTransform="capitalize">
+                    {headerTitleFormatted}
+                  </PrimaryText>
                 </ScrollView>
               ) : (
                 middleContent

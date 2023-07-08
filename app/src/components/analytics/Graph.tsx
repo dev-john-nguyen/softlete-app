@@ -3,8 +3,8 @@ import { LayoutChangeEvent } from 'react-native';
 import Empty from './Empty';
 import { FlexBox } from '@app/ui';
 import _ from 'lodash';
-import { Constants } from '@app/utils';
-import { ChartBanner, LineChartGraph, PickerButton } from '@app/elements';
+import { Colors, Constants } from '@app/utils';
+import { LineChartGraph, PickerButton, defaultDotProps } from '@app/elements';
 import { AnalyticDataProps, AnalyticsFilters } from './types';
 
 interface CustomLineChartProps {
@@ -21,11 +21,11 @@ const CustomLineChart = ({
   dates,
   chartLayout,
 }: CustomLineChartProps) => {
-  const [activeDot, setActiveDot] = useState<number | undefined>();
+  const [activeDot, setActiveDot] = useState<number>(0);
 
   useEffect(() => {
     if (data.length > 0) {
-      setActiveDot(data.length > 3 ? data.length - 1 : undefined);
+      setActiveDot(data.length > 3 ? data.length - 1 : 0);
     }
   }, [data]);
 
@@ -39,19 +39,29 @@ const CustomLineChart = ({
     return { months: [], values: [] };
   }, [data]);
 
+  const bannerLabel = useMemo(() => {
+    const dateLabel = dates[activeDot ?? 0];
+
+    return dateLabel.getMonth() + 1 + '/' + dateLabel.getDate();
+  }, [dates, activeDot]);
+
   return (
     <LineChartGraph
       data={values}
       labels={months}
-      renderDotContent={props => (
-        <ChartBanner
-          key={props.index}
-          props={props}
-          isActive={activeDot === props.index}
-          data={dates}
-          direction="bottom"
-        />
-      )}
+      getDotProps={(_, index) =>
+        index === activeDot
+          ? {
+              ...defaultDotProps,
+              r: 6,
+              strokeWidth: 0,
+              fill: Colors.white,
+            }
+          : defaultDotProps
+      }
+      isBannerVisible
+      bannerLabel={bannerLabel}
+      bannerValue={data[activeDot ?? 0]}
       onDataPointClick={props => setActiveDot(props.index)}
       fromZero
       widthDots
