@@ -21,7 +21,7 @@ const GoalFilterItem: FC<Props> = ({ goal, active, onPress }) => {
       backgroundColor={Colors.lightPrimary}
       borderRadius={5}
       borderWidth={1}
-      borderColor={active ? goal.color : rgba(Colors.whiteRbg, 0)}
+      borderColor={active ? goal.color : undefined}
       applyBoxShadow
       marginRight={20}>
       <PrimaryText opacity={0.6} marginBottom={2}>
