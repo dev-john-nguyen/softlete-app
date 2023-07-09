@@ -202,13 +202,7 @@ const ExerciseAnalytics = ({
       isBackVisible
       leftContentFlex={0}
       rightContentFlex={0}
-      middleContent={
-        <FlexBox flex={1} marginLeft={10}>
-          <PrimaryText size="large" variant="primary">
-            {analytics?.exercise?.name || 'Exercise Analytics'}
-          </PrimaryText>
-        </FlexBox>
-      }>
+      headerTitleFormatted={analytics?.exercise?.name || 'Exercise Analytics'}>
       {(() => {
         if (loading) return <Loading white />;
         return (

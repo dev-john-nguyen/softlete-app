@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -40,6 +40,7 @@ interface Props {
   leftContentFlex?: number;
   rightContentFlex?: number;
   middleContentFlex?: number;
+  headerTitleFormatted?: string;
 }
 
 const ScreenTemplate = ({
@@ -67,6 +68,7 @@ const ScreenTemplate = ({
   leftContentFlex,
   rightContentFlex,
   middleContentFlex,
+  headerTitleFormatted,
 }: Props) => {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
@@ -101,7 +103,9 @@ const ScreenTemplate = ({
             paddingLeft={15}
             paddingRight={15}
             zIndex={100}>
-            <FlexBox flex={leftContentFlex ?? 0.3} alignItems="center">
+            <FlexBox
+              flex={headerTitleFormatted ? 0 : leftContentFlex ?? 0.3}
+              alignItems="center">
               {isBackVisible && (
                 <BackButton
                   onPress={goBackHandler}
@@ -111,12 +115,30 @@ const ScreenTemplate = ({
               {leftContent}
             </FlexBox>
             <FlexBox
-              flex={middleContentFlex ?? 1}
+              flex={headerTitleFormatted ? 1 : middleContentFlex ?? 1}
               alignItems="center"
-              justifyContent="center">
-              {middleContent}
+              paddingLeft={headerTitleFormatted ? 10 : 0}
+              justifyContent={headerTitleFormatted ? 'flex-start' : 'center'}>
+              {headerTitleFormatted ? (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <PrimaryText size="large" textTransform="capitalize">
+                    {headerTitleFormatted}
+                  </PrimaryText>
+                </ScrollView>
+              ) : (
+                middleContent
+              )}
             </FlexBox>
-            <FlexBox flex={rightContentFlex ?? 0.3}>{rightContent}</FlexBox>
+            <FlexBox
+              flex={
+                headerTitleFormatted
+                  ? rightContent
+                    ? 0.2
+                    : 0
+                  : rightContentFlex ?? 0.3
+              }>
+              {rightContent}
+            </FlexBox>
           </FlexBox>
           {enableScrollWrapper ? (
             <>
