@@ -83,9 +83,8 @@ router.post('/', async (req: any, res: any, next: any) => {
       date,
       workoutUid: duplicateWorkout._id,
       userUid: uid,
-      data: e.data.map((d: any) => {
-        //note that the data is a document type
-        const { _id, performVal, ...restD } = d.toObject();
+      data: e.data.map(dta => {
+        const { _id, performVal, ...restD } = dta;
         return {
           ...restD,
         };
