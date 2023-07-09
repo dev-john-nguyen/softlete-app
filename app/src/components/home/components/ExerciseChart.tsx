@@ -1,7 +1,7 @@
 import { GraphPlaceholder, LineChartGraph } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import unionWith from 'lodash/unionWith';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import Constants from '../../../utils/Constants';
 
