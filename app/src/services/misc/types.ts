@@ -24,7 +24,7 @@ export interface AnalyticsProps {
   exerciseUid: string;
   exercise?: ExerciseProps;
   analytics?: ExercisesAnalyticsProps;
-  data: AnalyticalDataProps<WorkoutExerciseDataProps>[];
+  data: AnalyticalDataProps<WorkoutExerciseDataProps[]>[];
 }
 
 export interface ExercisesAnalyticsProps {

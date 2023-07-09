@@ -146,7 +146,7 @@ const Home = ({
       })
       .filter(e => !!e);
     return pinnedExerciseProps as ExerciseProps[];
-  }, [exercises]);
+  }, [exercises, user.pinExercises]);
 
   const pickerOptions = useMemo(() => {
     if (picker && picker === 'chartFilter') {
@@ -225,7 +225,7 @@ const Home = ({
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         ref={scrollRef}>
-        <HomeHealth healthData={healthData} navigation={navigation} />
+        <HomeHealth healthData={healthData} />
         <HomeWorkouts wos={wos} deviceWos={deviceWos} desc={bannerTxt} />
         <HomeExercises
           pinAnalytics={pinExercisesAnalytics}
