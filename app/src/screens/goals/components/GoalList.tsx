@@ -42,7 +42,7 @@ const GoalList: React.FC<Props> = ({ activeFilter }) => {
         (a, b) =>
           new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
       );
-  }, [exercise, goals, activeFilter]);
+  }, [type, exercise, goals, activeFilter]);
 
   const goalProfile = exerciseGoals.find(goal => goal._id === activeGoal);
 

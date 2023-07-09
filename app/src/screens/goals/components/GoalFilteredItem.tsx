@@ -4,6 +4,7 @@ import { GoalProps } from 'src/services/goals/types';
 import { PrimaryText } from '@app/elements';
 import { Colors, DateTools, rgba } from '@app/utils';
 import { GoalStatusProps } from '../types';
+import Icon from '@app/icons';
 
 type Props = {
   goal: GoalProps & GoalStatusProps;
@@ -33,6 +34,12 @@ const GoalFilterItem: FC<Props> = ({ goal, active, onPress }) => {
         Name:
       </PrimaryText>
       <PrimaryText>{goal.name}</PrimaryText>
+      <Icon
+        icon="target"
+        color={goal.color}
+        size={18}
+        containerStyles={{ position: 'absolute', top: 5, right: 5 }}
+      />
     </FlexBox>
   );
 };

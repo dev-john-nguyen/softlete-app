@@ -8,7 +8,7 @@ type Props = {
   color?: string;
   letter?: number;
   icon?: IconOptions;
-  desc: string;
+  desc?: string;
   onPress?: () => void;
   secondary?: boolean;
   label?: string;

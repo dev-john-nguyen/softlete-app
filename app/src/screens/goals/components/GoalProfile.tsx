@@ -1,4 +1,4 @@
-import { PrimaryText } from '@app/elements';
+import { InfoListBox, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, DateTools, rgba } from '@app/utils';
@@ -8,7 +8,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import useBanner from 'src/hooks/utils/useBanner';
@@ -73,7 +73,7 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
     <FlexBox column flex={1}>
       <FlexBox
         column
-        marginTop={10}
+        marginTop={5}
         alignItems="flex-start"
         borderBottomWidth={1}
         borderBottomColor={rgba(Colors.whiteRbg, 0.2)}
@@ -81,13 +81,13 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
         marginBottom={4}>
         <FlexBox
           justifyContent="space-between"
-          alignItems="center"
+          alignItems="flex-start"
           width="100%">
-          <FlexBox>
-            <PrimaryText opacity={0.6}>Status:</PrimaryText>
-            <PrimaryText color={goal.color} marginLeft={5}>
-              {goal.status}
+          <FlexBox column>
+            <PrimaryText opacity={0.6} marginTop={5}>
+              Name:
             </PrimaryText>
+            <PrimaryText>{goal.name}</PrimaryText>
           </FlexBox>
           <FlexBox>
             <Icon
@@ -107,43 +107,39 @@ const GoalProfile: React.FC<Props> = ({ goal, exercise }) => {
         </FlexBox>
 
         <PrimaryText opacity={0.6} marginTop={5}>
-          Name:
-        </PrimaryText>
-        <PrimaryText>{goal.name}</PrimaryText>
-        {goal.subType && (
-          <Fragment>
-            <PrimaryText opacity={0.6} marginTop={5}>
-              Type:
-            </PrimaryText>
-            <PrimaryText>{goal.subType}</PrimaryText>
-          </Fragment>
-        )}
-
-        <PrimaryText opacity={0.6} marginTop={5}>
           Description:
         </PrimaryText>
-        <FlexBox maxHeight={40}>
+        <FlexBox maxHeight={40} marginBottom={10}>
           <ScrollView>
             <PrimaryText>{goal.description}</PrimaryText>
           </ScrollView>
         </FlexBox>
 
-        <FlexBox column marginTop={5}>
-          <PrimaryText opacity={0.6}>Date Range: </PrimaryText>
-          <PrimaryText>
-            {`${DateTools.convertLocalStrToFormatStr(
-              goal.startDate,
-              '/',
-            )} - ${DateTools.convertLocalStrToFormatStr(goal.endDate, '/')}`}
-          </PrimaryText>
-        </FlexBox>
-
-        <FlexBox column marginTop={5}>
-          <PrimaryText opacity={0.6}>Target:</PrimaryText>
-          <PrimaryText>
-            {goal.goal} {goal.measurement}
-          </PrimaryText>
-        </FlexBox>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <InfoListBox
+            secondary
+            label="Goal"
+            desc={String(goal.goal) + String(goal.measurement)}
+          />
+          {goal.subType && (
+            <InfoListBox
+              secondary
+              label="Type"
+              desc={goal.subType}
+              textTransform="capitalize"
+            />
+          )}
+          <InfoListBox
+            secondary
+            label="Start Date"
+            desc={DateTools.convertLocalStrToFormatStr(goal.startDate, '/')}
+          />
+          <InfoListBox
+            secondary
+            label="End Date"
+            desc={DateTools.convertLocalStrToFormatStr(goal.endDate, '/')}
+          />
+        </ScrollView>
       </FlexBox>
 
       {type === GoalTypes.exercise && exercise ? (
