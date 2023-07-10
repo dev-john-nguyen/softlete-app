@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { FlexBox } from '@app/ui';
 import { Colors, Constants, rgba } from '@app/utils';
 import { LineChart } from 'react-native-chart-kit';
@@ -96,7 +96,7 @@ const Health = () => {
     }
   })();
 
-  const { sleepToday, hrvToday, rrToday, rhrToday } = (() => {
+  const { sleepToday, hrvToday, rrToday, rhrToday } = useMemo(() => {
     const getValue = (healthEval: HealthEvalProps) => {
       if (healthEval.data.length > 0) {
         return Math.round(
@@ -112,7 +112,7 @@ const Health = () => {
       rrToday: getValue(rrs),
       rhrToday: getValue(rhrs),
     };
-  })();
+  }, [hrvs, rhrs, rrs, sleeps]);
 
   return (
     <ScreenTemplate
