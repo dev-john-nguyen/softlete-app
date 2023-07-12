@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { HealthDataProps } from '../../../../services/workout/types';
 import BaseColors, { rgba } from '../../../../utils/BaseColors';
 import AppleHealthKit, {
@@ -27,8 +27,6 @@ const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
   const [sleepDuration, setSleepDuration] = useState(0);
-  const d = new Date();
-  const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const { sleepGoal, activeCaloriesGoal } = useSelector(
     (state: ReducerProps) => ({
@@ -37,7 +35,9 @@ const HomeHealth = ({ healthData }: Props) => {
     }),
   );
 
-  const fetchHealthData = async () => {
+  const fetchHealthData = useCallback(async () => {
+    const d = new Date();
+    const today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     const options: HealthInputOptions = {
       startDate: today.toISOString(),
     };
@@ -72,6 +72,7 @@ const HomeHealth = ({ healthData }: Props) => {
       options,
       (err, results: HealthValue[]) => {
         if (err) {
+          console.log(err);
           return;
         }
         let totalActive = 0;
@@ -81,11 +82,11 @@ const HomeHealth = ({ healthData }: Props) => {
         setActiveCals(_.round(totalActive));
       },
     );
-  };
+  }, []);
 
   useEffect(() => {
     fetchHealthData().catch(err => console.log(err));
-  }, [healthData]);
+  }, [fetchHealthData, healthData]);
 
   const onNavToHealth = () => {
     navigation.navigate(HomeStackScreens.Health);

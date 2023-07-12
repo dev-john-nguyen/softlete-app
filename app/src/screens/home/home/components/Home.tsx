@@ -137,7 +137,7 @@ const Home = ({
     if (route.params && route.params.directToDash) {
       navigation.navigate(HomeStackScreens.Calendar);
     }
-  }, [route]);
+  }, [navigation, route]);
 
   const pinnedExerciseProps = useMemo(() => {
     const pinnedExerciseProps = user.pinExercises
