@@ -174,6 +174,7 @@ export default {
   },
   programs: {
     get: (userUid: string) => `api/programs/get?userUid=${userUid}`,
+    getSoftlete: () => `api/programs/get-softlete`,
     create: 'api/programs/create',
     createWorkout: 'api/programs/workouts/create',
     updateWorkoutHeader: 'api/programs/workouts/update/header',

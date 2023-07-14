@@ -8,6 +8,8 @@ import { SERVERURL } from '../../utils/PATHS';
 import { BannerTypes } from '../banner/types';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 
+const undefinedResult = { data: undefined };
+
 export function getRequestURL(path: string) {
   return SERVERURL + path;
 }
@@ -35,7 +37,7 @@ export async function sendRequest(
   method: Method,
   path: string,
   data?: any,
-): Promise<{ data?: any; errorMessage?: string; deniedAccess?: boolean }> {
+): Promise<{ data: any; errorMessage?: string; deniedAccess?: boolean }> {
   const base = {
     method: method,
     url: SERVERURL + path,
@@ -64,19 +66,20 @@ export async function sendRequest(
       if (!data.tokenExpired) {
         //check if an html responses gets sent back
         if (data && typeof data === 'string' && data[0] !== '<') {
-          return { errorMessage: data };
+          return { errorMessage: data, ...undefinedResult };
         } else {
-          return { errorMessage: messages.defaultError };
+          return { errorMessage: messages.defaultError, ...undefinedResult };
         }
       }
       //skips to trying again...
-      return { deniedAccess: true };
+      return { deniedAccess: true, ...undefinedResult };
     }
 
     if (err.message === 'Network Error') {
       return {
         errorMessage:
           'There was a network error. Please check your internet connection.',
+        ...undefinedResult,
       };
     }
 
@@ -84,23 +87,29 @@ export async function sendRequest(
       return {
         errorMessage:
           'The request timed out. Please ensure you have a good network connection.',
+        ...undefinedResult,
       };
     }
 
-    return { errorMessage: messages.defaultError };
+    return { errorMessage: messages.defaultError, ...undefinedResult };
   }
 
   if (result) return result as { data: any };
 
-  return { errorMessage: messages.defaultError };
+  return { errorMessage: messages.defaultError, ...undefinedResult };
 }
 
-export default async function request(
+export interface Request<DataType = undefined> {
+  data: DataType;
+  networkError?: boolean;
+}
+
+export default async function request<DataType>(
   method: Method,
   path: string,
   dispatch: AppDispatch | ThunkDispatch<unknown, unknown, AnyAction>,
   data?: any,
-): Promise<{ data?: any; networkError?: boolean }> {
+): Promise<Request<DataType>> {
   //check auth and update if no there
   if (!axios.defaults.headers.common['Authorization']) {
     const isUpdated = await resetAuthHeader();
@@ -108,7 +117,7 @@ export default async function request(
       //user is logged out
       //will need to relogin
       dispatch({ type: SIGNOUT_USER });
-      return {};
+      return undefinedResult as Request<DataType>;
     }
   }
 
@@ -120,31 +129,31 @@ export default async function request(
       'There was a network error. Please check your internet connection.'
     ) {
       dispatch(setBanner(BannerTypes.error, resultOne.errorMessage));
-      return { networkError: true };
+      return { networkError: true, data: undefined } as Request<DataType>;
     } else {
       dispatch(setBanner(BannerTypes.error, resultOne.errorMessage));
-      return {};
+      return undefinedResult as Request<DataType>;
     }
   }
 
   if (resultOne.data) return resultOne;
 
   // only try again if deniedAcess is true
-  if (!resultOne.deniedAccess) return {};
+  if (!resultOne.deniedAccess) return undefinedResult as Request<DataType>;
 
   // possible token expire try again with new token
   const isUpdated = await resetAuthHeader();
 
   if (!isUpdated) {
     dispatch({ type: SIGNOUT_USER });
-    return {};
+    return undefinedResult as Request<DataType>;
   }
 
   const resultTwo = await sendRequest(method, path, data);
 
   if (resultTwo.errorMessage) {
     dispatch(setBanner(BannerTypes.error, resultTwo.errorMessage));
-    return {};
+    return undefinedResult as Request<DataType>;
   }
 
   if (resultTwo.data) return resultTwo;
@@ -157,9 +166,9 @@ export default async function request(
         "Looks like you don't have permission. Try logging in again.",
       ),
     );
-    return {};
+    return undefinedResult as Request<DataType>;
   }
 
   dispatch(setBanner(BannerTypes.error, messages.defaultError));
-  return {};
+  return undefinedResult as Request<DataType>;
 }

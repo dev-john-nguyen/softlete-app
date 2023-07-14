@@ -28,14 +28,7 @@ function ProgramStack(parentProps: any) {
     <Tab.Navigator
       screenOptions={childProps => screenOptions(parentProps, childProps)}
       initialRouteName={ProgramStackScreens.Templates}>
-      <Tab.Screen
-        name={ProgramStackScreens.Templates}
-        component={Templates}
-        options={{
-          headerTitle: 'Programs',
-          headerLeft: () => null,
-        }}
-      />
+      <Tab.Screen name={ProgramStackScreens.Templates} component={Templates} />
 
       <Tab.Screen
         name={ProgramStackScreens.ProgramInput}

@@ -1,54 +1,42 @@
-import { useState, useEffect } from "react";
-import { AppDispatch } from "../../../App";
-import { ProgramProps, ProgramHeaderProps, ProgramActionProps } from "../../services/program/types";
-import request from "../../services/utils/request";
-import { SectionProps } from "../../types/program/program.types";
-import PATHS from "../../utils/PATHS";
+import { useEffect, useMemo } from 'react';
+import {
+  ProgramHeaderProps,
+  ProgramActionProps,
+} from '../../services/program/types';
+import request from '../../services/utils/request';
+import PATHS from '../../utils/PATHS';
+import { useQuery } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
 
 interface Props {
-    softleteUid: string
-    dispatch: AppDispatch
-    fetchPrograms: ProgramActionProps['fetchPrograms']
-    programTemplates: ProgramProps[]
+  fetchPrograms: ProgramActionProps['fetchPrograms'];
 }
 
+export function useTemplates({ fetchPrograms }: Props) {
+  const dispatch = useDispatch();
+  const { programTemplates = [] } = useSelector((state: ReducerProps) => ({
+    programTemplates: state.program.programs,
+  }));
+  const { data: softletePrograms = [] } = useQuery<ProgramHeaderProps[]>(
+    ['softlete-programs'],
+    async () => {
+      const { data } = await request<ProgramHeaderProps[]>(
+        'GET',
+        PATHS.programs.getSoftlete(),
+        dispatch,
+      );
+      return data;
+    },
+  );
 
-export function useTemplates({ softleteUid, dispatch, fetchPrograms, programTemplates }: Props) {
-    const [programs, setPrograms] = useState<SectionProps[]>([]);
-    const [softPrograms, setSoftPrograms] = useState<ProgramProps[]>([])
+  useEffect(() => {
+    fetchPrograms().catch(err => console.log(err));
+  }, [fetchPrograms]);
 
-    useEffect(() => {
-        //softlete username
-        request("GET", PATHS.programs.get(softleteUid), dispatch)
-            .then(async ({ data }: { data?: ProgramHeaderProps[] }) => {
-                if (data) setSoftPrograms(data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+  const programs = useMemo(() => {
+    return [...softletePrograms, ...programTemplates];
+  }, [programTemplates, softletePrograms]);
 
-        //could return the programs instead of waiting for state update
-        fetchPrograms().catch(err => console.log(err))
-    }, [])
-
-
-    useEffect(() => {
-        let templates: SectionProps[] = [{
-            title: "Softlete",
-            data: softPrograms
-        }]
-
-        if (programTemplates.length > 0) {
-            templates.unshift({
-
-                title: 'Me',
-                data: programTemplates
-
-            })
-        }
-
-        setPrograms(templates)
-    }, [programTemplates, softPrograms])
-
-    return { programs }
+  return { programs };
 }
