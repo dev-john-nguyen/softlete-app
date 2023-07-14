@@ -1,13 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
-import {ReducerProps} from '../../services';
-import {connect} from 'react-redux';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { ReducerProps } from '../../services';
+import { connect } from 'react-redux';
 import {
   ProgramActionProps,
   ProgramByWeekProps,
@@ -19,22 +12,20 @@ import {
   generateProgram,
 } from '../../services/program/actions';
 import ProgramHeader from '../../components/program/Header';
-import BaseColors, {rgba} from '../../utils/BaseColors';
 import ProgramWorkouts from '../../components/program/Workouts';
-import {AppDispatch} from '../../../App';
-import StyleConstants from '../../components/tools/StyleConstants';
+import { AppDispatch } from '../../../App';
 import {
   SET_COPIED_PROGRAM_WORKOUT,
   SET_PROGRAM_WORKOUT_HEADER,
 } from '../../services/program/actionTypes';
-import {programWorkoutsArrToObj, normalize} from '../../utils/tools';
+import { programWorkoutsArrToObj } from '../../utils/tools';
 import ProgramHeaderImage from '../../components/program/HeaderImage';
-import PencilSvg from '../../assets/PencilSvg';
 import Loading from '../../components/elements/Loading';
-import {ProgramStackScreens} from './types';
-import Chevron from '../../assets/ChevronSvg';
-import ProgramDownload from '../../components/program/Download';
+import { ProgramStackScreens } from './types';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 interface Props {
   navigation: any;
@@ -74,38 +65,10 @@ const ProgramTemplate = ({
     return () => {
       mount.current = false;
     };
-  }, [programProps]);
+  }, [programProps, updateProgram]);
 
   const disableEdit = () =>
     route.params && route.params.softlete ? true : false;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        !disableEdit() ? (
-          <Pressable
-            style={styles.editContainer}
-            onPress={() =>
-              navigation.navigate(ProgramStackScreens.ProgramModal)
-            }>
-            <View style={styles.edit}>
-              <PencilSvg fillColor={BaseColors.primary} />
-            </View>
-          </Pressable>
-        ) : (
-          <></>
-        ),
-      headerLeft: () => (
-        <Pressable
-          style={styles.editContainer}
-          onPress={() => navigation.goBack()}>
-          <View style={styles.edit}>
-            <Chevron strokeColor={BaseColors.primary} />
-          </View>
-        </Pressable>
-      ),
-    });
-  }, [programProps]);
 
   const navToAddWorkout = (daysFromStart: number, weeks: string[]) => {
     dispatch({
@@ -156,19 +119,43 @@ const ProgramTemplate = ({
   if (!programProps) return <Loading />;
 
   return (
-    <ScreenTemplate>
-      <View style={{height: '40%'}}>
+    <ScreenTemplate
+      isBackVisible
+      applyContentPadding
+      onGoBack={() => navigation.goBack()}
+      headerTitleFormatted={programProps.name}
+      rightContent={
+        <FlexBox alignItems="center" justifyContent="flex-end">
+          <Icon
+            icon="pencil"
+            size={20}
+            color={Colors.white}
+            onPress={() =>
+              navigation.navigate(ProgramStackScreens.ProgramModal)
+            }
+            hitSlop={5}
+          />
+          <Icon
+            icon="download"
+            size={28}
+            color={Colors.white}
+            onPress={onDownload}
+            containerStyles={{ marginLeft: 10 }}
+            hitSlop={5}
+          />
+        </FlexBox>
+      }>
+      <FlexBox height="40%" marginTop={5}>
         <ProgramHeaderImage
           uri={programProps.imageUri}
-          container={{borderRadius: 0}}
+          container={{ borderRadius: 0 }}
         />
         {/* <ProgramLike
                     likeCount={likeCount()}
                     isLiked={false}
                 /> */}
-        <ProgramDownload onDownload={onDownload} />
-      </View>
-      <View style={styles.container}>
+      </FlexBox>
+      <FlexBox column flex={1} marginTop={10} marginBottom={15}>
         <ProgramHeader
           name={programProps.name}
           description={programProps.description}
@@ -182,38 +169,10 @@ const ProgramTemplate = ({
           onPasteWorkout={onPasteWorkout}
           athlete={disableEdit()}
         />
-      </View>
+      </FlexBox>
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: StyleConstants.smallMediumFont,
-    color: BaseColors.primary,
-  },
-  container: {
-    flex: 1,
-    marginTop: StyleConstants.baseMargin,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  editContainer: {
-    marginRight: StyleConstants.baseMargin,
-    marginLeft: StyleConstants.baseMargin,
-    backgroundColor: rgba(BaseColors.whiteRbg, 0.8),
-    padding: 10,
-    borderRadius: 100,
-  },
-  edit: {
-    width: normalize.width(25),
-    height: normalize.width(25),
-  },
-});
 
 const mapStateToProps = (state: ReducerProps) => ({
   programProps: state.program.targetProgram,

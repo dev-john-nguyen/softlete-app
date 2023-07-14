@@ -74,7 +74,7 @@ const Workout = ({
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      navigation.navigate(ProgramStackScreens.Templates);
+      navigation.navigate(ProgramStackScreens.TemplateList);
     }
   };
   const disableEdit = () =>

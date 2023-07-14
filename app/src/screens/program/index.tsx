@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import screenOptions from '../utils/screenOptions';
-import Templates from './Templates';
+import TemplateList from './TemplateList';
 import { ProgramStackParamsList, ProgramStackScreens } from './types';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit';
@@ -27,8 +27,11 @@ function ProgramStack(parentProps: any) {
   return (
     <Tab.Navigator
       screenOptions={childProps => screenOptions(parentProps, childProps)}
-      initialRouteName={ProgramStackScreens.Templates}>
-      <Tab.Screen name={ProgramStackScreens.Templates} component={Templates} />
+      initialRouteName={ProgramStackScreens.TemplateList}>
+      <Tab.Screen
+        name={ProgramStackScreens.TemplateList}
+        component={TemplateList}
+      />
 
       <Tab.Screen
         name={ProgramStackScreens.ProgramInput}
@@ -43,12 +46,6 @@ function ProgramStack(parentProps: any) {
       <Tab.Screen
         name={ProgramStackScreens.Program}
         component={ProgramTemplate}
-        options={{
-          headerTitle: '',
-          headerTransparent: true,
-          headerRight: undefined,
-          headerTintColor: BaseColors.white,
-        }}
       />
 
       <Tab.Screen

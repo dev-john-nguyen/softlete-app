@@ -87,25 +87,22 @@ const WorkoutPreviewItem = ({
     };
   }, [copied]);
 
-  const renderExercises = useCallback(
-    (e: WorkoutExerciseProps, i: number) => {
-      const { exercise, data } = e;
-      const sets = data.length;
-      return (
-        <FlexBox
-          key={e._id ? e._id : i}
-          marginBottom={5}
-          justifyContent="space-between"
-          alignItems="center">
-          <PrimaryText numberOfLines={1} textTransform="capitalize">
-            {exercise ? exercise.name : 'exercise'}
-          </PrimaryText>
-          <PrimaryText>{sets} set(s)</PrimaryText>
-        </FlexBox>
-      );
-    },
-    [workout],
-  );
+  const renderExercises = useCallback((e: WorkoutExerciseProps, i: number) => {
+    const { exercise, data } = e;
+    const sets = data.length;
+    return (
+      <FlexBox
+        key={e._id ? e._id : i}
+        marginBottom={5}
+        justifyContent="space-between"
+        alignItems="center">
+        <PrimaryText numberOfLines={1} textTransform="capitalize">
+          {exercise ? exercise.name : 'exercise'}
+        </PrimaryText>
+        <PrimaryText>{sets} set(s)</PrimaryText>
+      </FlexBox>
+    );
+  }, []);
 
   const ItemRender = useMemo(() => {
     if (workout.type === WorkoutTypes.TraditionalStrengthTraining) {
@@ -131,7 +128,7 @@ const WorkoutPreviewItem = ({
         color={renderColor(workout.status)}
       />
     );
-  }, [workout]);
+  }, [renderExercises, workout]);
 
   return (
     <Pressable
@@ -194,11 +191,11 @@ const WorkoutPreviewList = ({
         athlete={athlete}
       />
     ),
-    [workouts, athlete],
+    [onPress, onLongPress, athlete],
   );
 
   return (
-    <FlexBox flex={1} justifyContent="center">
+    <FlexBox flex={1} justifyContent="center" alignItems="center">
       <FlatList
         data={workouts}
         contentContainerStyle={{ paddingBottom: normalize.height(20) }}

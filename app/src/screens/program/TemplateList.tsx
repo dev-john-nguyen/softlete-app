@@ -26,7 +26,7 @@ interface Props {
   fetchPrograms: ProgramActionProps['fetchPrograms'];
 }
 
-const Templates = ({ dispatch, navigation, fetchPrograms }: Props) => {
+const TemplateList = ({ dispatch, navigation, fetchPrograms }: Props) => {
   const { programs } = useTemplates({
     fetchPrograms,
   });
@@ -93,4 +93,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   dispatch,
 });
 
-export default connect(null, mapDispatchToProps)(Templates);
+export default connect(null, mapDispatchToProps)(TemplateList);
