@@ -108,8 +108,8 @@ export const fetchPrograms =
 
     if (!uid) return;
 
-    request('GET', PATHS.programs.get(uid), dispatch)
-      .then(async ({ data }: { data?: ProgramHeaderProps[] }) => {
+    request<ProgramHeaderProps[]>('GET', PATHS.programs.get(uid), dispatch)
+      .then(async ({ data }) => {
         if (data) {
           prefetchProgramImages(data);
           if (athlete) {
@@ -255,13 +255,13 @@ export const updateProgramWorkoutExercises =
       exercises: prepareExercisesForRequest(saveExercises),
     };
 
-    await request(
+    await request<WorkoutExerciseProps[]>(
       'POST',
       PATHS.programs.updateWorkoutExercises,
       dispatch,
       saveData,
     )
-      .then(async ({ data }: { data?: WorkoutExerciseProps[] }) => {
+      .then(async ({ data }) => {
         if (data) {
           //find workout and
 
@@ -550,7 +550,7 @@ export const updateProgramExerciseData =
 export const updateProgramAccessCode =
   (programUid: string, accessCode?: string) =>
   async (dispatch: AppDispatch) => {
-    return request(
+    return request<string[]>(
       'POST',
       accessCode
         ? PATHS.programs.removeAccessCode
@@ -558,7 +558,7 @@ export const updateProgramAccessCode =
       dispatch,
       { _id: programUid, accessCode: accessCode },
     )
-      .then(({ data }: { data?: string[] }) => {
+      .then(({ data }) => {
         if (data) {
           dispatch({ type: UPDATE_PROGRAM_ACCESS_CODE, payload: data });
         }

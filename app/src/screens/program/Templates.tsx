@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Pressable, FlatList } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { AppDispatch } from '../../../App';
 import {
@@ -7,9 +7,7 @@ import {
   ProgramHeaderProps,
   ProgramProps,
 } from '../../services/program/types';
-import StyleConstants from '../../components/tools/StyleConstants';
 import ProgramHeaderImage from '../../components/program/HeaderImage';
-import BaseColors from '../../utils/BaseColors';
 import { normalize } from '../../utils/tools';
 import {
   fetchPrograms,
