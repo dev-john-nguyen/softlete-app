@@ -10,6 +10,7 @@ import { ProgramStackScreens } from '../types';
 import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
+import { Alert } from 'react-native';
 
 interface Props {
   navigation: any;
@@ -22,14 +23,27 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
   const user = useSelector((state: ReducerProps) => state.user);
 
   const onDelete = useCallback(() => {
-    removeProgram(program._id).catch(err => {
-      console.error(err);
-      setBanner(
-        'Oops! Something went wrong. Unable to remove program.',
-        BannerTypes.error,
-      );
-    });
-    navigation.navigate(ProgramStackScreens.TemplateList);
+    const deleteHandler = () => {
+      removeProgram(program._id).catch(err => {
+        console.error(err);
+        setBanner(
+          'Oops! Something went wrong. Unable to remove program.',
+          BannerTypes.error,
+        );
+      });
+      navigation.navigate(ProgramStackScreens.TemplateList);
+    };
+    Alert.alert(
+      'Confirmation',
+      "Are you sure you want to delete this program? You can't undo this action.",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: deleteHandler },
+      ],
+    );
   }, [navigation, program._id, removeProgram, setBanner]);
 
   // disabling for now
@@ -44,7 +58,7 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
       },
     ];
     const isAdmin = program._id === user.uid;
-    if (isAdmin) {
+    if (!isAdmin) {
       options.unshift(
         {
           text: 'Edit',
