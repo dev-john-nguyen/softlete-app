@@ -133,7 +133,8 @@ const WorkoutModal = ({
         </Pressable>
       </View>
     );
-  }, [confirm, help]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirm, help, navigation, workout]);
 
   const headerText = useMemo(() => {
     if (confirm) return 'Remove Workout';

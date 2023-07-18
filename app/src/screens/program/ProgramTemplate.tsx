@@ -127,20 +127,20 @@ const ProgramTemplate = ({
       rightContent={
         <FlexBox alignItems="center" justifyContent="flex-end">
           <Icon
-            icon="pencil"
+            icon="download"
+            size={28}
+            color={Colors.white}
+            onPress={onDownload}
+            containerStyles={{ marginRight: 10 }}
+            hitSlop={5}
+          />
+          <Icon
+            icon="ellipsis"
             size={20}
             color={Colors.white}
             onPress={() =>
               navigation.navigate(ProgramStackScreens.ProgramModal)
             }
-            hitSlop={5}
-          />
-          <Icon
-            icon="download"
-            size={28}
-            color={Colors.white}
-            onPress={onDownload}
-            containerStyles={{ marginLeft: 10 }}
             hitSlop={5}
           />
         </FlexBox>

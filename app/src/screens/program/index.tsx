@@ -20,6 +20,7 @@ import ExerciseRestructure from './ExerciseRestructure';
 import DownloadProgramModal from '../network/modals/DownloadProgramModal';
 import EditExerciseDetails from '../exercises/EditDetails';
 import FormInput from '../utils/FormInput';
+import ProgramHelp from './ProgramHelp';
 
 const Tab = createStackNavigator<ProgramStackParamsList>();
 
@@ -31,6 +32,11 @@ function ProgramStack(parentProps: any) {
       <Tab.Screen
         name={ProgramStackScreens.TemplateList}
         component={TemplateList}
+      />
+
+      <Tab.Screen
+        name={ProgramStackScreens.ProgramHelp}
+        component={ProgramHelp}
       />
 
       <Tab.Screen
