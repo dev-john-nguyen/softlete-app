@@ -14,7 +14,6 @@ const UnderLay = () => {
       width="100%"
       position="absolute"
       zIndex={0}
-      backgroundColor={rgba(Colors.primaryRgb, 0.5)}
       column
     />
   );
@@ -33,7 +32,12 @@ type MenuModalProps = {
 
 const MenuModal: FC<MenuModalProps> = ({ menuItems, title }) => {
   return (
-    <FlexBox column flex={1} alignItems="center" justifyContent="center">
+    <FlexBox
+      column
+      flex={1}
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor={rgba(Colors.primaryRgb, 0.5)}>
       <UnderLay />
       <FlexBox
         column
