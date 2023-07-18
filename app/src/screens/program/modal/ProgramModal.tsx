@@ -52,6 +52,11 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
   const menuItems = useMemo(() => {
     const options: MenuItemProps[] = [
       {
+        text: 'Generate',
+        icon: 'download',
+        onPress: () => navigation.navigate(ProgramStackScreens.ProgramDownload),
+      },
+      {
         text: 'Tips/Help',
         icon: 'info',
         onPress: () => navigation.navigate(ProgramStackScreens.ProgramHelp),
