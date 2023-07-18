@@ -57,11 +57,6 @@ function ProgramStack(parentProps: any) {
       <Tab.Screen
         name={ProgramStackScreens.ProgramHeader}
         component={ProgramHeader}
-        options={{
-          headerTitle: '',
-          headerTransparent: true,
-          headerRight: undefined,
-        }}
       />
 
       <Tab.Screen
