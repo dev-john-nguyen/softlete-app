@@ -57,8 +57,8 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
         onPress: () => navigation.navigate(ProgramStackScreens.ProgramHelp),
       },
     ];
-    const isAdmin = program._id === user.uid;
-    if (isAdmin) {
+    const isOwner = program._id === user.uid;
+    if (isOwner) {
       options.unshift(
         {
           text: 'Edit',
