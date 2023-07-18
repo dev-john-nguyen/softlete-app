@@ -125,15 +125,7 @@ const ProgramTemplate = ({
       onGoBack={() => navigation.goBack()}
       headerTitleFormatted={programProps.name}
       rightContent={
-        <FlexBox alignItems="center" justifyContent="flex-end">
-          <Icon
-            icon="download"
-            size={28}
-            color={Colors.white}
-            onPress={onDownload}
-            containerStyles={{ marginRight: 10 }}
-            hitSlop={5}
-          />
+        <FlexBox alignItems="center" justifyContent="flex-end" flex={1}>
           <Icon
             icon="ellipsis"
             size={20}
