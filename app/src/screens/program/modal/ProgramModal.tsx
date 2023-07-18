@@ -58,7 +58,7 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
       },
     ];
     const isAdmin = program._id === user.uid;
-    if (!isAdmin) {
+    if (isAdmin) {
       options.unshift(
         {
           text: 'Edit',
