@@ -19,7 +19,7 @@ const UnderLay = () => {
   );
 };
 
-type MenuItemProps = {
+export type MenuItemProps = {
   onPress: () => void;
   icon: IconOptions;
   text: string;
@@ -49,6 +49,7 @@ const MenuModal: FC<MenuModalProps> = ({ menuItems, title }) => {
         <FlexBox
           column
           backgroundColor={Colors.blendWhite}
+          applyBoxShadow
           padding={10}
           paddingTop={20}
           borderRadius={5}>

@@ -56,7 +56,7 @@ const PickerButton: React.FC<Props> = props => {
         {props.arrow && (
           <Icon
             icon="chevron"
-            size={12}
+            size={15}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}
             containerStyles={{ opacity: props.valueOpacity ?? 1 }}
@@ -65,7 +65,7 @@ const PickerButton: React.FC<Props> = props => {
         {props.icon && (
           <Icon
             icon={props.icon}
-            size={12}
+            size={15}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}
           />
