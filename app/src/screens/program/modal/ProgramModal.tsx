@@ -62,7 +62,7 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
         onPress: () => navigation.navigate(ProgramStackScreens.ProgramHelp),
       },
     ];
-    const isOwner = program._id === user.uid;
+    const isOwner = program.userUid === user.uid;
     if (isOwner) {
       options.unshift(
         {
@@ -81,7 +81,7 @@ const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
       );
     }
     return options;
-  }, [navigation, onDelete, program._id, user.uid]);
+  }, [navigation, onDelete, program.userUid, user.uid]);
 
   return <MenuModal title="Menu" menuItems={menuItems} />;
 };
