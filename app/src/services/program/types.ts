@@ -57,6 +57,7 @@ export interface ProgramHeaderProps {
   accessCodes: string[];
   likeUids: string[];
   isSoftlete?: boolean;
+  userUid: string;
 }
 
 export interface NewProgramProps

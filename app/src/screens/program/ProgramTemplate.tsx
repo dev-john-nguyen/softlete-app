@@ -142,10 +142,6 @@ const ProgramTemplate = ({
           uri={programProps.imageUri}
           container={{ borderRadius: 0 }}
         />
-        {/* <ProgramLike
-                    likeCount={likeCount()}
-                    isLiked={false}
-                /> */}
       </FlexBox>
       <FlexBox column flex={1} marginTop={10} marginBottom={15}>
         <ProgramHeader

@@ -24,6 +24,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import PreviewAerobic from './PreviewAerobic';
 import Icon from '@app/icons';
+import { useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
 
 interface WorkoutPreviewItemProps {
   workout: Omit<WorkoutProps, 'date'>;
@@ -182,6 +184,14 @@ const WorkoutPreviewList = ({
   onAddWorkout,
   athlete,
 }: Props) => {
+  const { isAdmin } = useSelector((state: ReducerProps) => {
+    const program = state.program.targetProgram;
+    const isAdmin = program.userUid === state.user.uid;
+    return {
+      isAdmin,
+    };
+  });
+
   const renderItem = useCallback(
     ({ item }: { item: Omit<WorkoutProps, 'date'> }) => (
       <WorkoutPreviewItem
@@ -202,7 +212,9 @@ const WorkoutPreviewList = ({
         keyExtractor={(item, index) => (item._id ? item._id : index)}
         renderItem={renderItem}
       />
-      {!athlete && onAddWorkout && <CircleAdd onPress={onAddWorkout} />}
+      {!athlete && onAddWorkout && isAdmin && (
+        <CircleAdd onPress={onAddWorkout} />
+      )}
     </FlexBox>
   );
 };
