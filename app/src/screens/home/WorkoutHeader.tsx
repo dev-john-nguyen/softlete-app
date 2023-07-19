@@ -120,11 +120,6 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
       });
   };
 
-  const renderActiveProgramName = (_id: string) => {
-    const program = genPrograms.find(g => g._id === programUid);
-    if (program) return program.name;
-  };
-
   const pickerOptions = useMemo(() => {
     switch (picker) {
       case 'type':
@@ -233,14 +228,6 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
           blurOnSubmit
           mb={15}
         />
-
-        {/* <SecondaryText styles={styles.label}>Program</SecondaryText>
-                                <Pressable style={styles.programContainer} onPress={() => setPicker(p => p ? '' : 'program')}>
-                                    <View style={styles.programSvg}>
-                                        <BooksSvg fillColor={Colors.primary} />
-                                    </View>
-                                    <SecondaryText styles={styles.text}>{renderActiveProgramName(programUid)}</SecondaryText>
-                                </Pressable> */}
 
         <PickerButton
           arrow
