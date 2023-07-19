@@ -133,7 +133,7 @@ const Cal = ({
           alignSelf: 'center',
         }}
         current={selectedDate}
-        theme={CalendarTheme}
+        theme={CalendarTheme()}
         markingType={'multi-dot'}
         hideArrows={false}
         markedDates={{

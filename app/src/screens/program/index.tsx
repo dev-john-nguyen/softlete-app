@@ -165,6 +165,11 @@ function ProgramStack(parentProps: any) {
         initialParams={{ programStack: true }}
       />
 
+      <Tab.Screen
+        name={ProgramStackScreens.ProgramDownload}
+        component={DownloadProgramModal}
+      />
+
       <Tab.Group>
         <Tab.Screen
           name={ProgramStackScreens.ProgramWorkoutModal}
@@ -175,18 +180,6 @@ function ProgramStack(parentProps: any) {
             headerLeft: () => null,
             headerRight: undefined,
             presentation: 'transparentModal',
-          }}
-        />
-
-        <Tab.Screen
-          name={ProgramStackScreens.ProgramDownload}
-          component={DownloadProgramModal}
-          options={{
-            title: '',
-            headerRight: undefined,
-            headerLeft: () => null,
-            headerTransparent: true,
-            presentation: 'modal',
           }}
         />
 
