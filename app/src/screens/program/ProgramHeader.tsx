@@ -17,11 +17,12 @@ import { Input, ScreenTemplate } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
+import { RouteProp } from '@react-navigation/native';
 
 interface Props {
   updateProgramHeader: ProgramActionProps['updateProgramHeader'];
   navigation: any;
-  route: any;
+  route: RouteProp<any>;
 }
 
 const imageOptions: ImageLibraryOptions = {
@@ -146,7 +147,7 @@ const ProgramHeader = ({ updateProgramHeader, navigation, route }: Props) => {
     <ScreenTemplate
       isBackVisible
       applyContentPadding
-      headerTitleFormatted="Edit Program">
+      headerTitleFormatted={route.params?.headerTitle ?? 'Edit Program'}>
       <Input
         defaultValue={name}
         label="Name:"
@@ -160,16 +161,6 @@ const ProgramHeader = ({ updateProgramHeader, navigation, route }: Props) => {
         onChangeText={text => setDescription(text)}
         styles={{ marginBottom: 10 }}
       />
-
-      {/* <View style={styles.switchContainer}>
-        <Switch
-          onSwitch={() => setIsPrivate(p => (p ? false : true))}
-          active={isPrivate}
-        />
-        <SecondaryText styles={[StyleBase.baseTxt, { marginLeft: 10 }]}>
-          {isPrivate ? 'Private' : 'Public'}
-        </SecondaryText>
-      </View> */}
 
       {isEdit && (
         <FlexBox height="40%" marginTop={10}>

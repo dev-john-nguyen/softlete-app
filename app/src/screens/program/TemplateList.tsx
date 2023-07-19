@@ -18,10 +18,11 @@ import ScreenTemplate from '../../components/elements/ScreenTemplate';
 import { useTemplates } from '../../hooks/program/templates.hooks';
 import { CircleAdd, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
 
 interface Props {
-  navigation: any;
-  route: any;
+  navigation: NavigationProp<any>;
+  route: RouteProp<any>;
   dispatch: AppDispatch;
   fetchPrograms: ProgramActionProps['fetchPrograms'];
 }
@@ -32,7 +33,9 @@ const TemplateList = ({ dispatch, navigation, fetchPrograms }: Props) => {
   });
 
   const onAddPress = () =>
-    navigation.navigate(ProgramStackScreens.ProgramHeader);
+    navigation.navigate(ProgramStackScreens.ProgramHeader, {
+      headerTitle: 'New Program',
+    });
 
   const renderItem = useCallback(
     ({ item: program }: { item: ProgramProps }) => {

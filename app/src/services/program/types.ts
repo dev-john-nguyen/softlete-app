@@ -61,7 +61,7 @@ export interface ProgramHeaderProps {
 }
 
 export interface NewProgramProps
-  extends Omit<ProgramHeaderProps, '_id' | 'likeUids'> {
+  extends Omit<ProgramHeaderProps, '_id' | 'likeUids' | 'userUid'> {
   _id?: string;
 }
 
