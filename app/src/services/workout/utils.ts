@@ -47,7 +47,7 @@ export function findAndUpdateWorkouts(
   if (stateWorkouts.length < 1) return [...newWorkouts];
   if (newWorkouts.length < 1) return [...stateWorkouts];
 
-  const mutateStateWorkouts = [...stateWorkouts];
+  const mutateStateWorkouts = cloneDeep(stateWorkouts);
 
   for (let i = 0; i < newWorkouts.length; i++) {
     const newWrkout = newWorkouts[i];

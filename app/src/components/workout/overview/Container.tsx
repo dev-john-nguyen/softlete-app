@@ -1,34 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   HealthDataProps,
   HealthDisMeas,
-  ViewWorkoutProps,
-  WorkoutActionProps,
   WorkoutTypes,
 } from '../../../services/workout/types';
-import { ImageProps } from '../../../services/user/types';
 import HealthImportContainer from './HealthImportContainer';
 import AppleHealthKit from 'react-native-health';
 import _ from 'lodash';
 import { FlexBox } from '@app/ui';
 import { useNavigation } from '@react-navigation/native';
+import { WorkoutContext } from '@app/contexts';
 
-interface Props {
-  workout: ViewWorkoutProps;
-  updateWoHealthData?: WorkoutActionProps['updateWoHealthData'];
-  athlete?: boolean;
-  image?: ImageProps;
-  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
-}
-
-const OverviewContainer = ({
-  workout,
-  updateWoHealthData,
-  athlete,
-  image,
-  setImage,
-}: Props) => {
+const OverviewContainer = () => {
   const navigation = useNavigation();
+  const { updateWoHealthData, workout } = useContext(WorkoutContext);
 
   useEffect(() => {
     if (workout.type !== WorkoutTypes.TraditionalStrengthTraining) {
@@ -36,9 +21,10 @@ const OverviewContainer = ({
     }
   }, [workout, navigation]);
 
-  const onImportData = (data: HealthDataProps) =>
+  const onImportData = (data: HealthDataProps) => {
     updateWoHealthData &&
-    updateWoHealthData(workout._id, data).catch(err => console.log(err));
+      updateWoHealthData(workout._id, data).catch(err => console.log(err));
+  };
 
   const onChangeHealthData = (data: HealthDataProps) => {
     //check if there is a difference
@@ -73,11 +59,8 @@ const OverviewContainer = ({
   return (
     <FlexBox screenWidth column flex={1} zIndex={100} marginTop={10}>
       <HealthImportContainer
-        workout={workout}
         type={AppleHealthKit.Constants.Observers.Workout}
         onImportData={onChangeHealthData}
-        setImage={setImage}
-        image={image}
       />
     </FlexBox>
   );

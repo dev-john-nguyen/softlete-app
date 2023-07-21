@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { ViewWorkoutProps, WorkoutStatus } from '../../services/workout/types';
+import React, { useMemo, useContext } from 'react';
+import { StyleSheet } from 'react-native';
 import { GeneratedProgramProps } from '../../services/program/types';
 import DateTools from '../../utils/DateTools';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,28 +9,18 @@ import { PrimaryText } from '@app/elements';
 import { Colors, rgba, StyleConstants } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
+import { WorkoutContext } from '@app/contexts';
 
 interface Props {
-  workout: ViewWorkoutProps;
   program?: GeneratedProgramProps | undefined;
-  onUpdateStatus?: (status: WorkoutStatus) => void;
-  athlete?: boolean;
   isLiked?: boolean;
   onLikePress?: () => void;
-  likeUids: string[];
-  template?: boolean;
 }
 
-const WorkoutHeader = ({
-  workout,
-  program,
-  onUpdateStatus,
-  athlete,
-  onLikePress,
-  isLiked,
-  likeUids,
-  template,
-}: Props) => {
+const WorkoutHeader = ({ program, onLikePress, isLiked }: Props) => {
+  const { workout, athlete, onUpdateStatus, isProgram } =
+    useContext(WorkoutContext);
+  const likeUids = workout.likeUids ? workout.likeUids : [];
   const headerText = useMemo(() => {
     if (!program) return '';
 
@@ -44,7 +33,7 @@ const WorkoutHeader = ({
 
   return (
     <FlexBox column paddingTop={10}>
-      {!template && (
+      {!isProgram && (
         <StagingActions
           onUpdateStatus={onUpdateStatus}
           status={workout.status}
@@ -74,7 +63,7 @@ const WorkoutHeader = ({
           )}
         </FlexBox>
         {/* disabled for MVP */}
-        {!template && false && (
+        {!isProgram && false && (
           <FlexBox flex={0.2}>
             <LikeCom
               likeUids={likeUids}

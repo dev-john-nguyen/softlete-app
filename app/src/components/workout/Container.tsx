@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useLayoutEffect,
   useContext,
+  useMemo,
 } from 'react';
 import {
   WorkoutExerciseProps,
@@ -16,36 +17,28 @@ import WorkoutNavbar from './Navbar';
 import ExercisesContainer from './exercises/Container';
 import _ from 'lodash';
 import Constants from '../../utils/Constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   removeWorkoutExercise,
   updateWorkoutExerciseData,
 } from '../../services/workout/actions';
+import { WorkoutContext } from '@app/contexts';
+import { useNavigation } from '@react-navigation/native';
+import { FlexBox } from '@app/ui';
+import { CircleAdd } from '@app/elements';
 import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
-} from '../../services/program/actions';
-import { ImageProps } from '../../services/user/types';
-import { HomeWorkoutContext } from '@app/contexts';
-import { useNavigation } from '@react-navigation/native';
-import { FlexBox } from '@app/ui';
-import { ReducerProps } from 'src/services';
-import { CircleAdd } from '@app/elements';
+} from 'src/services/program/actions';
 
-interface Props {
-  isProgramTemplate?: boolean;
-  onNavigateToAddExercise?: (group: number, order: number) => void;
-  athlete?: boolean;
-  image?: ImageProps;
-  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
-}
-
-const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
-  const { onNavigateToAddExercise, onNavigateToExercise, setImage, image } =
-    useContext(HomeWorkoutContext);
-  const { workout } = useSelector((state: ReducerProps) => ({
-    workout: state.workout.viewWorkout,
-  }));
+const WorkoutContainer = () => {
+  const {
+    onNavigateToAddExercise,
+    onNavigateToExercise,
+    isProgram,
+    athlete,
+    workout,
+  } = useContext(WorkoutContext);
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const [groupKeys, setGroupKeys] = useState<number[]>([]);
@@ -87,7 +80,16 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
 
     setExercises(cloneExs);
     setGroupKeys(keys);
-  }, [workout.exercises]);
+  }, [workout]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const autoSaveHandler = useCallback(
+    _.debounce(exercises => {
+      if (!mount.current) return;
+      saveExercisesDataHandler(exercises, athlete);
+    }, Constants.autoSaveDuration),
+    [athlete],
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -102,28 +104,39 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         />
       ),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [athlete, workout, groupKeys, groupState]);
 
   useEffect(() => {
-    mount.current = true;
-    return () => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      // Prevent default navigation behavior
+      e.preventDefault();
+      // Save data before leaving
       setExercises(e => {
         saveExercisesDataHandler(e, athlete);
         return e;
       });
       autoSaveHandler.cancel();
+      // Then navigate to the next screen
+      navigation.dispatch(e.data.action);
+    });
+    mount.current = true;
+    return () => {
       mount.current = false;
+      unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     handleUpdateWorkoutStates();
     exercisePropsRef.current = workout.exercises;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workout.exercises]);
 
   useEffect(() => {
-    if (mount.current) autoSaveHandler(exercises, athlete);
-  }, [exercises, athlete]);
+    if (mount.current) autoSaveHandler(exercises);
+  }, [exercises]);
 
   useEffect(() => {
     prevWorkoutRefId.current = workout._id;
@@ -138,13 +151,6 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
       setNavGroupState({ group: 0 });
     }
   }, [workout]);
-
-  const autoSaveHandler = useCallback(
-    _.debounce((exercises, athlete) => {
-      saveExercisesDataHandler(exercises, athlete);
-    }, Constants.autoSaveDuration),
-    [],
-  );
 
   const saveExercisesDataHandler = async (
     exercises: WorkoutExerciseProps[],
@@ -205,11 +211,11 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
     let res: any;
 
     if (dataArr.length > 0) {
-      if (isProgramTemplate) {
-        //save to program
+      if (isProgram) {
+        // save to program
         res = dispatch(updateProgramExerciseData(dataArr));
       } else {
-        //save to real workout
+        // save to real workout
         res = dispatch(updateWorkoutExerciseData(dataArr));
       }
     }
@@ -254,7 +260,6 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   };
 
   const onAddExercise = (newGroup?: boolean) => {
-    console.log(newGroup);
     if (
       workout.status === WorkoutStatus.completed ||
       athlete ||
@@ -288,19 +293,19 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
   };
 
   const onRemoveExercise = async (exercise: WorkoutExerciseProps) => {
-    if (isProgramTemplate) {
+    if (isProgram) {
       dispatch(removeProgramWorkoutExercise(exercise));
     } else {
       dispatch(removeWorkoutExercise(exercise));
     }
   };
 
-  const shouldAddCom = (() => {
+  const shouldAddCom = useMemo(() => {
     if (athlete) return false;
     if (workout.status === WorkoutStatus.pending) return true;
     if (workout.programTemplateUid) return true;
     return false;
-  })();
+  }, [athlete, workout]);
 
   return (
     <FlexBox flex={1} zIndex={100} justifyContent="center">
@@ -313,11 +318,8 @@ const WorkoutContainer = ({ isProgramTemplate, athlete }: Props) => {
         setCurEx={setCurEx}
         onNavigateToExercise={onNavigateToExercise}
         onCalcRefUpdate={onCalcRefUpdate}
-        athlete={athlete}
         removeWorkoutExercise={onRemoveExercise}
         navGroupState={navGroupState}
-        image={image}
-        setImage={setImage}
       />
       {shouldAddCom && (
         <CircleAdd onPress={() => onAddExercise()} style={{ bottom: 10 }} />

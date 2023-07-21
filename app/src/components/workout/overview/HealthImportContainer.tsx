@@ -19,7 +19,7 @@ import {
 import AutoId from '../../../utils/AutoId';
 import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
-import { HomeWorkoutContext } from '@app/contexts';
+import { WorkoutContext } from '@app/contexts';
 import { Pressable, Keyboard, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
@@ -71,17 +71,12 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
   );
 };
 
-interface WorkoutReflectionProps {
-  setImage: (img: ImageProps) => void;
-  image?: ImageProps;
-}
-
-const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
+const WorkoutReflection = () => {
   const { workout } = useSelector((state: ReducerProps) => ({
     workout: state.workout.viewWorkout,
   }));
 
-  const { setReflection } = useContext(HomeWorkoutContext);
+  const { setReflection, setImage, image } = useContext(WorkoutContext);
 
   return (
     <FlexBox
@@ -111,7 +106,11 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
           />
         )}
         <ReflectionImage
-          setImage={setImage}
+          setImage={
+            setImage as React.Dispatch<
+              React.SetStateAction<ImageProps | undefined>
+            >
+          }
           image={image}
           imageUri={workout.imageUri ? workout.imageUri : workout.localImageUri}
           allowUpload={workout.status === WorkoutStatus.inProgress}
@@ -138,26 +137,18 @@ const WorkoutReflection = ({ image, setImage }: WorkoutReflectionProps) => {
 };
 
 interface Props {
-  workout: WorkoutProps;
   type?: HealthObserver;
   onImportData: (data: HealthDataProps) => void;
   hide?: boolean;
-  image?: ImageProps;
-  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
 }
 
-const HealthImportContainer = ({
-  workout,
-  type: type,
-  onImportData,
-  image,
-  setImage,
-}: Props) => {
+const HealthImportContainer = ({ type: type, onImportData }: Props) => {
   const [data, setData] = useState<HealthDataProps[]>([]);
   const [custom, setCustom] = useState(false);
   const [customId] = useState(AutoId.newId(10));
   const [deviceWosIsVisible, setDeviceWosIsVisible] = useState(false);
   const mount = useRef(false);
+  const { workout } = useContext(WorkoutContext);
 
   useEffect(() => {
     getActiveEnergy();
@@ -347,9 +338,7 @@ const HealthImportContainer = ({
           </ScrollView>
         </FlexBox>
       ) : (
-        workout.status !== WorkoutStatus.pending && (
-          <WorkoutReflection image={image} setImage={setImage} />
-        )
+        workout.status !== WorkoutStatus.pending && <WorkoutReflection />
       )}
     </FlexBox>
   );

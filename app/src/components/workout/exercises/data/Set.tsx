@@ -1,4 +1,4 @@
-import { Input, PrimaryButton, PrimaryText } from '@app/elements';
+import { Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba, StyleConstants } from '@app/utils';

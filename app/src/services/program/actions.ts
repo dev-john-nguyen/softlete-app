@@ -45,7 +45,7 @@ import {
   insertExercises,
   insertExercisesIntoWorkouts,
 } from '../exercises/actions';
-import _ from 'lodash';
+import _, { cloneDeep } from 'lodash';
 import processImage from '../utils/save-image';
 import {
   SET_ATHLETE_PROGRAMS,
@@ -518,7 +518,7 @@ export const updateProgramExerciseData =
       .then(res => {
         if (res && res.data) {
           //update the view workout
-          const { viewWorkout } = getState().workout;
+          const viewWorkout = cloneDeep(getState().program.viewWorkout);
 
           //update the exercises
           viewWorkout.exercises = viewWorkout.exercises.map(e => {
@@ -529,17 +529,12 @@ export const updateProgramExerciseData =
             }
             return { ...e };
           });
-
-          const cloneWo = { ...viewWorkout };
-
           dispatch({
             type: UPDATE_PROGRAM_WORKOUTS,
-            payload: [cloneWo],
+            payload: [viewWorkout],
           });
-
-          dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: cloneWo });
-
-          return cloneWo.exercises;
+          dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: viewWorkout });
+          return viewWorkout.exercises;
         }
       })
       .catch(err => {

@@ -1,20 +1,16 @@
-import React, { useRef, useLayoutEffect, useCallback } from 'react';
+import React, { useRef, useLayoutEffect, useCallback, useContext } from 'react';
 import { StyleSheet, FlatList, ViewToken } from 'react-native';
 import {
   WorkoutExerciseProps,
   WorkoutExerciseDataProps,
   WorkoutStatus,
   WorkoutActionProps,
-  HealthDataProps,
 } from '../../../services/workout/types';
 import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
-import { ImageProps } from '../../../services/user/types';
 import OverviewContainer from '../overview/Container';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateWoHealthData } from 'src/services/workout/actions';
-import { ReducerProps } from 'src/services';
+import { WorkoutContext } from '@app/contexts';
 
 interface Props {
   exercises: WorkoutExerciseProps[];
@@ -28,10 +24,7 @@ interface Props {
   onNavigateToExercise: (exercise: ExerciseProps) => void;
   onCalcRefUpdate: (calc: number | string, index: number) => void;
   removeWorkoutExercise: WorkoutActionProps['removeWorkoutExercise'];
-  athlete?: boolean;
   navGroupState: { group: number };
-  image?: ImageProps;
-  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
 }
 
 interface InfoProps {
@@ -50,18 +43,12 @@ const ExercisesContainer = ({
   navIsActive,
   setCurEx,
   onNavigateToExercise,
-  athlete,
   onCalcRefUpdate,
   removeWorkoutExercise,
-  image,
-  setImage,
 }: Props) => {
   const listRef: any = useRef();
   const lastViewableItem: any = useRef();
-  const dispatch = useDispatch();
-  const { workout } = useSelector((state: ReducerProps) => ({
-    workout: state.workout.viewWorkout,
-  }));
+  const { athlete, workout } = useContext(WorkoutContext);
 
   const onViewableItemsChanged = useCallback(({ viewableItems }: InfoProps) => {
     for (let i = 0; i < viewableItems.length; i++) {
@@ -111,40 +98,17 @@ const ExercisesContainer = ({
     return false;
   };
 
-  const onUpdateWoHealthDataDispatch = async (
-    workoutUid: string,
-    healthData: HealthDataProps,
-  ) => {
-    await dispatch(updateWoHealthData(workoutUid, healthData));
-  };
-
   const renderListFooterComponent = useCallback(() => {
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.inProgress || athlete) return <></>;
-    return (
-      <OverviewContainer
-        image={image}
-        setImage={setImage}
-        workout={workout}
-        updateWoHealthData={onUpdateWoHealthDataDispatch}
-        athlete={athlete}
-      />
-    );
-  }, [workout.status, athlete, image]);
+    return <OverviewContainer />;
+  }, [athlete, workout.status]);
 
   const renderListHeaderComponent = useCallback(() => {
     //prevent the auto save from refreshing state
     if (workout.status !== WorkoutStatus.completed) return <></>;
-    return (
-      <OverviewContainer
-        image={image}
-        setImage={setImage}
-        workout={workout}
-        updateWoHealthData={onUpdateWoHealthDataDispatch}
-        athlete={athlete}
-      />
-    );
-  }, [workout.status, athlete, image]);
+    return <OverviewContainer />;
+  }, [workout]);
 
   const renderItem = useCallback(
     ({ item, index }: { item: WorkoutExerciseProps; index: number }) => (
@@ -161,6 +125,7 @@ const ExercisesContainer = ({
         goToFirstItem={() => scrollToFirstItem(curGroup ? curGroup : 0)}
       />
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [exercises, workout, curGroup],
   );
 

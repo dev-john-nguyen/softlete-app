@@ -1,14 +1,18 @@
 import React, { createContext, FC } from 'react';
+import { useSelector } from 'react-redux';
+import { ReducerProps } from 'src/services';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { GeneratedProgramProps } from 'src/services/program/types';
 import { ImageProps } from 'src/services/user/types';
 import {
   HealthDataProps,
+  ViewWorkoutProps,
+  WorkoutActionProps,
   WorkoutExerciseProps,
   WorkoutStatus,
 } from 'src/services/workout/types';
 
-type HomeWorkoutContextProps = {
+type WorkoutContextProps = {
   onNavigateToExercise: (exercise: ExerciseProps) => void;
   onUpdateWoHealthData?: (
     workoutUid: string,
@@ -21,46 +25,29 @@ type HomeWorkoutContextProps = {
   onUpdateStatus?: (status: WorkoutStatus) => Promise<void>;
   program?: GeneratedProgramProps;
   setReflection?: React.Dispatch<React.SetStateAction<string>>;
-  setImage: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
+  setImage?: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
   image?: ImageProps;
+  isProgram?: boolean;
+  athlete?: boolean;
+  updateWoHealthData?: WorkoutActionProps['updateWoHealthData'];
+  workout: ViewWorkoutProps;
 };
 
-export const HomeWorkoutContext = createContext<HomeWorkoutContextProps>(
-  {} as any,
-);
+export const WorkoutContext = createContext<WorkoutContextProps>({} as any);
 
-type HomeWorkoutProviderProps = {
+interface ProviderProps extends Omit<WorkoutContextProps, 'workout'> {
   children: JSX.Element;
-};
+}
 
-export const HomeWorkoutProvider: FC<
-  HomeWorkoutProviderProps & HomeWorkoutContextProps
-> = ({
-  children,
-  onNavigateToExercise,
-  onUpdateWoHealthData,
-  onNavigateToAddExercise,
-  onCompleteWorkout,
-  onUpdateStatus,
-  program,
-  setReflection,
-  setImage,
-  image,
-}) => {
+export const WorkoutProvider: FC<ProviderProps> = ({ children, ...props }) => {
+  const { workout } = useSelector((state: ReducerProps) => ({
+    workout: props.isProgram
+      ? state.program.viewWorkout
+      : state.workout.viewWorkout,
+  }));
   return (
-    <HomeWorkoutContext.Provider
-      value={{
-        onNavigateToExercise,
-        onUpdateWoHealthData,
-        onNavigateToAddExercise,
-        onCompleteWorkout,
-        onUpdateStatus,
-        program,
-        setReflection,
-        setImage,
-        image,
-      }}>
+    <WorkoutContext.Provider value={{ ...props, workout }}>
       {children}
-    </HomeWorkoutContext.Provider>
+    </WorkoutContext.Provider>
   );
 };

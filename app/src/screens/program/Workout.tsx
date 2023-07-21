@@ -1,69 +1,64 @@
-import React, {
-  useEffect,
-  useState,
-  Dispatch,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React, { Dispatch } from 'react';
 import { ReducerProps } from '../../services';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   WorkoutActionProps,
   WorkoutStatus,
-  WorkoutExerciseProps,
-  ViewWorkoutProps,
   WorkoutProps,
   WorkoutTypes,
   HealthDataProps,
+  DataArrProps,
 } from '../../services/workout/types';
-import BaseColors from '../../utils/BaseColors';
 import { ExerciseProps } from '../../services/exercises/types';
 import WorkoutContainer from '../../components/workout/Container';
-import { ProgramActionProps, ProgramProps } from '../../services/program/types';
+import { ProgramActionProps } from '../../services/program/types';
 import {
   updateWorkoutStatus,
   completeWorkout,
   updateWoHealthData,
 } from '../../services/workout/actions';
 import WorkoutHeader from '../../components/workout/Header';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import MoreSvg from '../../assets/MoreSvg';
-import { normalize } from '../../utils/tools';
-import StyleConstants from '../../components/tools/StyleConstants';
 import Loading from '../../components/elements/Loading';
 import { setBanner } from '../../services/banner/actions';
 import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
 import OverviewContainer from '../../components/workout/overview/Container';
-import { updateProgramWoHealthData } from '../../services/program/actions';
+import {
+  updateProgramExerciseData,
+  updateProgramWoHealthData,
+} from '../../services/program/actions';
 import { ProgramStackScreens } from './types';
-import BackButton from '../../components/elements/BackButton';
+import { WorkoutProvider } from '@app/contexts';
+import { ScreenTemplate } from '@app/elements';
+import Icon from '@app/icons';
+import { FlexBox } from '@app/ui';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface Props {
-  workout: ViewWorkoutProps;
   route: any;
   navigation: any;
   dispatch: React.Dispatch<any>;
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
-  targetProgram: ProgramProps;
   updateProgramWoHealthData: ProgramActionProps['updateProgramWoHealthData'];
+  updateProgramExerciseData: ProgramActionProps['updateProgramExerciseData'];
 }
-
-//notes
-///route params will determine if it's a new workout
 
 const Workout = ({
   route,
   navigation,
-  workout,
   updateWorkoutStatus,
-  targetProgram,
   dispatch,
   updateProgramWoHealthData,
+  updateProgramExerciseData,
 }: Props) => {
+  const { workout, targetProgram } = useSelector((state: ReducerProps) => ({
+    workout: state.program.viewWorkout,
+    targetProgram: state.program.targetProgram,
+  }));
+
   const onBackButtonPress = () => {
     if (route.params?.goBackScreen) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { workouts, ...rest } = targetProgram;
       navigation.navigate(route.params.goBackScreen, {
         program: rest,
@@ -77,25 +72,6 @@ const Workout = ({
       navigation.navigate(ProgramStackScreens.TemplateList);
     }
   };
-  const disableEdit = () =>
-    route.params && route.params.softlete ? true : false;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        workout?.status !== WorkoutStatus.inProgress &&
-        !disableEdit() && (
-          <Pressable
-            style={styles.menu}
-            onPress={() =>
-              navigation.navigate(ProgramStackScreens.ProgramWorkoutModal)
-            }>
-            <MoreSvg fillColor={BaseColors.primary} />
-          </Pressable>
-        ),
-      headerLeft: () => <BackButton onPress={onBackButtonPress} />,
-    });
-  }, [navigation, route, workout]);
 
   const onUpdateStatus = async (status: WorkoutStatus) => {
     if (!workout || workout.programTemplateUid) return;
@@ -114,7 +90,7 @@ const Workout = ({
     }
 
     await updateWorkoutStatus(workout._id, status).catch(err => {
-      console.log(err);
+      console.error(err);
     });
   };
 
@@ -137,7 +113,7 @@ const Workout = ({
       workout.programTemplateUid,
       workoutUid,
       data,
-    ).catch(err => console.log(err));
+    ).catch(err => console.error(err));
   };
 
   const onNavigateToExercise = (exercise: ExerciseProps) => {
@@ -146,58 +122,47 @@ const Workout = ({
 
   if (!workout) return <Loading />;
 
+  const disableEdit = route.params && route.params.softlete ? true : false;
+
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
-        <WorkoutContainer
-          isProgramTemplate
-          workout={workout}
-          onNavigateToAddExercise={onNavigateToAddExercise}
-          onNavigateToExercise={onNavigateToExercise}
-          navigation={navigation}
-          athlete={disableEdit()}
-        />
-      ) : (
-        <OverviewContainer
-          navigation={navigation}
-          workout={workout}
-          updateWoHealthData={onUpdateWoHealthData}
-          athlete={disableEdit()}
-        />
-      )}
-      <WorkoutHeader
-        likeUids={workout.likeUids ? workout.likeUids : []}
-        workout={workout}
-        onUpdateStatus={onUpdateStatus}
-        template
-      />
-    </SafeAreaView>
+    <WorkoutProvider
+      onNavigateToExercise={onNavigateToExercise}
+      onNavigateToAddExercise={onNavigateToAddExercise}
+      onUpdateStatus={onUpdateStatus}
+      onUpdateWoHealthData={onUpdateWoHealthData}
+      isProgram>
+      <ScreenTemplate
+        isBackVisible
+        onGoBack={onBackButtonPress}
+        rightContent={
+          <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+            {workout?.status !== WorkoutStatus.inProgress && !disableEdit && (
+              <Icon
+                icon="ellipsis"
+                size={20}
+                color={Colors.white}
+                onPress={() =>
+                  navigation.navigate(ProgramStackScreens.ProgramWorkoutModal)
+                }
+              />
+            )}
+          </FlexBox>
+        }>
+        {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
+          <WorkoutContainer />
+        ) : (
+          <OverviewContainer />
+        )}
+        <WorkoutHeader />
+      </ScreenTemplate>
+    </WorkoutProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  headerContainer: {
-    backgroundColor: BaseColors.white,
-    zIndex: 0,
-  },
-  menu: {
-    width: normalize.width(20),
-    height: normalize.width(20),
-    marginRight: StyleConstants.baseMargin,
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  workout: state.program.viewWorkout,
-  targetProgram: state.program.targetProgram,
-});
-
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
+    updateProgramExerciseData: async (dataArr: DataArrProps[]) =>
+      dispatch(updateProgramExerciseData(dataArr)),
     updateWorkoutStatus: async (workoutUid: string, status: WorkoutStatus) =>
       dispatch(updateWorkoutStatus(workoutUid, status)),
     completeWorkout: async (
@@ -218,4 +183,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workout);
+export default connect(null, mapDispatchToProps)(Workout);

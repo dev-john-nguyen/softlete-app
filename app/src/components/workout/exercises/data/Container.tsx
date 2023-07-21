@@ -186,7 +186,7 @@ const ExerciseData = ({
       default:
         return {
           placeholder: '0',
-          value: '0',
+          value: predictVal.toString() ?? '0',
         };
     }
   };
@@ -278,6 +278,7 @@ const ExerciseData = ({
         />
       );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, athlete, editable, workout]);
 
   return (
