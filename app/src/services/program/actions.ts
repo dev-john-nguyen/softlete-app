@@ -135,12 +135,15 @@ export const setTargetProgram =
 
       const storedProgram = programs.find(p => p._id === programHeader._id);
 
-      if (storedProgram && storedProgram.workouts) {
-        storedProgram.workouts = (await insertExercisesIntoWorkouts(
-          storedProgram.workouts,
+      // avoid mutation error
+      const clonedStoredProgram = cloneDeep(storedProgram);
+
+      if (clonedStoredProgram && clonedStoredProgram.workouts) {
+        clonedStoredProgram.workouts = (await insertExercisesIntoWorkouts(
+          clonedStoredProgram.workouts,
         )(dispatch, getState)) as ProgramWorkoutProps[];
-        dispatch({ type: SET_TARGET_PROGRAM, payload: storedProgram });
-        return storedProgram;
+        dispatch({ type: SET_TARGET_PROGRAM, payload: clonedStoredProgram });
+        return clonedStoredProgram;
       }
     }
 
