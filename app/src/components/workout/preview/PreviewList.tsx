@@ -208,7 +208,7 @@ const WorkoutPreviewList = ({
     <FlexBox flex={1} justifyContent="center" alignItems="center">
       <FlatList
         data={workouts}
-        contentContainerStyle={{ paddingBottom: normalize.height(20) }}
+        contentContainerStyle={{ paddingBottom: 20 }}
         keyExtractor={(item, index) => (item._id ? item._id : index)}
         renderItem={renderItem}
       />
