@@ -7,7 +7,7 @@ import View from './Workout';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit';
-import WorkoutExerciseRestructure from './ExerciseRestructure';
+import WorkoutExerciseRestructure from '../exercises/ExerciseRestructure';
 import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
 import ExerciseAnalytics from '../exercises/Analytics';

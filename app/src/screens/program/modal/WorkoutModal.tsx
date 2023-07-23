@@ -1,192 +1,102 @@
-import React, { Dispatch, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
-import BaseColors from '../../../utils/BaseColors';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { normalize } from '../../../utils/tools';
-import PrimaryText from '../../../components/elements/PrimaryText';
-import PencilSvg from '../../../assets/PencilSvg';
-import SecondaryText from '../../../components/elements/SecondaryText';
-import SortSvg from '../../../assets/SortSvg';
-import TrashSvg from '../../../assets/TrashSvg';
-import InfoSvg from '../../../assets/InfoSvg';
+import React, { Dispatch, useCallback, useMemo } from 'react';
+import { Alert } from 'react-native';
 import { ReducerProps } from '../../../services';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { removeProgramWorkout } from '../../../services/program/actions';
-import { removeWorkout } from '../../../services/workout/actions';
 import { INITIATE_WORKOUT_HEADER } from '../../../services/workout/actionTypes';
 import { ProgramActionProps } from '../../../services/program/types';
-import { ViewWorkoutProps, WorkoutActionProps, WorkoutTypes } from '../../../services/workout/types';
-import PrimaryButton from '../../../components/elements/PrimaryButton';
-import SecondaryButton from '../../../components/elements/SecondaryButton';
-import WorkoutHelp from '../../../components/modal/WorkoutHelp';
-import Chevron from '../../../assets/ChevronSvg';
-import CloseSvg from '../../../assets/CloseSvg';
-import styles from '../../../components/modal/styles';
 import { ProgramStackScreens } from '../types';
+import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
 
 interface Props {
-    navigation: any;
-    route: any;
-    dispatch: React.Dispatch<any>;
-    removeWorkout: WorkoutActionProps['removeWorkout'];
-    removeProgramWorkout: ProgramActionProps['removeProgramWorkout'];
-    workout: ViewWorkoutProps;
+  navigation: any;
+  route: any;
+  dispatch: React.Dispatch<any>;
+  removeProgramWorkout: ProgramActionProps['removeProgramWorkout'];
 }
 
-
-const WorkoutModal = ({ navigation, workout, route, removeProgramWorkout, removeWorkout, dispatch }: Props) => {
-    const [loading, setLoading] = useState(false);
-    const [confirm, setConfirm] = useState(false);
-    const [help, setHelp] = useState(false);
-    const mount = useRef(false);
-    const headerHeight = useHeaderHeight();
-
-    useEffect(() => {
-        mount.current = true;
-        return () => {
-            mount.current = false;
-        }
-    }, [])
-
-    const onEditWorkoutHeader = () => {
-        if (!workout) return;
-        dispatch({
-            type: INITIATE_WORKOUT_HEADER,
-            payload: { ...workout }
-        })
-        navigation.navigate(ProgramStackScreens.ProgramWorkoutHeader)
-    }
-
-    const onDeleteWorkout = () => {
-        if (!workout) return;
-        setLoading(true)
-
-        if (workout.programTemplateUid) {
-            removeProgramWorkout(workout._id)
-                .then(() => mount.current && navigation.navigate(ProgramStackScreens.Program)
-                )
-                .catch((err) => {
-                    console.log(err)
-                    if (mount.current) {
-                        navigation.navigate(ProgramStackScreens.Program)
-                        setLoading(false)
-                    }
-                })
-        }
-    }
-
-    const onRestructure = () => navigation.navigate(ProgramStackScreens.ProgramReorderWorkoutExercises)
-
-
-    const renderContent = () => {
-        if (confirm) return (
-            <View>
-                <SecondaryText styles={styles.label}>Are you sure you want to remove?</SecondaryText>
-                <View style={styles.confirmActions}>
-                    <PrimaryButton onPress={onDeleteWorkout}>Confirm</PrimaryButton>
-                    <SecondaryButton onPress={() => setConfirm(false)}>Cancel</SecondaryButton>
-                </View>
-            </View>
-        )
-
-        if (help) return <WorkoutHelp />
-
-        return (
-            <View>
-                <Pressable style={styles.item} onPress={onEditWorkoutHeader}>
-                    <SecondaryText styles={styles.label}>Edit</SecondaryText>
-                    <View style={styles.svg}>
-                        <PencilSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                {
-                    workout.type === WorkoutTypes.TraditionalStrengthTraining && (
-                        <Pressable style={styles.item} onPress={onRestructure}>
-                            <SecondaryText styles={styles.label}>Restructure</SecondaryText>
-                            <View style={styles.svg}>
-                                <SortSvg fillColor={BaseColors.primary} />
-                            </View>
-                        </Pressable>
-                    )
-                }
-                <Pressable style={styles.item} onPress={() => setHelp(true)}>
-                    <SecondaryText styles={styles.label}>Tips/Help</SecondaryText>
-                    <View style={styles.svg}>
-                        <InfoSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable style={styles.item} onPress={() => setConfirm(true)}>
-                    <SecondaryText styles={styles.label}>Remove</SecondaryText>
-                    <View style={styles.svg}>
-                        <TrashSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable style={styles.item} onPress={() => navigation.goBack()}>
-                    <SecondaryText styles={styles.label}>Cancel</SecondaryText>
-                    <View style={{ height: normalize.width(30), width: normalize.width(30) }}>
-                        <CloseSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-            </View>
-        )
-    }
-
-    const renderHeader = () => {
-        if (confirm) return 'Confirm'
-        if (help) return 'Tips/Help'
-        return 'Menu'
-    }
-
-    const onBack = () => {
-        setConfirm(false)
-        setHelp(false)
-    }
-
-    return (
-        <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
-            <Pressable onPress={() => navigation.goBack()} style={styles.closeContainer} />
-            <View style={[styles.content, { marginTop: headerHeight }]}>
-                <View style={styles.modal}>
-                    <View style={styles.headerContainer}>
-                        {
-                            (confirm || help) ? (
-                                <Pressable style={styles.backContainer} onPress={onBack}>
-                                    <Chevron strokeColor={BaseColors.black} />
-                                </Pressable>
-                            ) :
-                                <View />
-                        }
-                        <PrimaryText styles={styles.title}>{renderHeader()}</PrimaryText>
-                        <View />
-                    </View>
-                    {
-                        loading && (
-                            <ActivityIndicator size='small' color={BaseColors.primary} style={styles.loading} />
-                        )
-                    }
-                    {renderContent()}
-                </View>
-            </View>
-        </SafeAreaView >
-    )
-}
-
-const mapStateToProps = (state: ReducerProps) => ({
+const WorkoutModal = ({
+  navigation,
+  removeProgramWorkout,
+  dispatch,
+}: Props) => {
+  const { workout } = useSelector((state: ReducerProps) => ({
     workout: state.program.viewWorkout,
-})
+  }));
+
+  const onEditWorkoutHeader = useCallback(() => {
+    if (!workout) return;
+    dispatch({
+      type: INITIATE_WORKOUT_HEADER,
+      payload: { ...workout },
+    });
+    navigation.navigate(ProgramStackScreens.ProgramWorkoutHeader);
+  }, [dispatch, navigation, workout]);
+
+  const onDeleteWorkout = useCallback(() => {
+    const deleteHandler = () => {
+      if (!workout) return;
+      if (workout.programTemplateUid) {
+        removeProgramWorkout(workout._id)
+          .then(() => navigation.navigate(ProgramStackScreens.Program))
+          .catch(err => {
+            console.log(err);
+            navigation.navigate(ProgramStackScreens.Program);
+          });
+      }
+    };
+    Alert.alert(
+      'Confirmation',
+      "Are you sure you want to delete this workout? You can't undo this action.",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: deleteHandler },
+      ],
+    );
+  }, [navigation, removeProgramWorkout, workout]);
+
+  const menuItems = useMemo(() => {
+    const options: MenuItemProps[] = [
+      {
+        text: 'Edit',
+        icon: 'pencil',
+        onPress: onEditWorkoutHeader,
+      },
+      {
+        text: 'Restructure',
+        icon: 'sort',
+        onPress: () =>
+          navigation.navigate(
+            ProgramStackScreens.ProgramReorderWorkoutExercises,
+          ),
+      },
+      {
+        text: 'Tips/Help',
+        icon: 'info',
+        onPress: () =>
+          navigation.navigate(ProgramStackScreens.ProgramWorkoutHelp),
+      },
+      {
+        text: 'Remove',
+        icon: 'trash_bin',
+        onPress: onDeleteWorkout,
+      },
+    ];
+    return options;
+  }, [navigation, onDeleteWorkout, onEditWorkoutHeader]);
+
+  return <MenuModal title="Menu" menuItems={menuItems} />;
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-    return {
-        removeWorkout: async (workoutUid: string) => dispatch(removeWorkout(workoutUid)),
-        removeProgramWorkout: async (workoutUid: string) => dispatch(removeProgramWorkout(workoutUid)),
-        dispatch
-    }
-}
+  return {
+    removeProgramWorkout: async (workoutUid: string) =>
+      dispatch(removeProgramWorkout(workoutUid)),
+    dispatch,
+  };
+};
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(WorkoutModal);
+export default connect(null, mapDispatchToProps)(WorkoutModal);

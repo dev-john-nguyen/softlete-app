@@ -17,6 +17,7 @@ export type ProgramStackParamsList = {
   ProgramHeader: undefined;
   ProgramInput: undefined;
   ProgramHelp: undefined;
+  ProgramWorkoutHelp: undefined;
 };
 
 export enum ProgramStackScreens {
@@ -38,4 +39,5 @@ export enum ProgramStackScreens {
   ProgramEditExerciseDetails = 'ProgramEditExerciseDetails',
   ProgramInput = 'ProgramInput',
   ProgramHelp = 'ProgramHelp',
+  ProgramWorkoutHelp = 'ProgramWorkoutHelp',
 }
