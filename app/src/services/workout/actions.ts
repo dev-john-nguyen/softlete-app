@@ -115,23 +115,23 @@ export const updateWorkoutHeader =
       path = PATHS.workouts.create;
     }
 
-    return request('POST', path, dispatch, { workouts: [workoutHeader] }).then(
-      ({ data }: { data?: WorkoutHeaderProps[] }) => {
-        if (data) {
-          if (workoutHeader._id) {
-            const updatedWorkout = { ...workout.viewWorkout, ...data[0] };
-            dispatch({ type: UPDATE_WORKOUTS, payload: [updatedWorkout] });
-            dispatch({ type: SET_VIEW_WORKOUT, payload: updatedWorkout });
-          } else {
-            dispatch({ type: UPDATE_WORKOUTS, payload: data });
-            dispatch({ type: SET_VIEW_WORKOUT, payload: data[0] });
-          }
-          return data;
+    return request<WorkoutHeaderProps[]>('POST', path, dispatch, {
+      workouts: [workoutHeader],
+    }).then(({ data }) => {
+      if (data) {
+        if (workoutHeader._id) {
+          const updatedWorkout = { ...workout.viewWorkout, ...data[0] };
+          dispatch({ type: UPDATE_WORKOUTS, payload: [updatedWorkout] });
+          dispatch({ type: SET_VIEW_WORKOUT, payload: updatedWorkout });
         } else {
-          throw 'Failed to insert or update workout header.';
+          dispatch({ type: UPDATE_WORKOUTS, payload: data });
+          dispatch({ type: SET_VIEW_WORKOUT, payload: data[0] });
         }
-      },
-    );
+        return data;
+      } else {
+        throw 'Failed to insert or update workout header.';
+      }
+    });
   };
 
 export const updateWorkoutExercises =
@@ -208,10 +208,15 @@ export const removeWorkoutExercise =
       return;
     }
 
-    return request('POST', PATHS.workouts.removeExercise, dispatch, {
-      exerciseUid: exercise._id,
-    })
-      .then(({ data }: { data?: WorkoutExerciseProps }) => {
+    return request<WorkoutExerciseProps>(
+      'POST',
+      PATHS.workouts.removeExercise,
+      dispatch,
+      {
+        exerciseUid: exercise._id,
+      },
+    )
+      .then(({ data }) => {
         if (data) {
           //update remove to true
           data.remove = true;
@@ -232,7 +237,7 @@ export const fetchWorkout =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const uid = getState().user.uid;
 
-    const { data: workout }: { data?: WorkoutProps } = await request(
+    const { data: workout } = await request<WorkoutProps>(
       'GET',
       PATHS.workouts.fetchOne(uid, workoutUid),
       dispatch,
@@ -291,7 +296,7 @@ export const fetchWorkouts =
       return;
     }
 
-    const { data }: { data?: WorkoutProps[] } = await request(
+    const { data }: { data?: WorkoutProps[] } = await request<WorkoutProps[]>(
       'GET',
       PATHS.workouts.fetch(fromDate, toDate, user.uid),
       dispatch,
@@ -718,12 +723,17 @@ export const updateWoWorkoutRoute =
       return;
     }
 
-    return request('POST', PATHS.workouts.updateWorkoutRoute, dispatch, {
-      workoutUid,
-      locations,
-      activityId,
-    })
-      .then(({ data }: { data?: WorkoutRouteProps }) => {
+    return request<WorkoutRouteProps>(
+      'POST',
+      PATHS.workouts.updateWorkoutRoute,
+      dispatch,
+      {
+        workoutUid,
+        locations,
+        activityId,
+      },
+    )
+      .then(({ data }) => {
         //need to dispatch
         return data;
       })
@@ -736,8 +746,12 @@ export const getAllHealthData =
   () => async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { user } = getState();
 
-    request('GET', PATHS.workouts.getAllHealthData(user.uid), dispatch)
-      .then(({ data }: { data?: HealthDataProps[] }) => {
+    request<HealthDataProps[]>(
+      'GET',
+      PATHS.workouts.getAllHealthData(user.uid),
+      dispatch,
+    )
+      .then(({ data }) => {
         if (data) {
           dispatch({ type: SET_HEALTH_DATA, payload: data });
         }

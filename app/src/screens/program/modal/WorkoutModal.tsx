@@ -1,25 +1,21 @@
 import React, { Dispatch, useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
 import { ReducerProps } from '../../../services';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { removeProgramWorkout } from '../../../services/program/actions';
-import { INITIATE_WORKOUT_HEADER } from '../../../services/workout/actionTypes';
 import { ProgramActionProps } from '../../../services/program/types';
 import { ProgramStackScreens } from '../types';
 import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
+import { SET_PROGRAM_WORKOUT_HEADER } from 'src/services/program/actionTypes';
 
 interface Props {
   navigation: any;
   route: any;
-  dispatch: React.Dispatch<any>;
   removeProgramWorkout: ProgramActionProps['removeProgramWorkout'];
 }
 
-const WorkoutModal = ({
-  navigation,
-  removeProgramWorkout,
-  dispatch,
-}: Props) => {
+const WorkoutModal = ({ navigation, removeProgramWorkout }: Props) => {
+  const dispatch = useDispatch();
   const { workout } = useSelector((state: ReducerProps) => ({
     workout: state.program.viewWorkout,
   }));
@@ -27,7 +23,7 @@ const WorkoutModal = ({
   const onEditWorkoutHeader = useCallback(() => {
     if (!workout) return;
     dispatch({
-      type: INITIATE_WORKOUT_HEADER,
+      type: SET_PROGRAM_WORKOUT_HEADER,
       payload: { ...workout },
     });
     navigation.navigate(ProgramStackScreens.ProgramWorkoutHeader);

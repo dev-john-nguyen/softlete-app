@@ -219,7 +219,7 @@ export const removeProgram =
 
 export const updateProgramWorkoutHeader =
   (workoutHeader: ProgramWorkoutHeaderProps) =>
-  async (dispatch: AppDispatch) => {
+  async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     let path;
 
     if (!workoutHeader.programTemplateUid) return;
@@ -232,8 +232,19 @@ export const updateProgramWorkoutHeader =
 
     return request('POST', path, dispatch, workoutHeader).then(({ data }) => {
       if (data) {
-        dispatch({ type: UPDATE_PROGRAM_WORKOUTS, payload: [data] });
-        dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: data });
+        const {
+          program: { viewWorkout },
+        } = getState();
+        let updatedWo = data;
+        if (workoutHeader._id) {
+          // update workout header of the current viewed workout
+          updatedWo = {
+            ...viewWorkout,
+            ...data,
+          };
+        }
+        dispatch({ type: UPDATE_PROGRAM_WORKOUTS, payload: [updatedWo] });
+        dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: updatedWo });
       } else {
         throw 'Failed to insert or update workout header.';
       }
