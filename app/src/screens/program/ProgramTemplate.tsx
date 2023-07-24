@@ -9,7 +9,6 @@ import {
 import {
   setProgramViewWorkout,
   duplicateProgramWorkout,
-  generateProgram,
 } from '../../services/program/actions';
 import ProgramHeader from '../../components/program/Header';
 import ProgramWorkouts from '../../components/program/Workouts';
@@ -43,7 +42,6 @@ const ProgramTemplate = ({
   dispatch,
   setProgramViewWorkout,
   duplicateProgramWorkout,
-  generateProgram,
   programProps,
 }: Props) => {
   const [workoutsObj, setWorkoutsObj] = useState<ProgramByWeekProps>({});
@@ -110,9 +108,6 @@ const ProgramTemplate = ({
     });
   };
 
-  const onDownload = () =>
-    navigation.navigate(ProgramStackScreens.ProgramDownload);
-
   const likeCount = () =>
     programProps && programProps.likeUids ? programProps.likeUids.length : 0;
 
@@ -121,7 +116,6 @@ const ProgramTemplate = ({
   return (
     <ScreenTemplate
       isBackVisible
-      applyContentPadding
       onGoBack={() => navigation.goBack()}
       headerTitleFormatted={programProps.name}
       rightContent={
@@ -137,10 +131,10 @@ const ProgramTemplate = ({
           />
         </FlexBox>
       }>
-      <FlexBox height="40%" marginTop={5}>
+      <FlexBox height="40%" marginTop={5} paddingLeft={15} paddingRight={15}>
         <ProgramHeaderImage
           uri={programProps.imageUri}
-          container={{ borderRadius: 0 }}
+          container={{ borderRadius: 5 }}
         />
       </FlexBox>
       <FlexBox column flex={1} marginTop={10} marginBottom={15}>
@@ -172,8 +166,6 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(setProgramViewWorkout(workoutUid, programUid)),
     duplicateProgramWorkout: (daysFromStart: number) =>
       dispatch(duplicateProgramWorkout(daysFromStart)),
-    generateProgram: (programUid: string, startDate: string) =>
-      dispatch(generateProgram(programUid, startDate)),
     dispatch,
   };
 };

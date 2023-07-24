@@ -28,7 +28,7 @@ const ProgramFilter = ({
   athlete,
 }: Props) => {
   return (
-    <FlexBox column marginBottom={10}>
+    <FlexBox column marginBottom={10} paddingLeft={15} paddingRight={15}>
       <FlexBox alignItems="center">
         <Icon size={20} icon="calendar" color={Colors.white} />
         <WeekFilter weeks={weeks} curWeek={curWeek} setCurWeek={setCurWeek} />

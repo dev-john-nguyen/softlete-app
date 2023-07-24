@@ -147,9 +147,11 @@ const ProgramWorkouts = ({
       return (
         <FlexBox
           column
-          width={widthOfListItem}
+          screenWidth
           justifyContent="center"
-          alignItems="center">
+          alignItems="center"
+          paddingLeft={15}
+          paddingRight={15}>
           <WorkoutPreviewList
             onLongPress={onCopyWorkout}
             onPress={navToViewWorkout}

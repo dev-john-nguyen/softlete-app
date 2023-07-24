@@ -11,7 +11,7 @@ interface Props {
 
 const ProgramHeader: FC<Props> = ({ name, description }) => {
   return (
-    <FlexBox column marginBottom={10}>
+    <FlexBox column marginBottom={10} paddingLeft={15} paddingRight={15}>
       <PrimaryText
         size="medium"
         variant="primary"
