@@ -1,7 +1,10 @@
 import React from 'react';
 import WeekFilter from './WeekFilter';
 import DayFilter from './DayFilter';
-import { GroupByDayProps } from '../../services/program/types';
+import {
+  GroupByDayProps,
+  WorkoutByWeekProps,
+} from '../../services/program/types';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
@@ -15,6 +18,7 @@ interface Props {
   onDayLongPress?: (day: number) => void;
   groupByDay?: GroupByDayProps;
   athlete?: boolean;
+  workouts: WorkoutByWeekProps[][];
 }
 
 const ProgramFilter = ({
@@ -26,6 +30,7 @@ const ProgramFilter = ({
   onDayLongPress,
   groupByDay,
   athlete,
+  workouts,
 }: Props) => {
   return (
     <FlexBox column marginBottom={10} paddingLeft={15} paddingRight={15}>
@@ -39,6 +44,7 @@ const ProgramFilter = ({
           onChangeCurDay={onChangeCurDay}
           onLongPress={onDayLongPress}
           groupByDay={groupByDay}
+          workouts={workouts}
         />
       </FlexBox>
     </FlexBox>

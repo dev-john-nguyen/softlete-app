@@ -4,6 +4,8 @@ import Constants from '../../utils/Constants';
 import BaseColors, { rgba } from '../../utils/BaseColors';
 import PrimaryText from '../elements/PrimaryText';
 import { FlexBox } from '@app/ui';
+import { WorkoutByWeekProps } from 'src/services/program/types';
+import { Colors } from '@app/utils';
 
 const { daysOfWeek } = Constants;
 
@@ -14,6 +16,7 @@ interface Props {
   onChangeCurDay: (day: number) => void;
   onLongPress?: (day: number) => void;
   groupByDay?: any;
+  workouts: WorkoutByWeekProps[][];
 }
 
 const DayFilter = ({
@@ -21,9 +24,12 @@ const DayFilter = ({
   onChangeCurDay,
   onLongPress,
   groupByDay,
+  workouts,
 }: Props) => {
   const renderItem = useCallback(
     ({ item, index }: { item: string; index: number }) => {
+      const hasWos = (workouts[index]?.length ?? 0) > 0;
+
       return (
         <FlexBox
           column
@@ -46,10 +52,21 @@ const DayFilter = ({
             bold>
             {item}
           </PrimaryText>
+          {hasWos && (
+            <FlexBox
+              height={5}
+              width={5}
+              borderRadius={100}
+              backgroundColor={Colors.white}
+              position="absolute"
+              top={0}
+              right={0}
+            />
+          )}
         </FlexBox>
       );
     },
-    [curDay, onChangeCurDay, onLongPress],
+    [curDay, onChangeCurDay, onLongPress, workouts],
   );
 
   return (

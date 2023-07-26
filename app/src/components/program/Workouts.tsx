@@ -53,7 +53,7 @@ const ProgramWorkouts = ({
   const [workouts, setWorkouts] = useState<WorkoutByWeekProps[][]>([[]]);
   const [weeks, setWeeks] = useState<string[]>([]);
   const [groupByDay, setGroupByDay] = useState<GroupByDayProps>({});
-  const flatListRef: any = useRef();
+  const flatListRef = useRef<FlatList<WorkoutByWeekProps[][]>>();
   const isScrolling = useRef(false);
 
   const onViewableItemsChanged = useCallback(({ viewableItems }: InfoProps) => {
@@ -111,6 +111,12 @@ const ProgramWorkouts = ({
       flatListRef.current.scrollToIndex({ index: curDay });
     }
   }, [curDay]);
+
+  useLayoutEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({ index: 0, animated: false });
+    }
+  }, [curWeek]);
 
   const onAddWorkoutPress = () => {
     if (!onAddWorkout) return;
@@ -177,9 +183,10 @@ const ProgramWorkouts = ({
         onDayLongPress={onDayLongPress}
         groupByDay={groupByDay}
         athlete={athlete}
+        workouts={workouts}
       />
       <FlatList
-        ref={flatListRef}
+        ref={flatListRef as any}
         onMomentumScrollEnd={onMomentumScrollEnd}
         onViewableItemsChanged={onViewableItemsChanged}
         data={workouts}

@@ -51,7 +51,7 @@ const OverviewContainer = () => {
       heartRates: data.heartRates,
       disMeas: HealthDisMeas.mi,
       activityId: data.activityId,
-      date: workout.date,
+      date: workout.date as string, // date will not exists for program
     };
     onImportData(dataObj);
   };
