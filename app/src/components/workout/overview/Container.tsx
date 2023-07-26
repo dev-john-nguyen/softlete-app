@@ -22,6 +22,7 @@ const OverviewContainer = () => {
   }, [workout, navigation]);
 
   const onImportData = (data: HealthDataProps) => {
+    // this can be updating program or workout
     updateWoHealthData &&
       updateWoHealthData(workout._id, data).catch(err => console.log(err));
   };
@@ -38,8 +39,9 @@ const OverviewContainer = () => {
         data.duration === woHltDta.duration &&
         data.disMeas === woHltDta.disMeas &&
         _.isEqual(data.heartRates, woHltDta.heartRates)
-      )
+      ) {
         return;
+      }
     }
     // does this handle program differently
     const dataObj: HealthDataProps = {

@@ -13,10 +13,11 @@ import {
   renderHeartRateAvg,
 } from '@app/utils';
 import useBanner from 'src/hooks/utils/useBanner';
+import { ProgramWorkoutProps } from 'src/services/program/types';
 
 interface Props {
   data?: HealthDataProps;
-  workout?: WorkoutProps;
+  workout?: ProgramWorkoutProps;
 }
 
 const HealthContainer = ({ data, workout }: Props) => {
@@ -51,13 +52,15 @@ const HealthContainer = ({ data, workout }: Props) => {
             : 'Activity'
         }
       />
-      <InfoListBox
-        secondary
-        icon="devices"
-        label="Source"
-        desc={data ? data.sourceName : 'Manual'}
-      />
 
+      {!workout?.programTemplateUid && (
+        <InfoListBox
+          secondary
+          icon="devices"
+          label="Source"
+          desc={data ? data.sourceName : 'Manual'}
+        />
+      )}
       <InfoListBox
         secondary
         icon="clock"

@@ -129,7 +129,7 @@ const Workout = ({
       onNavigateToExercise={onNavigateToExercise}
       onNavigateToAddExercise={onNavigateToAddExercise}
       onUpdateStatus={onUpdateStatus}
-      onUpdateWoHealthData={onUpdateWoHealthData}
+      updateWoHealthData={onUpdateWoHealthData}
       isProgram>
       <ScreenTemplate
         isBackVisible

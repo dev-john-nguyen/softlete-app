@@ -14,10 +14,6 @@ import {
 
 type WorkoutContextProps = {
   onNavigateToExercise: (exercise: ExerciseProps) => void;
-  onUpdateWoHealthData?: (
-    workoutUid: string,
-    activity: HealthDataProps,
-  ) => Promise<void>;
   onNavigateToAddExercise?: (group: number, order: number) => void;
   onCompleteWorkout?: (
     exercises?: void | WorkoutExerciseProps[] | undefined,

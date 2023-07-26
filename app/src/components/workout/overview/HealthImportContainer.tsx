@@ -50,13 +50,8 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
         justifyContent="flex-end"
         marginBottom={5}
         alignItems="center"
-        backgroundColor={rgba(Colors.whiteRbg, 0.5)}
-        borderRadius={100}
-        paddingLeft={10}
-        paddingRight={10}
         paddingBottom={5}
         paddingTop={5}>
-        <PrimaryText>Set</PrimaryText>
         <Icon
           icon="download"
           onPress={onImportData}
@@ -315,10 +310,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
         </FlexBox>
       )}
       <FlexBox column marginBottom={10}>
-        <HealthContainer
-          data={workout.healthData}
-          workout={workout as WorkoutProps}
-        />
+        <HealthContainer data={workout.healthData} workout={workout} />
       </FlexBox>
       {deviceWosIsVisible ? (
         <FlexBox column flex={1}>
