@@ -90,17 +90,19 @@ export function findAndUpdateProgramWoData(
 ) {
   if (stateWorkouts.length < 1) return [];
 
-  const foundIndex = stateWorkouts.findIndex(w => w._id === workoutUid);
+  const cloneStateWorkouts = cloneDeep(stateWorkouts);
+
+  const foundIndex = cloneStateWorkouts.findIndex(w => w._id === workoutUid);
 
   if (foundIndex > -1) {
-    stateWorkouts[foundIndex] = {
-      ...stateWorkouts[foundIndex],
+    cloneStateWorkouts[foundIndex] = {
+      ...cloneStateWorkouts[foundIndex],
       ...updatedData,
     };
   } else {
     //insert it
-    stateWorkouts.push(updatedData);
+    cloneStateWorkouts.push(updatedData);
   }
 
-  return [...stateWorkouts];
+  return cloneStateWorkouts;
 }

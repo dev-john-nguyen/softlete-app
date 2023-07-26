@@ -21,13 +21,7 @@ const OverviewContainer = () => {
     }
   }, [workout, navigation]);
 
-  const onImportData = (data: HealthDataProps) => {
-    // this can be updating program or workout
-    updateWoHealthData &&
-      updateWoHealthData(workout._id, data).catch(err => console.log(err));
-  };
-
-  const onChangeHealthData = (data: HealthDataProps) => {
+  const onChangeHealthData = async (data: HealthDataProps) => {
     //check if there is a difference
     if (workout.healthData) {
       const { healthData: woHltDta } = workout;
@@ -44,7 +38,7 @@ const OverviewContainer = () => {
       }
     }
     // does this handle program differently
-    const dataObj: HealthDataProps = {
+    const updatedHealthData: HealthDataProps = {
       activityName: data.activityName,
       sourceName: data.sourceName,
       duration: data.duration,
@@ -55,7 +49,12 @@ const OverviewContainer = () => {
       activityId: data.activityId,
       date: workout.date as string, // date will not exists for program
     };
-    onImportData(dataObj);
+
+    if (updateWoHealthData) {
+      await updateWoHealthData(workout._id, updatedHealthData).catch(err =>
+        console.log(err),
+      );
+    }
   };
 
   return (

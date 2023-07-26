@@ -1,7 +1,7 @@
 import { InfoListBox, Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, rgba, StyleConstants } from '@app/utils';
+import { Colors, StyleConstants } from '@app/utils';
 import _ from 'lodash';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,7 +13,6 @@ import AppleHealthKit, {
 import { getWoSample } from '../../../helpers/health.helpers';
 import {
   HealthDataProps,
-  WorkoutProps,
   WorkoutStatus,
 } from '../../../services/workout/types';
 import AutoId from '../../../utils/AutoId';
@@ -65,7 +64,7 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
 };
 
 const WorkoutReflection = () => {
-  const { setReflection, setImage, image, workout } =
+  const { setReflection, setImage, image, workout, isProgram } =
     useContext(WorkoutContext);
 
   return (
@@ -95,16 +94,20 @@ const WorkoutReflection = () => {
             }}
           />
         )}
-        <ReflectionImage
-          setImage={
-            setImage as React.Dispatch<
-              React.SetStateAction<ImageProps | undefined>
-            >
-          }
-          image={image}
-          imageUri={workout.imageUri ? workout.imageUri : workout.localImageUri}
-          allowUpload={workout.status === WorkoutStatus.inProgress}
-        />
+        {!isProgram && (
+          <ReflectionImage
+            setImage={
+              setImage as React.Dispatch<
+                React.SetStateAction<ImageProps | undefined>
+              >
+            }
+            image={image}
+            imageUri={
+              workout.imageUri ? workout.imageUri : workout.localImageUri
+            }
+            allowUpload={workout.status === WorkoutStatus.inProgress}
+          />
+        )}
         {workout.status === WorkoutStatus.completed && (
           <FlexBox column padding={15}>
             <PrimaryText opacity={0.6} marginBottom={5} size="medium">
@@ -128,7 +131,7 @@ const WorkoutReflection = () => {
 
 interface Props {
   type?: HealthObserver;
-  onImportData: (data: HealthDataProps) => void;
+  onImportData: (data: HealthDataProps) => Promise<void>;
   hide?: boolean;
 }
 
@@ -138,7 +141,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
   const [customId] = useState(AutoId.newId(10));
   const [deviceWosIsVisible, setDeviceWosIsVisible] = useState(false);
   const mount = useRef(false);
-  const { workout } = useContext(WorkoutContext);
+  const { workout, isProgram } = useContext(WorkoutContext);
 
   useEffect(() => {
     getActiveEnergy();
@@ -250,21 +253,13 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
 
   const onCustomStateChange = () => setCustom(m => (m ? false : true));
 
-  const onCustomImportSubmit = (data: HealthDataProps) => {
+  const onCustomImportSubmit = async (data: HealthDataProps) => {
     const dataInsert = {
       ...data,
       activityId: customId,
       activityName: workout.type,
     };
-    setData(d => {
-      const dupIndex = d.findIndex(i => i.activityId === customId);
-      if (dupIndex > -1) {
-        d[dupIndex] = dataInsert;
-      } else {
-        d.push(dataInsert);
-      }
-      return [...d];
-    });
+    await onImportData(dataInsert);
     setCustom(false);
   };
 
@@ -278,13 +273,14 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
     ));
   }, [data]);
 
-  if (custom) {
+  if (custom || isProgram) {
     return (
       <FlexBox flex={1} column margin={15}>
         <HealthForm
           onSubmit={onCustomImportSubmit}
-          onClose={onCustomStateChange}
+          onClose={isProgram ? undefined : onCustomStateChange}
           activityName={workout.type}
+          healthData={isProgram ? workout.healthData : undefined} // only set the default data if it's program
         />
       </FlexBox>
     );
@@ -310,7 +306,11 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
         </FlexBox>
       )}
       <FlexBox column marginBottom={10}>
-        <HealthContainer data={workout.healthData} workout={workout} />
+        <HealthContainer
+          data={workout.healthData}
+          workout={workout}
+          isProgram={isProgram}
+        />
       </FlexBox>
       {deviceWosIsVisible ? (
         <FlexBox column flex={1}>

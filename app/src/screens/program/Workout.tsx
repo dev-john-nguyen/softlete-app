@@ -33,6 +33,7 @@ import { ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import useBanner from 'src/hooks/utils/useBanner';
 
 interface Props {
   route: any;
@@ -47,7 +48,6 @@ const Workout = ({
   route,
   navigation,
   updateWorkoutStatus,
-  dispatch,
   updateProgramWoHealthData,
   updateProgramExerciseData,
 }: Props) => {
@@ -55,6 +55,7 @@ const Workout = ({
     workout: state.program.viewWorkout,
     targetProgram: state.program.targetProgram,
   }));
+  const setBanner = useBanner();
 
   const onBackButtonPress = () => {
     if (route.params?.goBackScreen) {
@@ -83,9 +84,7 @@ const Workout = ({
         workout.type === WorkoutTypes.TraditionalStrengthTraining &&
         (!workout.exercises || workout.exercises.length < 1)
       ) {
-        return dispatch(
-          setBanner(BannerTypes.warning, 'Please add an exercise.'),
-        );
+        return setBanner('Please add an exercise.', BannerTypes.warning);
       }
     }
 
@@ -114,6 +113,7 @@ const Workout = ({
       workoutUid,
       data,
     ).catch(err => console.error(err));
+    setBanner('Successfully saved!');
   };
 
   const onNavigateToExercise = (exercise: ExerciseProps) => {
