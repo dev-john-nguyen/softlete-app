@@ -205,7 +205,7 @@ const WorkoutPreviewList = ({
   );
 
   return (
-    <FlexBox flex={1} justifyContent="center" alignItems="center">
+    <FlexBox flex={1}>
       <FlatList
         data={workouts}
         contentContainerStyle={{ paddingBottom: 20 }}

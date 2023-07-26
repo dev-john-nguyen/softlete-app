@@ -1,5 +1,4 @@
 import { PrimaryText } from '@app/elements';
-import Icon, { IconOptions } from '@app/icons';
 import { FlexBox } from '@app/ui';
 import {
   convertTimeToFormatTime,
@@ -11,19 +10,18 @@ import React from 'react';
 import { HealthDataProps } from '../../../services/workout/types';
 
 interface ItemProps {
-  icon: IconOptions;
   text: string;
-  color: string;
+  label: string;
 }
 
-const Item = ({ text, color, icon }: ItemProps) => {
+const Item = ({ text, label }: ItemProps) => {
   return (
     <FlexBox
       justifyContent="space-between"
       alignItems="center"
       marginBottom={5}>
+      <PrimaryText size="small">{label}</PrimaryText>
       <PrimaryText size="small">{text}</PrimaryText>
-      <Icon icon={icon} size={15} color={color} />
     </FlexBox>
   );
 };
@@ -37,12 +35,11 @@ const PreviewAerobic = ({ data, color }: Props) => {
   return (
     <FlexBox column>
       <Item
-        icon="fire"
         text={data ? renderCalories(data.calories) : '0 kcal'}
-        color={color}
+        label="Cals Burned"
       />
       <Item
-        icon="clock"
+        label="Duration"
         text={
           data
             ? (convertTimeToFormatTime(
@@ -52,19 +49,16 @@ const PreviewAerobic = ({ data, color }: Props) => {
               ) as string)
             : '0 sec'
         }
-        color={color}
       />
       <Item
-        icon="ruler"
+        label="Distance"
         text={`${data ? renderDistance(data.distance) : 0} ${
           data?.disMeas ? data.disMeas : 'mi'
         }`}
-        color={color}
       />
       <Item
-        icon="heart"
+        label="Avg Heart Rate"
         text={`${data ? renderHeartRateAvg(data.heartRates) : 0} bpm`}
-        color={color}
       />
     </FlexBox>
   );

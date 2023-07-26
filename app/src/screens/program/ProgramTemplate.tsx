@@ -46,6 +46,7 @@ const ProgramTemplate = ({
 }: Props) => {
   const [workoutsObj, setWorkoutsObj] = useState<ProgramByWeekProps>({});
   const mount = useRef(false);
+  const disableEdit = route.params && route.params.softlete ? true : false;
 
   const updateProgram = useCallback(() => {
     if (programProps) {
@@ -64,9 +65,6 @@ const ProgramTemplate = ({
       mount.current = false;
     };
   }, [programProps, updateProgram]);
-
-  const disableEdit = () =>
-    route.params && route.params.softlete ? true : false;
 
   const navToAddWorkout = (daysFromStart: number, weeks: string[]) => {
     dispatch({
@@ -87,14 +85,14 @@ const ProgramTemplate = ({
     setProgramViewWorkout(workoutUid, programProps._id)
       .then(() => {
         navigation.navigate(ProgramStackScreens.ProgramWorkout, {
-          softlete: disableEdit(),
+          softlete: disableEdit,
         });
       })
       .catch(err => console.log(err));
   };
 
   const onCopyWorkout = (workoutUid: string) => {
-    if (disableEdit()) return;
+    if (disableEdit) return;
     dispatch({
       type: SET_COPIED_PROGRAM_WORKOUT,
       payload: workoutUid,
@@ -102,14 +100,14 @@ const ProgramTemplate = ({
   };
 
   const onPasteWorkout = (daysFromStart: number) => {
-    if (disableEdit()) return;
+    if (disableEdit) return;
     duplicateProgramWorkout(daysFromStart).catch(err => {
       console.log(err);
     });
   };
 
-  const likeCount = () =>
-    programProps && programProps.likeUids ? programProps.likeUids.length : 0;
+  // const likeCount = () =>
+  //   programProps && programProps.likeUids ? programProps.likeUids.length : 0;
 
   if (!programProps) return <Loading />;
 
@@ -149,7 +147,7 @@ const ProgramTemplate = ({
           navToViewWorkout={navToViewWorkout}
           onCopyWorkout={onCopyWorkout}
           onPasteWorkout={onPasteWorkout}
-          athlete={disableEdit()}
+          athlete={disableEdit}
         />
       </FlexBox>
     </ScreenTemplate>

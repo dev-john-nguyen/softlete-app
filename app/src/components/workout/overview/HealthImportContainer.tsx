@@ -21,8 +21,6 @@ import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
 import { WorkoutContext } from '@app/contexts';
 import { Pressable, Keyboard, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { ReducerProps } from 'src/services';
 import ReflectionImage from './ReflectionImage';
 import { ImageProps } from 'src/services/user/types';
 
@@ -72,11 +70,8 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
 };
 
 const WorkoutReflection = () => {
-  const { workout } = useSelector((state: ReducerProps) => ({
-    workout: state.workout.viewWorkout,
-  }));
-
-  const { setReflection, setImage, image } = useContext(WorkoutContext);
+  const { setReflection, setImage, image, workout } =
+    useContext(WorkoutContext);
 
   return (
     <FlexBox
@@ -231,6 +226,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
   };
 
   const getActiveEnergy = async () => {
+    if (!workout.date) return;
     const d = new Date(workout.date);
 
     const options = {
@@ -319,7 +315,10 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
         </FlexBox>
       )}
       <FlexBox column marginBottom={10}>
-        <HealthContainer data={workout.healthData} workout={workout} />
+        <HealthContainer
+          data={workout.healthData}
+          workout={workout as WorkoutProps}
+        />
       </FlexBox>
       {deviceWosIsVisible ? (
         <FlexBox column flex={1}>
