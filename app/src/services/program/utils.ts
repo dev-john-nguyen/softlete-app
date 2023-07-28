@@ -34,13 +34,15 @@ export function findAndRemoveProgramWorkout(
 ) {
   if (stateWorkouts.length < 1) return [];
 
-  const targetIndex = stateWorkouts.findIndex(w => w._id === workoutUid);
+  const clonedWorkouts = cloneDeep(stateWorkouts);
+
+  const targetIndex = clonedWorkouts.findIndex(w => w._id === workoutUid);
 
   if (targetIndex > -1) {
-    stateWorkouts.splice(targetIndex, 1);
+    clonedWorkouts.splice(targetIndex, 1);
   }
 
-  return [...stateWorkouts];
+  return clonedWorkouts;
 }
 
 export function findAndUpdateProgram(

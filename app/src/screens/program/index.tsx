@@ -9,7 +9,7 @@ import Exercise from '../exercises/profile/Profile';
 import ExerciseAnalytics from '../exercises/Analytics';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import ProgramTemplate from './ProgramTemplate';
-import WorkoutModal from './modal/WorkoutModal';
+import WorkoutModal from '../modals/WorkoutModal';
 import Workout from './Workout';
 import BaseColors from '../../utils/BaseColors';
 import ProgramHeader from './ProgramHeader';

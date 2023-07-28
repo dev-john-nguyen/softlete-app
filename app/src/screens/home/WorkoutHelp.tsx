@@ -1,17 +1,17 @@
-import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { normalize } from '../../utils/tools';
+import { PrimaryText, ScreenTemplate } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { PrimaryText } from '@app/elements';
+import React from 'react';
 
 const WorkoutHelp = () => {
   return (
-    <ScrollView
-      style={styles.container}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
+    <ScreenTemplate
+      isBackVisible
+      headerTitleFormatted="Help"
+      applyContentPadding>
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>How to add another group?</PrimaryText>
+        <PrimaryText marginBottom={5} bold>
+          How to add another group?
+        </PrimaryText>
         <PrimaryText>
           Tap on the circle plus icon in the navbar located at the top of the
           screen.
@@ -19,12 +19,16 @@ const WorkoutHelp = () => {
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>How to add warm up sets?</PrimaryText>
+        <PrimaryText marginBottom={5} bold>
+          How to add warm up sets?
+        </PrimaryText>
         <PrimaryText>Tap the last set that the warm up will occur.</PrimaryText>
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>How to delete sets?</PrimaryText>
+        <PrimaryText marginBottom={5} bold>
+          How to delete sets?
+        </PrimaryText>
         <PrimaryText>
           You can remove a set by tapping and holding on the set you want to
           remove.
@@ -32,7 +36,7 @@ const WorkoutHelp = () => {
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>
+        <PrimaryText marginBottom={5} bold>
           How to update the measurement for an exercise?
         </PrimaryText>
         <PrimaryText>
@@ -42,7 +46,7 @@ const WorkoutHelp = () => {
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>
+        <PrimaryText marginBottom={5} bold>
           How to remove/reorder exercises?
         </PrimaryText>
         <PrimaryText>
@@ -51,16 +55,13 @@ const WorkoutHelp = () => {
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
-        <PrimaryText opacity={0.5}>Workout stages.</PrimaryText>
+        <PrimaryText marginBottom={5} bold>
+          What are the workout stages?
+        </PrimaryText>
         <PrimaryText>{`A workout consist of 3 stages (pending, performing, and completed). The stages allows you and other users to identify where you are in a workout.`}</PrimaryText>
       </FlexBox>
-    </ScrollView>
+    </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    maxHeight: normalize.height(2),
-  },
-});
 export default WorkoutHelp;
