@@ -59,7 +59,7 @@ const HealthContainer = ({ data, workout, isProgram }: Props) => {
           secondary
           icon="devices"
           label="Source"
-          desc={data ? data.sourceName : 'Manual'}
+          desc={data && data.sourceName ? data.sourceName : 'Manual'}
         />
       )}
       <InfoListBox

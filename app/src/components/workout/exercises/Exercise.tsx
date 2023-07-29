@@ -5,7 +5,7 @@ import {
   WorkoutExerciseDataProps,
   WorkoutStatus,
   WorkoutActionProps,
-  WorkoutProps,
+  ViewWorkoutProps,
 } from '../../../services/workout/types';
 import PrimaryText from '../../elements/PrimaryText';
 import ExerciseData from './data/Container';
@@ -19,7 +19,7 @@ interface Props {
   exercise: WorkoutExerciseProps;
   onPress?: (exercise: ExerciseProps) => void;
   onUpdateData: (updatedData: WorkoutExerciseDataProps[]) => void;
-  workout: WorkoutProps;
+  workout: ViewWorkoutProps;
   athlete?: boolean;
   onCalcRefUpdate: (calc: number | string) => void;
   removeWorkoutExercise: WorkoutActionProps['removeWorkoutExercise'];
@@ -74,11 +74,17 @@ const WorkoutExercise = ({
     <FlexBox screenWidth column marginTop={15}>
       <FlexBox
         marginBottom={10}
+        alignItems="center"
         justifyContent="space-between"
         paddingLeft={15}
         paddingRight={15}
         onPress={() => Keyboard.dismiss()}>
-        <FlexBox alignSelf="flex-start" flex={1} onPress={onExercisePress}>
+        <FlexBox
+          alignSelf="flex-start"
+          flex={1}
+          onPress={onExercisePress}
+          marginRight={10}
+          alignItem="center">
           {exercise.exercise ? (
             <PrimaryText
               size="large"

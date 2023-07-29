@@ -4,8 +4,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { normalize, strToFloat } from '../../../../utils/tools';
 import StyleConstants from '../../../tools/StyleConstants';
 import {
+  ViewWorkoutProps,
   WorkoutExerciseDataProps,
-  WorkoutProps,
   WorkoutStatus,
 } from '../../../../services/workout/types';
 import ExerciseDataHeader from './Header';
@@ -27,7 +27,7 @@ interface Props {
   data: WorkoutExerciseDataProps[];
   updateData: (data: WorkoutExerciseDataProps[]) => void;
   calcRef?: number;
-  workout: WorkoutProps;
+  workout: ViewWorkoutProps;
   measSubCat: MeasSubCats;
   athlete?: boolean;
   onCalcRefUpdate: (calc: string | number) => void;

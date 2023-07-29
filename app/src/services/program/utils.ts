@@ -1,9 +1,9 @@
-import cloneDeep from 'lodash/cloneDeep';
 import {
   ProgramWorkoutProps,
   ProgramProps,
   GeneratedProgramProps,
 } from './types';
+import cloneDeep from 'lodash/cloneDeep';
 
 export function findAndUpdateProgramWorkouts(
   stateWorkouts: ProgramWorkoutProps[] | GeneratedProgramProps[],
@@ -63,12 +63,13 @@ export function findAndRemoveProgram(
   statePrograms: ProgramProps[],
   programUid: string,
 ) {
-  const targetIndex = statePrograms.findIndex(p => p._id === programUid);
+  const copyStatePrograms = cloneDeep(statePrograms);
+  const targetIndex = copyStatePrograms.findIndex(p => p._id === programUid);
 
   if (targetIndex > -1) {
-    statePrograms.splice(targetIndex, 1);
+    copyStatePrograms.splice(targetIndex, 1);
   }
-  return [...statePrograms];
+  return copyStatePrograms;
 }
 
 export function findAndInsertLikeProgram(
