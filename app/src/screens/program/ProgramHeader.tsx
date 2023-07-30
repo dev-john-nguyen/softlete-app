@@ -153,6 +153,7 @@ const ProgramHeader = ({ updateProgramHeader, navigation, route }: Props) => {
         label="Name:"
         onChangeText={text => setName(text)}
         styles={{ marginBottom: 10 }}
+        maxLength={50}
       />
 
       <Input
@@ -160,6 +161,7 @@ const ProgramHeader = ({ updateProgramHeader, navigation, route }: Props) => {
         label="Description:"
         onChangeText={text => setDescription(text)}
         styles={{ marginBottom: 10 }}
+        maxLength={200}
       />
 
       {isEdit && (

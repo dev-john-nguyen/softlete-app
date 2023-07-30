@@ -57,7 +57,7 @@ const WorkoutHeader = ({
   const [picker, setPicker] = useState('');
   const setBanner = useBanner();
 
-  const init = useCallback(() => {
+  useEffect(() => {
     if (workoutHeader) {
       setType(
         workoutHeader.type
@@ -66,7 +66,7 @@ const WorkoutHeader = ({
       );
       setName(workoutHeader.name);
       setDescription(workoutHeader.description);
-      if (workoutHeader.program && targetProgram && targetProgram.workouts) {
+      if (targetProgram && targetProgram.workouts) {
         const obj = programWorkoutsArrToObj(targetProgram.workouts);
 
         let daysObj = {
@@ -102,10 +102,6 @@ const WorkoutHeader = ({
       setDescription('');
     }
   }, [route, targetProgram, workoutHeader]);
-
-  useEffect(() => {
-    init();
-  }, [init, route, workoutHeader]);
 
   const onContinuePress = () => {
     //check values
