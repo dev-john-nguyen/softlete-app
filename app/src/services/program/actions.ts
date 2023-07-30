@@ -409,7 +409,7 @@ export const removeProgramWorkoutExercise =
     })
       .then(() => {
         //get current state
-        const { viewWorkout } = getState().workout;
+        const viewWorkout = getState().program.viewWorkout;
         //remove the exercise
         const updatedWorkout = findAndUpdateWorkoutExercises(
           [viewWorkout],

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { ActivityIndicator, Keyboard } from 'react-native';
 import {
   WorkoutExerciseProps,
@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
+import { WorkoutContext } from '@app/contexts';
 
 interface Props {
   exercise: WorkoutExerciseProps;
@@ -34,8 +35,6 @@ const WorkoutExercise = ({
   exercise,
   onPress,
   onUpdateData,
-  workout,
-  athlete,
   onCalcRefUpdate,
   removeWorkoutExercise,
   showGoBack,
@@ -43,6 +42,7 @@ const WorkoutExercise = ({
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const mount = useRef(false);
+  const { workout, isProgram, athlete } = useContext(WorkoutContext);
 
   useEffect(() => {
     mount.current = true;
@@ -96,7 +96,7 @@ const WorkoutExercise = ({
             <ActivityIndicator size="small" color={Colors.white} />
           )}
         </FlexBox>
-        {!athlete && workout.status === WorkoutStatus.pending ? (
+        {(!athlete && workout.status === WorkoutStatus.pending) || isProgram ? (
           loading ? (
             <ActivityIndicator size="small" color={Colors.white} />
           ) : (
