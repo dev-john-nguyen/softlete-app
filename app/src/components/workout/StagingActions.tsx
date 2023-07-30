@@ -1,8 +1,9 @@
-import { Colors, rgba, StyleConstants } from '@app/utils';
+import { Colors, rgba } from '@app/utils';
 import React from 'react';
-import { StyleSheet, Pressable, View } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 import { WorkoutStatus } from '../../services/workout/types';
 import PrimaryText from '../elements/PrimaryText';
+import { FlexBox } from '@app/ui';
 
 interface Props {
   status: WorkoutStatus;
@@ -17,7 +18,13 @@ const StagingActions = ({ status, onUpdateStatus, athlete }: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <FlexBox
+      marginRight={15}
+      marginLeft={15}
+      marginBottom={10}
+      borderRadius={100}
+      alignSelf="center"
+      backgroundColor={rgba(Colors.whiteRbg, 0.05)}>
       <Pressable
         style={({ pressed }) => [
           styles.tabContainer,
@@ -100,19 +107,11 @@ const StagingActions = ({ status, onUpdateStatus, athlete }: Props) => {
           Completed
         </PrimaryText>
       </Pressable>
-    </View>
+    </FlexBox>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: StyleConstants.baseMargin,
-    marginRight: StyleConstants.baseMargin,
-    flexDirection: 'row',
-    borderRadius: 100,
-    alignSelf: 'center',
-    backgroundColor: rgba(Colors.whiteRbg, 0.05),
-  },
   tabContainer: {
     flex: 1,
     justifyContent: 'center',

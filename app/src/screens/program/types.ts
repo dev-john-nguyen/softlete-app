@@ -1,6 +1,6 @@
 export type ProgramStackParamsList = {
   TemplateList: undefined;
-  Program: undefined;
+  Program: { softlete?: boolean };
   ProgramWorkout: undefined;
   ProgramModal: undefined;
   ProgramSearchExercises: { programStack: boolean };

@@ -1,7 +1,6 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
-import FolderSvg from '../../assets/FolderSvg';
 import DashboardSvg from '../../assets/DashboardSvg';
 import { IndexStackList } from '../../screens/types';
 import { Colors, rgba } from '@app/utils';
@@ -9,21 +8,18 @@ import { moderateScale } from '../tools/StyleConstants';
 import Tab from './Tab';
 import GearSvg from '../../assets/GearSvg';
 import { HomeStackScreens } from '../../screens/home/types';
-import ConnectionSvg from '../../assets/ConnectionSvg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsStackScreens } from '../../screens/settings/types';
 import { NetworkStackScreens } from '../../screens/network/types';
 import { ProgramStackScreens } from '../../screens/program/types';
-import axios from 'axios';
-import { SERVERURL } from 'src/utils/PATHS';
-import useBanner from 'src/hooks/utils/useBanner';
+import Icon from '@app/icons';
 
 const TabBar = ({
   state,
   navigation,
   isHidden,
 }: BottomTabBarProps & { isHidden?: boolean }) => {
-  const setBanner = useBanner();
+  // const setBanner = useBanner();
   const navToHome = () => {
     if (isActive(IndexStackList.HomeStack)) {
       navigation.navigate(IndexStackList.HomeStack, {
@@ -61,14 +57,14 @@ const TabBar = ({
     }
   };
 
-  const clearCache = async () => {
-    try {
-      await axios.get(SERVERURL + '/clear-cache');
-      setBanner('Cache Cleared');
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const clearCache = async () => {
+  //   try {
+  //     await axios.get(SERVERURL + '/clear-cache');
+  //     setBanner('Cache Cleared');
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const isActive = useCallback(
     (val: string) => state.routes[state.index].name === val,
@@ -96,8 +92,10 @@ const TabBar = ({
       <Tab
         onPress={navToPrograms}
         icon={
-          <FolderSvg
-            strokeColor={
+          <Icon
+            size={22}
+            icon="folder"
+            color={
               isActive(IndexStackList.ProgramStack)
                 ? Colors.lightWhite
                 : rgba(Colors.whiteRbg, 0.1)
@@ -110,7 +108,9 @@ const TabBar = ({
       <Tab
         onPress={onNavToAthletes}
         icon={
-          <ConnectionSvg
+          <Icon
+            size={22}
+            icon="world"
             color={
               isActive(IndexStackList.NetworkStack)
                 ? Colors.lightWhite
@@ -134,12 +134,6 @@ const TabBar = ({
         }
         active={isActive(IndexStackList.SettingsStack)}
       />
-
-      <Tab
-        onPress={clearCache}
-        icon={<GearSvg fillColor={rgba(Colors.greenRbg, 0.5)} />}
-        active={isActive(IndexStackList.SettingsStack)}
-      />
     </SafeAreaView>
   );
 };
@@ -149,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#250000',
     justifyContent: 'space-around',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingTop: moderateScale(15),
     opacity: 1,
     borderTopWidth: 1,

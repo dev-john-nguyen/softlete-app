@@ -57,6 +57,7 @@ import { default as BarChart } from './BarChartSvg';
 import { default as BoxGraph } from './BoxGraphSvg';
 import { default as Table } from './TableSvg';
 import { default as Search } from './SearchSvg';
+import World from './World';
 import Database from './Database';
 import Target from './Target';
 import { default as Filter } from './FilterSvg';
@@ -128,6 +129,7 @@ const Icons = {
   filter: (props: any) => <Filter {...props} />,
   add_ring: (props: any) => <AddRing {...props} />,
   pause: (props: any) => <PauseSvg {...props} />,
+  world: (props: any) => <World {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;

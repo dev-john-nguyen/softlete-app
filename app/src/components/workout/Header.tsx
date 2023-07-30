@@ -1,12 +1,9 @@
-import React, { useMemo, useContext } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
 import { GeneratedProgramProps } from '../../services/program/types';
-import DateTools from '../../utils/DateTools';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import LikeCom from '../Like';
 import StagingActions from './StagingActions';
 import { PrimaryText } from '@app/elements';
-import { Colors, rgba, StyleConstants } from '@app/utils';
+import { Colors, rgba } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { WorkoutContext } from '@app/contexts';
@@ -21,15 +18,6 @@ const WorkoutHeader = ({ program, onLikePress, isLiked }: Props) => {
   const { workout, athlete, onUpdateStatus, isProgram } =
     useContext(WorkoutContext);
   const likeUids = workout.likeUids ? workout.likeUids : [];
-  const headerText = useMemo(() => {
-    if (!program) return '';
-
-    const dObj = DateTools.UTCISOToLocalDate(program.startDate);
-    if (!dObj) return program.name;
-    const dStr = DateTools.dateToStr(dObj);
-    const monthDayStr = DateTools.strToMMDD(dStr);
-    return monthDayStr + ' ' + program.name;
-  }, [program]);
 
   return (
     <FlexBox column paddingTop={10}>
@@ -40,7 +28,10 @@ const WorkoutHeader = ({ program, onLikePress, isLiked }: Props) => {
           athlete={athlete}
         />
       )}
-      <SafeAreaView edges={['bottom']} style={styles.container}>
+      <FlexBox
+        padding={15}
+        borderTopWidth={1}
+        borderTopColor={rgba(Colors.lightWhiteRgb, 0.5)}>
         <FlexBox flex={1} column>
           <FlexBox alignItems="center">
             <PrimaryText textTransform="capitalize" size="medium">
@@ -51,14 +42,16 @@ const WorkoutHeader = ({ program, onLikePress, isLiked }: Props) => {
             <PrimaryText>{workout.description}</PrimaryText>
           )}
           {program && (
-            <FlexBox marginTop={5} alignItems="center">
+            <FlexBox marginTop={5} alignItems="center" alignSelf="flex-start">
               <Icon
                 icon="folder"
-                size={20}
+                size={18}
                 containerStyles={{ marginRight: 5 }}
                 color={Colors.white}
               />
-              <PrimaryText>{headerText}</PrimaryText>
+              <PrimaryText textTransform="capitalize">
+                {program.name}
+              </PrimaryText>
             </FlexBox>
           )}
         </FlexBox>
@@ -73,22 +66,9 @@ const WorkoutHeader = ({ program, onLikePress, isLiked }: Props) => {
             />
           </FlexBox>
         )}
-      </SafeAreaView>
+      </FlexBox>
     </FlexBox>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    paddingLeft: StyleConstants.baseMargin,
-    paddingRight: StyleConstants.baseMargin,
-    paddingTop: StyleConstants.baseMargin,
-    paddingBottom: StyleConstants.smallMargin,
-    marginTop: StyleConstants.smallMargin,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: rgba(Colors.lightWhiteRgb, 0.2),
-  },
-});
 export default WorkoutHeader;
