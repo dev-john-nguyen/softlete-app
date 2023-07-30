@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, StyleProp } from 'react-native';
-import BaseColors from '../../utils/BaseColors';
 import LogoSvg from '../../assets/LogoSvg';
 import FastImage from 'react-native-fast-image';
+import { FlexBox } from '@app/ui';
+import { Colors } from '@app/utils';
 
 interface Props {
   uri: string | undefined;
@@ -16,9 +17,18 @@ const ProgramHeaderImage = ({ uri, onPress, container }: Props) => {
       {uri ? (
         <FastImage style={[styles.image, container]} source={{ uri: uri }} />
       ) : (
-        <View style={{ width: '13%' }}>
-          <LogoSvg secondary />
-        </View>
+        <FlexBox
+          height="100%"
+          width="100%"
+          borderRadius={10}
+          alignItems="center"
+          justifyContent="center"
+          borderWidth={1}
+          borderColor={Colors.white}>
+          <View style={{ width: '13%' }}>
+            <LogoSvg secondary />
+          </View>
+        </FlexBox>
       )}
     </Pressable>
   );
@@ -26,14 +36,12 @@ const ProgramHeaderImage = ({ uri, onPress, container }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: BaseColors.white,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
     width: '100%',
     borderRadius: 10,
-    ...BaseColors.lightBoxShadow,
+    ...Colors.lightBoxShadow,
   },
   image: {
     width: '100%',
