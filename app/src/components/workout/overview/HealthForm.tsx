@@ -31,6 +31,7 @@ interface StateProps {
 }
 
 class HealthForm extends React.Component<Props, StateProps> {
+  _isMounted = false;
   constructor(props: Props) {
     super(props);
 
@@ -47,8 +48,14 @@ class HealthForm extends React.Component<Props, StateProps> {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { healthData } = this.props;
     healthData && this.updateHealthDateState(healthData);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    // Clean up resources, timers, subscriptions, etc.
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -72,7 +79,9 @@ class HealthForm extends React.Component<Props, StateProps> {
     };
     this.setState({ isLoading: true });
     await this.props.onSubmit(manualData);
-    this.setState({ isLoading: false });
+    if (this._isMounted) {
+      this.setState({ isLoading: false });
+    }
   };
 
   updateHealthDateState(healthData?: HealthDataProps) {
