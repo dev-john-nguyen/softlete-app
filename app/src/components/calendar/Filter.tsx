@@ -99,10 +99,16 @@ const DashboardFilter = ({
           padding={5}
           borderRadius={100}
           backgroundColor={
-            selectedProgram ? Colors.lightPrimary : Colors.lightPrimary
+            selectedProgram === item._id
+              ? Colors.lightPrimary
+              : Colors.lightPrimary
           }>
           <PrimaryText
-            color={selectedProgram ? Colors.white : rgba(Colors.whiteRbg, 0.5)}
+            color={
+              selectedProgram === item._id
+                ? Colors.white
+                : rgba(Colors.whiteRbg, 0.5)
+            }
             numberOfLines={1}
             size="small"
             textTransform="capitalize">
