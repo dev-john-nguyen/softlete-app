@@ -21,7 +21,11 @@ export interface RootWorkoutProps {
   healthData: HealthDataProps[];
 }
 
-export interface ViewWorkoutProps extends WorkoutProps, ProgramWorkoutProps {}
+export interface ViewWorkoutProps
+  extends Omit<WorkoutProps, 'date'>,
+    ProgramWorkoutProps {
+  date?: WorkoutProps['date'];
+}
 
 export interface MonthWorkoutsProps {
   [date: string]: {

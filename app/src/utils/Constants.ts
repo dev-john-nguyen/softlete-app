@@ -68,7 +68,7 @@ export default {
   ],
   abc: genCharArray('a', 'z'),
   setsAndReps: getNumArray(1, 20),
-  autoSaveDuration: 10000,
+  autoSaveDuration: 5000,
   videoLarge: {
     width: 500,
     height: 281.25,

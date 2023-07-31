@@ -45,7 +45,7 @@ import {
   insertExercises,
   insertExercisesIntoWorkouts,
 } from '../exercises/actions';
-import _ from 'lodash';
+import _, { cloneDeep } from 'lodash';
 import processImage from '../utils/save-image';
 import {
   SET_ATHLETE_PROGRAMS,
@@ -108,8 +108,8 @@ export const fetchPrograms =
 
     if (!uid) return;
 
-    request('GET', PATHS.programs.get(uid), dispatch)
-      .then(async ({ data }: { data?: ProgramHeaderProps[] }) => {
+    request<ProgramHeaderProps[]>('GET', PATHS.programs.get(uid), dispatch)
+      .then(async ({ data }) => {
         if (data) {
           prefetchProgramImages(data);
           if (athlete) {
@@ -135,12 +135,15 @@ export const setTargetProgram =
 
       const storedProgram = programs.find(p => p._id === programHeader._id);
 
-      if (storedProgram && storedProgram.workouts) {
-        storedProgram.workouts = (await insertExercisesIntoWorkouts(
-          storedProgram.workouts,
+      // avoid mutation error
+      const clonedStoredProgram = cloneDeep(storedProgram);
+
+      if (clonedStoredProgram && clonedStoredProgram.workouts) {
+        clonedStoredProgram.workouts = (await insertExercisesIntoWorkouts(
+          clonedStoredProgram.workouts,
         )(dispatch, getState)) as ProgramWorkoutProps[];
-        dispatch({ type: SET_TARGET_PROGRAM, payload: storedProgram });
-        return storedProgram;
+        dispatch({ type: SET_TARGET_PROGRAM, payload: clonedStoredProgram });
+        return clonedStoredProgram;
       }
     }
 
@@ -216,7 +219,7 @@ export const removeProgram =
 
 export const updateProgramWorkoutHeader =
   (workoutHeader: ProgramWorkoutHeaderProps) =>
-  async (dispatch: AppDispatch) => {
+  async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     let path;
 
     if (!workoutHeader.programTemplateUid) return;
@@ -229,8 +232,19 @@ export const updateProgramWorkoutHeader =
 
     return request('POST', path, dispatch, workoutHeader).then(({ data }) => {
       if (data) {
-        dispatch({ type: UPDATE_PROGRAM_WORKOUTS, payload: [data] });
-        dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: data });
+        const {
+          program: { viewWorkout },
+        } = getState();
+        let updatedWo = data;
+        if (workoutHeader._id) {
+          // update workout header of the current viewed workout
+          updatedWo = {
+            ...viewWorkout,
+            ...data,
+          };
+        }
+        dispatch({ type: UPDATE_PROGRAM_WORKOUTS, payload: [updatedWo] });
+        dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: updatedWo });
       } else {
         throw 'Failed to insert or update workout header.';
       }
@@ -255,13 +269,13 @@ export const updateProgramWorkoutExercises =
       exercises: prepareExercisesForRequest(saveExercises),
     };
 
-    await request(
+    await request<WorkoutExerciseProps[]>(
       'POST',
       PATHS.programs.updateWorkoutExercises,
       dispatch,
       saveData,
     )
-      .then(async ({ data }: { data?: WorkoutExerciseProps[] }) => {
+      .then(async ({ data }) => {
         if (data) {
           //find workout and
 
@@ -395,7 +409,7 @@ export const removeProgramWorkoutExercise =
     })
       .then(() => {
         //get current state
-        const { viewWorkout } = getState().workout;
+        const viewWorkout = getState().program.viewWorkout;
         //remove the exercise
         const updatedWorkout = findAndUpdateWorkoutExercises(
           [viewWorkout],
@@ -518,7 +532,7 @@ export const updateProgramExerciseData =
       .then(res => {
         if (res && res.data) {
           //update the view workout
-          const { viewWorkout } = getState().workout;
+          const viewWorkout = cloneDeep(getState().program.viewWorkout);
 
           //update the exercises
           viewWorkout.exercises = viewWorkout.exercises.map(e => {
@@ -529,17 +543,12 @@ export const updateProgramExerciseData =
             }
             return { ...e };
           });
-
-          const cloneWo = { ...viewWorkout };
-
           dispatch({
             type: UPDATE_PROGRAM_WORKOUTS,
-            payload: [cloneWo],
+            payload: [viewWorkout],
           });
-
-          dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: cloneWo });
-
-          return cloneWo.exercises;
+          dispatch({ type: SET_PROGRAM_VIEW_WORKOUT, payload: viewWorkout });
+          return viewWorkout.exercises;
         }
       })
       .catch(err => {
@@ -550,7 +559,7 @@ export const updateProgramExerciseData =
 export const updateProgramAccessCode =
   (programUid: string, accessCode?: string) =>
   async (dispatch: AppDispatch) => {
-    return request(
+    return request<string[]>(
       'POST',
       accessCode
         ? PATHS.programs.removeAccessCode
@@ -558,7 +567,7 @@ export const updateProgramAccessCode =
       dispatch,
       { _id: programUid, accessCode: accessCode },
     )
-      .then(({ data }: { data?: string[] }) => {
+      .then(({ data }) => {
         if (data) {
           dispatch({ type: UPDATE_PROGRAM_ACCESS_CODE, payload: data });
         }

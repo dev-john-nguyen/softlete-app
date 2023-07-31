@@ -7,14 +7,13 @@ import View from './Workout';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit';
-import WorkoutExerciseRestructure from './ExerciseRestructure';
+import WorkoutExerciseRestructure from '../exercises/ExerciseRestructure';
 import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
 import ExerciseAnalytics from '../exercises/Analytics';
 import Exercise from '../exercises/profile/Profile';
 import BaseColors from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
-import WorkoutModal from './modals/WorkoutModal';
 import GoOnlineModal from './modals/GoOnlineModal';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import DataOverview from './DataOverview';
@@ -29,6 +28,8 @@ import { FlexBox } from '@app/ui';
 import { Goals, GoalForm } from '../goals';
 import { HealthGoalForm } from './health-goal';
 import { EnduranceAnalytics } from './endurance';
+import WorkoutHelp from './WorkoutHelp';
+import WorkoutModal from '../modals/WorkoutModal';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -38,6 +39,11 @@ function HomeStack(parentProps: any) {
       screenOptions={childProps => screenOptions(parentProps, childProps)}
       initialRouteName={HomeStackScreens.Home}>
       <Tab.Group>
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutHelp}
+          component={WorkoutHelp}
+        />
+
         <Tab.Screen
           name={HomeStackScreens.Home}
           component={Home}

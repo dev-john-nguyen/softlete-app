@@ -1,33 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   WorkoutExerciseProps,
-  WorkoutActionProps,
   WorkoutExercisesObjProps,
 } from '../../services/workout/types';
 import ExerciseList from '../../components/restructure/List';
 import { useSharedValue } from 'react-native-reanimated';
 import { listToObject } from '../../components/restructure/utils';
-import { connect, useSelector } from 'react-redux';
-import { ReducerProps } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReducerProps, ThunkAppDispatch } from '../../services';
 import { exercisesArrToObj } from '../../utils/tools';
 import { ActivityIndicator } from 'react-native';
 import { updateWorkoutExercises } from '../../services/workout/actions';
 import _ from 'lodash';
-import { setBanner } from '../../services/banner/actions';
-import { BannerActionsProps, BannerTypes } from '../../services/banner/types';
+import { BannerTypes } from '../../services/banner/types';
 import PrimaryText from '../../components/elements/PrimaryText';
 import { ScreenTemplate } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import useBanner from 'src/hooks/utils/useBanner';
+import { updateProgramWorkoutExercises } from 'src/services/program/actions';
+import { ProgramStackScreens } from '../program/types';
 
-interface Props {
-  updateWorkoutExercises: WorkoutActionProps['updateWorkoutExercises'];
-  setBanner: BannerActionsProps['setBanner'];
-}
-
-const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
+const ExerciseRestructure = () => {
+  const route = useRoute();
+  const isProgram =
+    route.name === ProgramStackScreens.ProgramReorderWorkoutExercises;
   const [exercises, setExercises] = useState<WorkoutExerciseProps[]>([]);
   const [exercisesObj, setExerciseObj] = useState<WorkoutExercisesObjProps>({});
   const [groups, setGroups] = useState<string[]>([]);
@@ -37,24 +36,26 @@ const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
   const [trashBin, setTrashBin] = useState<WorkoutExerciseProps[]>([]);
   const [prevExerciseObj, setPrevExerciseObj] =
     useState<WorkoutExercisesObjProps>({});
-  const { viewWorkout } = useSelector((state: ReducerProps) => ({
-    viewWorkout: state.workout.viewWorkout,
+  const { workout } = useSelector((state: ReducerProps) => ({
+    workout: isProgram ? state.program.viewWorkout : state.workout.viewWorkout,
   }));
   const navigation = useNavigation();
+  const setBanner = useBanner();
+  const dispatch = useDispatch<ThunkAppDispatch>();
 
   const initiateData = useCallback(() => {
-    if (viewWorkout) {
-      if (!viewWorkout.exercises || viewWorkout.exercises.length < 1) {
+    if (workout) {
+      if (!workout.exercises || workout.exercises.length < 1) {
         setBanner(
-          BannerTypes.warning,
           "Workout doesn't contain any exercises.",
+          BannerTypes.warning,
         );
         navigation.goBack();
         return;
       }
 
       //need to initiate exercseObj
-      const WoExObj = _.cloneDeep(exercisesArrToObj(viewWorkout.exercises));
+      const WoExObj = _.cloneDeep(exercisesArrToObj(workout.exercises));
 
       const keys = Object.keys(WoExObj).sort(
         (a, b) => parseInt(a) - parseInt(b),
@@ -73,11 +74,11 @@ const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
       setExerciseObj(WoExObj);
       setPrevExerciseObj(_.cloneDeep(WoExObj));
     }
-  }, [viewWorkout]);
+  }, [workout]);
 
   useEffect(() => {
     initiateData();
-  }, [viewWorkout]);
+  }, [workout]);
 
   const handleUpdateExerciseState = useCallback(() => {
     const curExercises = exercisesObj[curGroup];
@@ -101,7 +102,7 @@ const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
     exercisesObj[curGroup] = handleExerciseReorder(exercisesObj[curGroup]);
 
     if (_.isEqual(prevExerciseObj, exercisesObj)) {
-      setBanner(BannerTypes.warning, 'No changes were made.');
+      setBanner('No changes were made.', BannerTypes.warning);
       setLoading(false);
       return;
     }
@@ -126,10 +127,19 @@ const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
       });
     }
 
-    if (saveExercises.length < 1 && removedExercises.length < 1)
+    if (saveExercises.length < 1 && removedExercises.length < 1) {
       return setLoading(false);
+    }
 
-    updateWorkoutExercises(viewWorkout._id, saveExercises, removedExercises)
+    dispatch(
+      isProgram
+        ? updateProgramWorkoutExercises(
+            workout._id,
+            saveExercises,
+            removedExercises,
+          )
+        : updateWorkoutExercises(workout._id, saveExercises, removedExercises),
+    )
       .then(() => {
         setLoading(false);
         navigation.goBack();
@@ -270,6 +280,4 @@ const ExerciseRestructure = ({ updateWorkoutExercises, setBanner }: Props) => {
   );
 };
 
-export default connect(null, { updateWorkoutExercises, setBanner })(
-  ExerciseRestructure,
-);
+export default ExerciseRestructure;

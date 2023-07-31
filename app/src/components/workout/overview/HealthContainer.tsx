@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { HomeStackScreens } from '../../../screens/home/types';
 import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
@@ -13,13 +13,15 @@ import {
   renderHeartRateAvg,
 } from '@app/utils';
 import useBanner from 'src/hooks/utils/useBanner';
+import { ProgramWorkoutProps } from 'src/services/program/types';
 
 interface Props {
   data?: HealthDataProps;
-  workout?: WorkoutProps;
+  workout?: ProgramWorkoutProps;
+  isProgram?: boolean;
 }
 
-const HealthContainer = ({ data, workout }: Props) => {
+const HealthContainer = ({ data, workout, isProgram }: Props) => {
   const navigation = useNavigation<any>();
   const setBanner = useBanner();
 
@@ -51,13 +53,15 @@ const HealthContainer = ({ data, workout }: Props) => {
             : 'Activity'
         }
       />
-      <InfoListBox
-        secondary
-        icon="devices"
-        label="Source"
-        desc={data ? data.sourceName : 'Manual'}
-      />
 
+      {!isProgram && (
+        <InfoListBox
+          secondary
+          icon="devices"
+          label="Source"
+          desc={data && data.sourceName ? data.sourceName : 'Manual'}
+        />
+      )}
       <InfoListBox
         secondary
         icon="clock"
@@ -96,24 +100,28 @@ const HealthContainer = ({ data, workout }: Props) => {
         desc={`${renderHeartRateAvg(data?.heartRates)} bpm`}
       />
 
-      <InfoListBox
-        secondary
-        label="View"
-        icon="notebook"
-        desc="Statistics"
-        onPress={onViewSummary}
-        color={Colors.white}
-        opacity={data ? 1 : 0.5}
-      />
+      {!isProgram && (
+        <Fragment>
+          <InfoListBox
+            secondary
+            label="View"
+            icon="notebook"
+            desc="Statistics"
+            onPress={onViewSummary}
+            color={Colors.white}
+            opacity={data ? 1 : 0.5}
+          />
 
-      <InfoListBox
-        secondary
-        icon="compass"
-        label="View"
-        desc="Map Visual"
-        onPress={onMapPress}
-        opacity={data ? 1 : 0.5}
-      />
+          <InfoListBox
+            secondary
+            icon="compass"
+            label="View"
+            desc="Map Visual"
+            onPress={onMapPress}
+            opacity={data ? 1 : 0.5}
+          />
+        </Fragment>
+      )}
     </ScrollView>
   );
 };

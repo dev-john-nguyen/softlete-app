@@ -47,7 +47,7 @@ export function findAndUpdateWorkouts(
   if (stateWorkouts.length < 1) return [...newWorkouts];
   if (newWorkouts.length < 1) return [...stateWorkouts];
 
-  const mutateStateWorkouts = [...stateWorkouts];
+  const mutateStateWorkouts = cloneDeep(stateWorkouts);
 
   for (let i = 0; i < newWorkouts.length; i++) {
     const newWrkout = newWorkouts[i];
@@ -75,15 +75,17 @@ export function findAndRemoveWorkout(
 ) {
   if (stateWorkouts.length < 1) return [];
 
+  const clonedStateWorkouts = cloneDeep(stateWorkouts);
+
   workoutUids.forEach(workoutUid => {
-    const foundIndex = stateWorkouts.findIndex(w => w._id === workoutUid);
+    const foundIndex = clonedStateWorkouts.findIndex(w => w._id === workoutUid);
 
     if (foundIndex > -1) {
-      stateWorkouts.splice(foundIndex, 1);
+      clonedStateWorkouts.splice(foundIndex, 1);
     }
   });
 
-  return [...stateWorkouts];
+  return clonedStateWorkouts;
 }
 
 export function findAllAndUpdateExerciseProps(
@@ -148,7 +150,7 @@ export function findAndUpdateSelectedDateWorkouts(
 ) {
   if (workouts.length < 1) return [];
   //get the workout for today's date;
-  return workouts.filter(w => {
+  return cloneDeep(workouts).filter(w => {
     //filter there is a program filter active check filter
     if (filterByProgramUid && filterByProgramUid !== w.programUid) return false;
 

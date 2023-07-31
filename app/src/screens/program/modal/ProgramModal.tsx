@@ -1,168 +1,100 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Pressable, ActivityIndicator } from 'react-native';
-import BaseColors from '../../../utils/BaseColors';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import PrimaryText from '../../../components/elements/PrimaryText';
-import PencilSvg from '../../../assets/PencilSvg';
-import SecondaryText from '../../../components/elements/SecondaryText';
-import TrashSvg from '../../../assets/TrashSvg';
-import InfoSvg from '../../../assets/InfoSvg';
+import React, { useCallback, useMemo } from 'react';
 import { ReducerProps } from '../../../services';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { removeProgram } from '../../../services/program/actions';
-import { ProgramActionProps, ProgramProps } from '../../../services/program/types';
-import PrimaryButton from '../../../components/elements/PrimaryButton';
-import SecondaryButton from '../../../components/elements/SecondaryButton';
-import ProgramHelp from '../../../components/modal/ProgramHelp';
-import Chevron from '../../../assets/ChevronSvg';
-import LockSvg from '../../../assets/LockSvg';
-import CloseSvg from '../../../assets/CloseSvg';
-import styles from '../../../components/modal/styles';
-import { normalize } from '../../../utils/tools';
+import {
+  ProgramActionProps,
+  ProgramProps,
+} from '../../../services/program/types';
 import { ProgramStackScreens } from '../types';
+import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
+import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
+import { Alert } from 'react-native';
 
 interface Props {
-    navigation: any;
-    route: any;
-    dispatch: React.Dispatch<any>;
-    program: ProgramProps;
-    removeProgram: ProgramActionProps['removeProgram']
+  navigation: any;
+  program: ProgramProps;
+  removeProgram: ProgramActionProps['removeProgram'];
 }
 
+const ProgramModal = ({ navigation, program, removeProgram }: Props) => {
+  const setBanner = useBanner();
+  const user = useSelector((state: ReducerProps) => state.user);
 
-const ProgramModal = ({ navigation, route, dispatch, program, removeProgram }: Props) => {
-    const [loading, setLoading] = useState(false);
-    const [confirm, setConfirm] = useState(false);
-    const [help, setHelp] = useState(false);
-    const mount = useRef(false);
-    const headerHeight = useHeaderHeight();
+  const onDelete = useCallback(() => {
+    const deleteHandler = () => {
+      removeProgram(program._id).catch(err => {
+        console.error(err);
+        setBanner(
+          'Oops! Something went wrong. Unable to remove program.',
+          BannerTypes.error,
+        );
+      });
+      navigation.navigate(ProgramStackScreens.TemplateList);
+    };
+    Alert.alert(
+      'Confirmation',
+      "Are you sure you want to delete this program? You can't undo this action.",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: deleteHandler },
+      ],
+    );
+  }, [navigation, program._id, removeProgram, setBanner]);
 
-    useEffect(() => {
-        mount.current = true;
-        return () => {
-            mount.current = false;
-        }
-    }, [])
+  // disabling for now
+  // const onAccess = () => navigation.navigate(ProgramStackScreens.ProgramAccess);
 
-    const onDelete = () => {
-        if (!program || loading) return;
-        removeProgram(program._id)
-            .then(() => {
-                navigation.navigate(ProgramStackScreens.Templates)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+  const menuItems = useMemo(() => {
+    const options: MenuItemProps[] = [
+      {
+        text: 'Generate',
+        icon: 'download',
+        onPress: () => navigation.navigate(ProgramStackScreens.ProgramDownload),
+      },
+      {
+        text: 'Tips/Help',
+        icon: 'info',
+        onPress: () => navigation.navigate(ProgramStackScreens.ProgramHelp),
+      },
+    ];
+    const isOwner = program.userUid === user.uid;
+    if (isOwner) {
+      options.unshift(
+        {
+          text: 'Edit',
+          icon: 'pencil',
+          onPress: () =>
+            navigation.navigate(ProgramStackScreens.ProgramHeader, {
+              edit: true,
+            }),
+        },
+        {
+          text: 'Remove',
+          icon: 'trash_bin',
+          onPress: onDelete,
+        },
+      );
     }
+    return options;
+  }, [navigation, onDelete, program.userUid, user.uid]);
 
-    const onEdit = () => navigation.navigate(ProgramStackScreens.ProgramHeader, { edit: true })
-
-    const onAccess = () => navigation.navigate(ProgramStackScreens.ProgramAccess)
-
-    const renderContent = () => {
-        if (confirm) return (
-            <View>
-                <SecondaryText styles={styles.label}>Are you sure you want to remove?</SecondaryText>
-                <View style={styles.confirmActions}>
-                    <PrimaryButton onPress={onDelete}>Confirm</PrimaryButton>
-                    <SecondaryButton onPress={() => setConfirm(false)}>Cancel</SecondaryButton>
-                </View>
-            </View>
-        )
-
-        if (help) return <ProgramHelp />
-
-        return (
-            <View>
-                <Pressable style={styles.item} onPress={onEdit}>
-                    <SecondaryText styles={styles.label}>Edit</SecondaryText>
-                    <View style={styles.svg}>
-                        <PencilSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable onPress={onAccess} style={styles.item}>
-                    <SecondaryText styles={styles.label}>Access Codes</SecondaryText>
-                    <View style={styles.svg}>
-                        <LockSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable style={styles.item} onPress={() => setHelp(true)}>
-                    <SecondaryText styles={styles.label}>Tips/Help</SecondaryText>
-                    <View style={styles.svg}>
-                        <InfoSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable style={styles.item} onPress={() => setConfirm(true)}>
-                    <SecondaryText styles={styles.label}>Remove</SecondaryText>
-                    <View style={styles.svg}>
-                        <TrashSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-
-                <Pressable style={styles.item} onPress={() => navigation.goBack()}>
-                    <SecondaryText styles={styles.label}>Cancel</SecondaryText>
-                    <View style={{ height: normalize.width(30), width: normalize.width(30) }}>
-                        <CloseSvg fillColor={BaseColors.primary} />
-                    </View>
-                </Pressable>
-            </View>
-        )
-    }
-
-    const renderHeader = () => {
-        if (confirm) return 'Confirm'
-        if (help) return 'Tips/Help'
-        return 'Menu'
-    }
-
-    const onBack = () => {
-        setConfirm(false)
-        setHelp(false)
-    }
-
-    return (
-        <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
-            <Pressable onPress={() => navigation.goBack()} style={styles.closeContainer} />
-            <View style={[styles.content, { marginTop: headerHeight }]}>
-                <View style={styles.modal}>
-                    <View style={styles.headerContainer}>
-                        {
-                            (confirm || help) ? (
-                                <Pressable style={styles.backContainer} onPress={onBack}>
-                                    <Chevron strokeColor={BaseColors.black} />
-                                </Pressable>
-                            ) :
-                                <View />
-                        }
-                        <PrimaryText styles={styles.title}>{renderHeader()}</PrimaryText>
-                        <View />
-                    </View>
-                    {
-                        loading && (
-                            <ActivityIndicator size='small' color={BaseColors.primary} style={styles.loading} />
-                        )
-                    }
-                    {renderContent()}
-                </View>
-            </View>
-        </SafeAreaView>
-    )
-}
+  return <MenuModal title="Menu" menuItems={menuItems} />;
+};
 
 const mapStateToProps = (state: ReducerProps) => ({
-    program: state.program.targetProgram
-})
-
+  program: state.program.targetProgram,
+});
 
 const mapDispatchToProps = (dispatch: any) => {
-    return {
-        removeProgram: (programUid: string) => dispatch(removeProgram(programUid)),
-        dispatch
-    }
-}
+  return {
+    removeProgram: (programUid: string) => dispatch(removeProgram(programUid)),
+    dispatch,
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramModal);

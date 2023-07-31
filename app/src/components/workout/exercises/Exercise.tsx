@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { ActivityIndicator, Keyboard } from 'react-native';
 import {
   WorkoutExerciseProps,
   WorkoutExerciseDataProps,
   WorkoutStatus,
   WorkoutActionProps,
-  WorkoutProps,
+  ViewWorkoutProps,
 } from '../../../services/workout/types';
 import PrimaryText from '../../elements/PrimaryText';
 import ExerciseData from './data/Container';
@@ -14,12 +14,13 @@ import _ from 'lodash';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
+import { WorkoutContext } from '@app/contexts';
 
 interface Props {
   exercise: WorkoutExerciseProps;
   onPress?: (exercise: ExerciseProps) => void;
   onUpdateData: (updatedData: WorkoutExerciseDataProps[]) => void;
-  workout: WorkoutProps;
+  workout: ViewWorkoutProps;
   athlete?: boolean;
   onCalcRefUpdate: (calc: number | string) => void;
   removeWorkoutExercise: WorkoutActionProps['removeWorkoutExercise'];
@@ -34,8 +35,6 @@ const WorkoutExercise = ({
   exercise,
   onPress,
   onUpdateData,
-  workout,
-  athlete,
   onCalcRefUpdate,
   removeWorkoutExercise,
   showGoBack,
@@ -43,6 +42,7 @@ const WorkoutExercise = ({
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const mount = useRef(false);
+  const { workout, isProgram, athlete } = useContext(WorkoutContext);
 
   useEffect(() => {
     mount.current = true;
@@ -74,11 +74,17 @@ const WorkoutExercise = ({
     <FlexBox screenWidth column marginTop={15}>
       <FlexBox
         marginBottom={10}
+        alignItems="center"
         justifyContent="space-between"
         paddingLeft={15}
         paddingRight={15}
         onPress={() => Keyboard.dismiss()}>
-        <FlexBox alignSelf="flex-start" flex={1} onPress={onExercisePress}>
+        <FlexBox
+          alignSelf="flex-start"
+          flex={1}
+          onPress={onExercisePress}
+          marginRight={10}
+          alignItem="center">
           {exercise.exercise ? (
             <PrimaryText
               size="large"
@@ -90,7 +96,7 @@ const WorkoutExercise = ({
             <ActivityIndicator size="small" color={Colors.white} />
           )}
         </FlexBox>
-        {!athlete && workout.status === WorkoutStatus.pending ? (
+        {(!athlete && workout.status === WorkoutStatus.pending) || isProgram ? (
           loading ? (
             <ActivityIndicator size="small" color={Colors.white} />
           ) : (

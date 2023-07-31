@@ -1,93 +1,84 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, FlatList, Pressable } from 'react-native';
-import StyleConstants from '../tools/StyleConstants';
+import { FlatList } from 'react-native';
 import Constants from '../../utils/Constants';
 import BaseColors, { rgba } from '../../utils/BaseColors';
-import SecondaryText from '../elements/SecondaryText';
+import PrimaryText from '../elements/PrimaryText';
+import { FlexBox } from '@app/ui';
+import { WorkoutByWeekProps } from 'src/services/program/types';
+import { Colors } from '@app/utils';
 
 const { daysOfWeek } = Constants;
 
-const daysShort = daysOfWeek.map(d => d.substring(0, 3))
-
+const daysShort = daysOfWeek.map((d: string) => d.substring(0, 3));
 
 interface Props {
-    curDay: number;
-    onChangeCurDay: (day: number) => void;
-    onLongPress?: (day: number) => void;
-    groupByDay?: any;
+  curDay: number;
+  onChangeCurDay: (day: number) => void;
+  onLongPress?: (day: number) => void;
+  groupByDay?: any;
+  workouts: WorkoutByWeekProps[][];
 }
 
+const DayFilter = ({
+  curDay,
+  onChangeCurDay,
+  onLongPress,
+  groupByDay,
+  workouts,
+}: Props) => {
+  const renderItem = useCallback(
+    ({ item, index }: { item: string; index: number }) => {
+      const hasWos = (workouts[index]?.length ?? 0) > 0;
 
-const DayFilter = ({ curDay, onChangeCurDay, onLongPress, groupByDay }: Props) => {
-
-
-    const renderTotal = (day: string) => {
-        if (!groupByDay) return '';
-
-        if (groupByDay[day]) {
-            return groupByDay[day].length.toString()
-        } else {
-            return ''
-        }
-    }
-
-    const pressableStyle = (pressed: boolean, index: number) => {
-        return [styles.itemContainer, {
-            borderBottomColor: curDay === index ? BaseColors.white : 'transparent',
-        }]
-    }
-
-    const renderItem = useCallback(({ item, index }: { item: string, index: number }) => (
-        <Pressable style={({ pressed }) => pressableStyle(pressed, index)}
-            onPress={() => onChangeCurDay(index)}
-            onLongPress={() => onLongPress && onLongPress(index)}
-        >
-            <SecondaryText
-                styles={[styles.text, {
-                    color: curDay === index ? BaseColors.white : rgba(BaseColors.whiteRbg, .2)
-                }]}
-                bold
-            >
-                {item}
-            </SecondaryText>
-            <SecondaryText styles={[styles.info, { color: curDay === index ? BaseColors.primary : BaseColors.secondary }]}>
-                {renderTotal(index.toString())}
-            </SecondaryText>
-        </Pressable>
-    ), [groupByDay, curDay])
-
-    return (
-        <FlatList
-            style={styles.container}
-            extraData={groupByDay}
-            data={daysShort}
-            horizontal={true}
-            contentContainerStyle={{ justifyContent: 'space-between', flexGrow: 1 }}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-        />
-    )
-}
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
+      return (
+        <FlexBox
+          column
+          justifyContent="space-between"
+          alignItems="center"
+          padding={5}
+          borderBottomWidth={1}
+          borderBottomColor={
+            curDay === index ? BaseColors.white : 'transparent'
+          }
+          onPress={() => onChangeCurDay(index)}
+          onLongPress={() => onLongPress && onLongPress(index)}>
+          <PrimaryText
+            textTransform="capitalize"
+            color={
+              curDay === index
+                ? BaseColors.white
+                : rgba(BaseColors.whiteRbg, 0.2)
+            }
+            bold>
+            {item}
+          </PrimaryText>
+          {hasWos && (
+            <FlexBox
+              height={5}
+              width={5}
+              borderRadius={100}
+              backgroundColor={Colors.white}
+              position="absolute"
+              top={0}
+              right={0}
+            />
+          )}
+        </FlexBox>
+      );
     },
-    itemContainer: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottomWidth: 2,
-        padding: StyleConstants.smallPadding,
-    },
-    text: {
-        fontSize: StyleConstants.smallFont,
-        textTransform: 'capitalize'
-    },
-    info: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        fontSize: StyleConstants.smallFont
-    }
-})
+    [curDay, onChangeCurDay, onLongPress, workouts],
+  );
+
+  return (
+    <FlatList
+      extraData={groupByDay}
+      data={daysShort}
+      horizontal={true}
+      contentContainerStyle={{ justifyContent: 'space-between', flexGrow: 1 }}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderItem}
+    />
+  );
+};
+
 export default DayFilter;

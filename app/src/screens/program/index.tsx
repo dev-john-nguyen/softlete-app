@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import screenOptions from '../utils/screenOptions';
-import Templates from './Templates';
+import TemplateList from './TemplateList';
 import { ProgramStackParamsList, ProgramStackScreens } from './types';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit';
@@ -9,17 +9,19 @@ import Exercise from '../exercises/profile/Profile';
 import ExerciseAnalytics from '../exercises/Analytics';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import ProgramTemplate from './ProgramTemplate';
-import WorkoutModal from './modal/WorkoutModal';
+import WorkoutModal from '../modals/WorkoutModal';
 import Workout from './Workout';
 import BaseColors from '../../utils/BaseColors';
 import ProgramHeader from './ProgramHeader';
 import WorkoutHeader from './WorkoutHeader';
 import ProgramModal from './modal/ProgramModal';
 import ProgramAccess from './ProgramAccess';
-import ExerciseRestructure from './ExerciseRestructure';
 import DownloadProgramModal from '../network/modals/DownloadProgramModal';
 import EditExerciseDetails from '../exercises/EditDetails';
 import FormInput from '../utils/FormInput';
+import ProgramHelp from './ProgramHelp';
+import ProgramWorkoutHelp from './ProgramWorkoutHelp';
+import ExerciseRestructure from '../exercises/ExerciseRestructure';
 
 const Tab = createStackNavigator<ProgramStackParamsList>();
 
@@ -27,14 +29,20 @@ function ProgramStack(parentProps: any) {
   return (
     <Tab.Navigator
       screenOptions={childProps => screenOptions(parentProps, childProps)}
-      initialRouteName={ProgramStackScreens.Templates}>
+      initialRouteName={ProgramStackScreens.TemplateList}>
       <Tab.Screen
-        name={ProgramStackScreens.Templates}
-        component={Templates}
-        options={{
-          headerTitle: 'Programs',
-          headerLeft: () => null,
-        }}
+        name={ProgramStackScreens.TemplateList}
+        component={TemplateList}
+      />
+
+      <Tab.Screen
+        name={ProgramStackScreens.ProgramHelp}
+        component={ProgramHelp}
+      />
+
+      <Tab.Screen
+        name={ProgramStackScreens.ProgramWorkoutHelp}
+        component={ProgramWorkoutHelp}
       />
 
       <Tab.Screen
@@ -50,22 +58,11 @@ function ProgramStack(parentProps: any) {
       <Tab.Screen
         name={ProgramStackScreens.Program}
         component={ProgramTemplate}
-        options={{
-          headerTitle: '',
-          headerTransparent: true,
-          headerRight: undefined,
-          headerTintColor: BaseColors.white,
-        }}
       />
 
       <Tab.Screen
         name={ProgramStackScreens.ProgramHeader}
         component={ProgramHeader}
-        options={{
-          headerTitle: '',
-          headerTransparent: true,
-          headerRight: undefined,
-        }}
       />
 
       <Tab.Screen
@@ -174,6 +171,11 @@ function ProgramStack(parentProps: any) {
         initialParams={{ programStack: true }}
       />
 
+      <Tab.Screen
+        name={ProgramStackScreens.ProgramDownload}
+        component={DownloadProgramModal}
+      />
+
       <Tab.Group>
         <Tab.Screen
           name={ProgramStackScreens.ProgramWorkoutModal}
@@ -184,18 +186,6 @@ function ProgramStack(parentProps: any) {
             headerLeft: () => null,
             headerRight: undefined,
             presentation: 'transparentModal',
-          }}
-        />
-
-        <Tab.Screen
-          name={ProgramStackScreens.ProgramDownload}
-          component={DownloadProgramModal}
-          options={{
-            title: '',
-            headerRight: undefined,
-            headerLeft: () => null,
-            headerTransparent: true,
-            presentation: 'modal',
           }}
         />
 

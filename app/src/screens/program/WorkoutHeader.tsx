@@ -1,55 +1,50 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import Input from '../../components/elements/Input';
-import { connect } from 'react-redux';
-import BaseColors from '../../utils/BaseColors';
-import PrimaryButton from '../../components/elements/PrimaryButton';
-import { StyleSheet, View, Pressable, Keyboard } from 'react-native';
+import { connect, useSelector } from 'react-redux';
+import { Keyboard } from 'react-native';
 import { ReducerProps } from '../../services';
-import SecondaryText from '../../components/elements/SecondaryText';
-import { EditWorkoutProps, WorkoutTypes } from '../../services/workout/types';
-import StyleConstants from '../../components/tools/StyleConstants';
+import { WorkoutTypes } from '../../services/workout/types';
 import {
-  capitalize,
   convertDaysToWeekObj,
   convertObjToDays,
-  normalize,
   programWorkoutsArrToObj,
 } from '../../utils/tools';
 import {
-  RootProgramProps,
   ProgramWorkoutHeaderProps,
   ProgramActionProps,
 } from '../../services/program/types';
 import { updateProgramWorkoutHeader } from '../../services/program/actions';
-import { Picker } from '@react-native-picker/picker';
-import CustomPicker from '../../components/elements/Picker';
-import CalendarTodaySvg from '../../assets/CalendarToday';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
 import PrimaryText from '../../components/elements/PrimaryText';
 import Constants from '../../utils/Constants';
 import { HealthActivity } from 'react-native-health';
-import CategorySvg from '../../assets/CategorySvg';
 import { renderHealthActivityName } from '../../utils/format';
 import { ProgramStackScreens } from './types';
+import { RouteProp } from '@react-navigation/native';
+import {
+  ScreenTemplate,
+  Input,
+  PickerButton,
+  PrimaryButton,
+} from '@app/elements';
+import { FlexBox } from '@app/ui';
+import useBanner from 'src/hooks/utils/useBanner';
 
 interface Props {
-  route: any;
+  route: RouteProp<any>;
   navigation: any;
-  workoutHeader: EditWorkoutProps;
-  targetProgram: RootProgramProps['targetProgram'];
   updateProgramWorkoutHeader: ProgramActionProps['updateProgramWorkoutHeader'];
 }
-
-//calendar date format yyyy-mm-dd
 
 const WorkoutHeader = ({
   route,
   navigation,
-  workoutHeader,
-  targetProgram,
   updateProgramWorkoutHeader,
 }: Props) => {
+  const { targetProgram, workoutHeader } = useSelector(
+    (state: ReducerProps) => ({
+      targetProgram: state.program.targetProgram,
+      workoutHeader: state.program.workoutHeader,
+    }),
+  );
   const [type, setType] = useState<HealthActivity>(
     WorkoutTypes.TraditionalStrengthTraining,
   );
@@ -58,13 +53,11 @@ const WorkoutHeader = ({
   const [day, setDay] = useState(0);
   const [week, setWeek] = useState(0);
   const [weeks, setWeeks] = useState<string[]>([]);
-  const [error, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [picker, setPicker] = useState('');
-  const insets = useSafeAreaInsets();
-  const headerHeight = useHeaderHeight();
+  const setBanner = useBanner();
 
-  const init = useCallback(() => {
+  useEffect(() => {
     if (workoutHeader) {
       setType(
         workoutHeader.type
@@ -73,7 +66,7 @@ const WorkoutHeader = ({
       );
       setName(workoutHeader.name);
       setDescription(workoutHeader.description);
-      if (workoutHeader.program && targetProgram && targetProgram.workouts) {
+      if (targetProgram && targetProgram.workouts) {
         const obj = programWorkoutsArrToObj(targetProgram.workouts);
 
         let daysObj = {
@@ -108,40 +101,28 @@ const WorkoutHeader = ({
       setName('');
       setDescription('');
     }
-  }, [route, workoutHeader]);
-
-  useEffect(() => {
-    init();
-  }, [route, workoutHeader]);
+  }, [route, targetProgram, workoutHeader]);
 
   const onContinuePress = () => {
     //check values
     if (loading) return;
 
-    const errors = [];
-
     if (!name && type === WorkoutTypes.TraditionalStrengthTraining) {
-      errors.push('Name required.');
+      return setBanner('Name required!');
     }
 
     if (!type) {
-      errors.push('type is required.');
+      return setBanner('Type is required.!');
     }
-
-    if (errors.length > 0) {
-      return setErrors(errors);
-    }
-
-    setErrors([]);
 
     setLoading(true);
     //saving program workout
 
     if (!targetProgram._id) {
       setLoading(false);
-      return setErrors([
+      return setBanner(
         "Couldn't find the program id. Please refresh and try again.",
-      ]);
+      );
     }
 
     const programWorkoutHeaderData: ProgramWorkoutHeaderProps = {
@@ -198,7 +179,7 @@ const WorkoutHeader = ({
           };
         });
     }
-  }, [picker]);
+  }, [picker, weeks]);
 
   const getPickerValue = () => {
     switch (picker) {
@@ -225,181 +206,68 @@ const WorkoutHeader = ({
   };
 
   return (
-    <Pressable
-      style={{
-        flex: 1,
-        paddingTop: headerHeight,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-      }}
-      onPress={() => Keyboard.dismiss()}>
-      <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-        <View>
-          <PrimaryText styles={styles.headerText}>Workout Details</PrimaryText>
-          <SecondaryText styles={styles.headerSubText}>
-            Fill out the form below.
-          </SecondaryText>
+    <ScreenTemplate
+      enableScrollWrapper
+      isBackVisible
+      applyContentPadding
+      isPickerOpen={picker ? true : false}
+      rotateBack="-90deg"
+      onPickerClose={() => setPicker('')}
+      pickerValue={getPickerValue()}
+      pickerOptions={pickerOptions}
+      onPickerChangeValue={onPickerChangeValue}
+      middleContent={<PrimaryText size="large">Workout Details</PrimaryText>}>
+      <FlexBox column>
+        <PrimaryText size="small" marginBottom={10}>
+          Fill out the form below.
+        </PrimaryText>
 
-          <View style={styles.errorContainer}>
-            {error.map(e => (
-              <SecondaryText key={Math.random()} styles={styles.errorText}>
-                *{e}
-              </SecondaryText>
-            ))}
-          </View>
+        <FlexBox marginBottom={10}>
+          <PrimaryText textTransform="capitalize" bold>
+            {Constants.daysOfWeek[day]} of week {week + 1}
+          </PrimaryText>
+        </FlexBox>
 
-          <SecondaryText styles={styles.label}>Type</SecondaryText>
-          <Pressable
-            style={styles.programContainer}
-            onPress={() => setPicker(p => (p ? '' : 'type'))}>
-            <View style={styles.programSvg}>
-              <CategorySvg fillColor={BaseColors.primary} />
-            </View>
-            <SecondaryText styles={styles.text}>
-              {renderHealthActivityName(type)}
-            </SecondaryText>
-          </Pressable>
+        <PickerButton
+          arrow
+          arrowDirection="down"
+          borderBottom
+          label="Type:"
+          onPress={() => setPicker(p => (p ? '' : 'type'))}>
+          {renderHealthActivityName(type)}
+        </PickerButton>
 
-          {type === WorkoutTypes.TraditionalStrengthTraining && (
-            <>
-              <SecondaryText styles={styles.label}>Name</SecondaryText>
-              <Input
-                value={name}
-                placeholder="Name"
-                autoCapitalize="words"
-                onChangeText={txt => setName(txt)}
-                styles={{ marginBottom: StyleConstants.smallMargin }}
-                maxLength={50}
-              />
-            </>
-          )}
-
-          <SecondaryText styles={styles.label}>Description</SecondaryText>
+        {type === WorkoutTypes.TraditionalStrengthTraining && (
           <Input
-            value={description}
-            placeholder="Description"
-            multiline={true}
-            onChangeText={txt => setDescription(txt)}
-            maxLength={100}
-            onSubmitEditing={() => Keyboard.dismiss()}
-            blurOnSubmit
-            styles={{ marginBottom: StyleConstants.smallMargin }}
+            label="Name:"
+            value={name}
+            placeholder="Name"
+            autoCapitalize="words"
+            onChangeText={txt => setName(txt)}
+            maxLength={50}
+            mb={15}
           />
-
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ marginRight: StyleConstants.baseMargin }}>
-              <SecondaryText styles={styles.label}>Week</SecondaryText>
-              <Pressable
-                style={styles.programContainer}
-                onPress={() => setPicker(p => (p ? '' : 'week'))}>
-                <View style={styles.programSvg}>
-                  <CalendarTodaySvg fillColor={BaseColors.primary} />
-                </View>
-                <SecondaryText styles={styles.text}>{week + 1}</SecondaryText>
-              </Pressable>
-            </View>
-
-            <View>
-              <SecondaryText styles={styles.label}>Day</SecondaryText>
-              <Pressable
-                style={styles.programContainer}
-                onPress={() => setPicker(p => (p ? '' : 'day'))}>
-                <View style={styles.programSvg}>
-                  <CalendarTodaySvg fillColor={BaseColors.primary} />
-                </View>
-                <SecondaryText styles={styles.text}>
-                  {Constants.daysOfWeek[day]}
-                </SecondaryText>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-        <PrimaryButton
-          onPress={onContinuePress}
-          styles={styles.button}
-          loading={loading}>
-          Done
-        </PrimaryButton>
-        <CustomPicker
-          open={picker ? true : false}
-          setOpen={() => setPicker('')}
-          value={getPickerValue()}
-          pickerOptions={pickerOptions}
-          setValue={onPickerChangeValue}
+        )}
+        <Input
+          label="Description:"
+          value={description}
+          placeholder="Description"
+          multiline={true}
+          onChangeText={txt => setDescription(txt)}
+          maxLength={100}
+          onSubmitEditing={() => Keyboard.dismiss()}
+          blurOnSubmit
+          mb={15}
         />
-      </View>
-    </Pressable>
+        <PrimaryButton
+          marginTop={20}
+          onPress={onContinuePress}
+          loading={loading}>
+          Continue
+        </PrimaryButton>
+      </FlexBox>
+    </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingLeft: StyleConstants.baseMargin,
-    paddingRight: StyleConstants.baseMargin,
-  },
-  headerText: {
-    fontSize: StyleConstants.mediumFont,
-    color: BaseColors.primary,
-  },
-  headerSubText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.black,
-  },
-  errorText: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.red,
-    marginBottom: 2,
-  },
-  errorContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  dateInfo: {
-    marginTop: StyleConstants.baseMargin,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  label: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: BaseColors.black,
-    marginBottom: 10,
-  },
-  date: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.black,
-    marginLeft: 5,
-  },
-  button: {
-    marginTop: StyleConstants.baseMargin,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.black,
-    marginLeft: 5,
-    textTransform: 'capitalize',
-  },
-  programContainer: {
-    flexDirection: 'row',
-    backgroundColor: BaseColors.white,
-    padding: 15,
-    borderRadius: StyleConstants.borderRadius,
-    borderWidth: 1,
-    borderColor: BaseColors.lightGrey,
-    marginBottom: StyleConstants.smallMargin,
-  },
-  programSvg: {
-    width: normalize.width(20),
-    height: normalize.width(20),
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  targetProgram: state.program.targetProgram,
-  workoutHeader: state.program.workoutHeader,
-});
-
-export default connect(mapStateToProps, { updateProgramWorkoutHeader })(
-  WorkoutHeader,
-);
+export default connect(null, { updateProgramWorkoutHeader })(WorkoutHeader);

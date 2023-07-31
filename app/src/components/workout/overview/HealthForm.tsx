@@ -13,7 +13,7 @@ import AutoId from 'src/utils/AutoId';
 import { DurationForm, MeasForm, BaseForm } from './FormElements';
 
 interface Props {
-  onSubmit: (data: HealthDataProps) => void;
+  onSubmit: (data: HealthDataProps) => Promise<void>;
   onClose?: () => void;
   healthData?: HealthDataProps;
   activityName: string;
@@ -27,9 +27,11 @@ interface StateProps {
   disMeas: HealthDisMeas;
   avgHr: number;
   activityId: string;
+  isLoading: boolean;
 }
 
 class HealthForm extends React.Component<Props, StateProps> {
+  _isMounted = false;
   constructor(props: Props) {
     super(props);
 
@@ -41,12 +43,19 @@ class HealthForm extends React.Component<Props, StateProps> {
       disMeas: HealthDisMeas.mi,
       avgHr: 0,
       activityId: '',
+      isLoading: false,
     };
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { healthData } = this.props;
     healthData && this.updateHealthDateState(healthData);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    // Clean up resources, timers, subscriptions, etc.
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -55,7 +64,8 @@ class HealthForm extends React.Component<Props, StateProps> {
     }
   }
 
-  onSubmitHandler = () => {
+  onSubmitHandler = async () => {
+    if (this.state.isLoading) return;
     const manualData: HealthDataProps = {
       activityId: this.state.activityId,
       activityName: this.props.activityName as HealthActivity,
@@ -67,7 +77,11 @@ class HealthForm extends React.Component<Props, StateProps> {
       disMeas: this.state.disMeas,
       date: '',
     };
-    this.props.onSubmit(manualData);
+    this.setState({ isLoading: true });
+    await this.props.onSubmit(manualData);
+    if (this._isMounted) {
+      this.setState({ isLoading: false });
+    }
   };
 
   updateHealthDateState(healthData?: HealthDataProps) {
@@ -178,7 +192,6 @@ class HealthForm extends React.Component<Props, StateProps> {
           );
       }
     }
-
     return (
       <View>
         <FlexBox justifyContent="space-between" marginBottom={10}>
@@ -233,7 +246,11 @@ class HealthForm extends React.Component<Props, StateProps> {
           ) : (
             <FlexBox />
           )}
-          <PrimaryButton onPress={this.onSubmitHandler}>Create</PrimaryButton>
+          <PrimaryButton
+            onPress={this.onSubmitHandler}
+            loading={this.state.isLoading}>
+            Save
+          </PrimaryButton>
         </FlexBox>
       </View>
     );

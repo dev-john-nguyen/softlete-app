@@ -7,52 +7,39 @@ import {
   PrimaryText,
   ScreenTemplate,
 } from '@app/elements';
-import { Colors, rgba } from '@app/utils';
-import { connect } from 'react-redux';
-import { StyleSheet, Keyboard } from 'react-native';
+import { connect, useSelector } from 'react-redux';
+import { Keyboard } from 'react-native';
 import { ReducerProps } from '../../services';
 import {
-  RootWorkoutProps,
   WorkoutActionProps,
   WorkoutHeaderProps,
   WorkoutTypes,
 } from '../../services/workout/types';
-import StyleConstants from '../../components/tools/StyleConstants';
 import DateTools from '../../utils/DateTools';
-import { capitalize, normalize } from '../../utils/tools';
-import {
-  RootProgramProps,
-  GeneratedProgramProps,
-} from '../../services/program/types';
+import { capitalize } from '../../utils/tools';
 import { updateWorkoutHeader } from '../../services/workout/actions';
 import { updateProgramWorkoutHeader } from '../../services/program/actions';
 import { HomeStackScreens } from './types';
 import { HealthActivity } from 'react-native-health';
 import { renderHealthActivityName } from '../../utils/format';
 import DashboardDemo from '../../components/demo/Demo';
-import { DemoStates } from '../../services/global/types';
 import useBanner from 'src/hooks/utils/useBanner';
+import { RouteProp } from '@react-navigation/native';
 
 interface Props {
-  genPrograms: GeneratedProgramProps[];
-  route: any;
+  route: RouteProp<any>;
   navigation: any;
-  workoutHeader: RootWorkoutProps['workoutHeader'];
-  targetProgram: RootProgramProps['targetProgram'];
   updateWorkoutHeader: WorkoutActionProps['updateWorkoutHeader'];
-  demoState: DemoStates;
 }
 
-//calendar date format yyyy-mm-dd
+const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
+  const { genPrograms, workoutHeader } = useSelector((state: ReducerProps) => ({
+    genPrograms: state.program.generatedPrograms,
+    targetProgram: state.program.targetProgram,
+    workoutHeader: state.workout.workoutHeader,
+    demoState: state.global.demoState,
+  }));
 
-const WorkoutHeader = ({
-  genPrograms,
-  route,
-  navigation,
-  workoutHeader,
-  targetProgram,
-  updateWorkoutHeader,
-}: Props) => {
   const [type, setType] = useState<HealthActivity>(
     WorkoutTypes.TraditionalStrengthTraining,
   );
@@ -84,11 +71,11 @@ const WorkoutHeader = ({
       setDescription('');
       setProgramUid('');
     }
-  }, [route, workoutHeader]);
+  }, [workoutHeader]);
 
   useEffect(() => {
     init();
-  }, [route, workoutHeader]);
+  }, [init, route, workoutHeader]);
 
   const onContinuePress = () => {
     //check values
@@ -131,11 +118,6 @@ const WorkoutHeader = ({
         console.log(err);
         setLoading(false);
       });
-  };
-
-  const renderActiveProgramName = (_id: string) => {
-    const program = genPrograms.find(g => g._id === programUid);
-    if (program) return program.name;
   };
 
   const pickerOptions = useMemo(() => {
@@ -215,6 +197,15 @@ const WorkoutHeader = ({
           Fill out the form below.
         </PrimaryText>
 
+        <PickerButton
+          arrow
+          arrowDirection="down"
+          borderBottom
+          label="Type:"
+          onPress={() => setPicker(p => (p ? '' : 'type'))}>
+          {renderHealthActivityName(type)}
+        </PickerButton>
+
         {type === WorkoutTypes.TraditionalStrengthTraining && (
           <Input
             label="Name:"
@@ -242,30 +233,13 @@ const WorkoutHeader = ({
           arrow
           arrowDirection="down"
           borderBottom
-          label="Type:"
-          onPress={() => setPicker(p => (p ? '' : 'type'))}>
-          {renderHealthActivityName(type)}
-        </PickerButton>
-
-        {/* <SecondaryText styles={styles.label}>Program</SecondaryText>
-                                <Pressable style={styles.programContainer} onPress={() => setPicker(p => p ? '' : 'program')}>
-                                    <View style={styles.programSvg}>
-                                        <BooksSvg fillColor={Colors.primary} />
-                                    </View>
-                                    <SecondaryText styles={styles.text}>{renderActiveProgramName(programUid)}</SecondaryText>
-                                </Pressable> */}
-
-        <PickerButton
-          arrow
-          arrowDirection="down"
-          borderBottom
           label="Date:"
           onPress={() => setDatePicker(p => (p ? false : true))}>
           {date.toDateString()}
         </PickerButton>
         <PrimaryButton
           onPress={onContinuePress}
-          styles={styles.button}
+          marginTop={20}
           loading={loading}>
           Continue
         </PrimaryButton>
@@ -274,72 +248,7 @@ const WorkoutHeader = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingLeft: StyleConstants.baseMargin,
-    paddingRight: StyleConstants.baseMargin,
-  },
-  headerText: {
-    fontSize: StyleConstants.largeFont,
-    color: Colors.lightWhite,
-  },
-  headerSubText: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.lightWhite,
-  },
-  errorText: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.red,
-    marginBottom: 2,
-  },
-  dateInfo: {
-    marginTop: StyleConstants.baseMargin,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  label: {
-    fontSize: StyleConstants.extraSmallFont,
-    color: Colors.lightWhite,
-    marginBottom: 10,
-    opacity: 0.8,
-  },
-  date: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.black,
-    marginLeft: 5,
-  },
-  button: {
-    marginTop: StyleConstants.baseMargin,
-    marginBottom: StyleConstants.baseMargin,
-  },
-  text: {
-    fontSize: StyleConstants.smallFont,
-    color: Colors.lightWhite,
-    marginLeft: 5,
-    textTransform: 'capitalize',
-  },
-  programContainer: {
-    flexDirection: 'row',
-    padding: 15,
-    borderRadius: StyleConstants.borderRadius,
-    borderWidth: 1,
-    borderColor: rgba(Colors.whiteRbg, 0.8),
-    marginBottom: StyleConstants.smallMargin,
-  },
-  programSvg: {
-    width: normalize.width(20),
-    height: normalize.width(20),
-  },
-});
-
-const mapStateToProps = (state: ReducerProps) => ({
-  genPrograms: state.program.generatedPrograms,
-  targetProgram: state.program.targetProgram,
-  workoutHeader: state.workout.workoutHeader,
-  demoState: state.global.demoState,
-});
-export default connect(mapStateToProps, {
+export default connect(null, {
   updateWorkoutHeader,
   updateProgramWorkoutHeader,
 })(WorkoutHeader);

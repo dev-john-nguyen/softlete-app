@@ -36,7 +36,7 @@ import { SET_DEMO_STATE } from '../../services/global/actionTypes';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
 import { LocationValue } from 'react-native-health';
 import { handleDeviceActivityImport } from '../../helpers/route.helpers';
-import { HomeWorkoutProvider } from '@app/contexts';
+import { WorkoutProvider } from '@app/contexts';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useBanner from 'src/hooks/utils/useBanner';
 import { FlexBox } from '@app/ui';
@@ -196,7 +196,7 @@ const Workout = ({
   if (!workout) return <Loading />;
 
   return (
-    <HomeWorkoutProvider
+    <WorkoutProvider
       onNavigateToExercise={onNavigateToExercise}
       setImage={setImage}
       image={image}
@@ -204,7 +204,8 @@ const Workout = ({
       onNavigateToAddExercise={onNavigateToAddExercise}
       onUpdateStatus={onUpdateStatus}
       onUpdateWoHealthData={onUpdateWoHealthData}
-      setReflection={setReflection}>
+      setReflection={setReflection}
+      updateWoHealthData={updateWoHealthData}>
       <ScreenTemplate
         isBackVisible
         onGoBack={onBackButtonPress}
@@ -224,27 +225,13 @@ const Workout = ({
         }>
         <DashboardDemo screen={HomeStackScreens.Workout} />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
-          <WorkoutContainer
-            onNavigateToAddExercise={onNavigateToAddExercise}
-            image={image}
-            setImage={setImage}
-          />
+          <WorkoutContainer />
         ) : (
-          <OverviewContainer
-            workout={workout}
-            updateWoHealthData={onUpdateWoHealthData}
-            image={image}
-            setImage={setImage}
-          />
+          <OverviewContainer />
         )}
-        <WorkoutHeader
-          likeUids={workout.likeUids ? workout.likeUids : []}
-          workout={workout}
-          program={program}
-          onUpdateStatus={onUpdateStatus}
-        />
+        <WorkoutHeader program={program} />
       </ScreenTemplate>
-    </HomeWorkoutProvider>
+    </WorkoutProvider>
   );
 };
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
