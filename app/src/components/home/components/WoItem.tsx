@@ -44,6 +44,8 @@ const WoExercises: FC<WoExercisesProps> = ({
             letter={exercise.group}
             desc={name}
             color={color}
+            disablePressIcon
+            textTransform="capitalize"
           />
         );
       })}

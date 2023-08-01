@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Colors, moderateScale } from '@app/utils';
-import { PrimaryText } from '@app/elements';
+import { CircleAdd } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { AppDispatch } from '../../../../../App';
 import { HomeStackScreens } from '../../types';
@@ -13,7 +13,6 @@ import {
   WorkoutProps,
 } from '../../../../services/workout/types';
 import DateTools from '../../../../utils/DateTools';
-import WoAdd from '../../../../components/home/components/WoAdd';
 import WoItem from '../../../../components/home/components/WoItem';
 import DeviceWo from '../../../../components/home/components/DeviceWo';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
@@ -33,6 +32,7 @@ import {
 import { LocationValue } from 'react-native-health';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@app/icons';
+import WorkoutPreviewList from 'src/components/workout/preview/PreviewList';
 
 interface Props {
   wos: WorkoutProps[];
@@ -127,38 +127,19 @@ const HomeWorkouts = ({
         }
       />
       <FlexBox marginTop={20}>
+        {wos.length > 0 && (
+          <WorkoutPreviewList workouts={wos} onPress={onNavToWorkout} />
+        )}
+      </FlexBox>
+      <FlexBox marginTop={20}>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: moderateScale(100),
           }}>
-          {wos.length > 0 && (
-            <FlexBox marginBottom={15} column>
-              <FlexBox
-                paddingBottom={10}
-                marginBottom={15}
-                borderBottomColor={Colors.white}
-                borderBottomWidth={1}>
-                <PrimaryText size="small" variant="secondary">
-                  Current Activities
-                </PrimaryText>
-              </FlexBox>
-              {wos.map(w => (
-                <WoItem wo={w} onPress={onNavToWorkout(w._id)} key={w._id} />
-              ))}
-            </FlexBox>
-          )}
-
           {deviceWos.length > 0 && (
             <FlexBox marginBottom={15} column>
-              <FlexBox
-                paddingBottom={10}
-                marginBottom={15}
-                borderBottomColor={Colors.white}
-                borderBottomWidth={1}>
-                <PrimaryText size="small">Device Activites</PrimaryText>
-              </FlexBox>
               {deviceWos.map((data, i) => (
                 <DeviceWo
                   data={data}
@@ -170,9 +151,9 @@ const HomeWorkouts = ({
               ))}
             </FlexBox>
           )}
-          <WoAdd onPress={onAddWoPress} />
         </ScrollView>
       </FlexBox>
+      <CircleAdd onPress={onAddWoPress} />
     </FlexBox>
   );
 };
