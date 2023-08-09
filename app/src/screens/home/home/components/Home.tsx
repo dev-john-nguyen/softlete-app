@@ -198,9 +198,9 @@ const Home = ({
         txt += ` You also have pending device activities to import.`;
       }
     } else if (deviceWos.length > 0) {
-      txt = `You have pending device activities.`;
+      txt = `You have pending device activities to import.`;
     } else {
-      txt = `Looks like you don't have any workouts planned. Recovery is just as important as training. Enjoy your rest day.`;
+      txt = `Looks like you don't have any workouts planned for today.`;
     }
     return txt;
   }, [wos, deviceWos]);

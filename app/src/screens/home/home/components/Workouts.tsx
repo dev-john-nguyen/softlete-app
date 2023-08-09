@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
-import { Colors, moderateScale } from '@app/utils';
+import { Colors } from '@app/utils';
 import { CircleAdd } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { AppDispatch } from '../../../../../App';
@@ -13,8 +12,6 @@ import {
   WorkoutProps,
 } from '../../../../services/workout/types';
 import DateTools from '../../../../utils/DateTools';
-import WoItem from '../../../../components/home/components/WoItem';
-import DeviceWo from '../../../../components/home/components/DeviceWo';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
 import { handleDeviceActivityImport } from '../../../../helpers/route.helpers';
 import { connect } from 'react-redux';
@@ -130,28 +127,6 @@ const HomeWorkouts = ({
         {wos.length > 0 && (
           <WorkoutPreviewList workouts={wos} onPress={onNavToWorkout} />
         )}
-      </FlexBox>
-      <FlexBox marginTop={20}>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: moderateScale(100),
-          }}>
-          {deviceWos.length > 0 && (
-            <FlexBox marginBottom={15} column>
-              {deviceWos.map((data, i) => (
-                <DeviceWo
-                  data={data}
-                  onDownload={onImportDeviceWo(data)}
-                  key={i}
-                  loadingIds={loadingIds}
-                  wos={wos}
-                />
-              ))}
-            </FlexBox>
-          )}
-        </ScrollView>
       </FlexBox>
       <CircleAdd onPress={onAddWoPress} />
     </FlexBox>

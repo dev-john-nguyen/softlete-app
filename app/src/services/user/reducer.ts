@@ -95,7 +95,7 @@ export default (state = INITIAL_STATE, action: ActionProps) => {
     case REMOVE_EXERCISE:
       return {
         ...state,
-        pinExercises: _.remove(
+        pinExercises: _.filter(
           state.pinExercises,
           (e: PinExerciseProps) => e.exerciseUid !== action.payload._id,
         ),
