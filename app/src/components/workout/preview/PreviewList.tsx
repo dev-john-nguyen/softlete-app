@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Pressable } from 'react-native';
 import { Colors } from '@app/utils';
 import {
   WorkoutExerciseProps,
@@ -15,7 +14,6 @@ import {
 } from '../../../services/workout/types';
 import CircleAdd from '../../elements/CircleAdd';
 import { FlatList } from 'react-native-gesture-handler';
-import { normalize } from '../../../utils/tools';
 import { FlexBox } from '@app/ui';
 import { PrimaryText } from '@app/elements';
 import Animated, {
@@ -133,15 +131,14 @@ const WorkoutPreviewItem = ({
   }, [renderExercises, workout]);
 
   return (
-    <Pressable
+    <FlexBox
+      column
+      borderRadius={5}
+      padding={10}
+      backgroundColor={Colors.lightPrimary}
+      marginBottom={10}
       onPress={() => onPress(workout._id)}
-      onLongPress={() => onItemLongPress(workout._id)}
-      style={{
-        backgroundColor: Colors.lightPrimary,
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 5,
-      }}>
+      onLongPress={() => onItemLongPress(workout._id)}>
       <Animated.View style={copiedAnimatedStyles}>
         <PrimaryText
           variant="secondary"
@@ -165,7 +162,7 @@ const WorkoutPreviewItem = ({
         )}
       </FlexBox>
       {ItemRender}
-    </Pressable>
+    </FlexBox>
   );
 };
 
@@ -175,6 +172,7 @@ interface Props {
   onLongPress?: (workoutUid: string) => void;
   onAddWorkout?: () => void;
   athlete?: boolean;
+  isProgram?: boolean;
 }
 
 const WorkoutPreviewList = ({
@@ -183,6 +181,7 @@ const WorkoutPreviewList = ({
   onLongPress,
   onAddWorkout,
   athlete,
+  isProgram,
 }: Props) => {
   const { isAdmin } = useSelector((state: ReducerProps) => {
     const program = state.program.targetProgram;
@@ -204,6 +203,9 @@ const WorkoutPreviewList = ({
     [onPress, onLongPress, athlete],
   );
 
+  const allowAddForProgram = isProgram && isAdmin && onAddWorkout;
+  const allowAddForOther = onAddWorkout && !isProgram;
+
   return (
     <FlexBox flex={1} justifyContent="center">
       <FlatList
@@ -212,7 +214,7 @@ const WorkoutPreviewList = ({
         keyExtractor={(item, index) => (item._id ? item._id : index)}
         renderItem={renderItem}
       />
-      {!athlete && onAddWorkout && isAdmin && (
+      {(allowAddForProgram || allowAddForOther) && (
         <CircleAdd onPress={onAddWorkout} />
       )}
     </FlexBox>

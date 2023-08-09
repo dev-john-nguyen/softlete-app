@@ -164,6 +164,7 @@ const ProgramWorkouts = ({
             workouts={item}
             onAddWorkout={onAddWorkoutPress}
             athlete={athlete}
+            isProgram
           />
         </FlexBox>
       );
