@@ -260,7 +260,9 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
       activityName: workout.type,
     };
     await onImportData(dataInsert);
-    setCustom(false);
+    if (mount.current) {
+      setCustom(false);
+    }
   };
 
   const renderDataOptions = useMemo(() => {
