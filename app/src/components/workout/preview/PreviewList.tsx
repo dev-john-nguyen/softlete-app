@@ -148,7 +148,7 @@ const WorkoutPreviewItem = ({
           Copied!
         </PrimaryText>
       </Animated.View>
-      <FlexBox marginBottom={5}>
+      <FlexBox marginBottom={5} justifyContent="space-between">
         <PrimaryText
           size="medium"
           numberOfLines={1}
@@ -157,9 +157,16 @@ const WorkoutPreviewItem = ({
           variant="secondary">
           {workout.name}
         </PrimaryText>
-        {workout.status === WorkoutStatus.completed && (
-          <Icon icon="checked" size={20} color={Colors.green} />
-        )}
+        <FlexBox
+          height={15}
+          width={15}
+          borderRadius={100}
+          backgroundColor={
+            workout.status === WorkoutStatus.completed
+              ? Colors.green
+              : Colors.white
+          }
+        />
       </FlexBox>
       {ItemRender}
     </FlexBox>

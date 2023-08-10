@@ -18,7 +18,7 @@ const CalcRef = ({ onCalcRefUpdate, calcRef }: Props) => {
   return (
     <FlexBox flex={1} alignItems="center">
       <ToolTip
-        message="This input will be used as the base calculation of the . (input * percentage)"
+        message="The percentage will use this value to calculate the value of the set."
         zIndex={100}
         duration={5}
         marginRight={5}

@@ -263,7 +263,7 @@ const WorkoutHeader = ({
           marginTop={20}
           onPress={onContinuePress}
           loading={loading}>
-          Continue
+          Save
         </PrimaryButton>
       </FlexBox>
     </ScreenTemplate>
