@@ -39,7 +39,7 @@ export const useGoalEnduranceAnalytics = (goal: GoalProps) => {
     ],
     request,
     {
-      refetchOnMount: true,
+      refetchOnMount: 'always',
       staleTime: 60000,
     },
   );
