@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { GoalProps, GoalSubTypes } from 'src/services/goals/types';
 import { useGoalEnduranceAnalytics } from '../hooks';
 import { FlexBox } from '@app/ui';

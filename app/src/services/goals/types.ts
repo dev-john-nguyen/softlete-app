@@ -82,6 +82,8 @@ export interface GoalProps {
   startDate: string;
   endDate: string;
   isActive: boolean;
+  updatedAt?: string;
+  createdAt?: string;
 }
 
 export interface GoalRespProps

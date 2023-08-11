@@ -35,6 +35,7 @@ export const useGoalEnduranceAnalytics = (goal: GoalProps) => {
         goalUid: goal._id,
         startDate: goal.startDate,
         endDate: goal.endDate,
+        updatedAt: goal.updatedAt,
       },
     ],
     request,
