@@ -124,7 +124,11 @@ const EnduranceAnalytics = () => {
             : 'Select Filter Type'}
         </PickerButton>
       </FlexBox>
-      <AnalyticsVisuals data={data} filterType={filterType} />
+      <AnalyticsVisuals
+        data={data}
+        filterType={filterType}
+        isFetching={isFetching}
+      />
     </ScreenTemplate>
   );
 };

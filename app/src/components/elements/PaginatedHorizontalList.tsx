@@ -1,9 +1,17 @@
 import Icon, { IconOptions } from '@app/icons';
 import { Colors } from '@app/utils';
 import React, { useRef, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import { normalize } from '../../utils/tools';
 import StyleConstants, { moderateScale } from '../tools/StyleConstants';
+import { FlexBox } from '@app/ui';
+import PrimaryText from './PrimaryText';
 
 interface MenuItemProps {
   children: any;
@@ -35,12 +43,14 @@ interface Props {
   childrens: any[];
   navItems: IconOptions[];
   navItemSize?: number;
+  isLoading?: boolean;
 }
 
 const PaginatedHorizontalList = ({
   childrens,
   navItems,
   navItemSize = 25,
+  isLoading,
 }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<any>();
@@ -76,7 +86,14 @@ const PaginatedHorizontalList = ({
         ref={scrollRef}>
         {childrens.map((child, index) => (
           <View style={styles.childrenContainer} key={index}>
-            {child}
+            {isLoading ? (
+              <FlexBox flex={1} justifyContent="center" alignItems="center">
+                <PrimaryText marginRight={10}>Loading</PrimaryText>
+                <ActivityIndicator size="small" color={Colors.white} />
+              </FlexBox>
+            ) : (
+              child
+            )}
           </View>
         ))}
       </ScrollView>

@@ -36,7 +36,7 @@ const DateSelection = ({
   const [activeDate, setActiveDate] = useState<SelectedDateProps>();
   const [isOpen, setIsOpen] = useState(false);
 
-  const onAddDate = () => setDateFilters(d => [...d, genNewDate()]);
+  const onAddDate = () => setDateFilters(d => [genNewDate(), ...d]);
 
   const onDatePickerConfirm = (date: Date) => {
     setIsOpen(false);
