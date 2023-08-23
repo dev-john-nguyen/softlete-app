@@ -36,7 +36,7 @@ const PickerButton: React.FC<Props> = props => {
         </PrimaryText>
       )}
       <FlexBox
-        padding={10}
+        padding={15}
         marginBottom={props.marginBottom ?? 15}
         alignItems="center"
         justifyContent="space-between"

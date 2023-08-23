@@ -1,23 +1,18 @@
 import React, { useMemo, useState } from 'react';
-import { StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { FlexBox } from '@app/ui';
 import { useDispatch, useSelector } from 'react-redux';
-import SecondaryText from '../../components/elements/SecondaryText';
 import { updateProfile } from '../../services/user/actions';
 import { ReducerProps } from '../../services';
 import { ImageProps } from '../../services/user/types';
 import Switch from '../../components/elements/Switch';
 import UploadProfileImg from '../../components/UploadProfileImg';
-import StyleConstants, {
-  moderateScale,
-} from '../../components/tools/StyleConstants';
-import BaseColors, { rgba } from '../../utils/BaseColors';
-import CustomPicker from '../../components/elements/Picker';
+import BaseColors from '../../utils/BaseColors';
 import {
   Input,
   ScreenTemplate,
-  PrimaryText,
   PickerButton,
+  PrimaryText,
 } from '@app/elements';
 import { setBanner } from 'src/services/banner/actions';
 import { BannerTypes } from 'src/services/banner/types';
@@ -89,35 +84,30 @@ const EditProfile = () => {
 
   return (
     <ScreenTemplate
-      middleContent={
-        <FlexBox justifyContent="center">
-          <PrimaryText fontSize={20}>Edit Profile</PrimaryText>
-        </FlexBox>
-      }
+      pickerOptions={pickerOptions}
+      pickerValue={athlete}
+      isPickerOpen={picker}
+      onPickerClose={() => setPicker(false)}
+      onPickerChangeValue={value => setAthlete(value)}
+      headerTitleFormatted="Edit Profile"
       rightContent={
-        <FlexBox alignItems="center">
+        <FlexBox alignItems="center" flex={1} justifyContent="flex-end">
           {loading ? (
             <ActivityIndicator size="small" color={BaseColors.black} />
           ) : (
-            <Icon icon="save" size={25} color={Colors.white} onPress={onSave} />
+            <Icon icon="save" size={20} color={Colors.white} onPress={onSave} />
           )}
         </FlexBox>
       }
       isBackVisible
       applyContentPadding>
       <FlexBox flexDirection="column" flex={1}>
-        <UploadProfileImg
-          onImageUpload={setSelectedImg}
-          uri={selectedImg.uri ? selectedImg.uri : user.imageUri}
-        />
-
         <Input
           label="Name:"
           onChangeText={txt => setName(txt)}
-          mb={20}
+          mb={10}
           defaultValue={capitalize(name)}
           autoCapitalize="words"
-          mt={20}
         />
 
         <PickerButton
@@ -130,7 +120,6 @@ const EditProfile = () => {
         <Input
           label="Bio:"
           onChangeText={txt => setBio(txt)}
-          mt={10}
           maxLength={300}
           placeholder="Give a brief description of who you are."
           defaultValue={bio}
@@ -142,45 +131,20 @@ const EditProfile = () => {
             onSwitch={() => setIsPrivate(p => (p ? false : true))}
             active={isPrivate}
           />
-          <SecondaryText styles={[styles.label, { marginLeft: 10 }]}>
+          <PrimaryText marginLeft={5}>
             {isPrivate ? 'Private' : 'Public'}
-          </SecondaryText>
+          </PrimaryText>
+        </FlexBox>
+
+        <FlexBox alignItems="center" justifyContent="center" marginTop={15}>
+          <UploadProfileImg
+            onImageUpload={setSelectedImg}
+            uri={selectedImg.uri ? selectedImg.uri : user.imageUri}
+          />
         </FlexBox>
       </FlexBox>
-
-      <CustomPicker
-        open={picker}
-        setOpen={() => setPicker(false)}
-        value={athlete}
-        pickerOptions={pickerOptions}
-        setValue={txt => setAthlete(txt)}
-      />
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  valueContainer: {
-    padding: 10,
-    borderBottomColor: rgba(BaseColors.whiteRbg, 0.2),
-    borderBottomWidth: 1,
-    flex: 1,
-  },
-  label: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    opacity: 0.5,
-    marginRight: StyleConstants.smallMargin,
-  },
-  value: {
-    fontSize: StyleConstants.smallFont,
-    color: BaseColors.lightWhite,
-    marginRight: StyleConstants.smallMargin,
-  },
-  save: {
-    width: moderateScale(25),
-    height: moderateScale(25),
-  },
-});
 
 export default EditProfile;

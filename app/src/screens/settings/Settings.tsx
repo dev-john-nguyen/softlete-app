@@ -55,60 +55,32 @@ function SettingsHome({ navigation }: Props) {
         </PickerButton>
 
         {userState.admin && (
-          <PickerButton
-            arrow
-            onPress={onNavToAdmin}
-            borderRadius={100}
-            containerStyles={{ marginTop: 5 }}>
+          <PickerButton arrow onPress={onNavToAdmin} borderRadius={100}>
             Admin
           </PickerButton>
         )}
 
-        <PickerButton
-          arrow
-          onPress={onNavToEditSubs}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onNavToEditSubs} borderRadius={100}>
           Subscription
         </PickerButton>
 
-        <PickerButton
-          arrow
-          onPress={onNavToPassword}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onNavToPassword} borderRadius={100}>
           Reset Password
         </PickerButton>
 
-        <PickerButton
-          arrow
-          onPress={onNavToSettings}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onNavToSettings} borderRadius={100}>
           Apple Health Permissions
         </PickerButton>
 
-        <PickerButton
-          arrow
-          onPress={onNavToLegal}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onNavToLegal} borderRadius={100}>
           Legal
         </PickerButton>
 
-        <PickerButton
-          arrow
-          onPress={onNavToReportBug}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onNavToReportBug} borderRadius={100}>
           Issue Report
         </PickerButton>
 
-        <PickerButton
-          arrow
-          onPress={onRemoveAccount}
-          borderRadius={100}
-          containerStyles={{ marginTop: 5 }}>
+        <PickerButton arrow onPress={onRemoveAccount} borderRadius={100}>
           Remove Account
         </PickerButton>
       </FlexBox>
