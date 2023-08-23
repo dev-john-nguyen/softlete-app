@@ -5,7 +5,6 @@ import { ExerciseProps } from 'src/services/exercises/types';
 import { GeneratedProgramProps } from 'src/services/program/types';
 import { ImageProps } from 'src/services/user/types';
 import {
-  HealthDataProps,
   ViewWorkoutProps,
   WorkoutActionProps,
   WorkoutExerciseProps,
