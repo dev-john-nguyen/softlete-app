@@ -37,7 +37,11 @@ import ScreenTemplate from '../../components/elements/ScreenTemplate';
 import { LocationValue } from 'react-native-health';
 import { handleDeviceActivityImport } from '../../helpers/route.helpers';
 import { WorkoutProvider } from '@app/contexts';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useNavigationState,
+  useRoute,
+} from '@react-navigation/native';
 import useBanner from 'src/hooks/utils/useBanner';
 import { FlexBox } from '@app/ui';
 
@@ -70,6 +74,7 @@ const Workout = ({
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const setBanner = useBanner();
+  const navigationState = useNavigationState(state => state);
 
   const handleInitiateWorkout = useCallback(async () => {
     if (workout) {
@@ -85,6 +90,12 @@ const Workout = ({
   }, [workout, genPrograms]);
 
   const onBackButtonPress = () => {
+    const routes = navigationState.routes;
+    // Don't allow go back to workout header
+    if (routes[routes.length - 2]?.name === HomeStackScreens.WorkoutHeader) {
+      return navigation.navigate(HomeStackScreens.Home);
+    }
+
     if (route.params?.goBackScreen) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { workouts, ...rest } = targetProgram;
@@ -203,9 +214,8 @@ const Workout = ({
       onCompleteWorkout={onCompleteWorkout}
       onNavigateToAddExercise={onNavigateToAddExercise}
       onUpdateStatus={onUpdateStatus}
-      onUpdateWoHealthData={onUpdateWoHealthData}
       setReflection={setReflection}
-      updateWoHealthData={updateWoHealthData}>
+      updateWoHealthData={onUpdateWoHealthData}>
       <ScreenTemplate
         isBackVisible
         onGoBack={onBackButtonPress}

@@ -38,7 +38,7 @@ export interface MonthWorkoutsProps {
 
 export interface WorkoutProps {
   _id: string;
-  date: string;
+  date?: string;
   description: string;
   createdAt?: string;
   updatedAt?: string;

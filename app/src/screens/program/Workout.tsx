@@ -19,7 +19,6 @@ import {
 } from '../../services/workout/actions';
 import WorkoutHeader from '../../components/workout/Header';
 import Loading from '../../components/elements/Loading';
-import { setBanner } from '../../services/banner/actions';
 import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
 import OverviewContainer from '../../components/workout/overview/Container';
@@ -34,6 +33,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import useBanner from 'src/hooks/utils/useBanner';
+import { useNavigationState } from '@react-navigation/native';
 
 interface Props {
   route: any;
@@ -56,8 +56,18 @@ const Workout = ({
     targetProgram: state.program.targetProgram,
   }));
   const setBanner = useBanner();
+  const navigationState = useNavigationState(state => state);
 
   const onBackButtonPress = () => {
+    const routes = navigationState.routes;
+    // Don't allow go back to workout header
+    if (
+      routes[routes.length - 2]?.name ===
+      ProgramStackScreens.ProgramWorkoutHeader
+    ) {
+      return navigation.navigate(ProgramStackScreens.Program);
+    }
+
     if (route.params?.goBackScreen) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { workouts, ...rest } = targetProgram;
