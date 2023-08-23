@@ -241,7 +241,7 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
           onPress={onContinuePress}
           marginTop={20}
           loading={loading}>
-          Continue
+          Save
         </PrimaryButton>
       </FlexBox>
     </ScreenTemplate>

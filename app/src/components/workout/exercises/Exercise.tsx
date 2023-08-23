@@ -15,6 +15,7 @@ import { Colors } from '@app/utils';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { WorkoutContext } from '@app/contexts';
+import useBanner from 'src/hooks/utils/useBanner';
 
 interface Props {
   exercise: WorkoutExerciseProps;
@@ -43,6 +44,7 @@ const WorkoutExercise = ({
   const [loading, setLoading] = useState(false);
   const mount = useRef(false);
   const { workout, isProgram, athlete } = useContext(WorkoutContext);
+  const setBanner = useBanner();
 
   useEffect(() => {
     mount.current = true;
@@ -55,18 +57,15 @@ const WorkoutExercise = ({
     onPress && exercise.exercise && onPress(exercise.exercise);
   };
 
-  const onTrash = () => {
+  const onTrash = async () => {
     if (!athlete) {
       if (loading) return;
       setLoading(true);
-      removeWorkoutExercise(exercise)
-        .then(() => {
-          mount.current && setLoading(false);
-        })
-        .catch(err => {
-          console.log(err);
-          mount.current && setLoading(false);
-        });
+      await removeWorkoutExercise(exercise);
+      if (mount.current) {
+        setLoading(false);
+        setBanner('Successfully removed exercise.');
+      }
     }
   };
 

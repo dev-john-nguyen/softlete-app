@@ -35,11 +35,12 @@ export const useGoalEnduranceAnalytics = (goal: GoalProps) => {
         goalUid: goal._id,
         startDate: goal.startDate,
         endDate: goal.endDate,
+        updatedAt: goal.updatedAt,
       },
     ],
     request,
     {
-      refetchOnMount: true,
+      refetchOnMount: 'always',
       staleTime: 60000,
     },
   );

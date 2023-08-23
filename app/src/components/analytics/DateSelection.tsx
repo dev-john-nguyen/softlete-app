@@ -14,58 +14,74 @@ import {
   genNewDate,
   SelectedDateProps,
 } from './types';
+import useBanner from 'src/hooks/utils/useBanner';
+import { BannerTypes } from 'src/services/banner/types';
 
 interface Props {
-  dateFilters: SelectedDateProps[];
-  setDateFilters: React.Dispatch<React.SetStateAction<SelectedDateProps[]>>;
-  selectionType: DateSelectionTypes;
-  setSelectionType: React.Dispatch<React.SetStateAction<DateSelectionTypes>>;
-  onDatesSubmission: () => void;
+  onDatesSubmission: (
+    selectionType: DateSelectionTypes,
+    dateFilters: SelectedDateProps[],
+  ) => void;
   isFetching: boolean;
 }
 
 //date selection option to choose a range or multiple dates
-const DateSelection = ({
-  dateFilters,
-  setDateFilters,
-  selectionType,
-  setSelectionType,
-  onDatesSubmission,
-  isFetching,
-}: Props) => {
+const DateSelection = ({ onDatesSubmission, isFetching }: Props) => {
   const [activeDate, setActiveDate] = useState<SelectedDateProps>();
   const [isOpen, setIsOpen] = useState(false);
+  const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
+    DEFAULT_DATES.start,
+    DEFAULT_DATES.end,
+  ]);
+  const [multiDateFilters, setMultiDateFilters] = useState<SelectedDateProps[]>(
+    [],
+  );
+  const [selectionType, setSelectionType] = useState(DateSelectionTypes.range);
+  const addBanner = useBanner();
 
-  const onAddDate = () => setDateFilters(d => [...d, genNewDate()]);
+  const onAddDate = () => setMultiDateFilters(d => [genNewDate(), ...d]);
 
   const onDatePickerConfirm = (date: Date) => {
     setIsOpen(false);
     if (!activeDate) return;
-    setDateFilters(dates => {
+
+    const updateStateHandler = (dates: SelectedDateProps[]) => {
+      if (!activeDate) return dates;
       const targetIndex = dates.findIndex(d => d.key === activeDate.key);
       if (targetIndex > -1) {
         dates[targetIndex] = { ...activeDate, date };
       }
       return [...dates];
-    });
+    };
+
+    if (selectionType === DateSelectionTypes.range) {
+      setDateFilters(updateStateHandler);
+    } else {
+      setMultiDateFilters(updateStateHandler);
+    }
     setActiveDate(undefined);
   };
 
-  const onRangePress = () => {
-    //when switching to range always ensure that there are two dates
-    setSelectionType(DateSelectionTypes.range);
-    setDateFilters([DEFAULT_DATES.start, DEFAULT_DATES.end]);
-  };
-
-  const onMutliplePress = () => {
-    setSelectionType(DateSelectionTypes.multiple);
+  const onDateSubmitHandler = () => {
+    let submittedDateFilters: SelectedDateProps[] = [];
+    if (selectionType === DateSelectionTypes.range) {
+      submittedDateFilters = dateFilters;
+    } else {
+      submittedDateFilters = multiDateFilters;
+    }
+    if (submittedDateFilters.length < 1) {
+      return addBanner(
+        'Missing date values. Please add a date.',
+        BannerTypes.warning,
+      );
+    }
+    onDatesSubmission(selectionType, submittedDateFilters);
   };
 
   const onRemoveDate =
     ({ d }: { d: SelectedDateProps }) =>
     () => {
-      setDateFilters(dates => {
-        if (dates.length < 2) return dates;
+      setMultiDateFilters(dates => {
         const index = dates.findIndex(dt => dt.key === d.key);
         if (index > -1) {
           dates.splice(index, 1);
@@ -78,13 +94,13 @@ const DateSelection = ({
     <FlexBox column marginTop={10}>
       <FlexBox marginBottom={10}>
         <PrimaryButton
-          onPress={onRangePress}
+          onPress={() => setSelectionType(DateSelectionTypes.range)}
           marginRight={10}
           opacity={DateSelectionTypes.range === selectionType ? 1 : 0.2}>
           Range
         </PrimaryButton>
         <PrimaryButton
-          onPress={onMutliplePress}
+          onPress={() => setSelectionType(DateSelectionTypes.multiple)}
           opacity={DateSelectionTypes.multiple === selectionType ? 1 : 0.2}>
           Multiple
         </PrimaryButton>
@@ -104,7 +120,7 @@ const DateSelection = ({
               icon="search"
               size={15}
               color={Colors.white}
-              onPress={onDatesSubmission}
+              onPress={onDateSubmitHandler}
               hitSlop={5}
             />
           )}
@@ -165,7 +181,7 @@ const DateSelection = ({
                   style={styles.circleAdd}
                   size={15}
                 />
-                {dateFilters.map(d => (
+                {multiDateFilters.map(d => (
                   <FlexBox column key={d.key} marginRight={10}>
                     <PrimaryButton
                       onPress={() => {

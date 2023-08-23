@@ -1,11 +1,10 @@
 import { PickerButton, ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors } from '@app/utils';
+import { Colors, DateTools } from '@app/utils';
 import React, { useState } from 'react';
 import { DateSelection } from 'src/components/analytics';
 import {
-  DEFAULT_DATES,
   DateSelectionTypes,
   SelectedDateProps,
 } from 'src/components/analytics/types';
@@ -14,7 +13,7 @@ import {
   EnduranceFilterOptions,
   EnduranceFilterValues,
 } from '../types';
-import { useEnduranceAnalytics } from '../hook';
+import { useMutateEnduranceAnalytics } from '../hook';
 import AnalyticsVisuals from './AnalyticsVisuals';
 import useBanner from 'src/hooks/utils/useBanner';
 import { useNavigation } from '@react-navigation/native';
@@ -33,24 +32,24 @@ const EnduranceAnalytics = () => {
   const [filterType, setFilterType] = useState<EnduranceFilterValues>(
     EnduranceFilterValues.distance,
   );
-  const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
-    DEFAULT_DATES.start,
-    DEFAULT_DATES.end,
-  ]);
-  const [selectionType, setSelectionType] = useState(DateSelectionTypes.range);
   const [activePickerType, setActivePickerType] = useState<ActivePickers>();
-  const { data, isFetching, refetch } = useEnduranceAnalytics(
-    enduranceType,
-    selectionType,
-    dateFilters,
-  );
+  const { data, isLoading, mutateAsync } = useMutateEnduranceAnalytics();
   const setBanner = useBanner();
 
-  const onDatesSubmission = () => {
-    if (enduranceType) {
-      return refetch();
+  const onDatesSubmission = (
+    selectionType: DateSelectionTypes,
+    dateFilters: SelectedDateProps[],
+  ) => {
+    if (!enduranceType) {
+      return setBanner('Please select an endurance type!');
     }
-    setBanner('Please select an endurance type!');
+    const dates = dateFilters.map(d => DateTools.dateToStr(d.date));
+    const payload = {
+      dates,
+      enduranceType,
+      dateFilterType: selectionType,
+    };
+    mutateAsync(payload);
   };
 
   const onNavToGoals = () => {
@@ -105,12 +104,8 @@ const EnduranceAnalytics = () => {
             : 'Select Endurance Type'}
         </PickerButton>
         <DateSelection
-          dateFilters={dateFilters}
-          setDateFilters={setDateFilters}
           onDatesSubmission={onDatesSubmission}
-          selectionType={selectionType}
-          setSelectionType={setSelectionType}
-          isFetching={isFetching}
+          isFetching={isLoading}
         />
         <PickerButton
           valueOpacity={filterType ? 1 : 0.5}
@@ -124,7 +119,11 @@ const EnduranceAnalytics = () => {
             : 'Select Filter Type'}
         </PickerButton>
       </FlexBox>
-      <AnalyticsVisuals data={data} filterType={filterType} />
+      <AnalyticsVisuals
+        data={data}
+        filterType={filterType}
+        isFetching={isLoading}
+      />
     </ScreenTemplate>
   );
 };

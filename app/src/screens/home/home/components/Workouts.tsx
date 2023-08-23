@@ -75,7 +75,7 @@ const HomeWorkouts = ({
   const onNavToDeviceActivities = () =>
     navigation.navigate(HomeStackScreens.DeviceActivities);
 
-  const onNavToWorkout = (workoutUid: string) => () => {
+  const onNavToWorkout = (workoutUid: string) => {
     setViewWorkout(workoutUid);
     navigation.navigate(HomeStackScreens.Workout);
   };

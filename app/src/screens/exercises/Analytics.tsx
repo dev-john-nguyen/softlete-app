@@ -54,11 +54,6 @@ const ExerciseAnalytics = ({
   const [analytics, setAnalytics] = useState<AnalyticsProps>();
   const [fromDate] = useState(DateTools.dateToStr(DEFAULT_DATES.start.date));
   const [toDate] = useState(DateTools.dateToStr(DEFAULT_DATES.end.date));
-  const [dateFilters, setDateFilters] = useState<SelectedDateProps[]>([
-    DEFAULT_DATES.start,
-    DEFAULT_DATES.end,
-  ]);
-  const [selectionType, setSelectionType] = useState(DateSelectionTypes.range);
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [dates, setDates] = useState<Date[]>([]);
@@ -167,7 +162,10 @@ const ExerciseAnalytics = ({
     }
   };
 
-  const onDatesSubmission = async () => {
+  const onDatesSubmission = async (
+    selectionType: DateSelectionTypes,
+    dateFilters: SelectedDateProps[],
+  ) => {
     if (!analytics) return;
     const { athlete } = route.params;
     const dateFilterStrs = dateFilters.map(({ date }) =>
@@ -212,11 +210,7 @@ const ExerciseAnalytics = ({
                 Measurement: {analytics?.exercise?.measSubCat || 'N/A'}
               </PrimaryText>
               <DateSelection
-                dateFilters={dateFilters}
-                setDateFilters={setDateFilters}
                 onDatesSubmission={onDatesSubmission}
-                selectionType={selectionType}
-                setSelectionType={setSelectionType}
                 isFetching={isFetching}
               />
               <HealthProgress analytics={analytics} />

@@ -260,7 +260,9 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
       activityName: workout.type,
     };
     await onImportData(dataInsert);
-    setCustom(false);
+    if (mount.current) {
+      setCustom(false);
+    }
   };
 
   const renderDataOptions = useMemo(() => {
@@ -271,6 +273,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
         key={item.activityId ? item.activityId : i}
       />
     ));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   if (custom || isProgram) {

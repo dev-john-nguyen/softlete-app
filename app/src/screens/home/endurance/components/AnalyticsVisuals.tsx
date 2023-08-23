@@ -14,9 +14,14 @@ import Graph from './Graph';
 type Props = {
   data: HealthDataAnalytics[];
   filterType: EnduranceFilterValues;
+  isFetching?: boolean;
 };
 
-const AnalyticsVisuals: React.FC<Props> = ({ data: dataProp, filterType }) => {
+const AnalyticsVisuals: React.FC<Props> = ({
+  data: dataProp,
+  filterType,
+  isFetching,
+}) => {
   const data: AnalyticalDataProps<HealthDataProps>[] = useMemo(() => {
     // get data
     return dataProp
@@ -77,6 +82,7 @@ const AnalyticsVisuals: React.FC<Props> = ({ data: dataProp, filterType }) => {
   return (
     <FlexBox column flex={1} marginTop={20}>
       <PaginatedHorizontalList
+        isLoading={isFetching}
         childrens={[
           <StackedBarChart
             data={graphData}

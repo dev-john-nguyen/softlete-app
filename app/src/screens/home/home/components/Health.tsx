@@ -125,18 +125,13 @@ const HomeHealth = ({ healthData }: Props) => {
         }
         desc="An overview of your health today. See how you're progressing towards your goals."
       />
-      <FlexBox
-        marginTop={30}
-        marginBottom={30}
-        justifyContent="space-between"
-        marginRight={10}
-        marginLeft={10}>
+      <FlexBox marginTop={30} marginBottom={30} justifyContent="space-between">
         <HealthCircle
           name="Sleep"
           value={String(sleepDuration) + ' hrs'}
           progress={sleepDuration / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
-          size={normalize.width(3)}
+          size={normalize.width(2.5)}
           circleWidth={13}
           icon="crescent_moon"
           index={1}
@@ -149,7 +144,7 @@ const HomeHealth = ({ healthData }: Props) => {
           progress={activeCals / (activeCaloriesGoal?.goal ?? 200)}
           progressColor={BaseColors.red}
           index={2}
-          size={normalize.width(3)}
+          size={normalize.width(2.5)}
           icon="fire"
           circleWidth={13}
           secondary
