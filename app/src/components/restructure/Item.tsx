@@ -20,7 +20,9 @@ const RestructureItem = ({ exercise, onRemove, movingGroup }: Props) => {
 
   return (
     <View style={styles.container}>
-      <PrimaryText numberOfLines={1}>{data}</PrimaryText>
+      <PrimaryText numberOfLines={1} textTransform="capitalize">
+        {data}
+      </PrimaryText>
       {!!movingGroup && (
         <View style={styles.groupContainer}>
           {movingGroup === 'trash' ? (
