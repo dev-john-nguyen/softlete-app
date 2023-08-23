@@ -55,23 +55,16 @@ const RemoveAccount = (props: Props) => {
   };
 
   return (
-    <ScreenTemplate headerPadding>
-      <FlexBox flexDirection="column" padding={20} paddingTop={5}>
-        <PrimaryText fontSize={20} marginBottom={5}>
-          Remove Account
-        </PrimaryText>
-        <PrimaryText
-          variant="secondary"
-          fontSize={14}
-          opacity={0.8}
-          marginBottom={20}>
-          Are you sure you want to remove your account? Once your account has
-          been removed all of your data will be lost.
-        </PrimaryText>
-        <PrimaryButton onPress={onRemoveAccount} loading={loading}>
-          Remove My Account
-        </PrimaryButton>
-      </FlexBox>
+    <ScreenTemplate
+      applyContentPadding
+      isBackVisible
+      headerTitleFormatted="Remove Account">
+      <PrimaryText marginBottom={20}>
+        {`Are you sure you want to remove your account? Once your account has been removed all of your data will be lost. There's no going back!`}
+      </PrimaryText>
+      <PrimaryButton onPress={onRemoveAccount} loading={loading}>
+        Remove My Account
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };

@@ -24,35 +24,29 @@ const Subscription = () => {
   };
 
   return (
-    <ScreenTemplate headerPadding>
-      <FlexBox flexDirection="column" padding={20} paddingTop={5}>
-        <PrimaryText fontSize={20} marginBottom={10}>
-          Subscription
-        </PrimaryText>
-        <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
-          All Access ({renderSubscription()}) Subscription
-        </PrimaryText>
-        <PrimaryText
-          variant="secondary"
-          fontSize={12}
-          color={rgba(Colors.whiteRbg, 0.8)}
-          marginBottom={20}>
-          With this subscription you have all access to the tools that we offer.
-          Thank you for subscribing :).
-        </PrimaryText>
-        <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
-          How To Update Subscription?
-        </PrimaryText>
-        <PrimaryText
-          variant="secondary"
-          fontSize={12}
-          color={rgba(Colors.whiteRbg, 0.8)}>
-          To update your subscription, go to settings on your phone, tap the My
-          Account button or your profile picture at the top right, then tap
-          Subscriptions. You can change or cancel an existing subscription, or
-          resubscribe to an expired subscription.
-        </PrimaryText>
-      </FlexBox>
+    <ScreenTemplate
+      isBackVisible
+      headerTitleFormatted="Subscription"
+      applyContentPadding>
+      <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
+        All Access ({renderSubscription()}) Subscription
+      </PrimaryText>
+      <PrimaryText
+        variant="secondary"
+        color={rgba(Colors.whiteRbg, 0.8)}
+        marginBottom={20}>
+        With this subscription you have all access to the tools that we offer.
+        Thank you for subscribing :).
+      </PrimaryText>
+      <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
+        How To Update Subscription?
+      </PrimaryText>
+      <PrimaryText variant="secondary" color={rgba(Colors.whiteRbg, 0.8)}>
+        To update your subscription, go to settings on your phone, tap the My
+        Account button or your profile picture at the top right, then tap
+        Subscriptions. You can change or cancel an existing subscription, or
+        resubscribe to an expired subscription.
+      </PrimaryText>
     </ScreenTemplate>
   );
 };

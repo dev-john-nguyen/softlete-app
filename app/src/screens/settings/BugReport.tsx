@@ -8,11 +8,8 @@ import {
   PrimaryText,
   ScreenTemplate,
 } from '@app/elements';
-import { FlexBox } from '@app/ui';
 
-interface Props {}
-
-const BugReport = ({}: Props) => {
+const BugReport = () => {
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,35 +29,36 @@ const BugReport = ({}: Props) => {
   };
 
   return (
-    <ScreenTemplate headerPadding>
-      <FlexBox flexDirection="column" padding={20} paddingTop={5}>
-        <PrimaryText fontSize={20}>Bug Report Form</PrimaryText>
+    <ScreenTemplate
+      isBackVisible
+      applyContentPadding
+      headerTitleFormatted="Bug Report">
+      <PrimaryText>
+        Are you having issues? Please fill out the form to let us know.
+      </PrimaryText>
+      <Input
+        label="Location"
+        placeholder="Where did it occur?"
+        onChangeText={txt => setType(txt)}
+        multiline
+        maxLength={100}
+        value={type}
+        mb={10}
+        mt={10}
+      />
 
-        <Input
-          label="Location"
-          placeholder="Where did it occur?"
-          onChangeText={txt => setType(txt)}
-          multiline
-          maxLength={100}
-          value={type}
-          mt={20}
-          mb={20}
-        />
+      <Input
+        label="Description"
+        value={description}
+        onChangeText={txt => setDescription(txt)}
+        placeholder="Please give a detail explanation of the issue you found."
+        multiline
+        maxLength={500}
+      />
 
-        <Input
-          label="Description"
-          value={description}
-          onChangeText={txt => setDescription(txt)}
-          placeholder="Please give a detail explanation of the issue you found."
-          multiline
-          maxLength={500}
-          mb={20}
-        />
-
-        <PrimaryButton loading={loading} onPress={sendBugReport}>
-          Send
-        </PrimaryButton>
-      </FlexBox>
+      <PrimaryButton loading={loading} onPress={sendBugReport} marginTop={20}>
+        Send
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };
