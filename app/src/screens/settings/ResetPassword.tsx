@@ -44,32 +44,32 @@ const ResetPassword = () => {
   };
 
   return (
-    <ScreenTemplate headerPadding>
-      <FlexBox flexDirection="column" padding={20} paddingTop={5}>
-        <FlexBox marginBottom={10} flexDirection="column">
-          <PrimaryText fontSize={20}>Reset Password</PrimaryText>
-          {!!err && (
-            <PrimaryText
-              variant="secondary"
-              fontSize={12}
-              color={Colors.red}
-              marginTop={5}>
-              *{err}
-            </PrimaryText>
-          )}
-        </FlexBox>
-        <Input
-          label="Confirm Email"
-          onChangeText={txt => setEmail(txt)}
-          value={email}
-          styles={{ marginBottom: StyleConstants.baseMargin }}
-          placeholder="keisha_smith@softlete.com"
-          autoCapitalize="none"
-        />
-        <PrimaryButton onPress={onResetPassword} loading={loading}>
-          {sent ? 'Email Sent' : 'Send'}
-        </PrimaryButton>
+    <ScreenTemplate
+      isBackVisible
+      headerTitleFormatted="Reset Password"
+      applyContentPadding>
+      <FlexBox marginBottom={10} flexDirection="column">
+        {!!err && (
+          <PrimaryText
+            variant="secondary"
+            fontSize={12}
+            color={Colors.red}
+            marginTop={5}>
+            *{err}
+          </PrimaryText>
+        )}
       </FlexBox>
+      <Input
+        label="Confirm Email"
+        onChangeText={txt => setEmail(txt)}
+        value={email}
+        styles={{ marginBottom: StyleConstants.baseMargin }}
+        placeholder="keisha_smith@softlete.com"
+        autoCapitalize="none"
+      />
+      <PrimaryButton onPress={onResetPassword} loading={loading}>
+        {sent ? 'Email Sent' : 'Send'}
+      </PrimaryButton>
     </ScreenTemplate>
   );
 };
