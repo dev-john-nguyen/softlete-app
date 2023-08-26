@@ -44,6 +44,7 @@ import { Colors, Constants } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
+import { PickerOptionProp } from 'src/components/elements/Picker';
 
 interface Props {
   navigation: any;
@@ -259,38 +260,39 @@ const EditExercise = ({
     }
   };
 
-  const pickerItems = useMemo(() => {
+  const pickerItems: PickerOptionProp[] = useMemo(() => {
     const getMeasSubCat = () => {
-      switch (measCat) {
-        case MeasCats.distance:
-          return Object.values(DisCats).map(item => (
-            <Picker.Item label={capitalize(item)} value={item} key={item} />
-          ));
-        case MeasCats.time:
-          return Object.values(TimeCats).map(item => (
-            <Picker.Item label={capitalize(item)} value={item} key={item} />
-          ));
-        case MeasCats.weight:
-          return Object.values(WtCats).map(item => (
-            <Picker.Item label={capitalize(item)} value={item} key={item} />
-          ));
-        default:
-          return Object.values(MeasSubCats).map(item => (
-            <Picker.Item label={capitalize(item)} value={item} key={item} />
-          ));
-      }
+      return Object.values(
+        (() => {
+          switch (measCat) {
+            case MeasCats.distance:
+              return DisCats;
+            case MeasCats.time:
+              return TimeCats;
+            case MeasCats.weight:
+              return WtCats;
+            default:
+              return MeasSubCats;
+          }
+        })(),
+      ).map(item => ({
+        value: item,
+        label: capitalize(item),
+      })) as PickerOptionProp[];
     };
     switch (picker) {
       case PickerOptions.measCats:
-        return Object.values(MeasCats).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
+        return Object.values(MeasCats).map(item => ({
+          value: item,
+          label: capitalize(item),
+        }));
       case PickerOptions.measSubCats:
         return getMeasSubCat();
       case PickerOptions.muscleGroup:
-        return Object.values(MuscleGroups).map(item => (
-          <Picker.Item label={capitalize(item)} value={item} key={item} />
-        ));
+        return Object.values(MuscleGroups).map(item => ({
+          value: item,
+          label: capitalize(item),
+        }));
     }
     return [];
   }, [picker, measCat]);
@@ -313,7 +315,7 @@ const EditExercise = ({
       isPickerOpen={!!picker}
       onPickerClose={() => setPicker(PickerOptions.disable)}
       pickerValue={pickerValue}
-      pickerItems={pickerItems}
+      pickerOptions={pickerItems}
       onPickerChangeValue={onPickerValueChange}
       applyContentPadding
       rightContent={
