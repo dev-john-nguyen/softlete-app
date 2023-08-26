@@ -1,9 +1,8 @@
 import { ScreenTemplate } from '@app/elements';
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import { AppDispatch } from '../../../../App';
 import CircleAdd from '../../../components/elements/CircleAdd';
@@ -109,7 +108,5 @@ const SearchExercises = ({ navigation, dispatch }: Props) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default connect()(SearchExercises);
