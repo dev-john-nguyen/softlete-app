@@ -120,8 +120,11 @@ export const login = (token: string) => async (dispatch: AppDispatch) => {
 export const registerUser =
   (username: string, name: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    request('POST', PATHS.signin.register, dispatch, { name, username })
-      .then(({ data }: { data?: UserProps }) => {
+    request<UserProps>('POST', PATHS.signin.register, dispatch, {
+      name,
+      username,
+    })
+      .then(({ data }) => {
         const { user } = getState();
         dispatch({
           type: SIGNIN_USER,
@@ -214,11 +217,16 @@ export const updatePinExercises =
       return;
     }
 
-    return request('POST', PATHS.user.updatePinExercises, dispatch, {
-      pinExercise: pinProps,
-      pin,
-    })
-      .then(async ({ data }: { data?: PinExerciseProps[] }) => {
+    return request<PinExerciseProps[]>(
+      'POST',
+      PATHS.user.updatePinExercises,
+      dispatch,
+      {
+        pinExercise: pinProps,
+        pin,
+      },
+    )
+      .then(async ({ data }) => {
         if (data) {
           //update the data with exercise data
           data = await updatePinExercisesWithExercises(data)(
@@ -236,8 +244,8 @@ export const updatePinExercises =
 
 export const getFriends =
   () => async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    return request('GET', PATHS.friends.getAll, dispatch)
-      .then(({ data }: { data?: FriendProps[] }) => {
+    return request<FriendProps[]>('GET', PATHS.friends.getAll, dispatch)
+      .then(({ data }) => {
         if (data) {
           //This is removed to limit the amount of request ....
           //update 10/28 ... only fetch the pending status profiles
@@ -267,13 +275,18 @@ export const getFriends =
 
 export const handleSubscriptionPurchased =
   (transactionReceipt: string, originalOrderId: string, productId: string) =>
-  async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    return request('POST', PATHS.subscription.subscribe, dispatch, {
-      transactionReceipt,
-      originalOrderId,
-      productId,
-    })
-      .then(({ data }: { data?: SubscriptionProps }) => {
+  async (dispatch: AppDispatch) => {
+    return request<SubscriptionProps>(
+      'POST',
+      PATHS.subscription.subscribe,
+      dispatch,
+      {
+        transactionReceipt,
+        originalOrderId,
+        productId,
+      },
+    )
+      .then(({ data }) => {
         if (data) dispatch({ type: SET_SUBSCRIPTION_TYPE, payload: productId });
       })
       .catch(err => {
@@ -282,8 +295,7 @@ export const handleSubscriptionPurchased =
   };
 
 export const handleBlockUser =
-  (userUid: string, block: boolean) =>
-  async (dispatch: AppDispatch, getState: () => ReducerProps) => {
+  (userUid: string, block: boolean) => async (dispatch: AppDispatch) => {
     let path = '';
     if (block) {
       path = PATHS.user.unblock;
@@ -291,8 +303,8 @@ export const handleBlockUser =
       path = PATHS.user.block;
     }
 
-    await request('POST', path, dispatch, { userUid })
-      .then(({ data }: { data?: UserProps }) => {
+    await request<UserProps>('POST', path, dispatch, { userUid })
+      .then(({ data }) => {
         if (data) {
           dispatch({ type: INSERT_BLOCKED_USER, payload: data.blockUids });
         }
