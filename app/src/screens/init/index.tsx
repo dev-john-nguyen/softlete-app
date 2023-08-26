@@ -92,7 +92,7 @@ const InitUser = () => {
 
   return (
     <ScreenTemplate applyContentPadding applyKeyboardDismiss>
-      <PrimaryText bold variant="primary" fontSize={30} marginBottom={10}>
+      <PrimaryText bold variant="primary" fontSize={25} marginBottom={10}>
         Account Setup
       </PrimaryText>
 
@@ -103,7 +103,7 @@ const InitUser = () => {
         maxLength={100}
         autoCapitalize="none"
         label="Username"
-        mb={20}
+        mb={10}
       />
 
       <Input
@@ -113,10 +113,9 @@ const InitUser = () => {
         maxLength={200}
         autoCapitalize="words"
         label={`Name`}
-        mb={20}
       />
 
-      <PrimaryText bold marginBottom={10}>
+      <PrimaryText bold marginBottom={10} marginTop={15}>
         Username Criteria
       </PrimaryText>
       <PrimaryText marginBottom={5}>
