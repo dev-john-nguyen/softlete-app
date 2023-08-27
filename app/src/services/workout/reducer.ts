@@ -29,12 +29,14 @@ import {
   findAllAndUpdateExerciseProps,
   updateOfflineMonthWos,
   findAndInsertLikeWo,
+  demoWoHelper,
 } from './utils';
 import { WorkoutProps } from './types';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { UPDATE_EXERCISE } from '../exercises/actionTypes';
 import { ExerciseProps } from '../exercises/types';
 import _ from 'lodash';
+import { INIT_DEMO_STATE_DATA } from '../global/actionTypes';
 
 const INITIAL_STATE = {
   workoutHeader: {},
@@ -57,6 +59,25 @@ type ActionProps = {
 export default (state: any = INITIAL_STATE, action: ActionProps) => {
   let updatedWorkouts;
   switch (action.type) {
+    case INIT_DEMO_STATE_DATA:
+      // workouts state and monthly
+      const userUid = action.payload as string;
+      updatedWorkouts = demoWoHelper(userUid);
+      updateOfflineMonthWos(updatedWorkouts);
+      return {
+        ...state,
+        selectedDateWorkouts: findAndUpdateSelectedDateWorkouts(
+          state.selectedDate,
+          updatedWorkouts,
+          state.filterByProgramUid,
+        ),
+        monthWorkouts: findMonthWorkouts(
+          state.selectedDate,
+          updatedWorkouts,
+          state.filterByProgramUid,
+        ),
+        workouts: updatedWorkouts,
+      };
     case INITIATE_WORKOUT_HEADER:
       return {
         ...state,

@@ -253,10 +253,11 @@ export const fetchWorkout =
         getState,
       );
       dispatch({ type: UPDATE_WORKOUTS, payload: workouts });
-      dispatch({
-        type: UPDATE_WORKOUTS,
-        payload: [workout],
-      });
+      // not sure why this is here. I think it's a duplicate
+      // dispatch({
+      //   type: UPDATE_WORKOUTS,
+      //   payload: [workout],
+      // });
     }
     return workout;
   };

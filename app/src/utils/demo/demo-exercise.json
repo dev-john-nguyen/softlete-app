@@ -1,0 +1,52 @@
+{
+  "exercises": [
+    {
+      "_id": "64ea0d974933fae642f1d214",
+      "userUid": "",
+      "videoId": "",
+      "__v": 0,
+      "category": "strength",
+      "createdAt": "",
+      "description": "Your custom exercise description",
+      "equipment": "Barbell",
+      "localThumbnail": "",
+      "localUrl": "",
+      "muscleGroup": "glutes",
+      "name": "custom exercise",
+      "updatedAt": "",
+      "youtubeId": "",
+      "measCat": "weight",
+      "measSubCat": "pounds",
+      "url": "",
+      "thumbnail": "",
+      "owner": true
+    }
+  ],
+  "pinned_exercises": [
+    {
+      "exerciseUid": "64ea0d974933fae642f1d214",
+      "_id": "64ea10144c238df0849020b6",
+      "exercise": {
+        "_id": "64ea0d974933fae642f1d214",
+        "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+        "videoId": "",
+        "__v": 0,
+        "category": "strength",
+        "createdAt": "",
+        "description": "Your custom exercise description",
+        "equipment": "Barbell",
+        "localThumbnail": "",
+        "localUrl": "",
+        "muscleGroup": "glutes",
+        "name": "custom exercise",
+        "updatedAt": "",
+        "youtubeId": "",
+        "measCat": "weight",
+        "measSubCat": "pounds",
+        "url": "",
+        "thumbnail": "",
+        "owner": true
+      }
+    }
+  ]
+}
