@@ -25,3 +25,4 @@ export { default as ToolTip } from './ToolTip';
 export { default as PlaceholderImage } from './PlaceholderImage';
 export { default as PaginatedHorizontalList } from './PaginatedHorizontalList';
 export { default as HealthCircle } from './HealthCircle';
+export { default as Demo } from './Demo';

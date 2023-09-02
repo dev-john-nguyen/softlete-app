@@ -33,6 +33,7 @@ const InitUser = () => {
   }, [user]);
 
   const onSave = () => {
+    return navigation.navigate(IndexStackList.NewUserAdvise);
     if (loading) return;
 
     if (!username || username.length < 8 || username.length > 20) {

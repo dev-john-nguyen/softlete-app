@@ -38,6 +38,7 @@ import {
 //get health permissions
 import './permissions/health';
 import PrimaryText from './components/elements/PrimaryText';
+import Demo from './components/elements/Demo';
 
 const Tab = createBottomTabNavigator<IndexStackParamsList>();
 
@@ -123,6 +124,7 @@ const Main = ({
         </NavigationContainer>
       )}
       <Banner />
+      <Demo />
     </SafeAreaProvider>
   );
 };
