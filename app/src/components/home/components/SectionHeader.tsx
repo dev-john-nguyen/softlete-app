@@ -1,8 +1,9 @@
 import React from 'react';
-import { PrimaryText } from '@app/elements';
+import { DemoArrow, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
+import { DemoStates } from '@app/services';
 
 interface Props {
   title: string;
@@ -13,6 +14,12 @@ interface Props {
 const SectionHeader = ({ title, desc, RightElement }: Props) => {
   return (
     <FlexBox flexDirection="column">
+      <DemoArrow
+        state={[
+          DemoStates.HOME_WORKOUS_TODAY_WORKOUT,
+          DemoStates.HOME_WORKOUT_TODAY_PRESS,
+        ]}
+      />
       <FlexBox justifyContent="space-between" alignItems="center">
         <PrimaryText
           size="medium"

@@ -2,7 +2,7 @@ import React, { useEffect, useState, Dispatch, useCallback } from 'react';
 import { ReducerProps } from '../../services';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   WorkoutActionProps,
   WorkoutStatus,
@@ -41,6 +41,8 @@ import {
 } from '@react-navigation/native';
 import useBanner from 'src/hooks/utils/useBanner';
 import { FlexBox } from '@app/ui';
+import { DemoArrow } from '@app/elements';
+import { DemoStates } from '@app/services';
 
 interface Props {
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
@@ -221,6 +223,7 @@ const Workout = ({
             )}
           </FlexBox>
         }>
+        <DemoArrow state={[DemoStates.WORKOUT_VIEW]} />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (

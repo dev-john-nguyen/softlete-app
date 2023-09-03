@@ -13,11 +13,12 @@ import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
 import { Colors, normalize } from '@app/utils';
-import { HealthCircle } from '@app/elements';
+import { DemoArrow, HealthCircle } from '@app/elements';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { DemoStates } from '@app/services';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -106,6 +107,12 @@ const HomeHealth = ({ healthData }: Props) => {
         title="Health"
         RightElement={
           <FlexBox>
+            <DemoArrow
+              state={[
+                DemoStates.HOME_HEALTH_OVERVIEW,
+                DemoStates.HOME_HEALTH_EDIT,
+              ]}
+            />
             <Icon
               icon="pencil"
               color={Colors.white}
