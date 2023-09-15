@@ -4,11 +4,12 @@ import { normalize } from '../../utils/tools';
 import { WorkoutStatus } from '../../services/workout/types';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, rgba, StyleConstants } from '@app/utils';
-import { CircleAdd } from '@app/elements';
+import { CircleAdd, DemoArrow } from '@app/elements';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import { DemoStates } from '@app/services';
 
 interface NavbarItemProps {
   index: number;
@@ -65,6 +66,7 @@ const WorkoutNavbar = ({
 }: Props) => {
   return (
     <ScrollView style={styles.container} horizontal>
+      <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
       <FlexBox alignItems="center">
         {groupKeys.map((g, index) => (
           <NavbarItem

@@ -13,6 +13,8 @@ import { SettingsStackScreens } from '../../screens/settings/types';
 import { NetworkStackScreens } from '../../screens/network/types';
 import { ProgramStackScreens } from '../../screens/program/types';
 import Icon from '@app/icons';
+import DemoArrow from '../elements/DemoArrow';
+import { DemoStates } from '@app/services';
 
 const TabBar = ({
   state,
@@ -71,10 +73,19 @@ const TabBar = ({
     [state],
   );
 
-  if (isHidden) return <></>;
+  // if (isHidden) return <></>;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+      <DemoArrow
+        state={[
+          DemoStates.PROGRAMS,
+          DemoStates.BOTTOM_NAV,
+          DemoStates.SOCIAL,
+          DemoStates.SETTINGS,
+          DemoStates.PERSONAL,
+        ]}
+      />
       <Tab
         onPress={navToHome}
         icon={

@@ -1,6 +1,6 @@
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PrimaryText from './PrimaryText';
 import Icon from '@app/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
-import { DemoStates, setDemoState } from '@app/services';
+import { DemoStatePositions, DemoStates, setDemoState } from '@app/services';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -38,6 +38,17 @@ const Demo = () => {
       // action
     },
   });
+
+  useEffect(() => {
+    // can reposition for certain stages
+    if (
+      demo.state &&
+      DemoStatePositions[demo.state] &&
+      DemoStatePositions[demo.state].bannerY
+    ) {
+      translationY.value = DemoStatePositions[demo.state]?.bannerY as number;
+    }
+  }, [demo, translationY]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

@@ -29,6 +29,7 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
           DemoStates.HOME_WORKOUT_NAV_PRESS,
           DemoStates.HOME_WORKOUTS,
           DemoStates.HOME_NAVIGATION_HEALTH,
+          DemoStates.EXERCISE_HOME_VIEW_PRESS,
         ]}
       />
       <Icon

@@ -211,6 +211,7 @@ const Workout = ({
         onGoBack={onBackButtonPress}
         rightContent={
           <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+            <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             {workout?.status !== WorkoutStatus.inProgress && (
               <Icon
                 icon="ellipsis"
@@ -223,7 +224,15 @@ const Workout = ({
             )}
           </FlexBox>
         }>
-        <DemoArrow state={[DemoStates.WORKOUT_VIEW]} />
+        <DemoArrow
+          state={[
+            DemoStates.WORKOUT_VIEW,
+            DemoStates.WORKOUT_VIEW_STATUS,
+            DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
+            DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+          ]}
+        />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (
