@@ -36,7 +36,10 @@ import { SIGNOUT_USER } from '../user/actionTypes';
 import { UPDATE_EXERCISE } from '../exercises/actionTypes';
 import { ExerciseProps } from '../exercises/types';
 import _ from 'lodash';
-import { INIT_DEMO_STATE_DATA } from '../global/actionTypes';
+import {
+  CLEAR_DEMO_STATE_DATA,
+  INIT_DEMO_STATE_DATA,
+} from '../global/actionTypes';
 
 const INITIAL_STATE = {
   workoutHeader: {},
@@ -59,6 +62,8 @@ type ActionProps = {
 export default (state: any = INITIAL_STATE, action: ActionProps) => {
   let updatedWorkouts;
   switch (action.type) {
+    case CLEAR_DEMO_STATE_DATA:
+      return INITIAL_STATE; // clearing
     case INIT_DEMO_STATE_DATA:
       // workouts state and monthly
       const userUid = action.payload as string;

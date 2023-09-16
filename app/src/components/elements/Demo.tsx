@@ -13,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import { DemoStatePositions, DemoStates, setDemoState } from '@app/services';
+import { CLEAR_DEMO_STATE_DATA } from 'src/services/global/actionTypes';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -69,7 +70,10 @@ const Demo = () => {
     const currentIndex = demoStateArray.findIndex(s => s === demo.state);
     if (currentIndex > -1) {
       const nextIndex = currentIndex + add;
-      if (nextIndex > -1 && nextIndex < demoStateArray.length) {
+      if (nextIndex >= demoStateArray.length) {
+        dispatch(setDemoState(undefined));
+        dispatch({ type: CLEAR_DEMO_STATE_DATA });
+      } else if (nextIndex > -1 && nextIndex < demoStateArray.length) {
         dispatch(setDemoState(demoStateArray[currentIndex + add]));
       }
     }

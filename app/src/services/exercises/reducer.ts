@@ -12,8 +12,11 @@ import { SIGNOUT_USER } from '../user/actionTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
 import _ from 'lodash';
-import { INIT_DEMO_STATE_DATA } from '../global/actionTypes';
-import { demoExerciseHandler } from './helper';
+import {
+  CLEAR_DEMO_STATE_DATA,
+  INIT_DEMO_STATE_DATA,
+} from '../global/actionTypes';
+import { clearDemoExerciseHandler, demoExerciseHandler } from './helper';
 
 const INITIAL_STATE = {
   data: [],
@@ -30,6 +33,11 @@ type ActionProps = {
 export default (state = INITIAL_STATE, action: ActionProps) => {
   let exercises: any;
   switch (action.type) {
+    case CLEAR_DEMO_STATE_DATA:
+      return {
+        ...state,
+        data: clearDemoExerciseHandler(state.data),
+      };
     case INIT_DEMO_STATE_DATA:
       exercises = _.uniqBy(
         [...demoExerciseHandler(action.payload as string), ...state.data],
