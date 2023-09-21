@@ -83,19 +83,29 @@ const VerifyEmail = () => {
 
   return (
     <ScreenTemplate applyContentPadding>
-      <FlexBox column padding={15} alignItems="center">
-        <PrimaryText bold variant="primary" fontSize={30} marginBottom={10}>
+      <FlexBox column>
+        <PrimaryText
+          bold
+          variant="primary"
+          fontSize={25}
+          marginBottom={10}
+          textAlign="center">
           Verfiy your Email
         </PrimaryText>
         <PrimaryText marginBottom={5}>
           Shortly you should receive an email. Please follow the directions in
           the email to verify your email.
         </PrimaryText>
-        <FlexBox marginBottom={20} width="100%">
+        <FlexBox marginBottom={20}>
           <PrimaryText>Email: </PrimaryText>
           <PrimaryText bold>{auth().currentUser?.email}</PrimaryText>
         </FlexBox>
-        <Icon icon="send_mail" size={100} color={Colors.white} />
+        <Icon
+          icon="send_mail"
+          size={100}
+          color={Colors.white}
+          containerStyles={{ alignSelf: 'center' }}
+        />
         <FlexBox width="100%" column marginTop={20}>
           <PrimaryButton onPress={onDone} marginBottom={10}>
             {verified ? 'Refreshing...' : 'I verified my email'}
@@ -115,8 +125,8 @@ const VerifyEmail = () => {
         </FlexBox>
         <FlexBox width="100%" marginTop={10}>
           <PrimaryText>
-            If the email you registered with is invalid, Please logout and
-            re-register with the correct email.
+            If the email you registered with is invalid, please logout and
+            re-register with the correct/valid email.
           </PrimaryText>
         </FlexBox>
         <FlexBox marginTop={10} width="100%">

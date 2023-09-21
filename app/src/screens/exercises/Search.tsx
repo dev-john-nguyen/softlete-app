@@ -28,9 +28,6 @@ import SearchFilter from '../../components/SearchFilter';
 import { AppDispatch } from '../../../App';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { ProgramStackScreens } from '../program/types';
-import DashboardDemo from '../../components/demo/Demo';
-import { DemoStates } from '../../services/global/types';
-import { SET_DEMO_STATE } from '../../services/global/actionTypes';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
 
 interface Props {
@@ -50,14 +47,14 @@ const Exercises = ({
   updateProgramWorkoutExercises,
   dispatch,
 }: Props) => {
-  const { exercisesProps, pinExercises, user, offline, demoState } =
-    useSelector((state: ReducerProps) => ({
+  const { exercisesProps, pinExercises, user, offline } = useSelector(
+    (state: ReducerProps) => ({
       exercisesProps: state.exercises.data,
       pinExercises: state.misc.pinExercises,
       user: state.user,
       offline: state.global.offline,
-      demoState: state.global.demoState,
-    }));
+    }),
+  );
   const [exercises, setExercises] = useState<
     { title: string; data: ExerciseProps[] }[]
   >([]);
@@ -178,8 +175,6 @@ const Exercises = ({
   const onExercisePress = (exercise: ExerciseProps) => {
     setShowFilter(false);
     if (route.params && route.params) {
-      if (demoState)
-        dispatch({ type: SET_DEMO_STATE, payload: DemoStates.WO_EX_ADDED });
       onSendExerciseToWorkout(exercise);
     } else {
       navigation.navigate(HomeStackScreens.Exercise, {
@@ -277,7 +272,6 @@ const Exercises = ({
       leftContentFlex={0}
       rightContentFlex={0}
       middleContent={<SearchHeader onSearch={onSearch} onChange={onSearch} />}>
-      <DashboardDemo screen={HomeStackScreens.SearchExercises} />
       <SearchFilter
         show={showFilter}
         onHide={() => setShowFilter(false)}

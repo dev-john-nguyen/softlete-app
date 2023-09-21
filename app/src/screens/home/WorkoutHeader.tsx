@@ -22,7 +22,6 @@ import { updateProgramWorkoutHeader } from '../../services/program/actions';
 import { HomeStackScreens } from './types';
 import { HealthActivity } from 'react-native-health';
 import { renderHealthActivityName } from '../../utils/format';
-import DashboardDemo from '../../components/demo/Demo';
 import useBanner from 'src/hooks/utils/useBanner';
 import { RouteProp } from '@react-navigation/native';
 
@@ -37,7 +36,6 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
     genPrograms: state.program.generatedPrograms,
     targetProgram: state.program.targetProgram,
     workoutHeader: state.workout.workoutHeader,
-    demoState: state.global.demoState,
   }));
 
   const [type, setType] = useState<HealthActivity>(
@@ -191,7 +189,6 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
       onDatePickerClose={() => setDatePicker(false)}
       onDatePickerChange={value => setDate(value)}
       middleContent={<PrimaryText size="large">Workout Details</PrimaryText>}>
-      <DashboardDemo screen={HomeStackScreens.WorkoutHeader} />
       <FlexBox column>
         <PrimaryText size="small" marginBottom={10}>
           Fill out the form below.

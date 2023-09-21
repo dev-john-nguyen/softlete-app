@@ -4,13 +4,13 @@ import Icon from '@app/icons';
 import { PickerButton, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
-import { logout } from 'src/services/absolute-exports';
 import { SettingsStackScreens } from './types';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { AdminStackList } from 'src/screens/admin/screens/types';
 import { IndexStackList } from '../types';
+import { logout } from '@app/services';
 
 interface Props {
   navigation: any;

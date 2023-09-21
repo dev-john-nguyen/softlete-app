@@ -14,6 +14,8 @@ import DatePicker from 'react-native-date-picker';
 import { Colors, moderateScale } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
 import PrimaryText from './PrimaryText';
+import { DemoStates } from '@app/services';
+import DemoArrow from './DemoArrow';
 
 interface Props {
   children: any;
@@ -106,6 +108,7 @@ const ScreenTemplate = ({
             <FlexBox
               flex={headerTitleFormatted ? 0 : leftContentFlex ?? 0.3}
               alignItems="center">
+              <DemoArrow state={[DemoStates.WORKOUT_VIEW_BACK]} />
               {isBackVisible && (
                 <BackButton
                   onPress={goBackHandler}

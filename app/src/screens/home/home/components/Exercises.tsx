@@ -10,6 +10,8 @@ import SectionHeader from '../../../../components/home/components/SectionHeader'
 import { useNavigation } from '@react-navigation/native';
 import PrimaryText from '../../../../components/elements/PrimaryText';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { DemoArrow } from '@app/elements';
+import { DemoStates } from '@app/services';
 
 interface Props {
   pinAnalytics: AnalyticsProps[];
@@ -44,6 +46,12 @@ const HomeExercises = ({
           desc="Pin multiple exercises and quickly access your previous performances."
           RightElement={
             <FlexBox>
+              <DemoArrow
+                state={[
+                  DemoStates.EXERCISE_HOME_EXERCISE_LIST,
+                  DemoStates.EXERCISE_HOME_ENDURANCE,
+                ]}
+              />
               <Icon
                 icon="cardio"
                 size={20}
@@ -62,6 +70,7 @@ const HomeExercises = ({
             </FlexBox>
           }
         />
+        <DemoArrow state={[DemoStates.EXERCISE_HOME_PINNED]} />
         <FlexBox
           alignItems="center"
           justifyContent="space-between"

@@ -10,6 +10,7 @@ import athletesReducer from './athletes/reducer';
 import chatReducer from './chat/reducer';
 import notificationReducer from './notifications/reducer';
 import goalsReducer from './goals/slice';
+import demoReducer from './demo/slice';
 
 import { GoalsRootStateProps } from './goals/types';
 import { MiscProps } from './misc/types';
@@ -24,6 +25,7 @@ import { ChatRootProps } from './chat/types';
 import { NotificationRootProps } from './notifications/types';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
+import { DemoProps } from './services';
 
 export default combineReducers({
   user: userReducer,
@@ -37,6 +39,7 @@ export default combineReducers({
   chat: chatReducer,
   notifications: notificationReducer,
   goals: goalsReducer,
+  demo: demoReducer,
 });
 
 export interface ReducerProps {
@@ -51,6 +54,7 @@ export interface ReducerProps {
   chat: ChatRootProps;
   notifications: NotificationRootProps;
   goals: GoalsRootStateProps;
+  demo: DemoProps;
 }
 
 export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;

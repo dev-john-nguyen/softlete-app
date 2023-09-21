@@ -1,10 +1,11 @@
 import React from 'react';
-import { PrimaryText } from '@app/elements';
+import { DemoArrow, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors, StyleConstants, rgba, normalize, Constants } from '@app/utils';
 import Icon from '@app/icons';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
+import { DemoStates } from '@app/services';
 
 type HomeNavBarProps = {
   currentIndex: number;
@@ -23,6 +24,14 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
       marginLeft={20}
       padding={10}
       backgroundColor={rgba(Colors.whiteRbg, 0.1)}>
+      <DemoArrow
+        state={[
+          DemoStates.HOME_WORKOUT_NAV_PRESS,
+          DemoStates.HOME_WORKOUTS,
+          DemoStates.HOME_NAVIGATION_HEALTH,
+          DemoStates.EXERCISE_HOME_VIEW_PRESS,
+        ]}
+      />
       <Icon
         icon="heart"
         size={22}
@@ -37,7 +46,6 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
           currentIndex === 0 ? Colors.white : rgba(Colors.whiteRbg, 0.5)
         }
       />
-
       <Icon
         icon="notebook"
         size={22}
@@ -50,7 +58,6 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
         hitSlop={10}
         color={currentIndex === 1 ? Colors.white : rgba(Colors.whiteRbg, 0.5)}
       />
-
       <Icon
         icon="graph"
         size={22}

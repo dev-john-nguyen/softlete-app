@@ -1,0 +1,296 @@
+{
+  "_id": "64ea14824c238df0849020b9",
+  "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+  "date": "",
+  "status": "pending",
+  "type": "TraditionalStrengthTraining",
+  "name": "lower body",
+  "description": "Lower body focused",
+  "isPrivate": false,
+  "likeUids": [],
+  "sentNotification": false,
+  "createdAt": "",
+  "updatedAt": "",
+  "__v": 0,
+  "exercises": [
+    {
+      "_id": "64ea148a4c238df0849020bc",
+      "data": [
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea148a4c238df0849020bd"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea14a54c238df0849020c9"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 20,
+          "pct": 100,
+          "warmup": false,
+          "_id": "64ea14a54c238df0849020ca"
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": false
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0
+        }
+      ],
+      "date": "2023-08-26T00:00:00.000Z",
+      "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+      "workoutUid": "64ea14824c238df0849020b9",
+      "exerciseUid": "64ea0d974933fae642f1d214",
+      "group": 0,
+      "order": -1,
+      "createdAt": "2023-08-26T15:04:42.793Z",
+      "updatedAt": "2023-08-26T15:05:09.973Z",
+      "calcRef": 0,
+      "id": "64ea148a4c238df0849020bc",
+      "exercise": {
+        "_id": "64ea0d974933fae642f1d214",
+        "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+        "videoId": "",
+        "__v": 0,
+        "category": "strength",
+        "createdAt": "2023-08-26T14:35:02.978Z",
+        "description": "Your custom exercise description",
+        "equipment": "Barbell",
+        "localThumbnail": "",
+        "localUrl": "",
+        "muscleGroup": "glutes",
+        "name": "custom exercise",
+        "updatedAt": "2023-08-26T14:35:02.978Z",
+        "youtubeId": "",
+        "measCat": "weight",
+        "measSubCat": "pounds",
+        "url": "",
+        "thumbnail": "",
+        "owner": true
+      }
+    },
+    {
+      "_id": "64ea149d4c238df0849020c2",
+      "data": [
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea149d4c238df0849020c3"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea14a54c238df0849020cc"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 20,
+          "pct": 100,
+          "warmup": false,
+          "_id": "64ea14a54c238df0849020cd"
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": false
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0
+        }
+      ],
+      "date": "2023-08-26T00:00:00.000Z",
+      "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+      "workoutUid": "64ea14824c238df0849020b9",
+      "exerciseUid": "61e0a89b026beaae1a49dcf2",
+      "group": 0,
+      "order": 0,
+      "createdAt": "2023-08-26T15:05:01.153Z",
+      "updatedAt": "2023-08-26T15:05:09.973Z",
+      "calcRef": 0,
+      "id": "64ea149d4c238df0849020c2",
+      "exercise": {
+        "localUrl": "",
+        "localThumbnail": "",
+        "videoId": "",
+        "softlete": true,
+        "measCat": "weight",
+        "measSubCat": "pounds",
+        "_id": "61e0a89b026beaae1a49dcf2",
+        "description": "Back upright, chest up, shoulders back, take a dumbbell in each hand.  Step forward and come down, so that your knee almost touches the floor. Come up and take another step, and so on.  When you reach the end, take a short rest, turn around and go again. ",
+        "category": "weights",
+        "muscleGroup": "Legs",
+        "equipment": "Dumbbell",
+        "name": "Walking Dumbbell Lunges",
+        "youtubeId": "D7KaRcUTQeE",
+        "url": "",
+        "thumbnail": ""
+      }
+    },
+    {
+      "_id": "64ea165a4c238df0849020f1",
+      "data": [
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea165a4c238df0849020f2"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea16604c238df0849020fd"
+        },
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 20,
+          "pct": 100,
+          "warmup": false,
+          "_id": "64ea16604c238df0849020fe"
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": false
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0
+        }
+      ],
+      "date": "2023-08-26T00:00:00.000Z",
+      "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+      "workoutUid": "64ea14824c238df0849020b9",
+      "exerciseUid": "64ea15ff45d9245ab07a3d9d",
+      "group": 1,
+      "order": 0,
+      "createdAt": "2023-08-26T15:12:26.723Z",
+      "updatedAt": "2023-08-26T15:12:32.283Z",
+      "calcRef": 0,
+      "id": "64ea165a4c238df0849020f1",
+      "exercise": {
+        "localUrl": "",
+        "localThumbnail": "",
+        "videoId": "",
+        "softlete": true,
+        "measCat": "weight",
+        "measSubCat": "pounds",
+        "_id": "64ea15ff45d9245ab07a3d9d",
+        "description": "Target your hamstrings and lower back with this effective barbell exercise.",
+        "name": "Romanian Deadlift (RDL)",
+        "category": "Strength",
+        "muscleGroup": "Hamstrings, Lower Back",
+        "equipment": "Barbell",
+        "youtubeId": "_oyxCn2iSjU",
+        "url": "",
+        "thumbnail": ""
+      }
+    },
+    {
+      "_id": "64ea166e4c238df084902101",
+      "data": [
+        {
+          "reps": 10,
+          "performVal": 0,
+          "predictVal": 10,
+          "pct": 100,
+          "warmup": true,
+          "_id": "64ea166e4c238df084902102"
+        },
+        {
+          "predictVal": 10,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": true
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": false
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "performVal": 0,
+          "warmup": false
+        },
+        {
+          "predictVal": 20,
+          "reps": 10,
+          "pct": 100,
+          "warmup": false,
+          "performVal": 0
+        }
+      ],
+      "date": "2023-08-26T00:00:00.000Z",
+      "userUid": "3nJ6ns7x2WVzjzF4zMcXbnc615q1",
+      "workoutUid": "64ea14824c238df0849020b9",
+      "exerciseUid": "61e0a89b026beaae1a49dcb3",
+      "group": 1,
+      "order": 2,
+      "createdAt": "2023-08-26T15:12:46.573Z",
+      "updatedAt": "2023-08-26T15:12:46.573Z",
+      "calcRef": 0,
+      "id": "64ea166e4c238df084902101",
+      "exercise": {
+        "localUrl": "",
+        "localThumbnail": "",
+        "videoId": "",
+        "softlete": true,
+        "measCat": "weight",
+        "measSubCat": "pounds",
+        "_id": "61e0a89b026beaae1a49dcb3",
+        "description": "Working calves is a simple matter of up and down.  This can be done on a dedicated machine, or on a Smith Machine by placing a step below the bar.  Stretch at the bottom, squeeze at the top.   You can vary the movement by pointing the toes inwards for one set, and outwards for the next set. ",
+        "category": "weights",
+        "muscleGroup": "Legs",
+        "equipment": "Machine",
+        "name": "Machine Calf Raises",
+        "youtubeId": "Hu8i9d_IgpM",
+        "url": "",
+        "thumbnail": ""
+      }
+    }
+  ]
+}

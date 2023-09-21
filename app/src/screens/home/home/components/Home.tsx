@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../../../App';
-import DashboardDemo from '../../../../components/demo/Demo';
 import HomeExercises from './Exercises';
 import HomeWorkouts from './Workouts';
 import { ReducerProps } from '../../../../services';
@@ -213,7 +212,6 @@ const Home = ({
       pickerValue={picker === 'chartFilter' ? chartFilter : selectedEx?._id}
       onPickerChangeValue={onPickerChange}>
       <HomeBackground />
-      <DashboardDemo screen={HomeStackScreens.Home} />
       <HomeHeader />
       <HomeNavBar currentIndex={currentIndex} scrollRef={scrollRef} />
       <ScrollView

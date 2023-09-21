@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Colors } from '@app/utils';
-import { CircleAdd } from '@app/elements';
+import { CircleAdd, DemoArrow } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { AppDispatch } from '../../../../../App';
 import { HomeStackScreens } from '../../types';
@@ -30,6 +30,7 @@ import { LocationValue } from 'react-native-health';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@app/icons';
 import WorkoutPreviewList from 'src/components/workout/preview/PreviewList';
+import { DemoStates } from '@app/services';
 
 interface Props {
   wos: WorkoutProps[];
@@ -105,6 +106,12 @@ const HomeWorkouts = ({
         desc={desc}
         RightElement={
           <FlexBox>
+            <DemoArrow
+              state={[
+                DemoStates.HOME_WORKOUTS_CALENDAR,
+                DemoStates.HOME_WORKOUTS_DEVICE_ACTIVITES,
+              ]}
+            />
             <Icon
               icon="upload"
               onPress={onNavToDeviceActivities}

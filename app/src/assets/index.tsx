@@ -65,8 +65,10 @@ import AddRing from './AddRing';
 import PauseSvg from './PauseSvg';
 import Cardio from './Cardio';
 import KettleBell from './KettleBell';
+import Bot from './Bot';
 
 const Icons = {
+  bot: (props: any) => <Bot {...props} />,
   kettlebell: (props: any) => <KettleBell {...props} />,
   cardio: (props: any) => <Cardio {...props} />,
   chevron: (props: any) => <Chevron {...props} />,

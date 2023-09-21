@@ -10,9 +10,10 @@ interface Props {
     date: Date;
     value: number;
   }[];
+  hasBgColor?: boolean;
 }
 
-const ExerciseChart = ({ data }: Props) => {
+const ExerciseChart = ({ data, hasBgColor = true }: Props) => {
   const [activeDot, setActiveDot] = useState<number | undefined>();
   const [months, setMonths] = useState<string[]>([]);
   const [values, setValues] = useState<number[]>([]);
@@ -44,7 +45,7 @@ const ExerciseChart = ({ data }: Props) => {
   if (values.length < 2) {
     return (
       <FlexBox flex={1} marginTop={20} marginBottom={10}>
-        <GraphPlaceholder />
+        <GraphPlaceholder hasBgColor={hasBgColor} />
       </FlexBox>
     );
   }

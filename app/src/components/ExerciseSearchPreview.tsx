@@ -7,9 +7,9 @@ import {
   ExerciseVideo,
 } from '@app/elements';
 import React from 'react';
-import { UserProps } from 'src/services/absolute-exports';
 import { ExerciseProps } from 'src/services/exercises/types';
 import Icon from '@app/icons';
+import { UserProps } from '@app/services';
 
 interface Props {
   exercise: ExerciseProps;

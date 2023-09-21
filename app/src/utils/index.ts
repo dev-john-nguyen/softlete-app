@@ -12,3 +12,5 @@ export { default as TimeConverter } from './TimeConverter';
 export { default as AutoId } from './AutoId';
 export * from '../services/utils/request';
 export { default as PATHS } from './PATHS';
+export { default as DemoExerciseData } from './demo/demo-exercise.json';
+export { default as DemoWorkoutData } from './demo/demo-workout.json';

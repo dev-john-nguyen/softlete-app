@@ -12,7 +12,28 @@ import { ExerciseProps } from '../exercises/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
 import cloneDeep from 'lodash/cloneDeep';
-import { Colors } from '@app/utils';
+import { AutoId, Colors, DemoWorkoutData } from '@app/utils';
+
+export const demoWoHelper = (userUid: string) => {
+  // need to duplicate 3 times (one current day, and one last week and week prior)
+  // increment numbers
+  const workouts = [];
+  for (let i = 0; i < 3; i++) {
+    const demoWo = cloneDeep(DemoWorkoutData);
+    demoWo._id = AutoId.newId();
+    demoWo.userUid = userUid;
+    // Generate date based on index and increment by a week
+    const date = new Date();
+    // set times to 0
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setMilliseconds(0);
+    date.setDate(date.getDate() - i * 7); // Increment by week
+    demoWo.date = date.toISOString(); // Convert date to ISO string
+    workouts.push(demoWo);
+  }
+  return workouts as WorkoutProps[];
+};
 
 interface NewWorkoutProps {
   exercises: WorkoutExerciseProps[];
@@ -23,7 +44,7 @@ export function getMonthWorkouts(month: number, workouts: WorkoutProps[]) {
   const thisMonthWos: WorkoutProps[] = [];
 
   workouts.forEach(w => {
-    const wDate = DateTools.UTCISOToLocalDate(w.date);
+    const wDate = DateTools.UTCISOToLocalDate(w.date as string);
     if (wDate.getMonth() === month) {
       thisMonthWos.push(w);
     }
@@ -64,8 +85,8 @@ export function findAndUpdateWorkouts(
 
   return mutateStateWorkouts.sort(
     (a, b) =>
-      DateTools.UTCISOToLocalDate(a.date).getTime() -
-      DateTools.UTCISOToLocalDate(b.date).getTime(),
+      DateTools.UTCISOToLocalDate(a.date as string).getTime() -
+      DateTools.UTCISOToLocalDate(b.date as string).getTime(),
   );
 }
 
@@ -154,7 +175,7 @@ export function findAndUpdateSelectedDateWorkouts(
     //filter there is a program filter active check filter
     if (filterByProgramUid && filterByProgramUid !== w.programUid) return false;
 
-    const date = DateTools.UTCISOToLocalDate(w.date);
+    const date = DateTools.UTCISOToLocalDate(w.date as string);
     const dateStr = DateTools.dateToStr(date);
     if (dateStr === selectedDate) return true;
     return false;
@@ -243,8 +264,8 @@ export function findMonthWorkouts(
 
   const monthWorkouts: MonthWorkoutsProps = {};
 
-  stateWorkouts.forEach((w, i) => {
-    const wDate = DateTools.UTCISOToLocalDate(w.date);
+  stateWorkouts.forEach(w => {
+    const wDate = DateTools.UTCISOToLocalDate(w.date as string);
     const wDateStr = DateTools.dateToStr(wDate);
     const key = w._id;
     if (wDate.getMonth() === month) {

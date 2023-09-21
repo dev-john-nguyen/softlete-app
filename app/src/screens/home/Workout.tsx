@@ -2,7 +2,7 @@ import React, { useEffect, useState, Dispatch, useCallback } from 'react';
 import { ReducerProps } from '../../services';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   WorkoutActionProps,
   WorkoutStatus,
@@ -30,9 +30,6 @@ import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
 import OverviewContainer from '../../components/workout/overview/Container';
 import { updateProgramWoHealthData } from '../../services/program/actions';
-import DashboardDemo from '../../components/demo/Demo';
-import { DemoStates } from '../../services/global/types';
-import { SET_DEMO_STATE } from '../../services/global/actionTypes';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
 import { LocationValue } from 'react-native-health';
 import { handleDeviceActivityImport } from '../../helpers/route.helpers';
@@ -44,6 +41,8 @@ import {
 } from '@react-navigation/native';
 import useBanner from 'src/hooks/utils/useBanner';
 import { FlexBox } from '@app/ui';
+import { DemoArrow } from '@app/elements';
+import { DemoStates } from '@app/services';
 
 interface Props {
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
@@ -62,15 +61,13 @@ const Workout = ({
   const [program, setProgram] = useState<GeneratedProgramProps>();
   const [reflection, setReflection] = useState('');
   const [image, setImage] = useState<ImageProps>();
-  const { workout, demoState, genPrograms, targetProgram } = useSelector(
+  const { workout, genPrograms, targetProgram } = useSelector(
     (state: ReducerProps) => ({
       workout: state.workout.viewWorkout,
       genPrograms: state.program.generatedPrograms,
       targetProgram: state.program.targetProgram,
-      demoState: state.global.demoState,
     }),
   );
-  const dispatch = useDispatch<any>();
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const setBanner = useBanner();
@@ -141,10 +138,6 @@ const Workout = ({
       return;
     }
 
-    if (status === WorkoutStatus.inProgress && demoState) {
-      dispatch({ type: SET_DEMO_STATE, payload: DemoStates.WO_PROGRESS });
-    }
-
     await updateWorkoutStatus(workout._id, status).catch(err => {
       console.log(err);
     });
@@ -170,9 +163,6 @@ const Workout = ({
       ...workout,
       exercises: exercises ? exercises : workout.exercises,
     };
-
-    if (demoState)
-      dispatch({ type: SET_DEMO_STATE, payload: DemoStates.WO_COMPLETED });
 
     await completeWorkout(completedWorkout, 0, reflection, image).catch(err => {
       console.log(err);
@@ -221,6 +211,7 @@ const Workout = ({
         onGoBack={onBackButtonPress}
         rightContent={
           <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+            <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             {workout?.status !== WorkoutStatus.inProgress && (
               <Icon
                 icon="ellipsis"
@@ -233,7 +224,15 @@ const Workout = ({
             )}
           </FlexBox>
         }>
-        <DashboardDemo screen={HomeStackScreens.Workout} />
+        <DemoArrow
+          state={[
+            DemoStates.WORKOUT_VIEW,
+            DemoStates.WORKOUT_VIEW_STATUS,
+            DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
+            DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+          ]}
+        />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (
