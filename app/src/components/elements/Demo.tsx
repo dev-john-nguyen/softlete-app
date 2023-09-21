@@ -59,7 +59,7 @@ const Demo = () => {
       borderRadius: 5,
       backgroundColor: Colors.white,
       zIndex: 1000,
-      maxWidth: '95%',
+      maxWidth: '100%',
       flexDirection: 'row',
       alignItems: 'center',
     };
