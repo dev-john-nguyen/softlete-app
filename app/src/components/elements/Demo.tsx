@@ -71,12 +71,16 @@ const Demo = () => {
     if (currentIndex > -1) {
       const nextIndex = currentIndex + add;
       if (nextIndex >= demoStateArray.length) {
-        dispatch(setDemoState(undefined));
-        dispatch({ type: CLEAR_DEMO_STATE_DATA });
+        exitHandler();
       } else if (nextIndex > -1 && nextIndex < demoStateArray.length) {
         dispatch(setDemoState(demoStateArray[currentIndex + add]));
       }
     }
+  };
+
+  const exitHandler = () => {
+    dispatch(setDemoState(undefined));
+    dispatch({ type: CLEAR_DEMO_STATE_DATA });
   };
 
   if (!demo.state) return <></>;
@@ -85,6 +89,7 @@ const Demo = () => {
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View style={animatedStyle}>
         <FlexBox
+          flex={1}
           alignItems="center"
           onPress={demoStateHandler(1)}
           onLongPress={demoStateHandler(-1)}>
@@ -99,6 +104,15 @@ const Demo = () => {
           <FlexBox column marginLeft={10} justifyContent="center" flex={1}>
             <PrimaryText color={Colors.primary}>{demo.state}</PrimaryText>
           </FlexBox>
+        </FlexBox>
+        <FlexBox
+          onPress={exitHandler}
+          backgroundColor={Colors.primary}
+          borderRadius={8}
+          padding={5}
+          paddingLeft={8}
+          paddingRight={8}>
+          <PrimaryText fontSize={12}>Exit</PrimaryText>
         </FlexBox>
       </Animated.View>
     </PanGestureHandler>
