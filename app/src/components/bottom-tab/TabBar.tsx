@@ -73,7 +73,7 @@ const TabBar = ({
     [state],
   );
 
-  // if (isHidden) return <></>;
+  if (isHidden) return <></>;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
