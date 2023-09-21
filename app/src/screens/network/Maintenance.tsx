@@ -1,31 +1,24 @@
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
 import PrimaryText from '../../components/elements/PrimaryText';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
-import StyleConstants from '../../components/tools/StyleConstants';
-import BaseColors from '../../utils/BaseColors';
+import { FlexBox } from '@app/ui';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
-interface Props {}
-
-const Maintenance = ({}: Props) => {
+const Maintenance = () => {
   return (
     <ScreenTemplate>
-      <View style={styles.container}>
-        <PrimaryText styles={styles.text}>Coming Soon</PrimaryText>
-      </View>
+      <FlexBox flex={1} column alignItems="center" justifyContent="center">
+        <PrimaryText bold fontSize={30} variant="primary" marginBottom={5}>
+          Softlete Social
+        </PrimaryText>
+        <Icon icon="world" size={100} color={Colors.lightWhite} />
+        <PrimaryText bold size="large" marginTop={20}>
+          Coming Soon!
+        </PrimaryText>
+      </FlexBox>
     </ScreenTemplate>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: StyleConstants.largeFont,
-    color: BaseColors.white,
-  },
-});
 export default Maintenance;
