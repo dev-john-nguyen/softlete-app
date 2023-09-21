@@ -1,10 +1,15 @@
 import React from 'react';
-import { SET_NEW_USER_STATE } from '../../services/global/actionTypes';
+import {
+  INIT_DEMO_STATE_DATA,
+  SET_NEW_USER_STATE,
+} from '../../services/global/actionTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { PrimaryButton, PrimaryText, ScreenTemplate } from '@app/elements';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
+import auth from '@react-native-firebase/auth';
+import { DemoStates, setDemoState } from '@app/services';
 
 const NewUserAdvise = () => {
   const dispatch = useDispatch();
@@ -13,8 +18,9 @@ const NewUserAdvise = () => {
   );
 
   const onContinue = () => {
-    // removing demo right now as it's not a priority
-    // dispatch({ type: SET_DEMO_STATE, payload: DemoStates.HOME_WOS });
+    const currentUser = auth().currentUser;
+    dispatch({ type: INIT_DEMO_STATE_DATA, payload: currentUser?.uid });
+    dispatch(setDemoState(DemoStates.INIT));
     dispatch({ type: SET_NEW_USER_STATE, payload: false });
   };
 
