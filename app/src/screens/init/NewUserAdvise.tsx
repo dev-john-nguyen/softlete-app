@@ -35,27 +35,29 @@ const NewUserAdvise = () => {
         Welcome {user.name ? user.name : user.username}!
       </PrimaryText>
 
+      <PrimaryText bold>Help/Tips</PrimaryText>
       <PrimaryText marginBottom={10}>
-        If you get lost or have trouble understanding functionalities, please
-        look for the help/tips{' '}
-        <Icon icon="info" size={15} color={Colors.white} /> icons. You can find
-        the help/tips icon in most menus throughout the app.
+        {`If you get lost or have trouble understanding functionalities, look for the help/tips`}
+        <Icon icon="info" size={15} color={Colors.white} />
+        {` icon. You can find the help/tips icon in most menus throughout the app.`}
       </PrimaryText>
 
-      <PrimaryText bold marginBottom={5}>
-        Issues
-      </PrimaryText>
+      <PrimaryText bold>Issues</PrimaryText>
       <PrimaryText marginBottom={10}>
-        If you identify any issues please submit an bug form that can be found
-        under settings.
+        If you identify any issues please submit a bug report. They can be found
+        under the settings of the app or our website.
       </PrimaryText>
 
-      <PrimaryText bold marginBottom={5}>
-        Feedback
-      </PrimaryText>
-      <PrimaryText marginBottom={20}>
+      <PrimaryText bold>Feedback</PrimaryText>
+      <PrimaryText marginBottom={10}>
         {`Please let us know how we are doing by visiting our website and feeling out the feedback form. We would love to hear from you :).`}
       </PrimaryText>
+
+      <PrimaryText bold>Next</PrimaryText>
+      <PrimaryText
+        marginBottom={
+          20
+        }>{`We're going to start with a brief demo to help you become familiar with where most things are in the app.`}</PrimaryText>
 
       <PrimaryButton onPress={onContinue}>{`I'm ready`}</PrimaryButton>
     </ScreenTemplate>
