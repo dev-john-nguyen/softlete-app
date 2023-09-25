@@ -212,6 +212,12 @@ const Workout = ({
         rightContent={
           <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
+            <Icon
+              icon="timer"
+              size={25}
+              color={Colors.white}
+              onPress={() => navigation.navigate(HomeStackScreens.Timer)}
+            />
             {workout?.status !== WorkoutStatus.inProgress && (
               <Icon
                 icon="ellipsis"
@@ -220,6 +226,7 @@ const Workout = ({
                 onPress={() =>
                   navigation.navigate(HomeStackScreens.WorkoutModal)
                 }
+                containerStyles={{ marginLeft: 10 }}
               />
             )}
           </FlexBox>

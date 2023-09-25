@@ -1,23 +1,9 @@
 import { PickerButton, PrimaryText } from '@app/elements';
 import { IconOptions } from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { useNavigation } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { Colors, rgba } from '@app/utils';
-
-const UnderLay = () => {
-  const navigation = useNavigation();
-  return (
-    <FlexBox
-      onPress={() => navigation.goBack()}
-      height="100%"
-      width="100%"
-      position="absolute"
-      zIndex={0}
-      column
-    />
-  );
-};
+import UnderLay from './Underlay';
 
 export type MenuItemProps = {
   onPress: () => void;
