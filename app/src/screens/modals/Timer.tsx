@@ -1,32 +1,12 @@
 import { PrimaryButton, PrimaryText, CustomPicker } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
-import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import UnderLay from './Underlay';
 import { PickerOptionProp } from 'src/components/elements/Picker';
-import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
-import useBanner from 'src/hooks/utils/useBanner';
-
-function secondsToTime(seconds: number) {
-  if (isNaN(seconds) || seconds < 0) {
-    // Handle invalid input
-    return {
-      hrs: 0,
-      mins: 0,
-      secs: 0,
-    };
-  }
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  return {
-    hrs: hours,
-    mins: minutes,
-    secs: remainingSeconds,
-  };
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { ReducerProps, ThunkAppDispatch } from 'src/services';
+import { clearTime, setTime, startTimerHandler } from '@app/services';
 
 enum PickerTimers {
   hrs = 'hrs',
@@ -47,24 +27,18 @@ const minsnsecsArr: PickerOptionProp[] = new Array(60)
   }));
 
 const Timer = () => {
-  const [isRunning, setIsRunning] = useState(false);
-  const timerId = useRef<NodeJS.Timer>();
-  const [time, setTime] = useState({
-    hrs: 0,
-    mins: 0,
-    secs: 0,
-  });
+  const dispatch = useDispatch<ThunkAppDispatch>();
+  const { isRunning, time } = useSelector((state: ReducerProps) => state.timer);
   const [isPickerOpen, setIsPickerOpen] = useState<PickerTimers>();
-  const setBanner = useBanner();
 
   const onPickerChangeValue = (value: string) => {
-    setTime(prevTime => {
-      if (!isPickerOpen) return prevTime;
-      return {
-        ...prevTime,
+    if (!isPickerOpen) return;
+    dispatch(
+      setTime({
+        ...time,
         [isPickerOpen]: parseInt(value) || 0,
-      };
-    });
+      }),
+    );
   };
 
   const pickerOptions: PickerOptionProp[] = useMemo(() => {
@@ -79,73 +53,9 @@ const Timer = () => {
     }
   }, [isPickerOpen]);
 
-  useEffect(() => {
-    return () => timerId.current && clearInterval(timerId.current);
-  }, []);
+  const startTimer = () => dispatch(startTimerHandler());
 
-  const notifyHandler = async () => {
-    const settings = await notifee.getNotificationSettings();
-    if (settings.authorizationStatus >= IOSAuthorizationStatus.AUTHORIZED) {
-      notifee.displayNotification({
-        title: 'Workout Timer Finished!',
-        ios: {
-          foregroundPresentationOptions: {
-            badge: true,
-            sound: true,
-          },
-        },
-      });
-    } else {
-      setBanner('Workout Timer Finished!');
-    }
-  };
-
-  const startTimer = () => {
-    if (!isRunning) {
-      // convert time to seconds
-      const hrSecs = time.hrs * 60 * 60;
-      const minSecs = time.mins * 60;
-      const userInput = hrSecs + minSecs + time.secs;
-      if (userInput < 1) {
-        return setBanner('Please add time to the timer to start the timer');
-      }
-      setIsRunning(true);
-      timerId.current = setInterval(() => {
-        setTime(prevTime => {
-          const hrSecs = prevTime.hrs * 60 * 60;
-          const minSecs = prevTime.mins * 60;
-          let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
-          if (prevTimeInSecs <= 0) {
-            // timer finished
-            // notifiy
-            notifyHandler();
-            timerId.current && clearInterval(timerId.current);
-            setIsRunning(false);
-            return {
-              hrs: 0,
-              mins: 0,
-              secs: 0,
-            };
-          }
-          prevTimeInSecs--;
-          return secondsToTime(prevTimeInSecs);
-        });
-      }, 1000); // Timer interval in milliseconds (1 second)
-    } else {
-      timerId.current && clearInterval(timerId.current);
-      setIsRunning(false);
-    }
-  };
-
-  const cancelTimer = () => {
-    timerId.current && clearInterval(timerId.current);
-    setIsRunning(false);
-    setTime({
-      hrs: 0,
-      mins: 0,
-      secs: 0,
-    });
-  };
+  const cancelTimer = () => dispatch(clearTime());
 
   return (
     <Fragment>
