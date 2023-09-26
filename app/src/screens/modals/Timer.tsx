@@ -4,6 +4,7 @@ import { Colors, rgba } from '@app/utils';
 import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import UnderLay from './Underlay';
 import { PickerOptionProp } from 'src/components/elements/Picker';
+import notifee, { IOSAuthorizationStatus } from '@notifee/react-native';
 import useBanner from 'src/hooks/utils/useBanner';
 
 function secondsToTime(seconds: number) {
@@ -76,12 +77,28 @@ const Timer = () => {
       default:
         return [];
     }
-    return [];
   }, [isPickerOpen]);
 
   useEffect(() => {
     return () => timerId.current && clearInterval(timerId.current);
   }, []);
+
+  const notifyHandler = async () => {
+    const settings = await notifee.getNotificationSettings();
+    if (settings.authorizationStatus >= IOSAuthorizationStatus.AUTHORIZED) {
+      notifee.displayNotification({
+        title: 'Workout Timer Finished!',
+        ios: {
+          foregroundPresentationOptions: {
+            badge: true,
+            sound: true,
+          },
+        },
+      });
+    } else {
+      setBanner('Workout Timer Finished!');
+    }
+  };
 
   const startTimer = () => {
     if (!isRunning) {
@@ -99,6 +116,9 @@ const Timer = () => {
           const minSecs = prevTime.mins * 60;
           let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
           if (prevTimeInSecs <= 0) {
+            // timer finished
+            // notifiy
+            notifyHandler();
             timerId.current && clearInterval(timerId.current);
             setIsRunning(false);
             return {
