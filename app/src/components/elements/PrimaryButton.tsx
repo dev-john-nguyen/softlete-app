@@ -31,8 +31,8 @@ const PrimaryButton = ({
           if (variant === 'secondary') {
             return {
               backgroundColor: pressed
-                ? rgba(Colors.whiteRbg, 0.3)
-                : rgba(Colors.whiteRbg, 0.2),
+                ? rgba(Colors.whiteRbg, 0.5)
+                : rgba(Colors.whiteRbg, 0.8),
               borderWidth: 1,
               borderColor: Colors.white,
             };
@@ -65,7 +65,7 @@ const PrimaryButton = ({
       onPress={onPress}>
       <PrimaryText
         textTransform={stylesProps.textTransform}
-        color={variant === 'secondary' ? Colors.white : Colors.white}
+        color={variant === 'secondary' ? Colors.primary : Colors.white}
         variant={fontVariant}
         size={fontSize}>
         {children}

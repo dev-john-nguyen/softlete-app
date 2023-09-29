@@ -39,6 +39,7 @@ import {
 import './permissions/health';
 import PrimaryText from './components/elements/PrimaryText';
 import Demo from './components/elements/Demo';
+import { TimerBanner } from './components/TimerBanner';
 
 const Tab = createBottomTabNavigator<IndexStackParamsList>();
 
@@ -123,6 +124,7 @@ const Main = ({
           </Tab.Navigator>
         </NavigationContainer>
       )}
+      <TimerBanner />
       <Banner />
       <Demo />
     </SafeAreaProvider>

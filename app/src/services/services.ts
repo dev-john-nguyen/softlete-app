@@ -3,3 +3,7 @@ export * from './demo/types';
 export * from './user/actionTypes';
 export * from './user/types';
 export * from './user/actions';
+export * from './banner/actions';
+export * from './banner/actionTypes';
+export * from './timer/slice';
+export * from './timer/types';

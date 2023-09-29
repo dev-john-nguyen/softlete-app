@@ -30,6 +30,7 @@ import { HealthGoalForm } from './health-goal';
 import { EnduranceAnalytics } from './endurance';
 import WorkoutHelp from './WorkoutHelp';
 import WorkoutModal from '../modals/WorkoutModal';
+import Timer from '../modals/Timer';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -273,6 +274,15 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.WorkoutModal}
           component={WorkoutModal}
+          options={{
+            title: '',
+            headerRight: undefined,
+            headerTransparent: true,
+          }}
+        />
+        <Tab.Screen
+          name={HomeStackScreens.Timer}
+          component={Timer}
           options={{
             title: '',
             headerRight: undefined,

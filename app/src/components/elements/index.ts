@@ -27,3 +27,4 @@ export { default as PaginatedHorizontalList } from './PaginatedHorizontalList';
 export { default as HealthCircle } from './HealthCircle';
 export { default as Demo } from './Demo';
 export { default as DemoArrow } from './DemoArrow';
+export { default as CustomPicker } from './Picker';

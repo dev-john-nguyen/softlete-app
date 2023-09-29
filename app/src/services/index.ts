@@ -11,6 +11,7 @@ import chatReducer from './chat/reducer';
 import notificationReducer from './notifications/reducer';
 import goalsReducer from './goals/slice';
 import demoReducer from './demo/slice';
+import timerReducer from './timer/slice';
 
 import { GoalsRootStateProps } from './goals/types';
 import { MiscProps } from './misc/types';
@@ -26,6 +27,7 @@ import { NotificationRootProps } from './notifications/types';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 import { DemoProps } from './services';
+import { TimerProps } from './timer/types';
 
 export default combineReducers({
   user: userReducer,
@@ -40,6 +42,7 @@ export default combineReducers({
   notifications: notificationReducer,
   goals: goalsReducer,
   demo: demoReducer,
+  timer: timerReducer,
 });
 
 export interface ReducerProps {
@@ -55,6 +58,7 @@ export interface ReducerProps {
   notifications: NotificationRootProps;
   goals: GoalsRootStateProps;
   demo: DemoProps;
+  timer: TimerProps;
 }
 
 export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;

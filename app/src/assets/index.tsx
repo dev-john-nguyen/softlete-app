@@ -66,6 +66,7 @@ import PauseSvg from './PauseSvg';
 import Cardio from './Cardio';
 import KettleBell from './KettleBell';
 import Bot from './Bot';
+import Timer from './Timer';
 
 const Icons = {
   bot: (props: any) => <Bot {...props} />,
@@ -132,6 +133,7 @@ const Icons = {
   add_ring: (props: any) => <AddRing {...props} />,
   pause: (props: any) => <PauseSvg {...props} />,
   world: (props: any) => <World {...props} />,
+  timer: (props: any) => <Timer {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
