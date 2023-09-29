@@ -15,15 +15,15 @@ enum PickerTimers {
 }
 
 const hrsArr: PickerOptionProp[] = new Array(24).fill({}).map((_, index) => ({
-  value: index + 1,
-  label: String(index + 1),
+  value: index,
+  label: String(index),
 }));
 
 const minsnsecsArr: PickerOptionProp[] = new Array(60)
   .fill({})
   .map((_, index) => ({
-    value: index + 1,
-    label: String(index + 1),
+    value: index,
+    label: String(index),
   }));
 
 const Timer = () => {

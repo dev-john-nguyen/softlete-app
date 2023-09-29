@@ -24,7 +24,7 @@ export const TimerBanner = () => {
   const translationY = useSharedValue(insets.top);
   const translationX = useSharedValue(insets.right);
   const widthOfBanner = useSharedValue(0);
-  const { time, isRunning } = useSelector((state: ReducerProps) => state.timer);
+  const { time } = useSelector((state: ReducerProps) => state.timer);
   const snapPoints = [0, screenWidth - insets.right - widthOfBanner.value];
 
   const gestureHandler = useAnimatedGestureHandler({
