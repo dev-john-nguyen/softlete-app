@@ -93,7 +93,7 @@ export const TimerBanner = () => {
     time.mins,
   )}:${formatTimer(time.secs)}`;
 
-  if (!isRunning) return null;
+  if (!time.hrs && !time.mins && !time.secs) return null;
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
