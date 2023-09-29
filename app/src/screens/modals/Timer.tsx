@@ -82,7 +82,7 @@ const Timer = () => {
           padding={20}>
           <FlexBox marginBottom={10}>
             <PrimaryText variant="primary" size="large">
-              Timer
+              Stopwatch
             </PrimaryText>
           </FlexBox>
           <FlexBox>
