@@ -29,7 +29,7 @@ router.post('/', async (req: any, res: any, next: any) => {
     measCat,
     measSubCat,
     equipment,
-    muscleGroup,
+    muscleGroups,
     videoId,
     youtubeId,
   } = req.body;
@@ -49,13 +49,13 @@ router.post('/', async (req: any, res: any, next: any) => {
     return res.status(400).send('Invalid id.');
 
   try {
-    const updatedExercise = {
+    const updatedExercise: Omit<UserExerciseSchemaProps, 'userUid'> = {
       name,
       description,
       localUrl,
       category,
       equipment,
-      muscleGroup,
+      muscleGroups,
       youtubeId,
       videoId,
       localThumbnail,
