@@ -59,7 +59,6 @@ interface Props {
 enum PickerOptions {
   measCats = 'measCats',
   measSubCats = 'measSubCats',
-  muscleGroup = 'muscleGroup',
   disable = '',
 }
 

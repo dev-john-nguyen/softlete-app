@@ -230,6 +230,7 @@ const EditExerciseDetails = ({
 
   return (
     <ScreenTemplate
+      headerTitleFormatted="Exercise Details"
       applyContentPadding
       isBackVisible
       isPickerOpen={!!picker}
@@ -251,8 +252,6 @@ const EditExerciseDetails = ({
       ) : (
         <></>
       )}
-      <PrimaryText size="large">Exercise Details</PrimaryText>
-      <PrimaryText>Fill out the form below.</PrimaryText>
       {!isOwner ? (
         <FlexBox>
           <Icon icon="info" color={Colors.white} size={20} />

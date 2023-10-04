@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { StyleSheet, SectionList, Pressable, View, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  SectionList,
+  Pressable,
+  View,
+  Keyboard,
+} from 'react-native';
 import BaseColors from '../../utils/BaseColors';
 import { ExerciseProps, Categories } from '../../services/exercises/types';
 import { ReducerProps } from '../../services';
@@ -17,205 +23,255 @@ import { NetworkStackScreens } from './types';
 import { AthleteProfileProps } from '../../services/athletes/types';
 
 interface Props {
-    navigation: any;
-    exercisesProps: ExerciseProps[];
-    route: any;
-    athleteProps: AthleteProfileProps;
-    user: UserProps;
-    dispatch: AppDispatch;
+  navigation: any;
+  exercisesProps: ExerciseProps[];
+  route: any;
+  athleteProps: AthleteProfileProps;
+  user: UserProps;
+  dispatch: AppDispatch;
 }
 
-const AthleteSearchExercises = ({ navigation, route, exercisesProps, athleteProps, user, dispatch }: Props) => {
-    const [exercises, setExercises] = useState<{ title: string, data: ExerciseProps[] }[]>([]);
-    const [showFilter, setShowFilter] = useState(false);
-    const [catFilter, setCatFilter] = useState('');
-    const [equipFilter, setEquipFilter] = useState('');
-    const [mGFilter, setMGFilter] = useState('');
-    const [hiddenGroups, setHiddenGroups] = useState<string[]>([]);
-    const [fetchedExs, setFetchedExs] = useState<{ title: string, data: ExerciseProps[] }[]>([]);
-    const [query, setQuery] = useState('');
-    const mount = useRef(false);
+const AthleteSearchExercises = ({
+  navigation,
+  route,
+  exercisesProps,
+  athleteProps,
+  user,
+  dispatch,
+}: Props) => {
+  const [exercises, setExercises] = useState<
+    { title: string; data: ExerciseProps[] }[]
+  >([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [catFilter, setCatFilter] = useState('');
+  const [equipFilter, setEquipFilter] = useState('');
+  const [mGFilter, setMGFilter] = useState('');
+  const [hiddenGroups, setHiddenGroups] = useState<string[]>([]);
+  const [fetchedExs, setFetchedExs] = useState<
+    { title: string; data: ExerciseProps[] }[]
+  >([]);
+  const [query, setQuery] = useState('');
+  const mount = useRef(false);
 
-    useEffect(() => {
+  useEffect(() => {
+    let clone = _.cloneDeep(exercisesProps);
 
-        let clone = _.cloneDeep(exercisesProps);
+    //regex querying
+    const regex = new RegExp(
+      query.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1').toLowerCase(),
+    );
+    clone = clone.filter(e => e.name && regex.test(e.name.toLowerCase()));
 
-        //regex querying
-        const regex = new RegExp(query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1").toLowerCase())
-        clone = clone.filter(e => e.name && regex.test(e.name.toLowerCase()))
+    if (equipFilter || catFilter || equipFilter) {
+      //filter checks
+      //filter each one one at a time
+      if (catFilter) {
+        clone = clone.filter(item => item.category === catFilter);
+      }
 
-        if (equipFilter || catFilter || equipFilter) {
-            //filter checks
-            //filter each one one at a time
-            if (catFilter) {
-                clone = clone.filter((item) => item.category === catFilter)
-            }
+      if (mGFilter) {
+        clone = clone.filter(item =>
+          item.muscleGroups.some(m => String(m) === mGFilter),
+        );
+      }
 
-            if (mGFilter) {
-                clone = clone.filter((item) => item.muscleGroup === mGFilter)
-            }
+      if (equipFilter) {
+        clone = clone.filter(item => item.equipment === equipFilter);
+      }
+    }
 
-            if (equipFilter) {
-                clone = clone.filter((item) => item.equipment === equipFilter)
-            }
+    let grouped = processFetchedExercises(clone);
+
+    //hide all the groups
+    if (hiddenGroups.length > 0) {
+      grouped = grouped.map(item => {
+        const remove = hiddenGroups.find(g => g === item.title);
+        if (remove) {
+          item.data = [];
         }
-
-
-        let grouped = processFetchedExercises(clone);
-
-        //hide all the groups
-        if (hiddenGroups.length > 0) {
-            grouped = grouped.map(item => {
-                const remove = hiddenGroups.find(g => g === item.title)
-                if (remove) {
-                    item.data = []
-                }
-                return item
-            })
-        }
-
-        setExercises([...grouped])
-
-    }, [athleteProps, hiddenGroups, fetchedExs, catFilter, mGFilter, equipFilter, exercisesProps, query])
-
-    const onSearch = async (query: string) => setQuery(query)
-
-    const onSearchByCat = async (category: Categories) => {
-        const regex = new RegExp(category.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1").toLowerCase())
-        const queryExercise = exercisesProps.filter(e => regex.test(e.category.toLowerCase()))
-        const format = processFetchedExercises(queryExercise)
-        setExercises(format)
+        return item;
+      });
     }
 
-    const onNavigateToExercise = (exercise: ExerciseProps) => {
-        navigation.navigate(NetworkStackScreens.AthleteExercise, {
-            exercise: exercise
-        })
-    }
+    setExercises([...grouped]);
+  }, [
+    athleteProps,
+    hiddenGroups,
+    fetchedExs,
+    catFilter,
+    mGFilter,
+    equipFilter,
+    exercisesProps,
+    query,
+  ]);
 
-    const processFetchedExercises = (exs: ExerciseProps[] | void) => {
-        if (!exs) return [];
+  const onSearch = async (query: string) => setQuery(query);
 
-        const groups = _.groupBy(exs, 'category')
+  const onSearchByCat = async (category: Categories) => {
+    const regex = new RegExp(
+      category.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1').toLowerCase(),
+    );
+    const queryExercise = exercisesProps.filter(e =>
+      regex.test(e.category.toLowerCase()),
+    );
+    const format = processFetchedExercises(queryExercise);
+    setExercises(format);
+  };
 
-        const groupExs: { title: string, data: ExerciseProps[] }[] = [];
+  const onNavigateToExercise = (exercise: ExerciseProps) => {
+    navigation.navigate(NetworkStackScreens.AthleteExercise, {
+      exercise: exercise,
+    });
+  };
 
-        Object.keys(groups).forEach(function (key) {
-            groupExs.push({
-                title: key === 'other' ? 'all' : key,
-                data: groups[key]
-            })
-        });
+  const processFetchedExercises = (exs: ExerciseProps[] | void) => {
+    if (!exs) return [];
 
-        return groupExs
-    }
+    const groups = _.groupBy(exs, 'category');
 
-    const renderItem = useCallback(({ item }: { item: ExerciseProps }) => {
-        return <ExerciseSearchPreview exercise={item} onPress={() => onNavigateToExercise(item)} softlete={item.softlete} user={user} />
-    }, [exercises])
+    const groupExs: { title: string; data: ExerciseProps[] }[] = [];
 
-    const onOpenDrawer = () => navigation.toggleDrawer();
+    Object.keys(groups).forEach(function (key) {
+      groupExs.push({
+        title: key === 'other' ? 'all' : key,
+        data: groups[key],
+      });
+    });
 
-    const onReset = () => {
-        setCatFilter('');
-        setEquipFilter('');
-        setHiddenGroups([]);
-        setMGFilter('')
-        setShowFilter(false);
-        setExercises([]);
-        setFetchedExs([])
-    }
+    return groupExs;
+  };
 
-    const handleOnFilter = () => {
-        Keyboard.dismiss();
-        setShowFilter(f => f ? false : true);
-    }
+  const renderItem = useCallback(
+    ({ item }: { item: ExerciseProps }) => {
+      return (
+        <ExerciseSearchPreview
+          exercise={item}
+          onPress={() => onNavigateToExercise(item)}
+          softlete={item.softlete}
+          user={user}
+        />
+      );
+    },
+    [exercises],
+  );
 
-    const hideGroup = (group: string) => setHiddenGroups(gs => {
-        const foundIndex = gs.findIndex(g => group === g);
-        if (foundIndex > -1) {
-            gs.splice(foundIndex, 1)
-        } else {
-            gs.push(group)
-        }
-        return [...gs]
-    })
+  const onOpenDrawer = () => navigation.toggleDrawer();
 
-    return (
-        <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
-            <SearchFilter
-                show={showFilter}
-                onHide={() => setShowFilter(false)}
-                catFilter={catFilter}
-                setCatFilter={setCatFilter}
-                equipFilter={equipFilter}
-                setEquipFilter={setEquipFilter}
-                mGFilter={mGFilter}
-                setMGFilter={setMGFilter}
-                onReset={onReset}
-                onSearchByCat={onSearchByCat}
-            />
-            <SearchHeader onOpenDrawer={onOpenDrawer} onSearch={onSearch} onFilter={handleOnFilter} />
-            <SectionList
-                sections={exercises}
-                keyExtractor={(item, index) => item._id ? item._id : index.toString()}
-                contentContainerStyle={{ paddingBottom: StyleConstants.baseMargin }}
-                renderItem={renderItem}
-                initialNumToRender={20}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Pressable style={({ pressed }) => [styles.titleContainer, { backgroundColor: pressed ? BaseColors.lightGrey : BaseColors.lightWhite }]} onPress={() => hideGroup(title)}>
-                        <SecondaryText styles={styles.title}>{title}</SecondaryText>
-                        {
-                            hiddenGroups.find(g => g === title) && <View style={styles.minus} />
-                        }
-                    </Pressable>
-                )}
-                stickySectionHeadersEnabled={false}
-            />
-        </SafeAreaView>
-    )
-}
+  const onReset = () => {
+    setCatFilter('');
+    setEquipFilter('');
+    setHiddenGroups([]);
+    setMGFilter('');
+    setShowFilter(false);
+    setExercises([]);
+    setFetchedExs([]);
+  };
+
+  const handleOnFilter = () => {
+    Keyboard.dismiss();
+    setShowFilter(f => (f ? false : true));
+  };
+
+  const hideGroup = (group: string) =>
+    setHiddenGroups(gs => {
+      const foundIndex = gs.findIndex(g => group === g);
+      if (foundIndex > -1) {
+        gs.splice(foundIndex, 1);
+      } else {
+        gs.push(group);
+      }
+      return [...gs];
+    });
+
+  return (
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
+      <SearchFilter
+        show={showFilter}
+        onHide={() => setShowFilter(false)}
+        catFilter={catFilter}
+        setCatFilter={setCatFilter}
+        equipFilter={equipFilter}
+        setEquipFilter={setEquipFilter}
+        mGFilter={mGFilter}
+        setMGFilter={setMGFilter}
+        onReset={onReset}
+        onSearchByCat={onSearchByCat}
+      />
+      <SearchHeader
+        onOpenDrawer={onOpenDrawer}
+        onSearch={onSearch}
+        onFilter={handleOnFilter}
+      />
+      <SectionList
+        sections={exercises}
+        keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
+        contentContainerStyle={{ paddingBottom: StyleConstants.baseMargin }}
+        renderItem={renderItem}
+        initialNumToRender={20}
+        renderSectionHeader={({ section: { title } }) => (
+          <Pressable
+            style={({ pressed }) => [
+              styles.titleContainer,
+              {
+                backgroundColor: pressed
+                  ? BaseColors.lightGrey
+                  : BaseColors.lightWhite,
+              },
+            ]}
+            onPress={() => hideGroup(title)}>
+            <SecondaryText styles={styles.title}>{title}</SecondaryText>
+            {hiddenGroups.find(g => g === title) && (
+              <View style={styles.minus} />
+            )}
+          </Pressable>
+        )}
+        stickySectionHeadersEnabled={false}
+      />
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        flexDirection: 'row',
-        backgroundColor: BaseColors.primary,
-        paddingBottom: StyleConstants.baseMargin,
-        paddingLeft: StyleConstants.baseMargin,
-        paddingRight: StyleConstants.baseMargin
-    },
-    menu: {
-        marginLeft: StyleConstants.smallMargin,
-        justifyContent: 'center', alignItems: 'center'
-    },
-    title: {
-        fontSize: StyleConstants.extraSmallFont,
-        color: BaseColors.secondary,
-        textTransform: 'capitalize'
-    },
-    titleContainer: {
-        paddingTop: StyleConstants.smallMargin,
-        paddingBottom: StyleConstants.smallMargin,
-        paddingLeft: StyleConstants.baseMargin,
-        paddingRight: StyleConstants.baseMargin,
-        borderBottomWidth: .2,
-        borderBottomColor: BaseColors.lightGrey,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    minus: {
-        width: '4%',
-        height: 1,
-        borderRadius: 100,
-        backgroundColor: BaseColors.secondary
-    },
-})
+  headerContainer: {
+    flexDirection: 'row',
+    backgroundColor: BaseColors.primary,
+    paddingBottom: StyleConstants.baseMargin,
+    paddingLeft: StyleConstants.baseMargin,
+    paddingRight: StyleConstants.baseMargin,
+  },
+  menu: {
+    marginLeft: StyleConstants.smallMargin,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: StyleConstants.extraSmallFont,
+    color: BaseColors.secondary,
+    textTransform: 'capitalize',
+  },
+  titleContainer: {
+    paddingTop: StyleConstants.smallMargin,
+    paddingBottom: StyleConstants.smallMargin,
+    paddingLeft: StyleConstants.baseMargin,
+    paddingRight: StyleConstants.baseMargin,
+    borderBottomWidth: 0.2,
+    borderBottomColor: BaseColors.lightGrey,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  minus: {
+    width: '4%',
+    height: 1,
+    borderRadius: 100,
+    backgroundColor: BaseColors.secondary,
+  },
+});
 
 const mapStateToProps = (state: ReducerProps) => ({
-    exercisesProps: state.athletes.exercises,
-    athleteProps: state.athletes.curAthlete,
-    user: state.user,
-})
+  exercisesProps: state.athletes.exercises,
+  athleteProps: state.athletes.curAthlete,
+  user: state.user,
+});
 
 export default connect(mapStateToProps)(AthleteSearchExercises);

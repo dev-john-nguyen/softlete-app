@@ -100,7 +100,9 @@ const Exercises = ({
       }
 
       if (mGFilter) {
-        clone = clone.filter(item => item.muscleGroup === mGFilter);
+        clone = clone.filter(item =>
+          item.muscleGroups?.some(m => String(m) === mGFilter),
+        );
       }
 
       if (equipFilter) {
@@ -272,7 +274,7 @@ const Exercises = ({
       leftContentFlex={0}
       rightContentFlex={0}
       middleContent={<SearchHeader onSearch={onSearch} onChange={onSearch} />}>
-      <SearchFilter
+      {/* <SearchFilter
         show={showFilter}
         onHide={() => setShowFilter(false)}
         catFilter={catFilter}
@@ -283,7 +285,7 @@ const Exercises = ({
         setMGFilter={setMGFilter}
         onReset={onReset}
         onSearchByCat={onSearchByCat}
-      />
+      /> */}
       <SectionList
         sections={exercises}
         keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
