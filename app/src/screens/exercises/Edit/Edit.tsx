@@ -5,7 +5,7 @@ import {
   capitalize,
   getYoutubeThumbNail,
   getYoutubeUrl,
-} from '../../utils/tools';
+} from '../../../utils/tools';
 import {
   ExerciseActionProps,
   MeasCats,
@@ -16,27 +16,26 @@ import {
   DisCats,
   TimeCats,
   WtCats,
-} from '../../services/exercises/types';
+} from '../../../services/exercises/types';
 import {
   updateExercise,
   createNewExercise,
   removeExercise,
   findExercise,
   fetchMusclesAndEquipments,
-} from '../../services/exercises/actions';
+} from '../../../services/exercises/actions';
 import { connect, useSelector } from 'react-redux';
-import StyleConstants from '../../components/tools/StyleConstants';
+import StyleConstants from '../../../components/tools/StyleConstants';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import Input from '../../components/elements/Input';
-import { ReducerProps } from '../../services';
+import Input from '../../../components/elements/Input';
+import { ReducerProps } from '../../../services';
 import FastImage from 'react-native-fast-image';
-import { Picker } from '@react-native-picker/picker';
-import { HomeStackScreens } from '../home/types';
-import { ProgramStackScreens } from '../program/types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import { HomeStackScreens } from '../../home/types';
+import { ProgramStackScreens } from '../../program/types';
+import ScreenTemplate from '../../../components/elements/ScreenTemplate';
 import { PickerButton, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
@@ -45,6 +44,7 @@ import useKeyboard from 'src/hooks/utils/useKeyboard';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { PickerOptionProp } from 'src/components/elements/Picker';
+import MuscleForm from './MuscleForm';
 
 interface Props {
   navigation: any;
@@ -69,7 +69,6 @@ const EditExercise = ({
   updateExercise,
   createNewExercise,
   removeExercise,
-  findExercise,
   fetchMusclesAndEquipments,
 }: Props) => {
   const { user, exerciseProps } = useSelector((state: ReducerProps) => ({
@@ -80,8 +79,8 @@ const EditExercise = ({
   const [youtubeThumbnail, setYoutubeThumnnail] = useState('');
   const [measCat, setMeasCat] = useState<MeasCats>(MeasCats.weight);
   const [measSubCat, setMeasSubCat] = useState<MeasSubCats>(MeasSubCats.none);
-  const [muscleGroup, setMuscleGroup] = useState<MuscleGroups>(
-    MuscleGroups.other,
+  const [muscleGroups, setMuscleGroups] = useState<Map<MuscleGroups, boolean>>(
+    new Map(),
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
   const [loading, setLoading] = useState(false);
@@ -107,12 +106,6 @@ const EditExercise = ({
       return;
     }
 
-    let admin = false;
-
-    if (route.params && route.params.admin) {
-      admin = true;
-    }
-
     fetchMusclesAndEquipments();
 
     setYoutubeUrl(
@@ -127,7 +120,13 @@ const EditExercise = ({
     setMeasSubCat(
       exerciseProps.measSubCat ? exerciseProps.measSubCat : MeasSubCats.lb,
     );
-    setMuscleGroup(exerciseProps.muscleGroup);
+    setMuscleGroups(() => {
+      const storedMuscleGroups = new Map();
+      exerciseProps.muscleGroups.forEach(m => {
+        storedMuscleGroups.set(m, true);
+      });
+      return storedMuscleGroups;
+    });
     setEquipment(exerciseProps.equipment);
     //if softlete exerciseProps and user is an admin allow user to edit
     setIsOwner(
@@ -189,7 +188,7 @@ const EditExercise = ({
       youtubeId: youtubeId,
       measCat: measCat ? measCat : MeasCats.weight,
       measSubCat: measSubCat ? measSubCat : MeasSubCats.lb,
-      muscleGroup,
+      muscleGroups: Array.from(muscleGroups).map(([m]) => m),
       equipment,
       videoId: exerciseProps.videoId,
       localThumbnail: exerciseProps.localThumbnail,
@@ -255,8 +254,6 @@ const EditExercise = ({
         return setMeasCat(val);
       case PickerOptions.measSubCats:
         return setMeasSubCat(val);
-      case PickerOptions.muscleGroup:
-        return setMuscleGroup(val);
     }
   };
 
@@ -288,11 +285,6 @@ const EditExercise = ({
         }));
       case PickerOptions.measSubCats:
         return getMeasSubCat();
-      case PickerOptions.muscleGroup:
-        return Object.values(MuscleGroups).map(item => ({
-          value: item,
-          label: capitalize(item),
-        }));
     }
     return [];
   }, [picker, measCat]);
@@ -303,14 +295,13 @@ const EditExercise = ({
         return measCat;
       case PickerOptions.measSubCats:
         return measSubCat;
-      case PickerOptions.muscleGroup:
-        return muscleGroup;
     }
     return '';
-  }, [picker]);
+  }, [measCat, measSubCat, picker]);
 
   return (
     <ScreenTemplate
+      headerTitleFormatted="Exercise Details"
       isBackVisible
       isPickerOpen={!!picker}
       onPickerClose={() => setPicker(PickerOptions.disable)}
@@ -319,7 +310,7 @@ const EditExercise = ({
       onPickerChangeValue={onPickerValueChange}
       applyContentPadding
       rightContent={
-        <FlexBox flex={1} justifyContent="flex-end">
+        <FlexBox flex={1} justifyContent="flex-end" alignItems="center">
           {loading ? (
             <FlexBox alignItems="center">
               <ActivityIndicator color={Colors.white} />
@@ -347,8 +338,6 @@ const EditExercise = ({
         </FlexBox>
       }>
       <ScrollView>
-        <PrimaryText size="large">Exercise Details</PrimaryText>
-        <PrimaryText>Optional Fields</PrimaryText>
         {!isOwner && (
           <FlexBox marginTop={10} marginBottom={5}>
             <Icon icon="info" color={Colors.white} size={20} />
@@ -367,15 +356,10 @@ const EditExercise = ({
         </PickerButton>
 
         {isOwner && (
-          <PickerButton
-            textTransform="capitalize"
-            label="Muscle Group"
-            onPress={() => {
-              Keyboard.dismiss();
-              isOwner && setPicker(PickerOptions.muscleGroup);
-            }}>
-            {muscleGroup}
-          </PickerButton>
+          <MuscleForm
+            muscleGroups={muscleGroups}
+            setMuscleGroups={setMuscleGroups}
+          />
         )}
 
         {isOwner && (

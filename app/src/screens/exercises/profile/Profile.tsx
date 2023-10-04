@@ -269,7 +269,7 @@ const Exercise = ({ route, navigation }: Props) => {
         </ScrollView>
 
         <View style={styles.body}>
-          <BodySvg muscleGroup={exercise.muscleGroup} />
+          <BodySvg muscleGroups={exercise.muscleGroups} />
         </View>
 
         <ScrollView

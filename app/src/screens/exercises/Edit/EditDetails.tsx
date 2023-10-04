@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ActivityIndicator, Keyboard } from 'react-native';
-import { normalize, capitalize } from '../../utils/tools';
+import { normalize, capitalize } from '../../../utils/tools';
 import {
   ExerciseActionProps,
   Categories,
   ExerciseProps,
-} from '../../services/exercises/types';
-import { removeExercise, findExercise } from '../../services/exercises/actions';
+} from '../../../services/exercises/types';
+import {
+  removeExercise,
+  findExercise,
+} from '../../../services/exercises/actions';
 import { connect } from 'react-redux';
-import StyleConstants from '../../components/tools/StyleConstants';
-import { ReducerProps } from '../../services';
-import { UserProps } from '../../services/user/types';
+import StyleConstants from '../../../components/tools/StyleConstants';
+import { ReducerProps } from '../../../services';
+import { UserProps } from '../../../services/user/types';
 import { Picker } from '@react-native-picker/picker';
-import { HomeStackScreens } from '../home/types';
-import { ProgramStackScreens } from '../program/types';
-import { AppDispatch } from '../../../App';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
+import { HomeStackScreens } from '../../home/types';
+import { ProgramStackScreens } from '../../program/types';
+import { AppDispatch } from '../../../../App';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
 import {
   ConfirmModal,
   Input,
@@ -170,7 +173,6 @@ const EditExerciseDetails = ({
   };
 
   const validateName = async () => {
-    if (isAdmin) return;
     if (!name) return false;
     const isDuplicate = await findExercise(name).catch(err => console.log(err));
     if (isDuplicate) {

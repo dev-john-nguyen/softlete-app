@@ -6,7 +6,7 @@ import {
 import View from './Workout';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
-import EditExercise from '../exercises/Edit';
+import EditExercise from '../exercises/Edit/Edit';
 import WorkoutExerciseRestructure from '../exercises/ExerciseRestructure';
 import Calendar from './Calendar';
 import screenOptions from '../utils/screenOptions';
@@ -18,7 +18,7 @@ import GoOnlineModal from './modals/GoOnlineModal';
 import UploadExerciseVideo from '../exercises/UploadVideo';
 import DataOverview from './DataOverview';
 import { Home } from './home';
-import EditExerciseDetails from '../exercises/EditDetails';
+import EditExerciseDetails from '../exercises/Edit/EditDetails';
 import Subscribe from './Subscribe';
 import Map from './Map';
 import Health from './Health';
