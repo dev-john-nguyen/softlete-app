@@ -288,7 +288,9 @@ const EditExerciseDetails = ({
         label="Category"
         onPress={onCatPress}
         disabled={!isOwner}
-        textTransform="capitalize">
+        textTransform="capitalize"
+        arrow
+        arrowDirection="down">
         {category ? category : 'Category'}
       </PickerButton>
 

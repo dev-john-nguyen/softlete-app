@@ -122,7 +122,7 @@ const EditExercise = ({
     setMuscleGroups(() => {
       const storedMuscleGroups = new Map();
       exerciseProps.muscleGroups.forEach(m => {
-        storedMuscleGroups.set(m, true);
+        storedMuscleGroups.set(m.toLowerCase(), true);
       });
       return storedMuscleGroups;
     });
@@ -350,7 +350,9 @@ const EditExercise = ({
             Keyboard.dismiss();
             setPicker(PickerOptions.measSubCats);
           }}
-          textTransform="capitalize">
+          textTransform="capitalize"
+          arrow
+          arrowDirection="down">
           {measSubCat}
         </PickerButton>
 
