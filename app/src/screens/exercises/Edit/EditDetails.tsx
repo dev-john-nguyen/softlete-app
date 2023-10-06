@@ -152,6 +152,7 @@ const EditExerciseDetails = ({
         name: name,
         category: category,
         description: description,
+        muscleGroups: [],
       },
     });
     handleNavigation();
