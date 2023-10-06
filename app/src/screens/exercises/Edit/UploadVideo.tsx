@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../App';
-import { ReducerProps } from '../../services';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
-import { ExercisesVideoBatchProps } from '../../services/global/types';
-import { HomeStackScreens } from '../home/types';
-import { AdminStackList } from '../admin/screens/types';
-import { ExerciseActionProps } from '../../services/exercises/types';
-import { removeExercise } from '../../services/exercises/actions';
+import { AppDispatch } from '../../../../App';
+import { ReducerProps } from '../../../services';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
+import { ExercisesVideoBatchProps } from '../../../services/global/types';
+import { HomeStackScreens } from '../../home/types';
+import { AdminStackList } from '../../admin/screens/types';
+import { ExerciseActionProps } from '../../../services/exercises/types';
+import { removeExercise } from '../../../services/exercises/actions';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import { ProgramStackScreens } from '../program/types';
+import { ProgramStackScreens } from '../../program/types';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import {
