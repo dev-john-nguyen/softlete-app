@@ -188,9 +188,9 @@ const Exercises = ({
   const onAddExerciessPress = () => {
     dispatch({ type: SET_TARGET_EXERCISE, payload: {} });
     if (route && route.params && route.params.programStack) {
-      navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+      navigation.navigate(ProgramStackScreens.ProgramEditExerciseDetails);
     } else {
-      navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+      navigation.navigate(HomeStackScreens.EditExerciseDetails);
     }
   };
 
@@ -331,8 +331,7 @@ const Exercises = ({
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  searchExercises: async (query: string, limit?: number) =>
-    dispatch(searchExercises(query, limit)),
+  searchExercises: async (query: string) => dispatch(searchExercises(query)),
   updateWorkoutExercises: async (
     workoutUid: string,
     exercises: WorkoutExerciseProps[],

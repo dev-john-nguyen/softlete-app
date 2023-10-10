@@ -69,12 +69,12 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
 
     if (exercise.userUid !== user.uid) {
       if (exercise.softlete && user.admin) {
-        return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+        return navigation.navigate(HomeStackScreens.EditExerciseDetails);
       } else {
         return navigation.navigate(HomeStackScreens.EditExercise);
       }
     } else {
-      return navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+      return navigation.navigate(HomeStackScreens.EditExerciseDetails);
     }
   };
 
