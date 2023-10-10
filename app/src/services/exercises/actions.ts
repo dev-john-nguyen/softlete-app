@@ -27,8 +27,12 @@ export const fetchAllUserExercises =
   () => async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { uid } = getState().user;
 
-    await request('GET', PATHS.exercises.fetchAllSoftlete(uid), dispatch)
-      .then(({ data }: { data?: ExerciseProps[] }) => {
+    await request<ExerciseProps[]>(
+      'GET',
+      PATHS.exercises.fetchAllSoftlete(uid),
+      dispatch,
+    )
+      .then(({ data }) => {
         if (data) {
           dispatch({
             type: STORE_EXERCISES,
@@ -38,8 +42,12 @@ export const fetchAllUserExercises =
       })
       .catch(err => console.log(err));
 
-    await request('GET', PATHS.exercises.fetchAllUsers(uid), dispatch)
-      .then(({ data }: { data?: ExerciseProps[] }) => {
+    await request<ExerciseProps[]>(
+      'GET',
+      PATHS.exercises.fetchAllUsers(uid),
+      dispatch,
+    )
+      .then(({ data }) => {
         if (data) {
           dispatch({
             type: STORE_EXERCISES,
@@ -103,9 +111,9 @@ export const createNewExercise =
   };
 
 export const searchExercises =
-  (query: string, limit?: number) =>
+  (query: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    const { user, global, exercises } = getState();
+    const { user, exercises } = getState();
 
     if (!user.uid) {
       dispatch({ type: SIGNOUT_USER });
@@ -142,7 +150,7 @@ export const searchExercises =
 export const searchByCat =
   (category: Categories) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    const { global, exercises } = getState();
+    const { exercises } = getState();
 
     // if (global.offline) {
     const regex = new RegExp(
@@ -231,7 +239,6 @@ export const updateExercise =
     const dif = _.reduce(
       exerciseProps,
       function (result: any, value: any, key: any) {
-        //@ts-ignore
         return _.isEqual(value, exerciseStore[key])
           ? result
           : result.concat(key);
