@@ -15,7 +15,7 @@ import Exercise from '../exercises/profile/Profile';
 import BaseColors from '../../utils/BaseColors';
 import { HomeStackParamsList, HomeStackScreens } from './types';
 import GoOnlineModal from './modals/GoOnlineModal';
-import UploadExerciseVideo from '../exercises/UploadVideo';
+import UploadExerciseVideo from '../exercises/Edit/UploadVideo';
 import DataOverview from './DataOverview';
 import { Home } from './home';
 import EditExerciseDetails from '../exercises/Edit/EditDetails';

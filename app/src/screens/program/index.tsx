@@ -7,7 +7,7 @@ import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit/Edit';
 import Exercise from '../exercises/profile/Profile';
 import ExerciseAnalytics from '../exercises/Analytics';
-import UploadExerciseVideo from '../exercises/UploadVideo';
+import UploadExerciseVideo from '../exercises/Edit/UploadVideo';
 import ProgramTemplate from './ProgramTemplate';
 import WorkoutModal from '../modals/WorkoutModal';
 import Workout from './Workout';

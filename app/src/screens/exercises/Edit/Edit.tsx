@@ -45,6 +45,7 @@ import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { PickerOptionProp } from 'src/components/elements/Picker';
 import MuscleForm from './MuscleForm';
+import { useDelete } from './hooks';
 
 interface Props {
   navigation: any;
@@ -88,6 +89,8 @@ const EditExercise = ({
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
   const keyboardHeight = useKeyboard();
   const setBanner = useBanner();
+  const { onDelete, loading: isDeleting } = useDelete();
+  const isLoading = isDeleting || loading;
 
   const handleNavigation = () => {
     if (route && route.params) {
@@ -217,19 +220,6 @@ const EditExercise = ({
     !requestErr && handleNavigation();
   };
 
-  const onDelete = async () => {
-    if (loading) return;
-
-    if (!exerciseProps?._id) return navigation.goBack();
-
-    setLoading(true);
-
-    await removeExercise(exerciseProps._id);
-
-    setLoading(false);
-    handleNavigation();
-  };
-
   const fetchUrl = async () => {
     if (!youtubeUrl) return '';
 
@@ -253,6 +243,13 @@ const EditExercise = ({
         return setMeasCat(val);
       case PickerOptions.measSubCats:
         return setMeasSubCat(val);
+    }
+  };
+
+  const onDeleteClick = async () => {
+    if (!exerciseProps) return;
+    if (await onDelete(exerciseProps)) {
+      handleNavigation();
     }
   };
 
@@ -310,7 +307,7 @@ const EditExercise = ({
       applyContentPadding
       rightContent={
         <FlexBox flex={1} justifyContent="flex-end" alignItems="center">
-          {loading ? (
+          {isLoading ? (
             <FlexBox alignItems="center">
               <ActivityIndicator color={Colors.white} />
               <PrimaryText marginLeft={5}>{saveMsg}</PrimaryText>
@@ -321,7 +318,7 @@ const EditExercise = ({
                 <Icon
                   icon="trash_bin"
                   color={Colors.white}
-                  onPress={onDelete}
+                  onPress={onDeleteClick}
                   size={20}
                   containerStyles={{ marginRight: 15 }}
                 />
