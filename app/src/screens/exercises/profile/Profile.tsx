@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ExerciseProps } from '../../../services/exercises/types';
 import { normalize } from '../../../utils/tools';
@@ -11,7 +11,6 @@ import BodySvg from '../../../assets/body/BodySvg';
 import { AppDispatch } from '../../../../App';
 import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
 import { UserProps } from '../../../services/user/types';
-import ExerciseVideo from '../../../components/elements/ExerciseVideo';
 import { AthleteProfileProps } from '../../../services/athletes/types';
 import { ProgramStackScreens } from '../../program/types';
 import reportExercise from '../../utils/report-exercise';
@@ -251,22 +250,29 @@ const Exercise = ({ route, navigation }: Props) => {
           </FlexBox>
         )}
 
-        <ScrollView
-          horizontal
-          style={{ marginTop: StyleConstants.baseMargin }}
-          contentContainerStyle={{
-            flexDirection:
-              exercise.localUrl || exercise.url ? 'row' : 'row-reverse',
-          }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          <FlexBox marginLeft={exercise.localUrl || exercise.url ? 0 : 10}>
-            <ExerciseVideo props={exercise} />
-          </FlexBox>
-          <FlexBox marginLeft={exercise.localUrl || exercise.url ? 10 : 0}>
-            <YoutubePreview id={exercise.youtubeId} />
-          </FlexBox>
-        </ScrollView>
+        {/* Skipping upload exercise video for now. Conserving resources. */}
+        {/*
+          <ScrollView
+            horizontal
+            style={{ marginTop: StyleConstants.baseMargin }}
+            contentContainerStyle={{
+              flexDirection:
+                exercise.localUrl || exercise.url ? 'row' : 'row-reverse',
+            }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}>
+            <FlexBox marginLeft={exercise.localUrl || exercise.url ? 0 : 10}>
+              <ExerciseVideo props={exercise} />
+            </FlexBox>
+            <FlexBox marginLeft={exercise.localUrl || exercise.url ? 10 : 0}>
+              <YoutubePreview id={exercise.youtubeId} />
+            </FlexBox>
+          </ScrollView>
+        */}
+
+        <FlexBox marginTop={15}>
+          <YoutubePreview id={exercise.youtubeId} />
+        </FlexBox>
 
         <View style={styles.body}>
           <BodySvg muscleGroups={exercise.muscleGroups} />
