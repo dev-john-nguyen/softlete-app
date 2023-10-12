@@ -39,7 +39,7 @@ const hidePos = -normalize.height(1);
 
 enum PickerOptions {
   category = 'category',
-  muscleGroup = 'muscleGroup',
+  muscleGroups = 'muscleGroups',
   equipment = 'equipment',
   none = '',
 }
@@ -71,7 +71,7 @@ const SearchFilter = ({
           });
         }
         break;
-      case PickerOptions.muscleGroup:
+      case PickerOptions.muscleGroups:
         let keyM: keyof typeof MuscleGroups;
         for (keyM in MuscleGroups) {
           render.push({
@@ -101,7 +101,7 @@ const SearchFilter = ({
       case PickerOptions.equipment:
         setEquipFilter(val);
         break;
-      case PickerOptions.muscleGroup:
+      case PickerOptions.muscleGroups:
         setMGFilter(val);
         break;
     }
@@ -115,7 +115,7 @@ const SearchFilter = ({
         return catFilter;
       case PickerOptions.equipment:
         return equipFilter;
-      case PickerOptions.muscleGroup:
+      case PickerOptions.muscleGroups:
         return mGFilter;
     }
     return '';
@@ -176,7 +176,7 @@ const SearchFilter = ({
         <SecondaryText styles={styles.label}>Muscle Group</SecondaryText>
         <Pressable
           style={styles.itemContainer}
-          onPress={() => setPicker(PickerOptions.muscleGroup)}>
+          onPress={() => setPicker(PickerOptions.muscleGroups)}>
           <View style={styles.svg}>
             <BodyOutlineSvg strokeColor={BaseColors.primary} />
           </View>

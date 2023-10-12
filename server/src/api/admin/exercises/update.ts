@@ -1,5 +1,5 @@
 const router = require('express').Router();
-import Exercises from '../../../collections/exercises';
+import Exercises, { ExerciseSchemaProps } from '../../../collections/exercises';
 import errorCatch from '../../../utils/error-catch';
 import mongoose from 'mongoose';
 
@@ -20,7 +20,7 @@ router.post('/', async (req: any, res: any, next: any) => {
     localThumbnail,
     _id,
     equipment,
-    muscleGroup,
+    muscleGroups,
     videoId,
     youtubeId,
   } = req.body;
@@ -44,13 +44,13 @@ router.post('/', async (req: any, res: any, next: any) => {
     return res.status(400).send('Invalid id.');
 
   try {
-    const updatedExercise = {
+    const updatedExercise: Omit<ExerciseSchemaProps, '_id'> = {
       name,
       description,
       localUrl,
       category,
       equipment,
-      muscleGroup,
+      muscleGroups,
       youtubeId,
       videoId,
       localThumbnail,

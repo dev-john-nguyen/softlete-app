@@ -100,7 +100,9 @@ const Exercises = ({
       }
 
       if (mGFilter) {
-        clone = clone.filter(item => item.muscleGroup === mGFilter);
+        clone = clone.filter(item =>
+          item.muscleGroups?.some(m => String(m) === mGFilter),
+        );
       }
 
       if (equipFilter) {
@@ -186,9 +188,9 @@ const Exercises = ({
   const onAddExerciessPress = () => {
     dispatch({ type: SET_TARGET_EXERCISE, payload: {} });
     if (route && route.params && route.params.programStack) {
-      navigation.navigate(ProgramStackScreens.ProgramUploadVideo);
+      navigation.navigate(ProgramStackScreens.ProgramEditExerciseDetails);
     } else {
-      navigation.navigate(HomeStackScreens.UploadExerciseVideo);
+      navigation.navigate(HomeStackScreens.EditExerciseDetails);
     }
   };
 
@@ -272,7 +274,7 @@ const Exercises = ({
       leftContentFlex={0}
       rightContentFlex={0}
       middleContent={<SearchHeader onSearch={onSearch} onChange={onSearch} />}>
-      <SearchFilter
+      {/* <SearchFilter
         show={showFilter}
         onHide={() => setShowFilter(false)}
         catFilter={catFilter}
@@ -283,7 +285,7 @@ const Exercises = ({
         setMGFilter={setMGFilter}
         onReset={onReset}
         onSearchByCat={onSearchByCat}
-      />
+      /> */}
       <SectionList
         sections={exercises}
         keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
@@ -329,8 +331,7 @@ const Exercises = ({
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  searchExercises: async (query: string, limit?: number) =>
-    dispatch(searchExercises(query, limit)),
+  searchExercises: async (query: string) => dispatch(searchExercises(query)),
   updateWorkoutExercises: async (
     workoutUid: string,
     exercises: WorkoutExerciseProps[],

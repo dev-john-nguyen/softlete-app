@@ -454,7 +454,7 @@ export const setViewWorkout =
             measSubCat: MeasSubCats.lb,
             measCat: MeasCats.weight,
             category: Categories.other,
-            muscleGroup: MuscleGroups.other,
+            muscleGroups: [MuscleGroups.other],
             equipment: Equipments.none,
           };
         }

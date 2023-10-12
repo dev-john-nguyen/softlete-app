@@ -47,7 +47,7 @@ export default (state: any = INITIAL_STATE, action: any) => {
       return {
         ...state,
         pinExercises: _.remove(
-          state.pinExercises,
+          cloneDeep(state.pinExercises),
           (e: PinExerciseProps) => e.exerciseUid !== action.payload._id,
         ),
       };

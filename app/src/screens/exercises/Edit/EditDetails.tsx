@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ActivityIndicator, Keyboard } from 'react-native';
-import { normalize, capitalize } from '../../utils/tools';
+import { normalize, capitalize } from '../../../utils/tools';
 import {
   ExerciseActionProps,
   Categories,
   ExerciseProps,
-} from '../../services/exercises/types';
-import { removeExercise, findExercise } from '../../services/exercises/actions';
+} from '../../../services/exercises/types';
+import {
+  removeExercise,
+  findExercise,
+} from '../../../services/exercises/actions';
 import { connect } from 'react-redux';
-import StyleConstants from '../../components/tools/StyleConstants';
-import { ReducerProps } from '../../services';
-import { UserProps } from '../../services/user/types';
-import { Picker } from '@react-native-picker/picker';
-import { HomeStackScreens } from '../home/types';
-import { ProgramStackScreens } from '../program/types';
-import { AppDispatch } from '../../../App';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
+import StyleConstants from '../../../components/tools/StyleConstants';
+import { ReducerProps } from '../../../services';
+import { UserProps } from '../../../services/user/types';
+import { HomeStackScreens } from '../../home/types';
+import { ProgramStackScreens } from '../../program/types';
+import { AppDispatch } from '../../../../App';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
 import {
   ConfirmModal,
   Input,
@@ -29,6 +31,7 @@ import Icon from '@app/icons';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { Colors } from '@app/utils';
+import { useDelete } from './hooks';
 
 interface Props {
   navigation: any;
@@ -58,11 +61,11 @@ const EditExerciseDetails = ({
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Categories>(Categories.other);
   const [loading, setLoading] = useState(false);
-  const [confirm, setConfirm] = useState(false);
   const [isOwner, setIsOwner] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
   const setBanner = useBanner();
+  const { onDelete } = useDelete();
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -123,7 +126,6 @@ const EditExerciseDetails = ({
 
     setIsAdmin(admin || user.admin ? true : false);
     //reset all states
-    setConfirm(false);
     setLoading(false);
   }, [route]);
 
@@ -149,28 +151,13 @@ const EditExerciseDetails = ({
         name: name,
         category: category,
         description: description,
+        muscleGroups: exerciseProps.muscleGroups ?? [],
       },
     });
     handleNavigation();
   };
 
-  const onDelete = async () => {
-    if (loading) return;
-
-    if (!confirm) return setConfirm(true);
-
-    if (!exerciseProps?._id) return navigation.goBack();
-
-    setLoading(true);
-
-    await removeExercise(exerciseProps._id);
-
-    setLoading(false);
-    handleNavigation();
-  };
-
   const validateName = async () => {
-    if (isAdmin) return;
     if (!name) return false;
     const isDuplicate = await findExercise(name).catch(err => console.log(err));
     if (isDuplicate) {
@@ -212,22 +199,31 @@ const EditExerciseDetails = ({
     isOwner && setPicker(PickerOptions.cats);
   };
 
+  const onDeletePress = async () => {
+    if (!exerciseProps?._id) return navigation.goBack();
+    if (await onDelete(exerciseProps)) {
+      handleNavigation(true);
+    }
+  };
+
   const rightContent = useMemo(() => {
     if (loading) return <ActivityIndicator color={Colors.white} />;
     if (exerciseProps?._id && isOwner) {
       return (
         <Icon
           icon="trash_bin"
-          onPress={onDelete}
+          onPress={onDeletePress}
           size={20}
           color={Colors.white}
         />
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, exerciseProps, isOwner]);
 
   return (
     <ScreenTemplate
+      headerTitleFormatted="Exercise Details"
       applyContentPadding
       isBackVisible
       isPickerOpen={!!picker}
@@ -240,17 +236,6 @@ const EditExerciseDetails = ({
           {rightContent}
         </FlexBox>
       }>
-      {confirm ? (
-        <ConfirmModal
-          onConfirm={onDelete}
-          onDeny={() => setConfirm(false)}
-          header={`Are you sure you want to remove ${name}?`}
-        />
-      ) : (
-        <></>
-      )}
-      <PrimaryText size="large">Exercise Details</PrimaryText>
-      <PrimaryText>Fill out the form below.</PrimaryText>
       {!isOwner ? (
         <FlexBox>
           <Icon icon="info" color={Colors.white} size={20} />
@@ -287,7 +272,9 @@ const EditExerciseDetails = ({
         label="Category"
         onPress={onCatPress}
         disabled={!isOwner}
-        textTransform="capitalize">
+        textTransform="capitalize"
+        arrow
+        arrowDirection="down">
         {category ? category : 'Category'}
       </PickerButton>
 

@@ -7,7 +7,7 @@ export interface UserExerciseSchemaProps {
   name?: string;
   description?: string;
   category?: Categories;
-  muscleGroup?: string;
+  muscleGroups?: MuscleGroups[];
   equipment?: string;
   youtubeId?: string;
   localUrl?: string;
@@ -38,9 +38,9 @@ const userExerciseSchema = new mongoose.Schema(
       default: Categories.other,
       lowercase: true,
     },
-    muscleGroup: {
-      type: String,
-      default: MuscleGroups.other,
+    muscleGroups: {
+      type: [String],
+      default: [],
       lowercase: true,
     },
     equipment: {

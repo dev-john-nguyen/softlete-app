@@ -53,6 +53,7 @@ import ExerciseVideo from '../../../components/elements/ExerciseVideo';
 import { AdminStackList } from '../screens/types';
 import { PickerButton, ScreenTemplate } from '@app/elements';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
+import MuscleForm from 'src/screens/exercises/Edit/MuscleForm';
 
 interface Props {
   navigation: any;
@@ -68,7 +69,6 @@ enum PickerOptions {
   measCats = 'measCats',
   measSubCats = 'measSubCats',
   equipment = 'equipment',
-  muscleGroup = 'muscleGroup',
   disable = '',
 }
 
@@ -85,8 +85,8 @@ const EditExercise = ({
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [youtubeThumbnail, setYoutubeThumnnail] = useState('');
   const [category, setCategory] = useState<Categories>(Categories.other);
-  const [muscleGroup, setMuscleGroup] = useState<MuscleGroups>(
-    MuscleGroups.other,
+  const [muscleGroups, setMuscleGroups] = useState<Map<MuscleGroups, boolean>>(
+    new Map(),
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
   const [errors, setErrors] = useState<string[]>([]);
@@ -124,7 +124,9 @@ const EditExercise = ({
     setCategory(
       exerciseProps.category ? exerciseProps.category : Categories.other,
     );
-    setMuscleGroup(exerciseProps.muscleGroup);
+    const prevMuscleGroups = new Map();
+    exerciseProps.muscleGroups?.forEach(m => prevMuscleGroups.set(m, true));
+    setMuscleGroups(prevMuscleGroups);
     setEquipment(exerciseProps.equipment);
 
     //reset all states
@@ -181,7 +183,7 @@ const EditExercise = ({
       youtubeId: youtubeId,
       localUrl: exerciseProps.localUrl,
       category,
-      muscleGroup,
+      muscleGroups: Array.from(muscleGroups).map(([m]) => m),
       equipment,
       videoId: exerciseProps.videoId,
       localThumbnail: exerciseProps.localThumbnail,
@@ -249,8 +251,6 @@ const EditExercise = ({
         return Object.values(Categories).map(v => ({ value: v, label: v }));
       case PickerOptions.equipment:
         return equipments.map(v => ({ value: v, label: v }));
-      case PickerOptions.muscleGroup:
-        return Object.values(MuscleGroups).map(v => ({ value: v, label: v }));
     }
     return [];
   }, [picker, equipments]);
@@ -261,8 +261,6 @@ const EditExercise = ({
         return setCategory(val);
       case PickerOptions.equipment:
         return setEquipment(val);
-      case PickerOptions.muscleGroup:
-        return setMuscleGroup(val);
     }
   };
 
@@ -272,8 +270,6 @@ const EditExercise = ({
         return category;
       case PickerOptions.equipment:
         return equipment;
-      case PickerOptions.muscleGroup:
-        return muscleGroup;
     }
     return '';
   }, [picker]);
@@ -364,11 +360,10 @@ const EditExercise = ({
             {category ? category : 'Category'}
           </PickerButton>
 
-          <PickerButton
-            label="Muscle Group"
-            onPress={() => setPicker(PickerOptions.muscleGroup)}>
-            {muscleGroup}
-          </PickerButton>
+          <MuscleForm
+            muscleGroups={muscleGroups}
+            setMuscleGroups={setMuscleGroups}
+          />
 
           <PickerButton
             label="Equipment"

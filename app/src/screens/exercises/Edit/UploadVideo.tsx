@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../App';
-import { ReducerProps } from '../../services';
-import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
-import { ExercisesVideoBatchProps } from '../../services/global/types';
-import { HomeStackScreens } from '../home/types';
-import { AdminStackList } from '../admin/screens/types';
-import { ExerciseActionProps } from '../../services/exercises/types';
-import { removeExercise } from '../../services/exercises/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../../App';
+import { ReducerProps, ThunkAppDispatch } from '../../../services';
+import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
+import { ExercisesVideoBatchProps } from '../../../services/global/types';
+import { HomeStackScreens } from '../../home/types';
+import { AdminStackList } from '../../admin/screens/types';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import { ProgramStackScreens } from '../program/types';
+import { ProgramStackScreens } from '../../program/types';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import {
@@ -19,28 +17,24 @@ import {
   VideoPicker,
 } from '@app/elements';
 import { AutoId, Colors } from '@app/utils';
+import { useDelete } from './hooks';
+import { ActivityIndicator } from 'react-native';
 
 interface Props {
   navigation: any;
   route: any;
-  dispatch: AppDispatch;
-  removeExercise: ExerciseActionProps['removeExercise'];
 }
 
-const UploadExerciseVideo = ({
-  navigation,
-  dispatch,
-  route,
-  removeExercise,
-}: Props) => {
+const UploadExerciseVideo = ({ navigation, route }: Props) => {
   const { exerciseProps } = useSelector((state: ReducerProps) => ({
     exerciseProps: state.exercises.targetExercise,
     user: state.user,
   }));
-
+  const dispatch = useDispatch<ThunkAppDispatch>();
   const [uri, setUri] = useState('');
   const [thumbnail, setThumbnail] = useState('');
   const [trashVid, setTrashVid] = useState(false);
+  const { onDelete, loading } = useDelete();
 
   useEffect(() => {
     onCreateThumbnail();
@@ -96,11 +90,11 @@ const UploadExerciseVideo = ({
     onNavToExerciseEdit();
   };
 
-  const onTrash = () => {
-    if (exerciseProps) {
-      removeExercise(exerciseProps._id).catch(err => console.log(err));
+  const onTrash = async () => {
+    if (!exerciseProps) return;
+    if (await onDelete(exerciseProps)) {
+      onNavBack();
     }
-    onNavBack();
   };
 
   const onRemoveVid = () => {
@@ -161,13 +155,17 @@ const UploadExerciseVideo = ({
       applyContentPadding
       rightContent={
         <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
-          {exerciseProps?._id && (
-            <Icon
-              icon="trash_bin"
-              size={20}
-              onPress={onTrash}
-              color={Colors.white}
-            />
+          {loading ? (
+            <ActivityIndicator color={Colors.white} />
+          ) : (
+            exerciseProps?._id && (
+              <Icon
+                icon="trash_bin"
+                size={20}
+                onPress={onTrash}
+                color={Colors.white}
+              />
+            )
           )}
         </FlexBox>
       }>
@@ -192,10 +190,4 @@ const UploadExerciseVideo = ({
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  removeExercise: (exericseUid?: string) =>
-    dispatch(removeExercise(exericseUid)),
-  dispatch,
-});
-
-export default connect(null, mapDispatchToProps)(UploadExerciseVideo);
+export default UploadExerciseVideo;
