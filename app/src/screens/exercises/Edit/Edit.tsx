@@ -385,8 +385,6 @@ const EditExercise = ({
         <FlexBox
           alignSelf="flex-start"
           borderRadius={5}
-          borderColor={Colors.white}
-          borderWidth={1}
           marginTop={10}
           {...Constants.videoSmallDim}>
           <FastImage

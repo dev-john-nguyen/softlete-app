@@ -52,6 +52,7 @@ export enum WtCats {
   kg = 'kilograms',
   lb = 'pounds',
   ounce = 'ounces',
+  none = 'none',
 }
 
 export enum Categories {

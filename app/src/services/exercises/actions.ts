@@ -239,7 +239,7 @@ export const updateExercise =
     const dif = _.reduce(
       exerciseProps,
       function (result: any, value: any, key: any) {
-        return _.isEqual(value, exerciseStore[key])
+        return _.isEqual(value, exerciseStore[key as keyof ExerciseProps])
           ? result
           : result.concat(key);
       },
@@ -248,7 +248,7 @@ export const updateExercise =
 
     if (dif.length < 1) {
       dispatch(setBanner(BannerTypes.default, 'No changes found.'));
-      throw new Error('No changes found');
+      return;
     }
 
     let path = '';
