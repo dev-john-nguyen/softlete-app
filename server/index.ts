@@ -4,8 +4,8 @@ import admin from 'firebase-admin';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import api from './src/api';
-import onSockets from './src/sockets';
-import authIo from './src/sockets/auth';
+// import onSockets from './src/sockets';
+// import authIo from './src/sockets/auth';
 import rateLimit from 'express-rate-limit';
 import apicache from 'apicache';
 
@@ -82,8 +82,8 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root });
 });
 
-io.use(authIo);
-io.on('connection', onSockets);
+// io.use(authIo);
+// io.on('connection', onSockets);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

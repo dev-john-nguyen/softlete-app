@@ -62,7 +62,7 @@ export function useApiHooks(
       actions.fetchGeneratedPrograms().catch(err => console.log(err));
       actions.getFriends().catch(err => console.log(err));
       actions.getAllHealthData().catch(err => console.log(err));
-      actions.initSockets();
+      // actions.initSockets(); -> disconnecting sockets
       actions.getChats();
       actions.fetchNotifications();
       const endD = DateTools.dateToStr(today);
