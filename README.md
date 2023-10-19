@@ -1,4 +1,5 @@
 # Softlete App
+An iOS health and fitness application tailored for athletes and coaches to efficiently manage their training programs.
 
 ## Development
 ### App (IOS)
