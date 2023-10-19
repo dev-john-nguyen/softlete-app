@@ -69,11 +69,11 @@ const exerciseSchema = new mongoose.Schema(
     },
     measCat: {
       type: String,
-      default: MeasCats.weight,
+      default: MeasCats.other,
     },
     measSubCat: {
       type: String,
-      default: MeasSubCats.lb,
+      default: MeasSubCats.none,
     },
   },
   {

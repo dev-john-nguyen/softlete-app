@@ -342,7 +342,19 @@ const EditExercise = ({
         )}
 
         <PickerButton
-          label="Measurement Sub Category"
+          label="Measurement Category"
+          onPress={() => {
+            Keyboard.dismiss();
+            setPicker(PickerOptions.measCats);
+          }}
+          textTransform="capitalize"
+          arrow
+          arrowDirection="down">
+          {measCat}
+        </PickerButton>
+
+        <PickerButton
+          label="Sub-category"
           onPress={() => {
             Keyboard.dismiss();
             setPicker(PickerOptions.measSubCats);

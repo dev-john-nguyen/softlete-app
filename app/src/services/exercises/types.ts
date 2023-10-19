@@ -31,12 +31,16 @@ export enum MeasCats {
   weight = 'weight',
   distance = 'distance',
   time = 'time',
+  other = 'other',
+  none = 'none',
 }
 
 export enum TimeCats {
   sec = 'seconds',
   min = 'minutes',
   hr = 'hour',
+  other = 'other',
+  none = 'none',
 }
 
 export enum DisCats {
@@ -46,12 +50,15 @@ export enum DisCats {
   ft = 'feets',
   yds = 'yards',
   m = 'meters',
+  other = 'other',
+  none = 'none',
 }
 
 export enum WtCats {
   kg = 'kilograms',
   lb = 'pounds',
   ounce = 'ounces',
+  other = 'other',
   none = 'none',
 }
 

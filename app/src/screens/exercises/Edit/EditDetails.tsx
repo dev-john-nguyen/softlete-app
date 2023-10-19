@@ -19,7 +19,6 @@ import { ProgramStackScreens } from '../../program/types';
 import { AppDispatch } from '../../../../App';
 import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
 import {
-  ConfirmModal,
   Input,
   PickerButton,
   PrimaryButton,
