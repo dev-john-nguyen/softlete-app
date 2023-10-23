@@ -22,12 +22,10 @@ export default function authenticate(req: any, res: any, next: any) {
     .auth()
     .verifyIdToken(token)
     .then(function (decodedToken) {
-      //attach uid to body
-      console.log(decodedToken);
       if (!decodedToken.email_verified)
         return res.status(401).send('Your email needs to be verified.');
       req.headers.uid = decodedToken.uid;
-      req.headers.isAdmin = decodedToken.claims.admin;
+      req.headers.isAdmin = decodedToken.claims?.admin ?? false;
       next();
       // ...
     })
