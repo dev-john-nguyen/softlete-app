@@ -1,4 +1,5 @@
 import admin from 'firebase-admin';
+import Users from '../collections/users';
 
 export default function authenticate(req: any, res: any, next: any) {
   const header = req.headers.authorization;
@@ -25,7 +26,7 @@ export default function authenticate(req: any, res: any, next: any) {
       if (!decodedToken.email_verified)
         return res.status(401).send('Your email needs to be verified.');
       req.headers.uid = decodedToken.uid;
-      req.headers.isAdmin = decodedToken.claims?.admin ?? false;
+      req.headers.admin = decodedToken.claims?.admin ?? false;
       next();
       // ...
     })
@@ -37,4 +38,8 @@ export default function authenticate(req: any, res: any, next: any) {
       console.log(error);
       return res.status(401).send('Unauthorized Header. Access Denied');
     });
+}
+
+export async function validateAdmin(uid: string) {
+  return Users.findOne({ uid, admin: true }).then(doc => !!doc);
 }

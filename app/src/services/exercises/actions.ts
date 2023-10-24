@@ -201,7 +201,7 @@ export const findExercise =
     if (/[^A-Za-z0-9\s]/.test(name)) return;
 
     //send request
-    const res = await request(
+    const res = await request<ExerciseProps & { empty: boolean }>(
       'GET',
       PATHS.exercises.find(name.toLowerCase(), uid),
       dispatch,
@@ -253,17 +253,13 @@ export const updateExercise =
 
     let path = '';
 
-    if (owner) {
-      if (admin) {
-        path = ADMIN_PATHS.exercises.update;
-      } else {
-        path = PATHS.exercises.updateProps;
-      }
+    if (owner || admin) {
+      path = PATHS.exercises.updateProps;
     } else {
       path = PATHS.exercises.updateMeas;
     }
 
-    const { data }: { data?: ExerciseProps } = await request(
+    const { data } = await request<ExerciseProps>(
       'POST',
       path,
       dispatch,
@@ -281,7 +277,7 @@ export const updateExercise =
       //if old video exists remove
       if (exerciseStore.videoId) {
         removeVideo(user.uid, exerciseStore.videoId)(dispatch, getState).catch(
-          err => console.log(err),
+          (err: any) => console.log(err),
         );
       }
 

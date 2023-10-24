@@ -39,7 +39,7 @@ import ScreenTemplate from '../../../components/elements/ScreenTemplate';
 import { PickerButton, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
-import { Colors, Constants } from '@app/utils';
+import { Colors, Constants, rgba } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
@@ -84,9 +84,9 @@ const EditExercise = ({
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
   const [loading, setLoading] = useState(false);
-  const [saveMsg, setSaveMsg] = useState('');
   const [isOwner, setIsOwner] = useState(true);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
+  const [isSoftlete, setIsSoftlete] = useState(false);
   const keyboardHeight = useKeyboard();
   const setBanner = useBanner();
   const { onDelete, loading: isDeleting } = useDelete();
@@ -130,7 +130,7 @@ const EditExercise = ({
       return storedMuscleGroups;
     });
     setEquipment(exerciseProps.equipment);
-    //if softlete exerciseProps and user is an admin allow user to edit
+    // if softlete exerciseProps and user is an admin allow user to edit
     setIsOwner(
       exerciseProps.userUid === user.uid ||
         (exerciseProps.softlete && user.admin) ||
@@ -138,6 +138,7 @@ const EditExercise = ({
         ? true
         : false,
     );
+    setIsSoftlete(Boolean(exerciseProps.softlete));
     //reset all states
     setLoading(false);
   }, [route]);
@@ -216,7 +217,6 @@ const EditExercise = ({
     }
 
     setLoading(false);
-    setSaveMsg('');
     !requestErr && handleNavigation();
   };
 
@@ -310,7 +310,6 @@ const EditExercise = ({
           {isLoading ? (
             <FlexBox alignItems="center">
               <ActivityIndicator color={Colors.white} />
-              <PrimaryText marginLeft={5}>{saveMsg}</PrimaryText>
             </FlexBox>
           ) : (
             <>
@@ -338,6 +337,27 @@ const EditExercise = ({
           <FlexBox marginTop={10} marginBottom={5}>
             <Icon icon="info" color={Colors.white} size={20} />
             <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
+          </FlexBox>
+        )}
+        {user.admin && (
+          <FlexBox
+            alignSelf="flex-start"
+            marginBottom={10}
+            onPress={() => {
+              // only allow new exercises to toggle
+              if (!exerciseProps?._id) {
+                setIsSoftlete(prev => !prev);
+              } else {
+                setBanner('Can only toggle for new exercise.');
+              }
+            }}
+            padding={5}
+            marginRight={5}
+            borderRadius={5}
+            backgroundColor={rgba(Colors.whiteRbg, isSoftlete ? 1 : 0.1)}>
+            <PrimaryText color={isSoftlete ? Colors.primary : Colors.white}>
+              Is Softlete?
+            </PrimaryText>
           </FlexBox>
         )}
 

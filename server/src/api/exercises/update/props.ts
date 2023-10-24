@@ -2,6 +2,7 @@ const router = require('express').Router();
 import UserExercise, {
   UserExerciseSchemaProps,
 } from '../../../collections/user-exercises';
+import Exercises, { ExerciseSchemaProps } from '../../../collections/exercises';
 import errorCatch from '../../../utils/error-catch';
 import UserExerciseMeas, {
   MeasCats,
@@ -9,11 +10,12 @@ import UserExerciseMeas, {
 } from '../../../collections/user-exercise-measurements';
 import mongoose from 'mongoose';
 import { removeVideoFromStorage } from '../../../utils/remove-media';
+import { validateAdmin } from '../../../utils/authenticate';
 
 router.post('/', async (req: any, res: any, next: any) => {
   //user has a id token
   //verify token
-  const { uid } = req.headers;
+  const { uid, admin } = req.headers;
 
   if (!uid) return res.status(401).send('cannot find user id.');
 
@@ -32,6 +34,7 @@ router.post('/', async (req: any, res: any, next: any) => {
     muscleGroups,
     videoId,
     youtubeId,
+    softlete,
   } = req.body;
 
   if (!name || !_id) return res.status(400).send('Name and Id is required.');
@@ -61,8 +64,32 @@ router.post('/', async (req: any, res: any, next: any) => {
       localThumbnail,
     };
 
-    const exerciseDoc: UserExerciseSchemaProps | undefined =
-      await UserExercise.findOneAndUpdate(
+    let updatedExerciseDoc:
+      | UserExerciseSchemaProps
+      | ExerciseSchemaProps
+      | undefined
+      | null;
+
+    let owner = false;
+
+    if (softlete) {
+      // validate permissions for softlete
+      if (!validateAdmin(uid) && !admin) {
+        return res.status(401).send('Not an authorized user.');
+      }
+
+      updatedExerciseDoc = await Exercises.findByIdAndUpdate(
+        _id,
+        updatedExercise,
+        { new: true, runValidators: true },
+      ).then(doc => {
+        if (!doc) return null;
+        return doc.toObject();
+      });
+
+      owner = false; // not owner, it's softlete's
+    } else {
+      updatedExerciseDoc = await UserExercise.findOneAndUpdate(
         { _id: _id, userUid: uid },
         updatedExercise,
         { runValidators: true },
@@ -81,11 +108,14 @@ router.post('/', async (req: any, res: any, next: any) => {
           ...updatedExercise,
         };
       });
+      owner = true; // owner is true
+    }
 
-    if (!exerciseDoc) return res.status(404).send('Exercise does not exists.');
+    if (!updatedExerciseDoc)
+      return res.status(404).send('Exercise does not exists.');
 
     await UserExerciseMeas.findOneAndUpdate(
-      { userUid: uid, exerciseUid: exerciseDoc._id },
+      { userUid: uid, exerciseUid: updatedExerciseDoc._id },
       {
         measCat: measCat ? measCat : MeasCats.none,
         measSubCat: measSubCat ? measSubCat : MeasSubCats.none,
@@ -94,11 +124,11 @@ router.post('/', async (req: any, res: any, next: any) => {
     );
 
     return res.send({
-      ...exerciseDoc,
+      ...updatedExerciseDoc,
       measCat: measCat ? measCat : MeasCats.none,
       measSubCat: measSubCat ? measSubCat : MeasSubCats.none,
-      owner: true,
-      softlete: false,
+      owner,
+      softlete,
     });
   } catch (err) {
     return errorCatch(err, res, next);
