@@ -124,10 +124,7 @@ export enum MeasSubCats {
 }
 
 export interface ExerciseActionProps {
-  createNewExercise: (
-    data: ExerciseFormProps,
-    admin?: boolean,
-  ) => Promise<void>;
+  createNewExercise: (data: ExerciseFormProps) => Promise<void>;
   updateExercise: (
     data: ExerciseProps,
     owner?: boolean,

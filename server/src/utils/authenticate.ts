@@ -26,7 +26,7 @@ export default function authenticate(req: any, res: any, next: any) {
       if (!decodedToken.email_verified)
         return res.status(401).send('Your email needs to be verified.');
       req.headers.uid = decodedToken.uid;
-      req.headers.admin = decodedToken.claims?.admin ?? false;
+      req.headers.admin = decodedToken.claims?.admin ?? undefined;
       next();
       // ...
     })

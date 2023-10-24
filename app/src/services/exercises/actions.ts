@@ -15,7 +15,6 @@ import {
 import { WorkoutProps, WorkoutExerciseProps } from '../workout/types';
 import _ from 'lodash';
 import { AnalyticsProps, PinExerciseProps } from '../misc/types';
-import ADMIN_PATHS from '../admin/ADMINPATHS';
 import { BannerTypes } from '../banner/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
@@ -61,29 +60,25 @@ export const fetchAllUserExercises =
   };
 
 export const createNewExercise =
-  (exerciseProps: ExerciseFormProps, admin?: boolean) =>
+  (exerciseProps: ExerciseFormProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     let path = '';
 
-    if (admin) {
-      path = ADMIN_PATHS.exercises.create;
-    } else {
-      const { exercises, user } = getState();
+    const { exercises, user } = getState();
 
-      const myExs = exercises.data.filter(e => e.userUid === user.uid);
+    const myExs = exercises.data.filter(e => e.userUid === user.uid);
 
-      if (myExs.length >= Limits.maxCustomExs) {
-        dispatch(
-          setBanner(
-            BannerTypes.warning,
-            'You exceeded the custom amount of exercises.',
-          ),
-        );
-        throw 'Exceed limit';
-      }
-
-      path = PATHS.exercises.create;
+    if (myExs.length >= Limits.maxCustomExs) {
+      dispatch(
+        setBanner(
+          BannerTypes.warning,
+          'You exceeded the custom amount of exercises.',
+        ),
+      );
+      throw 'Exceed limit';
     }
+
+    path = PATHS.exercises.create;
 
     const { data }: { data?: ExerciseProps } = await request(
       'POST',
@@ -106,8 +101,7 @@ export const createNewExercise =
       )(dispatch, getState);
     }
 
-    if (!admin)
-      dispatch({ type: INSERT_EXERCISES, payload: { exercise: data } });
+    dispatch({ type: INSERT_EXERCISES, payload: { exercise: data } });
   };
 
 export const searchExercises =
@@ -218,7 +212,7 @@ export const findExercise =
   };
 
 export const updateExercise =
-  (exerciseProps: ExerciseProps, owner?: boolean, admin?: boolean) =>
+  (exerciseProps: ExerciseProps, updateProps?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { user, exercises } = getState();
 
@@ -253,7 +247,7 @@ export const updateExercise =
 
     let path = '';
 
-    if (owner || admin) {
+    if (updateProps) {
       path = PATHS.exercises.updateProps;
     } else {
       path = PATHS.exercises.updateMeas;
@@ -323,11 +317,11 @@ export const removeExercise =
       );
     }
 
-    let path = PATHS.exercises.remove;
+    const path = PATHS.exercises.remove;
 
-    if (admin) {
-      path = ADMIN_PATHS.exercises.remove;
-    }
+    // if (admin) {
+    //   path = ADMIN_PATHS.exercises.remove;
+    // }
 
     const res = await request('POST', path, dispatch, { _id: _id });
     if (!res) return;

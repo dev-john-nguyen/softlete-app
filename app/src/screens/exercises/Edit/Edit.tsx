@@ -7,7 +7,6 @@ import {
   getYoutubeUrl,
 } from '../../../utils/tools';
 import {
-  ExerciseActionProps,
   MeasCats,
   MeasSubCats,
   ExerciseFormProps,
@@ -20,18 +19,16 @@ import {
 import {
   updateExercise,
   createNewExercise,
-  removeExercise,
-  findExercise,
   fetchMusclesAndEquipments,
 } from '../../../services/exercises/actions';
-import { connect, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StyleConstants from '../../../components/tools/StyleConstants';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
 import Input from '../../../components/elements/Input';
-import { ReducerProps } from '../../../services';
+import { ReducerProps, ThunkAppDispatch } from '../../../services';
 import FastImage from 'react-native-fast-image';
 import { HomeStackScreens } from '../../home/types';
 import { ProgramStackScreens } from '../../program/types';
@@ -46,16 +43,13 @@ import { BannerTypes } from 'src/services/banner/types';
 import { PickerOptionProp } from 'src/components/elements/Picker';
 import MuscleForm from './MuscleForm';
 import { useDelete } from './hooks';
-
-interface Props {
-  navigation: any;
-  route: any;
-  createNewExercise: ExerciseActionProps['createNewExercise'];
-  updateExercise: ExerciseActionProps['updateExercise'];
-  removeExercise: ExerciseActionProps['removeExercise'];
-  findExercise: ExerciseActionProps['findExercise'];
-  fetchMusclesAndEquipments: ExerciseActionProps['fetchMusclesAndEquipments'];
-}
+import { confirmAdminExerciseHandler } from './helpers';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 enum PickerOptions {
   measCats = 'measCats',
@@ -63,14 +57,10 @@ enum PickerOptions {
   disable = '',
 }
 
-const EditExercise = ({
-  route,
-  navigation,
-  updateExercise,
-  createNewExercise,
-  removeExercise,
-  fetchMusclesAndEquipments,
-}: Props) => {
+const EditExercise = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+  const route = useRoute<RouteProp<any>>();
+  const dispatch = useDispatch<ThunkAppDispatch>();
   const { user, exerciseProps } = useSelector((state: ReducerProps) => ({
     user: state.user,
     exerciseProps: state.exercises.targetExercise,
@@ -91,6 +81,7 @@ const EditExercise = ({
   const setBanner = useBanner();
   const { onDelete, loading: isDeleting } = useDelete();
   const isLoading = isDeleting || loading;
+  const fullAccess = isOwner || user.admin;
 
   const handleNavigation = () => {
     if (route && route.params) {
@@ -130,14 +121,9 @@ const EditExercise = ({
       return storedMuscleGroups;
     });
     setEquipment(exerciseProps.equipment);
-    // if softlete exerciseProps and user is an admin allow user to edit
-    setIsOwner(
-      exerciseProps.userUid === user.uid ||
-        (exerciseProps.softlete && user.admin) ||
-        !exerciseProps._id
-        ? true
-        : false,
-    );
+
+    setIsOwner(exerciseProps.userUid === user.uid);
+
     setIsSoftlete(Boolean(exerciseProps.softlete));
     //reset all states
     setLoading(false);
@@ -177,12 +163,6 @@ const EditExercise = ({
       return;
     }
 
-    let admin = false;
-
-    if (route.params && route.params.admin) {
-      admin = true;
-    }
-
     const exerciseToSave: ExerciseFormProps = {
       name: exerciseProps.name?.toLowerCase(),
       description: exerciseProps.description,
@@ -198,18 +178,29 @@ const EditExercise = ({
     };
 
     let requestErr = false;
+
     try {
       if (!exerciseProps._id) {
-        await createNewExercise(exerciseToSave, admin);
+        if (isSoftlete && user.admin) {
+          const saveAdmin = await confirmAdminExerciseHandler('create');
+          exerciseToSave.softlete = saveAdmin;
+        }
+        await dispatch(createNewExercise(exerciseToSave));
       } else {
         //insert uid
         const dataToSave = {
           ...exerciseToSave,
           _id: exerciseProps._id,
-          softlete: exerciseProps.softlete,
         };
 
-        await updateExercise(dataToSave, isOwner, admin);
+        let saveAdmin = false;
+
+        if (isSoftlete && user.admin) {
+          dataToSave.softlete = exerciseProps.softlete;
+          saveAdmin = await confirmAdminExerciseHandler('update');
+        }
+
+        await dispatch(updateExercise(dataToSave, saveAdmin || isOwner));
       }
     } catch (err) {
       console.log(err);
@@ -333,8 +324,8 @@ const EditExercise = ({
         </FlexBox>
       }>
       <ScrollView>
-        {!isOwner && (
-          <FlexBox marginTop={10} marginBottom={5}>
+        {!fullAccess && (
+          <FlexBox marginBottom={10}>
             <Icon icon="info" color={Colors.white} size={20} />
             <PrimaryText marginLeft={5}>You have limited access.</PrimaryText>
           </FlexBox>
@@ -385,32 +376,32 @@ const EditExercise = ({
           {measSubCat}
         </PickerButton>
 
-        {isOwner && (
+        {fullAccess && (
           <MuscleForm
             muscleGroups={muscleGroups}
             setMuscleGroups={setMuscleGroups}
           />
         )}
 
-        {isOwner && (
+        {fullAccess && (
           <Input
             label="Equipment"
             placeholder=""
-            onChangeText={txt => isOwner && setEquipment(txt)}
+            onChangeText={txt => fullAccess && setEquipment(txt)}
             value={equipment}
             maxLength={200}
             styles={{ marginBottom: StyleConstants.baseMargin }}
           />
         )}
 
-        {isOwner && (
+        {fullAccess && (
           <Input
             label="Youtube Url (can also be found under share options)"
             placeholder="Youtube URL"
-            onChangeText={txt => isOwner && setYoutubeUrl(txt)}
+            onChangeText={txt => fullAccess && setYoutubeUrl(txt)}
             value={youtubeUrl}
             maxLength={500}
-            editable={isOwner}
+            editable={fullAccess}
           />
         )}
 
@@ -430,10 +421,4 @@ const EditExercise = ({
   );
 };
 
-export default connect(null, {
-  updateExercise,
-  createNewExercise,
-  removeExercise,
-  findExercise,
-  fetchMusclesAndEquipments,
-})(EditExercise);
+export default EditExercise;
