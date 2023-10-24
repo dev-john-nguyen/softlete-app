@@ -7,7 +7,6 @@ export type IndexStackParamsList = {
   Init: undefined;
   NewUserAdvise: undefined;
   NetworkStack: undefined;
-  AdminStack: undefined;
   VerifyEmail: undefined;
   HelpStack: undefined;
   About: undefined;
@@ -21,7 +20,6 @@ export enum IndexStackList {
   NewUserAdvise = 'NewUserAdvise',
   Init = 'Init',
   NetworkStack = 'NetworkStack',
-  AdminStack = 'AdminStack',
   VerifyEmail = 'VerifyEmail',
   HelpStack = 'HelpStack',
   About = 'About',

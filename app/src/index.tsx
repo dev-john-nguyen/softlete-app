@@ -19,7 +19,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import InitUser from './screens/init';
 import NewUserAdvise from './screens/init/NewUserAdvise';
 import NetworkStack from './screens/network';
-import AdminStack from './screens/admin/screens';
 import VerifyEmail from './screens/signin/VerifyEmail';
 import HelpStack from './screens/help';
 import { navigationRef } from './RootNavigation';
@@ -113,7 +112,6 @@ const Main = ({
                     initialParams={user}
                   />
                   <Tab.Screen name="HelpStack" component={HelpStack} />
-                  <Tab.Screen name="AdminStack" component={AdminStack} />
                 </>
               )
             ) : (

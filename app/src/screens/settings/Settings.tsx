@@ -6,10 +6,7 @@ import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import { SettingsStackScreens } from './types';
 import ScreenTemplate from '../../components/elements/ScreenTemplate';
-import { useDispatch, useSelector } from 'react-redux';
-import { ReducerProps } from 'src/services';
-import { AdminStackList } from 'src/screens/admin/screens/types';
-import { IndexStackList } from '../types';
+import { useDispatch } from 'react-redux';
 import { logout } from '@app/services';
 
 interface Props {
@@ -17,7 +14,6 @@ interface Props {
 }
 
 function SettingsHome({ navigation }: Props) {
-  const userState = useSelector((state: ReducerProps) => state.user);
   const dispatch = useDispatch();
 
   const onNavToEditProfile = () =>
@@ -33,12 +29,6 @@ function SettingsHome({ navigation }: Props) {
     navigation.navigate(SettingsStackScreens.BugReport);
   const onNavToLegal = () => navigation.navigate(SettingsStackScreens.Legal);
 
-  const onNavToAdmin = () =>
-    userState.admin &&
-    navigation.navigate(IndexStackList.AdminStack, {
-      screen: AdminStackList.AdminHome,
-    });
-
   const onSignout = () => dispatch(logout());
 
   return (
@@ -53,12 +43,6 @@ function SettingsHome({ navigation }: Props) {
           containerStyles={{ marginTop: 15 }}>
           Profile
         </PickerButton>
-
-        {userState.admin && (
-          <PickerButton arrow onPress={onNavToAdmin} borderRadius={100}>
-            Admin
-          </PickerButton>
-        )}
 
         <PickerButton arrow onPress={onNavToEditSubs} borderRadius={100}>
           Subscription
