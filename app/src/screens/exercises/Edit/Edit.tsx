@@ -231,7 +231,12 @@ const EditExercise = () => {
   const onPickerValueChange = (val: any) => {
     switch (picker) {
       case PickerOptions.measCats:
-        return setMeasCat(val);
+        return setMeasCat(prev => {
+          if (prev !== val) {
+            setMeasSubCat(MeasSubCats.none);
+          }
+          return val;
+        });
       case PickerOptions.measSubCats:
         return setMeasSubCat(val);
     }
