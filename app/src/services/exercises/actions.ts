@@ -299,7 +299,7 @@ export const updateExercise =
   };
 
 export const removeExercise =
-  (_id: ExerciseProps['_id'], admin?: boolean) =>
+  (_id: ExerciseProps['_id'], softlete = false) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { exercises, user } = getState();
 
@@ -319,11 +319,7 @@ export const removeExercise =
 
     const path = PATHS.exercises.remove;
 
-    // if (admin) {
-    //   path = ADMIN_PATHS.exercises.remove;
-    // }
-
-    const res = await request('POST', path, dispatch, { _id: _id });
+    const res = await request('POST', path, dispatch, { _id: _id, softlete });
     if (!res) return;
     if (res.data) dispatch({ type: REMOVE_EXERCISE, payload: { _id: _id } });
   };

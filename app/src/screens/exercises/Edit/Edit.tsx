@@ -304,7 +304,7 @@ const EditExercise = () => {
             </FlexBox>
           ) : (
             <>
-              {exerciseProps?._id && isOwner && (
+              {exerciseProps?._id && fullAccess && (
                 <Icon
                   icon="trash_bin"
                   color={Colors.white}
