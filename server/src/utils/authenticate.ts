@@ -12,8 +12,8 @@ export default function authenticate(req: any, res: any, next: any) {
   const token = header.substring(7, header.length);
 
   if (!token) {
-    res.statusMessage = 'Unauthorized Header. Access Denied';
-    return res.status(401).send('Unauthorized Header. Access Denied');
+    res.statusMessage = 'Unauthorized header. Access denied';
+    return res.status(401).send('Access denied.');
   }
 
   //verify users previous ip addres to prevent threft
