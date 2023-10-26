@@ -15,7 +15,6 @@ import {
 import { WorkoutProps, WorkoutExerciseProps } from '../workout/types';
 import _ from 'lodash';
 import { AnalyticsProps, PinExerciseProps } from '../misc/types';
-import ADMIN_PATHS from '../admin/ADMINPATHS';
 import { BannerTypes } from '../banner/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
@@ -61,29 +60,25 @@ export const fetchAllUserExercises =
   };
 
 export const createNewExercise =
-  (exerciseProps: ExerciseFormProps, admin?: boolean) =>
+  (exerciseProps: ExerciseFormProps) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     let path = '';
 
-    if (admin) {
-      path = ADMIN_PATHS.exercises.create;
-    } else {
-      const { exercises, user } = getState();
+    const { exercises, user } = getState();
 
-      const myExs = exercises.data.filter(e => e.userUid === user.uid);
+    const myExs = exercises.data.filter(e => e.userUid === user.uid);
 
-      if (myExs.length >= Limits.maxCustomExs) {
-        dispatch(
-          setBanner(
-            BannerTypes.warning,
-            'You exceeded the custom amount of exercises.',
-          ),
-        );
-        throw 'Exceed limit';
-      }
-
-      path = PATHS.exercises.create;
+    if (myExs.length >= Limits.maxCustomExs) {
+      dispatch(
+        setBanner(
+          BannerTypes.warning,
+          'You exceeded the custom amount of exercises.',
+        ),
+      );
+      throw 'Exceed limit';
     }
+
+    path = PATHS.exercises.create;
 
     const { data }: { data?: ExerciseProps } = await request(
       'POST',
@@ -106,8 +101,7 @@ export const createNewExercise =
       )(dispatch, getState);
     }
 
-    if (!admin)
-      dispatch({ type: INSERT_EXERCISES, payload: { exercise: data } });
+    dispatch({ type: INSERT_EXERCISES, payload: { exercise: data } });
   };
 
 export const searchExercises =
@@ -201,7 +195,7 @@ export const findExercise =
     if (/[^A-Za-z0-9\s]/.test(name)) return;
 
     //send request
-    const res = await request(
+    const res = await request<ExerciseProps & { empty: boolean }>(
       'GET',
       PATHS.exercises.find(name.toLowerCase(), uid),
       dispatch,
@@ -218,7 +212,7 @@ export const findExercise =
   };
 
 export const updateExercise =
-  (exerciseProps: ExerciseProps, owner?: boolean, admin?: boolean) =>
+  (exerciseProps: ExerciseProps, updateProps?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { user, exercises } = getState();
 
@@ -253,17 +247,13 @@ export const updateExercise =
 
     let path = '';
 
-    if (owner) {
-      if (admin) {
-        path = ADMIN_PATHS.exercises.update;
-      } else {
-        path = PATHS.exercises.updateProps;
-      }
+    if (updateProps) {
+      path = PATHS.exercises.updateProps;
     } else {
       path = PATHS.exercises.updateMeas;
     }
 
-    const { data }: { data?: ExerciseProps } = await request(
+    const { data } = await request<ExerciseProps>(
       'POST',
       path,
       dispatch,
@@ -281,7 +271,7 @@ export const updateExercise =
       //if old video exists remove
       if (exerciseStore.videoId) {
         removeVideo(user.uid, exerciseStore.videoId)(dispatch, getState).catch(
-          err => console.log(err),
+          (err: any) => console.log(err),
         );
       }
 
@@ -309,7 +299,7 @@ export const updateExercise =
   };
 
 export const removeExercise =
-  (_id: ExerciseProps['_id'], admin?: boolean) =>
+  (_id: ExerciseProps['_id'], softlete = false) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { exercises, user } = getState();
 
@@ -327,13 +317,9 @@ export const removeExercise =
       );
     }
 
-    let path = PATHS.exercises.remove;
+    const path = PATHS.exercises.remove;
 
-    if (admin) {
-      path = ADMIN_PATHS.exercises.remove;
-    }
-
-    const res = await request('POST', path, dispatch, { _id: _id });
+    const res = await request('POST', path, dispatch, { _id: _id, softlete });
     if (!res) return;
     if (res.data) dispatch({ type: REMOVE_EXERCISE, payload: { _id: _id } });
   };

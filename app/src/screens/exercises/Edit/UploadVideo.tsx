@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../../App';
 import { ReducerProps, ThunkAppDispatch } from '../../../services';
 import { SET_TARGET_EXERCISE } from '../../../services/exercises/actionTypes';
 import { ExercisesVideoBatchProps } from '../../../services/global/types';
 import { HomeStackScreens } from '../../home/types';
-import { AdminStackList } from '../../admin/screens/types';
 import { createThumbnail } from 'react-native-create-thumbnail';
 import { ProgramStackScreens } from '../../program/types';
 import { FlexBox } from '@app/ui';
@@ -104,9 +102,6 @@ const UploadExerciseVideo = ({ navigation, route }: Props) => {
 
   const onNavBack = () => {
     if (route && route.params) {
-      if (route.params.admin) {
-        return navigation.navigate(AdminStackList.AdminExercises);
-      }
       if (route.params.programStack) {
         return navigation.navigate(ProgramStackScreens.ProgramSearchExercises);
       }
@@ -117,9 +112,6 @@ const UploadExerciseVideo = ({ navigation, route }: Props) => {
   const onNavToExerciseEdit = () => {
     setUri('');
     if (route && route.params) {
-      if (route.params.admin) {
-        return navigation.navigate(AdminStackList.AdminEditExercise);
-      }
       if (route.params.programStack) {
         return navigation.navigate(
           ProgramStackScreens.ProgramEditExerciseDetails,
