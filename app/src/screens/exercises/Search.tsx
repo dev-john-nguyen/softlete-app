@@ -122,7 +122,7 @@ const Exercises = ({
         return item;
       });
     }
-
+    grouped.sort((a, b) => a.title.localeCompare(b.title));
     setExercises([pinStore, ...grouped]);
   }, [
     pinExercises,
@@ -219,7 +219,11 @@ const Exercises = ({
     Object.keys(groups).forEach(function (key) {
       groupExs.push({
         title: key,
-        data: groups[key],
+        data: groups[key].sort((a, b) =>
+          (a.name ?? '').localeCompare(b.name ?? '', 'en', {
+            sensitivity: 'base',
+          }),
+        ),
       });
     });
 

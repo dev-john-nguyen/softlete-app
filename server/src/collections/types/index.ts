@@ -5,6 +5,7 @@ export enum Categories {
   stretching = 'stretching',
   balance = 'balance',
   weights = 'weights',
+  plyometrics = 'plyometrics',
 }
 
 export enum MuscleGroups {
