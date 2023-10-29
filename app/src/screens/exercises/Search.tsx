@@ -324,6 +324,7 @@ const Exercises = ({
           </FlexBox>
         )}
         stickySectionHeadersEnabled={false}
+        indicatorStyle="white"
       />
       {!offline ? (
         <CircleAdd onPress={onAddExerciessPress} style={{ bottom: '3%' }} />
