@@ -166,7 +166,7 @@ const HomeHealth = ({ healthData }: Props) => {
         rrVal={'78.3'}
       />
       <FlexBox marginTop={15} alignSelf="center">
-        <PrimaryText size="small">{`Today's Health Results`}</PrimaryText>
+        <PrimaryText size="small">{`Today's Results`}</PrimaryText>
       </FlexBox>
     </FlexBox>
   );
