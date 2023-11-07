@@ -199,7 +199,7 @@ const Home = ({
     } else if (deviceWos.length > 0) {
       txt = `You have pending device activities to import.`;
     } else {
-      txt = `Looks like you don't have any workouts planned for today.`;
+      txt = `Looks like you don't have any workouts planned for today. Enjoy your rest day!`;
     }
     return txt;
   }, [wos, deviceWos]);

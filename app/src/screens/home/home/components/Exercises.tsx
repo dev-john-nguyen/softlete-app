@@ -43,7 +43,7 @@ const HomeExercises = ({
       <FlexBox column paddingLeft={20} paddingRight={20}>
         <SectionHeader
           title="Exercises"
-          desc="Pin multiple exercises and quickly access your previous performances."
+          desc="Identify your previous exercise performances. Pin exercises to quickly view them below."
           RightElement={
             <FlexBox>
               <DemoArrow
