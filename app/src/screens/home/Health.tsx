@@ -6,7 +6,7 @@ import HealthContainer from '../../components/HealthDataVisual';
 import { moderateScale } from '../../components/tools/StyleConstants';
 import { DateValueProps, HealthEvalProps } from '../../services/workout/types';
 import { normalize } from '../../utils/tools';
-import { PrimaryText, ScreenTemplate } from '@app/elements';
+import { GraphPlaceholder, PrimaryText, ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';
 import { getDates, useHealthSamples } from 'src/hooks/health/health.hooks';
 
@@ -48,9 +48,14 @@ const HealthHeader: FC<HealthHeaderProps> = ({ desc, dates }) => {
   );
 };
 
+const chartDimensions = {
+  width: normalize.width(1),
+  height: normalize.height(3),
+};
+
 const Health = () => {
   const { hrvs, sleeps, rrs, rhrs } = useHealthSamples();
-  const [activeItem, setActiveItem] = useState('recovery');
+  const [activeItem, setActiveItem] = useState('rhr');
 
   const lineChartConfig = useMemo(() => {
     const renderLabelFromValue = (value: DateValueProps) =>
@@ -155,52 +160,62 @@ const Health = () => {
         </FlexBox>
       }>
       <HealthHeader desc={lineChartConfig.desc} dates={getDates(6)} />
-      <LineChart
-        data={{
-          labels: lineChartConfig.labels,
-          datasets: [
-            {
-              data: lineChartConfig.data,
+      {lineChartConfig.data.length === 0 ? (
+        <FlexBox
+          height={chartDimensions.height}
+          alignItems="center"
+          justifyContent="center"
+          width="100%">
+          <GraphPlaceholder hasBgColor={false} />
+        </FlexBox>
+      ) : (
+        <LineChart
+          data={{
+            labels: lineChartConfig.labels,
+            datasets: [
+              {
+                data: lineChartConfig.data,
+              },
+            ],
+          }}
+          width={chartDimensions.width}
+          height={chartDimensions.height}
+          withVerticalLines={false}
+          withHorizontalLines={false}
+          withHorizontalLabels={false}
+          bezier
+          segments={10}
+          withDots={true}
+          fromZero={true}
+          withShadow={false}
+          renderDotContent={renderDotContent}
+          chartConfig={{
+            backgroundGradientFrom: '#1E2923',
+            backgroundGradientFromOpacity: 0,
+            backgroundGradientTo: '#08130D',
+            backgroundGradientToOpacity: 0,
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: () => rgba(Colors.whiteRbg, 0.2),
+            labelColor: () => rgba(Colors.whiteRbg, 0.5),
+            style: {},
+            propsForLabels: {
+              fontSize: moderateScale(12),
             },
-          ],
-        }}
-        width={normalize.width(1)}
-        height={normalize.height(3)}
-        withVerticalLines={false}
-        withHorizontalLines={false}
-        withHorizontalLabels={false}
-        bezier
-        segments={10}
-        withDots={true}
-        fromZero={true}
-        withShadow={false}
-        renderDotContent={renderDotContent}
-        chartConfig={{
-          backgroundGradientFrom: '#1E2923',
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientTo: '#08130D',
-          backgroundGradientToOpacity: 0,
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: () => rgba(Colors.whiteRbg, 0.2),
-          labelColor: () => rgba(Colors.whiteRbg, 0.5),
-          style: {},
-          propsForLabels: {
-            fontSize: moderateScale(12),
-          },
-          propsForHorizontalLabels: {},
-          propsForDots: {
-            r: '5',
-            strokeWidth: '1',
-            stroke: Colors.lightWhite,
-          },
-          strokeWidth: 2,
-        }}
-        style={{
-          alignSelf: 'center',
-          paddingRight: moderateScale(30),
-          left: moderateScale(15),
-        }}
-      />
+            propsForHorizontalLabels: {},
+            propsForDots: {
+              r: '5',
+              strokeWidth: '1',
+              stroke: Colors.lightWhite,
+            },
+            strokeWidth: 2,
+          }}
+          style={{
+            alignSelf: 'center',
+            paddingRight: moderateScale(30),
+            left: moderateScale(15),
+          }}
+        />
+      )}
       <HealthContainer
         setActiveItem={setActiveItem}
         activeItem={activeItem}

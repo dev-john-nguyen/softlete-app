@@ -5,6 +5,7 @@ import {
   ScreenTemplate,
 } from '@app/elements';
 import { FlexBox } from '@app/ui';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +25,7 @@ const HealthGoalForm = () => {
     }));
   const dispatch = useDispatch<ThunkAppDispatch>();
   const setBanner = useBanner();
+  const navigation = useNavigation();
 
   const onSave = async () => {
     if (
@@ -52,6 +54,11 @@ const HealthGoalForm = () => {
       await dispatch(
         updateHealthGoalsAsync({ sleep, activeCalories }),
       ).unwrap();
+      setBanner(
+        'Your health goals have been successfully updated.',
+        BannerTypes.success,
+      );
+      navigation.goBack();
     } catch (error) {
       console.error(error);
       setBanner(
