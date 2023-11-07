@@ -55,7 +55,7 @@ const chartDimensions = {
 
 const Health = () => {
   const { hrvs, sleeps, rrs, rhrs } = useHealthSamples();
-  const [activeItem, setActiveItem] = useState('recovery');
+  const [activeItem, setActiveItem] = useState('rhr');
 
   const lineChartConfig = useMemo(() => {
     const renderLabelFromValue = (value: DateValueProps) =>
