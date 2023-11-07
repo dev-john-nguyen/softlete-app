@@ -1,6 +1,5 @@
 import React from 'react';
 import { DemoArrow, PrimaryText } from '@app/elements';
-import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import { DemoStates } from '@app/services';
@@ -31,14 +30,12 @@ const SectionHeader = ({ title, desc, RightElement }: Props) => {
         </PrimaryText>
         {RightElement}
       </FlexBox>
-      <FlexBox alignItems="center" marginTop={10}>
-        <Icon icon="logo" size={25} variant="secondary" />
+      <FlexBox alignItems="center">
         <PrimaryText
           variant="secondary"
           size="small"
           color={Colors.white}
-          flex={1}
-          marginLeft={5}>
+          flex={1}>
           {desc}
         </PrimaryText>
       </FlexBox>

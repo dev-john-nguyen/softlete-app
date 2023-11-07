@@ -38,7 +38,9 @@ const HealthItem = ({
       <PrimaryText size="small" marginTop={5}>
         {title}
       </PrimaryText>
-      <PrimaryText size="small">{value}</PrimaryText>
+      <PrimaryText size="small" numberOfLines={1}>
+        {value}
+      </PrimaryText>
     </FlexBox>
   );
 };

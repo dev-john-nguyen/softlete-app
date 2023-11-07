@@ -49,12 +49,36 @@ export const useHealthSamples = () => {
     }
   };
 
+  const fillInGapDates = (
+    sleepData: DateValueProps[],
+    start: Date,
+    end: Date,
+  ) => {
+    const dateSet = new Set(
+      sleepData.map(data => data.date.toISOString().split('T')[0]),
+    );
+    const filledDates = [];
+    for (
+      let date = new Date(start);
+      date <= end;
+      date.setDate(date.getDate() + 1)
+    ) {
+      const dateStr = date.toISOString().split('T')[0];
+      if (!dateSet.has(dateStr)) {
+        filledDates.push({ value: 0, date: new Date(date) });
+      }
+    }
+    return sleepData
+      .concat(filledDates)
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
+  };
+
   const evalSleepSamples = async () => {
     const { startDate, endDate } = getDates(7);
     try {
       const sleepStore = await getSleepDailyAmts(startDate, endDate);
       setSleeps({
-        data: sleepStore.reverse(),
+        data: fillInGapDates(sleepStore, startDate, endDate),
         eval: sleepDesc,
       });
     } catch (err) {

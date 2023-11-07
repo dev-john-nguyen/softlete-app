@@ -52,7 +52,7 @@ const Health = () => {
   const { hrvs, sleeps, rrs, rhrs } = useHealthSamples();
   const [activeItem, setActiveItem] = useState('recovery');
 
-  const lineChartConfig = (() => {
+  const lineChartConfig = useMemo(() => {
     const renderLabelFromValue = (value: DateValueProps) =>
       `${Constants.daysOfWeek[value.date.getDay()].slice(0, 3).toUpperCase()}`;
 
@@ -94,25 +94,55 @@ const Health = () => {
           desc: '',
         };
     }
-  })();
+  }, [activeItem, hrvs, rhrs, rrs, sleeps]);
 
   const { sleepToday, hrvToday, rrToday, rhrToday } = useMemo(() => {
-    const getValue = (healthEval: HealthEvalProps) => {
+    const getAverage = (healthEval: HealthEvalProps, fixed = 1) => {
+      let avg = 0;
       if (healthEval.data.length > 0) {
-        return Math.round(
-          healthEval.data[healthEval.data.length - 1].value,
-        ).toString();
+        // skip zeros
+        const filtered = healthEval.data.filter(d => d.value);
+        avg =
+          filtered.reduce((state, val) => state + val.value, 0) /
+          filtered.length;
       }
-      return '0';
+      return String(avg.toFixed(fixed));
     };
 
     return {
-      sleepToday: getValue(sleeps),
-      hrvToday: getValue(hrvs),
-      rrToday: getValue(rrs),
-      rhrToday: getValue(rhrs),
+      sleepToday: getAverage(sleeps, 2),
+      hrvToday: getAverage(hrvs),
+      rrToday: getAverage(rrs),
+      rhrToday: getAverage(rhrs),
     };
   }, [hrvs, rhrs, rrs, sleeps]);
+
+  const renderDotContent = (props: {
+    x: number;
+    y: number;
+    index: number;
+    indexData: number;
+  }) => {
+    let label = props.indexData.toFixed(1);
+    const leftAdj = -moderateScale(10);
+    const topAdj = -moderateScale(35);
+    if (activeItem === 'sleep') {
+      label = props.indexData.toString().replace('.', ':');
+    }
+    if (props.indexData === 0) {
+      label = '';
+    }
+
+    return (
+      <FlexBox
+        position="absolute"
+        left={props.x + leftAdj}
+        top={props.y + topAdj}
+        key={props.index}>
+        <PrimaryText size="small">{label}</PrimaryText>
+      </FlexBox>
+    );
+  };
 
   return (
     <ScreenTemplate
@@ -144,15 +174,7 @@ const Health = () => {
         withDots={true}
         fromZero={true}
         withShadow={false}
-        renderDotContent={props => (
-          <FlexBox
-            position="absolute"
-            left={props.x + -moderateScale(10)}
-            top={props.y + moderateScale(10)}
-            key={props.index}>
-            <PrimaryText size="small">{props.indexData.toFixed(1)}</PrimaryText>
-          </FlexBox>
-        )}
+        renderDotContent={renderDotContent}
         chartConfig={{
           backgroundGradientFrom: '#1E2923',
           backgroundGradientFromOpacity: 0,
@@ -188,7 +210,7 @@ const Health = () => {
         rhrVal={rhrToday}
       />
       <FlexBox marginTop={15} alignSelf="center">
-        <PrimaryText size="small">Last 7 Day Avg</PrimaryText>
+        <PrimaryText size="small">Last 7 Days Averages</PrimaryText>
       </FlexBox>
     </ScreenTemplate>
   );
