@@ -78,7 +78,10 @@ export const useHealthSamples = () => {
     try {
       const sleepStore = await getSleepDailyAmts(startDate, endDate);
       setSleeps({
-        data: fillInGapDates(sleepStore, startDate, endDate),
+        data:
+          sleepStore.length > 0
+            ? fillInGapDates(sleepStore, startDate, endDate)
+            : [],
         eval: sleepDesc,
       });
     } catch (err) {
