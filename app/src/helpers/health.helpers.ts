@@ -239,45 +239,60 @@ export const getSleepDailyAmts = async (startDate: Date, endDate: Date) => {
         sple.value === SleepValueProps.DEEP ||
         sple.value === SleepValueProps.REM ||
         sple.value === SleepValueProps.ASLEEP,
+    )
+    .sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
     );
-  //samples should be sorted in ascending order
+
+  // samples are sorted in descending order to get the latest first
   const sleepStore: DateValueProps[] = [];
 
   let totalSleep = 0;
   let sleepDate: Date | undefined;
 
-  for (let i = 0; i < samples.length; i++) {
-    const sample = samples[i];
+  samples.forEach((sample, i) => {
     const diff =
       new Date(sample.endDate).getTime() - new Date(sample.startDate).getTime();
 
     if (i === 0) {
+      // Initialize totalSleep and sleepDate on the first sample
+      totalSleep = diff;
+      sleepDate = new Date(sample.startDate);
+    } else {
+      // Check if it's a new sleep cycle
+      const previousSample = samples[i - 1];
+      const gapBetweenSamples =
+        new Date(previousSample.startDate).getTime() -
+        new Date(sample.endDate).getTime();
+
+      if (gapBetweenSamples > 3600000 * 6) {
+        // If gap is greater than 6 hours, conclude the previous sleep cycle and save it
+        sleepStore.push({
+          value: convertTotalSleepToHours(totalSleep),
+          date: sleepDate as Date,
+        });
+        totalSleep = 0; // Reset totalSleep for the new cycle
+        sleepDate = new Date(sample.startDate); // Update sleepDate to the current sample's start date
+      }
+
+      // Add current sample's sleep duration to totalSleep
       totalSleep += diff;
-      sleepDate = new Date(sample.endDate);
-      continue;
     }
 
-    //check if it's a new sleep cycle
-    const sampleB4 = samples[i - 1];
-
-    const diffSamples =
-      new Date(sampleB4.startDate).getTime() -
-      new Date(sample.endDate).getTime();
-
-    if (diffSamples > 3600000 * 6) {
-      //greater than 6 hours assume new sleep cycle
-      const time = convertTimeToFormatTime(totalSleep) as string;
-      const sleepAmt = parseFloat(time.split(' ')[0]);
+    // Check if current sample is the last in the array and push its data to sleepStore
+    if (i === samples.length - 1) {
       sleepStore.push({
-        value: sleepAmt ? sleepAmt : 0,
-        date: sleepDate ? sleepDate : new Date(),
+        value: convertTotalSleepToHours(totalSleep),
+        date: sleepDate as Date,
       });
-
-      totalSleep = 0;
-      sleepDate = new Date(sample.endDate);
     }
+  });
 
-    totalSleep += diff;
-  }
   return sleepStore;
 };
+
+function convertTotalSleepToHours(totalSleep: number): number {
+  // Assuming convertTimeToFormatTime returns a string like "8 hours" or "7.5 hours"
+  const timeString = convertTimeToFormatTime(totalSleep) as string;
+  return parseFloat(timeString.split(' ')[0]);
+}

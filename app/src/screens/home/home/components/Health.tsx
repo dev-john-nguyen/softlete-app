@@ -13,7 +13,7 @@ import { FlexBox } from '@app/ui';
 import { getSleepDailyAmts } from 'src/helpers/health.helpers';
 import Icon from '@app/icons';
 import { Colors, normalize } from '@app/utils';
-import { DemoArrow, HealthCircle } from '@app/elements';
+import { DemoArrow, HealthCircle, PrimaryText } from '@app/elements';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
@@ -42,8 +42,7 @@ const HomeHealth = ({ healthData }: Props) => {
     const options: HealthInputOptions = {
       startDate: today.toISOString(),
     };
-
-    const yesterday = new Date(today.setDate(today.getDate() - 1));
+    const yesterday = new Date(today.setDate(today.getDate() - 3));
 
     const sleepStore = await getSleepDailyAmts(yesterday, new Date());
 
@@ -116,7 +115,7 @@ const HomeHealth = ({ healthData }: Props) => {
             <Icon
               icon="pencil"
               color={Colors.white}
-              size={20}
+              size={19}
               onPress={onNavToEditGoalForm}
               hitSlop={10}
               containerStyles={{ marginRight: 15 }}
@@ -124,18 +123,18 @@ const HomeHealth = ({ healthData }: Props) => {
             <Icon
               icon="filter_bars"
               color={Colors.white}
-              size={20}
+              size={19}
               onPress={onNavToHealth}
               hitSlop={10}
             />
           </FlexBox>
         }
-        desc="An overview of your health today. See how you're progressing towards your goals."
+        desc="An overview of your health today. See how you're progressing towards your health goals."
       />
       <FlexBox marginTop={30} marginBottom={30} justifyContent="space-between">
         <HealthCircle
           name="Sleep"
-          value={String(sleepDuration) + ' hrs'}
+          value={String(sleepDuration).replace('.', ':') + ' hrs'}
           progress={sleepDuration / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
           size={normalize.width(2.5)}
@@ -161,11 +160,14 @@ const HomeHealth = ({ healthData }: Props) => {
       <HealthContainer
         setActiveItem={() => undefined}
         activeItem={''}
-        sleepVal={String(sleepDuration)}
+        sleepVal={String(sleepDuration).replace('.', ':')}
         hrvVal={'50'}
         rhrVal={'80'}
         rrVal={'78.3'}
       />
+      <FlexBox marginTop={15} alignSelf="center">
+        <PrimaryText size="small">{`Today's Health Results`}</PrimaryText>
+      </FlexBox>
     </FlexBox>
   );
 };
