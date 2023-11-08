@@ -26,7 +26,7 @@ async function validateSkipRouteSamples() {
       [
         {
           text: 'Cancel',
-          onPress: () => reject(),
+          onPress: () => reject('cancel'),
           style: 'cancel',
         },
         { text: 'Import', onPress: () => resolve('') },
@@ -138,7 +138,7 @@ export async function fetchWorkoutRouteLocations(
   activityId?: string,
   workoutUid?: string,
 ) {
-  return request(
+  return request<any>(
     'GET',
     PATHS.workouts.getWorkoutRoute(userUid, activityId, workoutUid),
     (() => null) as any,
