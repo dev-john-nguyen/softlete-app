@@ -24,7 +24,7 @@ export const TimerBanner = () => {
   const translationY = useSharedValue(insets.top);
   const translationX = useSharedValue(insets.right);
   const widthOfBanner = useSharedValue(0);
-  const { time } = useSelector((state: ReducerProps) => state.timer);
+  const { time, isRunning } = useSelector((state: ReducerProps) => state.timer);
   const snapPoints = [0, screenWidth - insets.right - widthOfBanner.value];
 
   const gestureHandler = useAnimatedGestureHandler({
@@ -93,7 +93,7 @@ export const TimerBanner = () => {
     time.mins,
   )}:${formatTimer(time.secs)}`;
 
-  if (!time.hrs && !time.mins && !time.secs) return null;
+  if (!isRunning) return null;
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>

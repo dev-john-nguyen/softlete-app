@@ -27,7 +27,13 @@ export const startTimerHandler = createAsyncThunk(
       const minSecs = prevTime.mins * 60;
       let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
       if (prevTimeInSecs <= 0) {
-        dispatch(setBanner(BannerTypes.default, 'Workout timer has finished!'));
+        dispatch(
+          setBanner(
+            BannerTypes.default,
+            'Workout timer has finished!',
+            5 * 1000,
+          ),
+        );
         dispatch(clearTime());
       } else {
         prevTimeInSecs--;
