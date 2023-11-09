@@ -1,14 +1,17 @@
+export type Time = {
+  hrs: number;
+  mins: number;
+  secs: number;
+};
+
 export type TimerProps = {
   timerId?: NodeJS.Timer;
   isRunning?: boolean;
-  time: {
-    hrs: number;
-    mins: number;
-    secs: number;
-  };
+  time: Time;
+  initialTime: Time;
 };
 
-export const initialTime = {
+export const defaultTime = {
   hrs: 0,
   mins: 0,
   secs: 0,

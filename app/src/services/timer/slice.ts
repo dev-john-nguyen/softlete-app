@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TimerProps, initialTime } from './types';
-import { notifyHandler, secondsToTime } from './helpers';
+import { TimerProps, defaultTime } from './types';
+import { secondsToTime } from './helpers';
 import { setBanner } from '@app/services';
 import { BannerTypes } from '../banner/types';
 import { ReducerProps } from '..';
 
 const initialState: TimerProps = {
-  time: initialTime,
+  time: defaultTime,
+  initialTime: defaultTime,
 };
 
 export const startTimerHandler = createAsyncThunk(
@@ -26,15 +27,11 @@ export const startTimerHandler = createAsyncThunk(
       const minSecs = prevTime.mins * 60;
       let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
       if (prevTimeInSecs <= 0) {
-        if (!notifyHandler()) {
-          dispatch(
-            setBanner(BannerTypes.default, 'Workout timer has finished!'),
-          );
-        }
+        dispatch(setBanner(BannerTypes.default, 'Workout timer has finished!'));
         dispatch(clearTime());
       } else {
         prevTimeInSecs--;
-        dispatch(setTime(secondsToTime(prevTimeInSecs)));
+        dispatch(updateTime(secondsToTime(prevTimeInSecs)));
       }
     }, 1000); // Timer interval in milliseconds (1 second)
     dispatch(setTimerId(timerRef));
@@ -61,18 +58,28 @@ const timerSlice = createSlice({
         clearInterval(state.timerId);
       }
     },
-    setTime: (state: TimerProps, action) => {
+    updateTime: (state: TimerProps, action) => {
       state.time = action.payload;
     },
+    setTime: (state: TimerProps, action) => {
+      state.time = action.payload;
+      state.initialTime = action.payload;
+    },
     clearTime: (state: TimerProps) => {
-      state.time = initialTime;
+      state.time = state.initialTime;
       state.timerId && clearInterval(state.timerId);
       state.isRunning = false;
     },
   },
 });
 
-export const { setTime, clearTime, pauseTime, setTimerId, setRunning } =
-  timerSlice.actions;
+export const {
+  setTime,
+  clearTime,
+  pauseTime,
+  setTimerId,
+  setRunning,
+  updateTime,
+} = timerSlice.actions;
 
 export default timerSlice.reducer;
