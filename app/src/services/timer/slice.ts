@@ -1,3 +1,4 @@
+import { Vibration } from 'react-native';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TimerProps, defaultTime } from './types';
 import { secondsToTime } from './helpers';
@@ -9,6 +10,8 @@ const initialState: TimerProps = {
   time: defaultTime,
   initialTime: defaultTime,
 };
+
+const ONE_SECOND_IN_MS = 1000;
 
 export const startTimerHandler = createAsyncThunk(
   'timer/startTimerHandler',
@@ -27,11 +30,18 @@ export const startTimerHandler = createAsyncThunk(
       const minSecs = prevTime.mins * 60;
       let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
       if (prevTimeInSecs <= 0) {
+        Vibration.vibrate([
+          1 * ONE_SECOND_IN_MS,
+          1 * ONE_SECOND_IN_MS,
+          1 * ONE_SECOND_IN_MS,
+          1 * ONE_SECOND_IN_MS,
+          1 * ONE_SECOND_IN_MS,
+        ]);
         dispatch(
           setBanner(
             BannerTypes.default,
             'Workout timer has finished!',
-            5 * 1000,
+            5 * ONE_SECOND_IN_MS,
           ),
         );
         dispatch(clearTime());
