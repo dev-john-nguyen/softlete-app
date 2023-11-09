@@ -27,7 +27,7 @@ import NotificationItem from '../../components/notifications/NotificationItem';
 import FriendItem from '../../components/notifications/FriendItem';
 import {fetchNotifications} from '../../services/notifications/actions';
 import {getFriends} from '../../services/user/actions';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 
 interface Props {
   navigation: any;

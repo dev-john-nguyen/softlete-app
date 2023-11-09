@@ -5,7 +5,7 @@ import { PickerButton, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import { SettingsStackScreens } from './types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { useDispatch } from 'react-redux';
 import { logout } from '@app/services';
 

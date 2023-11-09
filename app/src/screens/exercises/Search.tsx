@@ -28,7 +28,7 @@ import SearchFilter from '../../components/SearchFilter';
 import { AppDispatch } from '../../../App';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { ProgramStackScreens } from '../program/types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 
 interface Props {
   navigation: any;

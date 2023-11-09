@@ -30,7 +30,7 @@ import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
 import OverviewContainer from '../../components/workout/overview/Container';
 import { updateProgramWoHealthData } from '../../services/program/actions';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { LocationValue } from 'react-native-health';
 import { handleDeviceActivityImport } from '../../helpers/route.helpers';
 import { WorkoutProvider } from '@app/contexts';

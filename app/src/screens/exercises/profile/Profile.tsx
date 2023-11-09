@@ -14,7 +14,7 @@ import { UserProps } from '../../../services/user/types';
 import { AthleteProfileProps } from '../../../services/athletes/types';
 import { ProgramStackScreens } from '../../program/types';
 import reportExercise from '../../utils/report-exercise';
-import ScreenTemplate from '../../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../../components/elements/screen-template';
 import Icon from '@app/icons';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {

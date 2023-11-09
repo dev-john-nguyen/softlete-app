@@ -30,7 +30,7 @@ import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
 } from 'src/services/program/actions';
-import { useScreenTemplateState } from '../elements/ScreenTemplate';
+import { useScreenTemplateState } from '@app/elements';
 
 const WorkoutContainer = () => {
   const {

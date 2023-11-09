@@ -2,7 +2,7 @@ import React from 'react';
 import { ReducerProps } from '../../services';
 import { useSelector } from 'react-redux';
 import Products from '../../utils/Products';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';

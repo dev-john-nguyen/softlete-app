@@ -1,6 +1,6 @@
 import React from 'react';
 import PrimaryText from '../../components/elements/PrimaryText';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';

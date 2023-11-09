@@ -1,86 +1,23 @@
-import React, {
-  FC,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { FlexBox } from '@app/ui';
 import { useNavigation } from '@react-navigation/native';
-import BackButton from './BackButton';
+import BackButton from '../BackButton';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import CustomPicker, { PickerOptionProp } from './Picker';
+import CustomPicker, { PickerOptionProp } from '../Picker';
 import DatePicker from 'react-native-date-picker';
 import { Colors, moderateScale } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
-import PrimaryText from './PrimaryText';
+import PrimaryText from '../PrimaryText';
 import { DemoStates } from '@app/services';
-import DemoArrow from './DemoArrow';
-
-export type ScreenTemplateContext = {
-  setMiddleContent: React.Dispatch<
-    React.SetStateAction<JSX.Element | undefined>
-  >;
-  middleContent?: JSX.Element;
-};
-
-export const ScreenTemplateContext =
-  createContext<null | ScreenTemplateContext>(null);
-
-const ScreenTemplateProvider: FC<{ children: JSX.Element[] }> = ({
-  children,
-}) => {
-  const [middleContent, setMiddleContent] = useState<JSX.Element>();
-
-  return (
-    <ScreenTemplateContext.Provider value={{ middleContent, setMiddleContent }}>
-      {children}
-    </ScreenTemplateContext.Provider>
-  );
-};
-
-export const useScreenTemplateState = () => {
-  const state = useContext(ScreenTemplateContext);
-  if (!state) throw new Error('cannot access screen template context');
-  return state;
-};
-
-type HeaderMiddleContentProps = {
-  headerTitleFormatted?: string;
-  middleContentFlex?: number;
-  middleContent?: JSX.Element;
-};
-
-const HeaderMiddleContent: FC<HeaderMiddleContentProps> = ({
-  headerTitleFormatted,
-  middleContentFlex,
-  middleContent,
-}) => {
-  const { middleContent: middleContentState } = useScreenTemplateState();
-  return (
-    <FlexBox
-      flex={headerTitleFormatted ? 1 : middleContentFlex ?? 1}
-      alignItems="center"
-      paddingLeft={headerTitleFormatted ? 10 : 0}
-      justifyContent={headerTitleFormatted ? 'flex-start' : 'center'}>
-      {headerTitleFormatted ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <PrimaryText size="large" textTransform="capitalize">
-            {headerTitleFormatted}
-          </PrimaryText>
-        </ScrollView>
-      ) : (
-        middleContentState || middleContent
-      )}
-    </FlexBox>
-  );
-};
+import DemoArrow from '../DemoArrow';
+import { ScreenTemplateProvider } from './context';
+import HeaderMiddleContent from './components/HeaderMiddleContent';
 
 interface Props {
   children: any;
