@@ -31,11 +31,9 @@ export const startTimerHandler = createAsyncThunk(
       let prevTimeInSecs = hrSecs + minSecs + prevTime.secs;
       if (prevTimeInSecs <= 0) {
         Vibration.vibrate([
-          1 * ONE_SECOND_IN_MS,
-          1 * ONE_SECOND_IN_MS,
-          1 * ONE_SECOND_IN_MS,
-          1 * ONE_SECOND_IN_MS,
-          1 * ONE_SECOND_IN_MS,
+          500,
+          250, // Vibrate for 500ms, pause for 250ms
+          500,
         ]);
         dispatch(
           setBanner(
