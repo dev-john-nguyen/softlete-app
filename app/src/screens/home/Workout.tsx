@@ -210,7 +210,7 @@ const Workout = ({
         isBackVisible
         onGoBack={onBackButtonPress}
         rightContent={
-          <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+          <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             <Icon
               icon="timer"

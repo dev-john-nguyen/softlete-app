@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '5%',
     zIndex: 1,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: rgba(Colors.whiteRbg, 1),
   },
 });

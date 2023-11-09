@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import Chevron from '../../assets/ChevronSvg';
 import BaseColors from '../../utils/BaseColors';
-import { normalize } from '../../utils/tools';
-import StyleConstants, { moderateScale } from '../tools/StyleConstants';
+import { moderateScale } from '../tools/StyleConstants';
 
 interface Props {
   onPress: () => void;

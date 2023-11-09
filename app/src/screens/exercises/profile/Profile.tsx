@@ -101,7 +101,7 @@ const IconMenuOptions: FC<IconMenuOptionsProps> = ({
   };
 
   return (
-    <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+    <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
       {!offline && (
         <>
           <Icon
