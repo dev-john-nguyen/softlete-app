@@ -124,16 +124,18 @@ const Workout = ({
     if (!workout || workout.programTemplateUid) return;
     if (status === workout.status) return;
 
-    if (status === WorkoutStatus.completed) {
-      //don't allow in progress if not workouts
-      if (
-        workout.type === WorkoutTypes.TraditionalStrengthTraining &&
-        (!workout.exercises || workout.exercises.length < 1)
-      ) {
-        setBanner('Please add an exercise.', BannerTypes.warning);
-        return;
-      }
+    // check if there are any exercises
+    if (
+      (status === WorkoutStatus.completed ||
+        status === WorkoutStatus.inProgress) &&
+      workout.type === WorkoutTypes.TraditionalStrengthTraining &&
+      (!workout.exercises || workout.exercises.length < 1)
+    ) {
+      setBanner('Please add an exercise.', BannerTypes.warning);
+      return;
+    }
 
+    if (status === WorkoutStatus.completed) {
       await onCompleteWorkout();
       return;
     }
