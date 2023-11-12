@@ -13,6 +13,8 @@ import {
 type FlexBoxProps = {
   children: JSX.Element;
   onPress?: () => void;
+  onPressOut?: () => void;
+  onPressIn?: () => void;
   screenWidth?: boolean;
   screenWidthPct?: number;
   column?: boolean;
@@ -37,6 +39,8 @@ const FlexBox = ({
   onLayout,
   applyBoxShadow,
   onLayoutExtract,
+  onPressOut,
+  onPressIn,
   ...stylesProp
 }: FlexBoxProps) => {
   const styles = useResizeStyles(stylesProp);
@@ -55,7 +59,7 @@ const FlexBox = ({
     : styles.width;
   const direction = column ? 'column' : flexDirection;
 
-  if (onPress || onLongPress) {
+  if (onPress || onLongPress || onPressOut || onPressIn) {
     return (
       <Pressable
         style={[
@@ -68,6 +72,8 @@ const FlexBox = ({
         ]}
         onPress={onPress}
         onLongPress={onLongPress}
+        onPressOut={onPressOut}
+        onPressIn={onPressIn}
         hitSlop={5}
         onLayout={onLayoutHandler}>
         {children}

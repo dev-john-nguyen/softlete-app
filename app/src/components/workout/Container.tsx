@@ -25,12 +25,12 @@ import {
 import { WorkoutContext } from '@app/contexts';
 import { useNavigation } from '@react-navigation/native';
 import { FlexBox } from '@app/ui';
-import { CircleAdd } from '@app/elements';
 import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
 } from 'src/services/program/actions';
 import { useScreenTemplateState } from '@app/elements';
+import AddExercise from './components/AddExercise';
 
 const WorkoutContainer = () => {
   const {
@@ -321,9 +321,7 @@ const WorkoutContainer = () => {
         removeWorkoutExercise={onRemoveExercise}
         navGroupState={navGroupState}
       />
-      {shouldAddCom && (
-        <CircleAdd onPress={() => onAddExercise()} style={{ bottom: 10 }} />
-      )}
+      {shouldAddCom && <AddExercise onAddExercise={onAddExercise} />}
     </FlexBox>
   );
 };

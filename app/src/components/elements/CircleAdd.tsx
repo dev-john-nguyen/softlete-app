@@ -5,14 +5,18 @@ import PlusSvg from '../../assets/PlusSvg';
 import { moderateScale } from '../tools/StyleConstants';
 
 interface Props {
-  onPress: () => void;
+  onPress?: () => void;
   style?: StyleProp<any>;
   size?: number;
+  onPressIn?: () => void;
 }
 
-const CircleAdd = ({ onPress, style, size }: Props) => {
+const CircleAdd = ({ onPress, style, size, onPressIn }: Props) => {
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]}>
+    <Pressable
+      onPress={onPress}
+      onPressIn={onPressIn}
+      style={[styles.container, style]}>
       <View
         style={{
           width: size ? moderateScale(size) : moderateScale(20),
