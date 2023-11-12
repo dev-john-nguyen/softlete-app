@@ -47,7 +47,6 @@ import StyleConstants from '../../../../components/tools/StyleConstants';
 import { useNotifeeListener } from '../../../../hooks/home/notifee.hooks';
 import { useActiveWos } from '../../../../hooks/home/workout.hooks';
 import { useApiHooks } from '../../../../hooks/home/api.hooks';
-import HomeBackground from './Background';
 import { ScreenTemplate } from '@app/elements';
 import { useMemo } from 'react';
 import { Colors } from '@app/utils';
@@ -211,7 +210,6 @@ const Home = ({
       onPickerClose={() => setPicker(undefined)}
       pickerValue={picker === 'chartFilter' ? chartFilter : selectedEx?._id}
       onPickerChangeValue={onPickerChange}>
-      <HomeBackground />
       <HomeHeader />
       <HomeNavBar currentIndex={currentIndex} scrollRef={scrollRef} />
       <ScrollView

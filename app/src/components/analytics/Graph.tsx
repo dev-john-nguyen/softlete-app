@@ -103,12 +103,14 @@ const AnalyticsGraph = ({ dates, data }: Props) => {
     <FlexBox flex={1} padding={15} paddingTop={0} column>
       <FlexBox marginBottom={10}>
         <PickerButton
+          padding={10}
           marginBottom={0}
           isActive={filter === AnalyticsFilters.LOW}
           onPress={() => setFilter(AnalyticsFilters.LOW)}>
           Min
         </PickerButton>
         <PickerButton
+          padding={10}
           marginBottom={0}
           containerStyles={{ marginLeft: 10 }}
           isActive={filter === AnalyticsFilters.AVG}
@@ -116,6 +118,7 @@ const AnalyticsGraph = ({ dates, data }: Props) => {
           Avg
         </PickerButton>
         <PickerButton
+          padding={10}
           marginBottom={0}
           containerStyles={{ marginLeft: 10 }}
           isActive={filter === AnalyticsFilters.HIGH}

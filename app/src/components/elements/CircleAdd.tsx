@@ -31,7 +31,7 @@ const CircleAdd = ({ onPress, style, size, onPressIn }: Props) => {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 100,
-    backgroundColor: Colors.blendWhite,
+    backgroundColor: Colors.lightPrimary,
     padding: moderateScale(8),
     alignSelf: 'center',
     position: 'absolute',

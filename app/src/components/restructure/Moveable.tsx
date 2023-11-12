@@ -199,7 +199,7 @@ const RestructureMoveable = ({
       shadowOpacity: withSpring(moving ? 0.2 : 0),
       shadowRadius: 10,
       width: `${width.value}%`,
-      backgroundColor: Colors.blendWhite,
+      backgroundColor: Colors.lightPrimary,
     };
   }, [moving]);
 

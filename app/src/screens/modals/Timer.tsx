@@ -77,7 +77,7 @@ const Timer = () => {
           column
           alignItems="center"
           justifyContent="center"
-          backgroundColor={Colors.blendWhite}
+          backgroundColor={Colors.lightPrimary}
           borderRadius={5}
           maxWidth="80%"
           padding={20}>

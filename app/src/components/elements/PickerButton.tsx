@@ -21,6 +21,7 @@ type Props = {
   textTransform?: 'capitalize';
   icon?: IconOptions;
   valueOpacity?: number;
+  padding?: number;
 };
 
 const PickerButton: React.FC<Props> = props => {
@@ -36,7 +37,7 @@ const PickerButton: React.FC<Props> = props => {
         </PrimaryText>
       )}
       <FlexBox
-        padding={15}
+        padding={props.padding ?? 15}
         marginBottom={props.marginBottom ?? 15}
         alignItems="center"
         justifyContent="space-between"

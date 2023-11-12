@@ -34,7 +34,7 @@ const MenuModal: FC<MenuModalProps> = ({ menuItems, title }) => {
         <UnderLay />
         <FlexBox
           column
-          backgroundColor={Colors.blendWhite}
+          backgroundColor={Colors.lightPrimary}
           applyBoxShadow
           padding={10}
           paddingTop={20}

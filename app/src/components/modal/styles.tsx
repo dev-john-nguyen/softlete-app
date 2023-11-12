@@ -49,7 +49,7 @@ const modalStyles = StyleSheet.create({
   modal: {
     borderColor: Colors.white,
     borderWidth: 1,
-    backgroundColor: Colors.blendWhite,
+    backgroundColor: Colors.lightPrimary,
     padding: StyleConstants.baseMargin,
     borderRadius: 5,
   },

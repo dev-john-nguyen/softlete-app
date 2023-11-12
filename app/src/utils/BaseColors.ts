@@ -1,10 +1,9 @@
 export default {
-  primary: '#170001',
-  lightPrimary: '#290000',
-  primaryRgb: '23, 0, 1',
+  primary: '#0C0001',
+  lightPrimary: '#140000',
+  primaryRgb: '12, 0, 1',
   lightWhite: '#FAFAFA',
   lightWhiteRgb: '250, 250, 250',
-  blendWhite: '#2E191A',
   black: '#250000',
   lightBlack: '#333333',
   secondary: '#C4C4C4',

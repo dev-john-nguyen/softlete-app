@@ -30,27 +30,39 @@ const renderDate = (d: string) => {
 const DataTable = ({ data, type = DataType.workout }: Props) => {
   const renderVisual = useMemo(() => {
     if (type === DataType.workout) {
-      return (data as AnalyticalDataProps<WorkoutExerciseDataProps[]>[]).map(
-        d => (
-          <View key={d.workoutExerciseUid}>
-            {d.data.map(({ performVal, reps, _id }, i) => (
-              <FlexBox
-                key={_id || i}
-                backgroundColor={
-                  i % 2 === 0 ? rgba(BaseColors.whiteRbg, 0.2) : 'transparent'
-                }
-                justifyContent="space-between"
-                marginBottom={5}
-                padding={10}>
-                <PrimaryText flex={0.5}>{renderDate(d.date)}</PrimaryText>
-                <PrimaryText flex={0.5}>{i + 1}</PrimaryText>
-                <PrimaryText flex={0.5}>{reps}</PrimaryText>
-                <PrimaryText flex={1}>{performVal}</PrimaryText>
-              </FlexBox>
-            ))}
-          </View>
-        ),
-      );
+      let count = 0;
+      return (data as AnalyticalDataProps<WorkoutExerciseDataProps[]>[])
+        .sort((a, b) => {
+          const dateA = strToDate(a.date);
+          const dateB = strToDate(b.date);
+          return dateA.getTime() - dateB.getTime();
+        })
+        .map(d => {
+          return (
+            <View key={d.workoutExerciseUid}>
+              {d.data.map(({ performVal, reps, _id }, i) => {
+                count++;
+                return (
+                  <FlexBox
+                    key={_id || i}
+                    backgroundColor={
+                      count % 2 === 0
+                        ? rgba(BaseColors.whiteRbg, 0.05)
+                        : 'transparent'
+                    }
+                    justifyContent="space-between"
+                    marginBottom={5}
+                    padding={10}>
+                    <PrimaryText flex={0.5}>{renderDate(d.date)}</PrimaryText>
+                    <PrimaryText flex={0.5}>{i + 1}</PrimaryText>
+                    <PrimaryText flex={0.5}>{reps}</PrimaryText>
+                    <PrimaryText flex={1}>{performVal}</PrimaryText>
+                  </FlexBox>
+                );
+              })}
+            </View>
+          );
+        });
     } else {
       return (data as AnalyticalDataProps<HealthDataProps>[]).map((d, i) => {
         const healthWorkout = new WorkoutTracker();
@@ -60,7 +72,7 @@ const DataTable = ({ data, type = DataType.workout }: Props) => {
           <FlexBox
             key={d.workoutExerciseUid || i}
             backgroundColor={
-              i % 2 === 0 ? rgba(BaseColors.whiteRbg, 0.2) : 'transparent'
+              i % 2 === 0 ? rgba(BaseColors.whiteRbg, 0.05) : 'transparent'
             }
             justifyContent="space-between"
             marginBottom={5}
@@ -85,7 +97,7 @@ const DataTable = ({ data, type = DataType.workout }: Props) => {
           paddingBottom={15}
           justifyContent="space-between"
           opacity={0.8}
-          backgroundColor={Colors.blendWhite}>
+          backgroundColor={Colors.lightPrimary}>
           <PrimaryText flex={0.5}>Date</PrimaryText>
           <PrimaryText flex={0.5}>Set</PrimaryText>
           <PrimaryText flex={0.5}>Rep</PrimaryText>
@@ -99,7 +111,7 @@ const DataTable = ({ data, type = DataType.workout }: Props) => {
           paddingBottom={15}
           justifyContent="space-between"
           opacity={0.8}
-          backgroundColor={Colors.blendWhite}>
+          backgroundColor={Colors.lightPrimary}>
           <PrimaryText flex={0.6}>Date</PrimaryText>
           <PrimaryText flex={1}>Duration</PrimaryText>
           <PrimaryText flex={0.8}>Distance</PrimaryText>

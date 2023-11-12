@@ -96,7 +96,7 @@ const ScreenTemplate = ({
   return (
     <ScreenTemplateProvider>
       <LinearGradient
-        colors={['#250000', '#170001', '#250000']}
+        colors={['#140000', '#0C0001', '#140000']}
         style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']}>
           <FlexBox
