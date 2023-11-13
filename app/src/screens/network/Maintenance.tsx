@@ -8,20 +8,26 @@ import { Colors } from '@app/utils';
 const Maintenance = () => {
   return (
     <ScreenTemplate applyContentPadding>
-      <FlexBox flex={1} column alignItems="center">
-        <PrimaryText bold fontSize={30} variant="primary" marginBottom={5}>
-          Softlete Social
-        </PrimaryText>
-        <PrimaryText>
-          Cultivate connections with fellow athletes, stay updated on their
-          training regimens, explore and download training programs/workouts
-          from others.
-        </PrimaryText>
-        <FlexBox flex={1} column alignItems="center" marginTop={20}>
-          <Icon icon="world" size={120} color={Colors.lightWhite} />
-          <PrimaryText bold fontSize={30} marginTop={20}>
-            Coming Soon!
+      <FlexBox flex={1} column justifyContent="center">
+        <FlexBox column bottom={50}>
+          <PrimaryText bold fontSize={50} variant="primary">
+            Social Networking
           </PrimaryText>
+          <PrimaryText>
+            Cultivate connections with fellow athletes, stay updated on their
+            training regimens, explore and download training programs/workouts
+            from others. Coming soon.
+          </PrimaryText>
+        </FlexBox>
+        <FlexBox
+          marginTop={100}
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
+          right={-50}
+          top={0}
+          opacity={0.1}>
+          <Icon icon="world" color={Colors.white} size={500} />
         </FlexBox>
       </FlexBox>
     </ScreenTemplate>
