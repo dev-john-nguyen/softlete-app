@@ -16,6 +16,7 @@ interface Props {
   onPress: () => void;
   softlete?: boolean;
   user: UserProps;
+  isActive?: boolean;
 }
 
 const ExerciseSearchPreview = ({
@@ -23,10 +24,12 @@ const ExerciseSearchPreview = ({
   onPress,
   softlete,
   user,
+  isActive,
 }: Props) => {
   return (
     <FlexBox
       onPress={onPress}
+      backgroundColor={isActive ? rgba(Colors.whiteRbg, 0.2) : undefined}
       borderBottomWidth={1}
       borderBottomColor={rgba(Colors.whiteRbg, 0.2)}
       justifyContent="space-between"

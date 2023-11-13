@@ -49,12 +49,15 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
     }
   };
 
-  const onDragEndHandler = () => {
-    if (activeDrop === DropOptions.exercise) {
+  const onDragEndHandler = (notDragged: boolean) => {
+    if (notDragged) {
+      onAddExercise();
+    } else if (activeDrop === DropOptions.exercise) {
       onAddExercise();
     } else if (activeDrop === DropOptions.group) {
       onAddExercise(true);
     }
+    setActiveDrop(undefined);
     showOptionsHandler(false);
   };
 
@@ -76,7 +79,9 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
       runOnJS(activateDropHandler)(finalPositionX, finalPositionY);
     },
     onEnd: () => {
-      runOnJS(onDragEndHandler)();
+      runOnJS(onDragEndHandler)(
+        translateX.value === 0 && translateY.value === 0,
+      );
       translateX.value = 0;
       translateY.value = 0;
     },
@@ -157,7 +162,10 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
           ref={plusRef}
           style={animatedStyle}
           onLayout={() => onLayout(plusRef, DropOptions.plus)}>
-          <CircleAdd style={{ position: 'relative' }} />
+          <CircleAdd
+            style={{ position: 'relative' }}
+            onPress={() => onAddExercise()}
+          />
         </Animated.View>
       </PanGestureHandler>
     </FlexBox>

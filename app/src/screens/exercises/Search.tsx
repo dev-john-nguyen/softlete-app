@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SectionList } from 'react-native';
-import { PrimaryText } from '@app/elements';
+import { PrimaryButton, PrimaryText } from '@app/elements';
 import { Colors } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import {
@@ -55,6 +55,9 @@ const Exercises = ({
       offline: state.global.offline,
     }),
   );
+  const [selectedExercises, setSelectedExercises] = useState<
+    Map<string, ExerciseProps>
+  >(new Map());
   const [exercises, setExercises] = useState<
     { title: string; data: ExerciseProps[] }[]
   >([]);
@@ -140,7 +143,7 @@ const Exercises = ({
     navigation.navigate(HomeStackScreens.Home);
   };
 
-  const onSendExerciseToWorkout = (exercise: ExerciseProps) => {
+  const onSendExerciseToWorkout = () => {
     const { group, order, workoutUid, programTemplateUid } = route.params as {
       group: number;
       order: number;
@@ -150,38 +153,32 @@ const Exercises = ({
 
     if (!workoutUid) return navigation.goBack();
 
-    const workoutExercise: WorkoutExerciseProps = {
-      group: group,
-      order: order,
-      exercise: exercise,
-      data: [
-        {
-          reps: 1,
-          predictVal: 0,
-          pct: 100,
-        },
-      ],
-    };
+    const workoutExercises = Array.from(selectedExercises).map(
+      ([, exercise]) => {
+        const workoutExercise: WorkoutExerciseProps = {
+          group: group,
+          order: order,
+          exercise: exercise,
+          data: [
+            {
+              reps: 1,
+              predictVal: 0,
+              pct: 100,
+            },
+          ],
+        };
+        return workoutExercise;
+      },
+    );
 
     if (programTemplateUid || (route.params && route.params.programStack)) {
-      updateProgramWorkoutExercises(workoutUid, [workoutExercise])
+      updateProgramWorkoutExercises(workoutUid, workoutExercises)
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
     } else {
-      updateWorkoutExercises(workoutUid, [workoutExercise])
+      updateWorkoutExercises(workoutUid, workoutExercises)
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
-    }
-  };
-
-  const onExercisePress = (exercise: ExerciseProps) => {
-    setShowFilter(false);
-    if (route.params && route.params) {
-      onSendExerciseToWorkout(exercise);
-    } else {
-      navigation.navigate(HomeStackScreens.Exercise, {
-        exercise: exercise,
-      });
     }
   };
 
@@ -232,16 +229,38 @@ const Exercises = ({
 
   const renderItem = useCallback(
     ({ item }: { item: ExerciseProps }) => {
+      const onExercisePress = (exercise: ExerciseProps) => {
+        setShowFilter(false);
+        if (route.params) {
+          setSelectedExercises(prevSelected => {
+            if (!exercise._id) return prevSelected;
+
+            if (prevSelected.get(exercise._id)) {
+              prevSelected.delete(exercise._id);
+            } else {
+              prevSelected.set(exercise._id, exercise);
+            }
+            return new Map(prevSelected);
+          });
+          // onSendExerciseToWorkout(exercise);
+        } else {
+          navigation.navigate(HomeStackScreens.Exercise, {
+            exercise: exercise,
+          });
+        }
+      };
+
       return (
         <ExerciseSearchPreview
           exercise={item}
           onPress={() => onExercisePress(item)}
           softlete={item.softlete}
           user={user}
+          isActive={selectedExercises.get(item._id as string) ? true : false}
         />
       );
     },
-    [exercises],
+    [navigation, route, selectedExercises, user],
   );
 
   const onReset = () => {
@@ -277,7 +296,25 @@ const Exercises = ({
       middleContentFlex={1}
       leftContentFlex={0}
       rightContentFlex={0}
-      middleContent={<SearchHeader onSearch={onSearch} onChange={onSearch} />}>
+      middleContent={
+        <SearchHeader
+          onSearch={onSearch}
+          onChange={onSearch}
+          customRightElement={
+            !offline ? (
+              <FlexBox justifyContent="center" marginLeft={10}>
+                <CircleAdd
+                  size={10}
+                  onPress={onAddExerciessPress}
+                  style={{ position: 'relative' }}
+                />
+              </FlexBox>
+            ) : (
+              <></>
+            )
+          }
+        />
+      }>
       {/* <SearchFilter
         show={showFilter}
         onHide={() => setShowFilter(false)}
@@ -326,10 +363,8 @@ const Exercises = ({
         stickySectionHeadersEnabled={false}
         indicatorStyle="white"
       />
-      {!offline ? (
-        <CircleAdd onPress={onAddExerciessPress} style={{ bottom: '3%' }} />
-      ) : (
-        <></>
+      {route.params && (
+        <CircleAdd onPress={onSendExerciseToWorkout} style={{ bottom: '3%' }} />
       )}
     </ScreenTemplate>
   );
