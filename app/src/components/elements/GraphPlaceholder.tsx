@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { FlexBox } from '@app/ui';
-import { Colors, rgba } from '@app/utils';
+import { Colors } from '@app/utils';
 import Icon from '@app/icons';
 import PrimaryText from './PrimaryText';
 
@@ -14,12 +14,16 @@ const GraphPlaceholder: FC<Props> = ({ hasBgColor = true }) => {
       width="100%"
       height="100%"
       alignItems="center"
-      backgroundColor={hasBgColor ? rgba(Colors.whiteRbg, 0.1) : undefined}
+      backgroundColor={hasBgColor ? Colors.lightPrimary : undefined}
       borderRadius={5}
       justifyContent="center">
-      <FlexBox alignItems="center" bottom={30}>
-        <Icon icon="bar_chart" size={25} color={Colors.white} />
-        <PrimaryText marginLeft={5}>Not Enough Data</PrimaryText>
+      <FlexBox position="absolute" zIndex={-1} opacity={0.1}>
+        <Icon icon="graph_two" size={50} color={Colors.white} />
+      </FlexBox>
+      <FlexBox alignItems="center" bottom={10}>
+        <PrimaryText marginLeft={5} size="medium">
+          Not Enough Data
+        </PrimaryText>
       </FlexBox>
     </FlexBox>
   );
