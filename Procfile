@@ -1,1 +1,1 @@
-web: yarn run start && yarn run logs
+web: yarn run postinstall && yarn run prod

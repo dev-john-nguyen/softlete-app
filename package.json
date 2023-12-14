@@ -7,12 +7,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prod": "pm2-runtime start ecosystem.config.js --env production",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start index.ts --watch",
     "server": "pm2 start index.ts --watch",
     "logs": "pm2 logs",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "postinstall": "$(yarn bin)/pm2 install typescript"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +46,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.0.10",
     "nodemon": "^2.0.12",
+    "pm2": "^5.3.0",
     "socket.io": "^4.2.0",
     "stripe": "^8.181.0",
     "ts-node": "^10.1.0"
