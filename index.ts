@@ -8,8 +8,9 @@ import api from './src/api';
 // import authIo from './src/sockets/auth';
 import rateLimit from 'express-rate-limit';
 import apicache from 'apicache';
+import exercises from './src/collections/exercises';
 
-require('stripe')(process.env.STRIPE_TEST_API_KEY);
+// require('stripe')(process.env.STRIPE_TEST_API_KEY);
 
 const app = express();
 app.use(
@@ -37,7 +38,8 @@ if (process.env.MONGODB_CREDENTIAL) {
 
   const db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', function () {
+  db.once('open', function (e) {
+    console.log(process.env.MONGODB_CREDENTIAL);
     console.log('successfully connected to softlete database');
   });
 } else {
@@ -66,6 +68,11 @@ app.use('/api', api);
 app.get('/clear-cache', (req, res) => {
   apicache.clear([]);
   return res.send('cleared');
+});
+
+app.get('/exercises', (req, res) => {
+  exercises.find().then(docs => console.log(docs));
+  res.send([]);
 });
 
 app.use(
