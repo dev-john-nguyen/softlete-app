@@ -1,0 +1,1 @@
+web: cd server && yarn start && pm2 logs
