@@ -117,7 +117,7 @@ const WoExerciseChart = ({
           </PrimaryText>
         </FlexBox>
       </FlexBox>
-      <ExerciseChart data={data} hasBgColor={false} />
+      <ExerciseChart data={data} hasBgColor={true} />
     </FlexBox>
   );
 };

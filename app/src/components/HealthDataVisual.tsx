@@ -88,7 +88,7 @@ const HealthDataVisual = ({
         icon="crescent_moon"
         onPress={() => setActiveItem('sleep')}
         isActive={activeItem === 'sleep'}
-        value={(sleepVal || 0) + ' hrs'}
+        value={String(sleepVal || 0).replace('.', ':') + ' hrs'}
       />
       <HealthItem
         title="HRV"

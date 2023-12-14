@@ -20,7 +20,7 @@ import StyleConstants from '../../components/tools/StyleConstants';
 import BaseColors from '../../utils/BaseColors';
 import _ from 'lodash';
 import {FlatList} from 'react-native-gesture-handler';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import {useFetchAthletes} from '../../hooks/network/search-athletes.hooks';
 
 interface Props {

@@ -3,7 +3,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
@@ -27,10 +27,11 @@ const DeviceWo = ({
   onDownload,
 }: Props) => {
   const navigation = useNavigation<HomeStackParamsList>();
-  const enableImport = (() => {
+
+  const enableImport = useMemo(() => {
     const found = wos?.find(w => w.healthData?.activityId === data.activityId);
     return found ? false : true;
-  })();
+  }, [data.activityId, wos]);
 
   const isLoading = loadingIds?.find(id => data.activityId === id)
     ? true

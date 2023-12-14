@@ -14,7 +14,7 @@ import {
   setTargetProgram,
 } from '../../services/program/actions';
 import { ProgramStackScreens } from './types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { useTemplates } from '../../hooks/program/templates.hooks';
 import { CircleAdd, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';

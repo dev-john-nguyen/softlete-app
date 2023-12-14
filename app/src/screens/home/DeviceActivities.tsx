@@ -41,21 +41,27 @@ const DeviceActivities: FC<Props> = ({
     useDeviceWos();
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
-  const onImportDeviceWo = (activity: HealthDataProps) => {
-    return async () => {
-      setLoadingIds(ids => [...ids, activity.activityId]);
-      try {
-        await handleDeviceActivityImport(activity, {
-          updateWoHealthData,
-          updateWoWorkoutRoute,
-          updateWorkoutHeader,
-        });
-      } catch (err) {
-        setBanner(BannerTypes.error, err as string);
-      }
-      setLoadingIds(ids => ids.filter(id => id !== activity.activityId));
-    };
-  };
+  const onImportDeviceWo = useCallback(
+    (activity: HealthDataProps) => {
+      return async () => {
+        setLoadingIds(ids => [...ids, activity.activityId]);
+        try {
+          await handleDeviceActivityImport(activity, {
+            updateWoHealthData,
+            updateWoWorkoutRoute,
+            updateWorkoutHeader,
+          });
+        } catch (err) {
+          console.log(err);
+          if (typeof err !== 'string' || err !== 'cancel') {
+            setBanner(BannerTypes.error, err as string);
+          }
+        }
+        setLoadingIds(ids => ids.filter(id => id !== activity.activityId));
+      };
+    },
+    [setBanner, updateWoHealthData, updateWoWorkoutRoute, updateWorkoutHeader],
+  );
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<HealthDataProps>) => {
@@ -69,7 +75,7 @@ const DeviceActivities: FC<Props> = ({
         />
       );
     },
-    [deviceWos, wos, loadingIds],
+    [onImportDeviceWo, wos, loadingIds],
   );
 
   const renderListEmptyComponent = useMemo(() => {

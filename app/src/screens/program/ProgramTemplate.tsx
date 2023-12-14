@@ -21,7 +21,7 @@ import { programWorkoutsArrToObj } from '../../utils/tools';
 import ProgramHeaderImage from '../../components/program/HeaderImage';
 import Loading from '../../components/elements/Loading';
 import { ProgramStackScreens } from './types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';

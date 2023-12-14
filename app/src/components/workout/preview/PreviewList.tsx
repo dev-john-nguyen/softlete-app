@@ -134,7 +134,7 @@ const WorkoutPreviewItem = ({
     <FlexBox
       column
       borderRadius={5}
-      padding={10}
+      padding={15}
       backgroundColor={Colors.lightPrimary}
       marginBottom={10}
       onPress={() => onPress(workout._id)}

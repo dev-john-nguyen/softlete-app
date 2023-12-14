@@ -152,7 +152,7 @@ const TabBar = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#250000',
+    backgroundColor: '#140000',
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingTop: moderateScale(15),

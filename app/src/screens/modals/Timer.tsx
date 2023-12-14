@@ -77,12 +77,16 @@ const Timer = () => {
           column
           alignItems="center"
           justifyContent="center"
-          backgroundColor={Colors.blendWhite}
+          backgroundColor={Colors.lightPrimary}
           borderRadius={5}
+          maxWidth="80%"
           padding={20}>
-          <FlexBox marginBottom={10}>
+          <FlexBox marginBottom={10} column alignItems="center">
             <PrimaryText variant="primary" size="large">
               Stopwatch
+            </PrimaryText>
+            <PrimaryText>
+              This stopwatch will be disrupted if you leave the app.
             </PrimaryText>
           </FlexBox>
           <FlexBox>

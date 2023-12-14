@@ -1,15 +1,16 @@
 import React from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { normalize } from '../../utils/tools';
 import { WorkoutStatus } from '../../services/workout/types';
 import { FlexBox } from '@app/ui';
-import { Colors, moderateScale, rgba, StyleConstants } from '@app/utils';
-import { CircleAdd, DemoArrow } from '@app/elements';
+import { Colors, rgba } from '@app/utils';
+import { DemoArrow } from '@app/elements';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
 import { DemoStates } from '@app/services';
+import Icon from '@app/icons';
 
 interface NavbarItemProps {
   index: number;
@@ -19,8 +20,7 @@ interface NavbarItemProps {
   lightColor: string;
 }
 
-const activeWidth = normalize.width(20);
-const inactiveWidth = normalize.width(30);
+const circleWidth = normalize.width(18);
 
 const NavbarItem = ({
   index,
@@ -33,15 +33,15 @@ const NavbarItem = ({
     const active = curGroup * 30 === index * 30 ? true : false;
     return {
       backgroundColor: active ? withTiming(color) : withTiming(lightColor),
-      height: active ? withTiming(activeWidth) : withTiming(inactiveWidth),
-      width: active ? withTiming(activeWidth) : withTiming(inactiveWidth),
+      height: circleWidth,
+      width: circleWidth,
       borderRadius: 100,
-      marginRight: 20,
+      marginRight: 10,
     };
   }, [curGroup, color]);
 
   return (
-    <Pressable style={styles.itemContainer} onPress={onPress} hitSlop={5}>
+    <Pressable onPress={onPress} hitSlop={5}>
       <Animated.View key={index} style={animatedStyles} />
     </Pressable>
   );
@@ -65,7 +65,10 @@ const WorkoutNavbar = ({
   athlete,
 }: Props) => {
   return (
-    <ScrollView style={styles.container} horizontal>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      horizontal>
       <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
       <FlexBox alignItems="center">
         {groupKeys.map((g, index) => (
@@ -77,27 +80,25 @@ const WorkoutNavbar = ({
               curGroup === g ? onAddExercise(false) : onGroupPress(g)
             }
             color={
-              status === WorkoutStatus.completed ? Colors.green : Colors.white
+              status === WorkoutStatus.completed ||
+              (status === WorkoutStatus.inProgress &&
+                curGroup === groupKeys[groupKeys.length - 1])
+                ? Colors.green
+                : Colors.white
             }
             lightColor={
               status === WorkoutStatus.completed
                 ? rgba(Colors.greenRbg, 0.5)
-                : rgba(Colors.whiteRbg, 0.5)
+                : rgba(Colors.whiteRbg, 0.2)
             }
           />
         ))}
         {status === WorkoutStatus.inProgress && (
-          <Pressable style={styles.reflect} onPress={() => onGroupPress(-2)} />
-        )}
-        {!athlete && status !== WorkoutStatus.completed && (
-          <CircleAdd
-            onPress={() => onAddExercise(true)}
-            size={12}
-            style={{
-              position: 'relative',
-              bottom: 0,
-              padding: moderateScale(5),
-            }}
+          <Icon
+            icon="notebook"
+            onPress={() => onGroupPress(-2)}
+            size={20}
+            color={Colors.white}
           />
         )}
       </FlexBox>
@@ -107,21 +108,19 @@ const WorkoutNavbar = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    maxWidth: normalize.width(2),
-    height: '100%',
+    flex: 1,
   },
-  itemContainer: {
-    height: normalize.width(20),
-    justifyContent: 'center',
+  contentContainer: {
+    flexGrow: 1, // Ensures that the container will grow to fit the content if it's not full screen
+    justifyContent: 'center', // Centers content vertically in the container
+    alignItems: 'center', // Centers content horizontally in the container
   },
   reflect: {
-    height: normalize.width(25),
-    width: normalize.width(25),
+    height: circleWidth,
+    width: circleWidth,
     borderRadius: 100,
-    borderColor: Colors.green,
+    backgroundColor: Colors.green,
     borderWidth: 1,
-    marginRight: StyleConstants.baseMargin,
   },
 });
 export default WorkoutNavbar;

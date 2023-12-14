@@ -1,7 +1,7 @@
 import React from 'react';
 import { Linking } from 'react-native';
 import { SERVERURL } from '../../utils/PATHS';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { PickerButton } from '@app/elements';
 
 const Legal = () => {

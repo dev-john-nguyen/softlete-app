@@ -25,11 +25,12 @@ import {
 import { WorkoutContext } from '@app/contexts';
 import { useNavigation } from '@react-navigation/native';
 import { FlexBox } from '@app/ui';
-import { CircleAdd } from '@app/elements';
 import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
 } from 'src/services/program/actions';
+import { useScreenTemplateState } from '@app/elements';
+import AddExercise from './components/AddExercise';
 
 const WorkoutContainer = () => {
   const {
@@ -39,6 +40,7 @@ const WorkoutContainer = () => {
     athlete,
     workout,
   } = useContext(WorkoutContext);
+  const { setMiddleContent } = useScreenTemplateState();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const [groupKeys, setGroupKeys] = useState<number[]>([]);
@@ -92,18 +94,16 @@ const WorkoutContainer = () => {
   );
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <WorkoutNavbar
-          status={workout.status}
-          groupKeys={groupKeys}
-          onGroupPress={key => setNavGroupState({ group: key })}
-          curGroup={groupState.cur}
-          onAddExercise={onAddExercise}
-          athlete={athlete}
-        />
-      ),
-    });
+    setMiddleContent(
+      <WorkoutNavbar
+        status={workout.status}
+        groupKeys={groupKeys}
+        onGroupPress={key => setNavGroupState({ group: key })}
+        curGroup={groupState.cur}
+        onAddExercise={onAddExercise}
+        athlete={athlete}
+      />,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [athlete, workout, groupKeys, groupState]);
 
@@ -321,9 +321,7 @@ const WorkoutContainer = () => {
         removeWorkoutExercise={onRemoveExercise}
         navGroupState={navGroupState}
       />
-      {shouldAddCom && (
-        <CircleAdd onPress={() => onAddExercise()} style={{ bottom: 10 }} />
-      )}
+      {shouldAddCom && <AddExercise onAddExercise={onAddExercise} />}
     </FlexBox>
   );
 };

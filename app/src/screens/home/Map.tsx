@@ -8,7 +8,7 @@ import {
   Marker,
 } from 'react-native-maps';
 import BaseColors, { rgba } from '../../utils/BaseColors';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import {
   useMapAdjustView,
   useRouteMarkers,

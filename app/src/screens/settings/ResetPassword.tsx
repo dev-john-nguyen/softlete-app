@@ -3,7 +3,7 @@ import StyleConstants from '../../components/tools/StyleConstants';
 import auth from '@react-native-firebase/auth';
 import PrimaryButton from '../../components/elements/PrimaryButton';
 import { validateEmail } from '../../utils/tools';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { Input, PrimaryText } from '@app/elements';
 import { Colors } from '@app/utils';
 import { FlexBox } from '@app/ui';

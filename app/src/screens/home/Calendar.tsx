@@ -21,7 +21,7 @@ import DashboardFilter from '../../components/calendar/Filter';
 import CalendarHeader from '../../components/calendar/CustomHeader';
 import { HomeStackScreens } from './types';
 import { DateData } from 'react-native-calendars/src/types';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 
 interface Props {
   route: any;

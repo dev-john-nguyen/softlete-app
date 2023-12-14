@@ -13,6 +13,7 @@ interface Props {
   onChange?: (txt: string) => Promise<void>;
   onNotification?: () => void;
   onFilter?: () => void;
+  customRightElement?: JSX.Element;
 }
 
 const SearchHeader = ({
@@ -20,10 +21,12 @@ const SearchHeader = ({
   onNotification,
   onFilter,
   onChange,
+  customRightElement,
 }: Props) => {
   return (
-    <FlexBox marginLeft={10} flex={1}>
+    <FlexBox marginLeft={10} flex={1} alignItems="center">
       <SearchBar onSearch={onSearch} placeholder="Search" onChange={onChange} />
+      {customRightElement}
       {onFilter && (
         <View style={styles.filterContainer}>
           <Pressable style={styles.filter} hitSlop={5} onPress={onFilter}>

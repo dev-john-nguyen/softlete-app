@@ -6,7 +6,7 @@ import SecondaryText from '../../components/elements/SecondaryText';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { capitalize } from '../../utils/tools';
 import BackButton from '../../components/elements/BackButton';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 
 interface Props {
   route: any;

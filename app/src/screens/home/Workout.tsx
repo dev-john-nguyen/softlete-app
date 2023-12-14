@@ -30,7 +30,7 @@ import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
 import OverviewContainer from '../../components/workout/overview/Container';
 import { updateProgramWoHealthData } from '../../services/program/actions';
-import ScreenTemplate from '../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../components/elements/screen-template';
 import { LocationValue } from 'react-native-health';
 import { handleDeviceActivityImport } from '../../helpers/route.helpers';
 import { WorkoutProvider } from '@app/contexts';
@@ -124,16 +124,18 @@ const Workout = ({
     if (!workout || workout.programTemplateUid) return;
     if (status === workout.status) return;
 
-    if (status === WorkoutStatus.completed) {
-      //don't allow in progress if not workouts
-      if (
-        workout.type === WorkoutTypes.TraditionalStrengthTraining &&
-        (!workout.exercises || workout.exercises.length < 1)
-      ) {
-        setBanner('Please add an exercise.', BannerTypes.warning);
-        return;
-      }
+    // check if there are any exercises
+    if (
+      (status === WorkoutStatus.completed ||
+        status === WorkoutStatus.inProgress) &&
+      workout.type === WorkoutTypes.TraditionalStrengthTraining &&
+      (!workout.exercises || workout.exercises.length < 1)
+    ) {
+      setBanner('Please add an exercise.', BannerTypes.warning);
+      return;
+    }
 
+    if (status === WorkoutStatus.completed) {
       await onCompleteWorkout();
       return;
     }
@@ -210,7 +212,7 @@ const Workout = ({
         isBackVisible
         onGoBack={onBackButtonPress}
         rightContent={
-          <FlexBox flex={1} alignItems="flex-end" justifyContent="flex-end">
+          <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             <Icon
               icon="timer"

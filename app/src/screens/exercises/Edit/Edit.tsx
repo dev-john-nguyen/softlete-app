@@ -32,7 +32,7 @@ import { ReducerProps, ThunkAppDispatch } from '../../../services';
 import FastImage from 'react-native-fast-image';
 import { HomeStackScreens } from '../../home/types';
 import { ProgramStackScreens } from '../../program/types';
-import ScreenTemplate from '../../../components/elements/ScreenTemplate';
+import ScreenTemplate from '../../../components/elements/screen-template';
 import { PickerButton, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
