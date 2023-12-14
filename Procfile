@@ -1,1 +1,1 @@
-web: yarn run postinstall && yarn run prod
+web: yarn run nodemon

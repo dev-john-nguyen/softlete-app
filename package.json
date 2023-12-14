@@ -11,10 +11,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start index.ts --watch",
     "server": "pm2 start index.ts --watch",
-    "logs": "pm2 logs",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "postinstall": "$(yarn bin)/pm2 install typescript"
+    "postinstall": "$(yarn bin)/pm2 install typescript",
+    "nodemon": "nodemon --exec ts-node ./index.ts"
   },
   "keywords": [],
   "author": "",
