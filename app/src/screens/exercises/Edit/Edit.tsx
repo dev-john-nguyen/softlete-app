@@ -42,7 +42,7 @@ import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { PickerOptionProp } from 'src/components/elements/Picker';
 import MuscleForm from './MuscleForm';
-import { useDelete } from './hooks';
+import { useDelete, useIsOwner } from './hooks';
 import { confirmAdminExerciseHandler } from './helpers';
 import {
   NavigationProp,
@@ -74,7 +74,7 @@ const EditExercise = () => {
   );
   const [equipment, setEquipment] = useState<string>(Equipments.none);
   const [loading, setLoading] = useState(false);
-  const [isOwner, setIsOwner] = useState(true);
+  const { isOwner } = useIsOwner();
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
   const [isSoftlete, setIsSoftlete] = useState(false);
   const keyboardHeight = useKeyboard();
@@ -121,8 +121,6 @@ const EditExercise = () => {
       return storedMuscleGroups;
     });
     setEquipment(exerciseProps.equipment);
-
-    setIsOwner(exerciseProps.userUid === user.uid);
 
     setIsSoftlete(Boolean(exerciseProps.softlete));
     //reset all states

@@ -1,5 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps, ThunkAppDispatch } from 'src/services';
@@ -49,4 +50,22 @@ export const useDelete = () => {
   };
 
   return { onDelete, loading: isLoading };
+};
+
+export const useIsOwner = () => {
+  const { targetExercise, user } = useSelector((state: ReducerProps) => ({
+    targetExercise: state.exercises.targetExercise,
+    user: state.user,
+  }));
+  const [isOwner, setIsOwner] = useState(true);
+  useEffect(() => {
+    setIsOwner(() => {
+      if (!targetExercise) return false;
+      if (targetExercise.userUid === user.uid) return true;
+      if (targetExercise.softlete && user.admin) return true;
+      if (!targetExercise._id) return true;
+      return false;
+    });
+  }, [targetExercise, user]);
+  return { isOwner, setIsOwner };
 };
