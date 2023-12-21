@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { SectionList } from 'react-native';
-import { PrimaryButton, PrimaryText } from '@app/elements';
+import { PrimaryText } from '@app/elements';
 import { Colors } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import {
@@ -70,6 +70,17 @@ const Exercises = ({
     { title: string; data: ExerciseProps[] }[]
   >([]);
   const [query, setQuery] = useState('');
+
+  const workoutParams = useMemo(() => {
+    const { group, order, workoutUid, programTemplateUid } =
+      (route?.params as {
+        group: number;
+        order: number;
+        workoutUid: string;
+        programTemplateUid?: string;
+      }) ?? {};
+    return { group, order, workoutUid, programTemplateUid };
+  }, [route]);
 
   useEffect(() => {
     const pinExs = _.intersectionWith(
@@ -144,20 +155,13 @@ const Exercises = ({
   };
 
   const onSendExerciseToWorkout = () => {
-    const { group, order, workoutUid, programTemplateUid } = route.params as {
-      group: number;
-      order: number;
-      workoutUid: string;
-      programTemplateUid?: string;
-    };
-
-    if (!workoutUid) return navigation.goBack();
+    if (!workoutParams.workoutUid) return navigation.goBack();
 
     const workoutExercises = Array.from(selectedExercises).map(
       ([, exercise]) => {
         const workoutExercise: WorkoutExerciseProps = {
-          group: group,
-          order: order,
+          group: workoutParams.group,
+          order: workoutParams.order,
           exercise: exercise,
           data: [
             {
@@ -171,12 +175,15 @@ const Exercises = ({
       },
     );
 
-    if (programTemplateUid || (route.params && route.params.programStack)) {
-      updateProgramWorkoutExercises(workoutUid, workoutExercises)
+    if (
+      workoutParams.programTemplateUid ||
+      (route.params && route.params.programStack)
+    ) {
+      updateProgramWorkoutExercises(workoutParams.workoutUid, workoutExercises)
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
     } else {
-      updateWorkoutExercises(workoutUid, workoutExercises)
+      updateWorkoutExercises(workoutParams.workoutUid, workoutExercises)
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
     }
@@ -185,9 +192,13 @@ const Exercises = ({
   const onAddExerciessPress = () => {
     dispatch({ type: SET_TARGET_EXERCISE, payload: {} });
     if (route && route.params && route.params.programStack) {
-      navigation.navigate(ProgramStackScreens.ProgramEditExerciseDetails);
+      navigation.navigate(ProgramStackScreens.ProgramEditExerciseDetails, {
+        workoutParams,
+      });
     } else {
-      navigation.navigate(HomeStackScreens.EditExerciseDetails);
+      navigation.navigate(HomeStackScreens.EditExerciseDetails, {
+        workoutParams,
+      });
     }
   };
 

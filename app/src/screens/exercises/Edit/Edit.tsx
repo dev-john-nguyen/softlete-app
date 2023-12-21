@@ -82,15 +82,18 @@ const EditExercise = () => {
   const { onDelete, loading: isDeleting } = useDelete();
   const isLoading = isDeleting || loading;
   const fullAccess = isOwner || user.admin;
+  const workoutParams = route.params?.workoutParams;
 
   const handleNavigation = () => {
     if (route && route.params) {
       if (route.params.programStack) {
-        return navigation.navigate(ProgramStackScreens.ProgramSearchExercises);
+        return navigation.navigate(
+          ProgramStackScreens.ProgramSearchExercises,
+          workoutParams,
+        );
       }
     }
-
-    return navigation.navigate(HomeStackScreens.SearchExercises);
+    return navigation.navigate(HomeStackScreens.SearchExercises, workoutParams);
   };
 
   useEffect(() => {
