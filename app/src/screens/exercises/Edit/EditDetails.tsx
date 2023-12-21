@@ -65,6 +65,7 @@ const EditExerciseDetails = ({
   const setBanner = useBanner();
   const { onDelete } = useDelete();
   const { isOwner } = useIsOwner();
+  const workoutParams = route.params?.workoutParams;
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -72,16 +73,24 @@ const EditExerciseDetails = ({
         if (goBack) {
           return navigation.navigate(
             ProgramStackScreens.ProgramSearchExercises,
+            { workoutParams },
           );
         } else {
-          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
+          return navigation.navigate(ProgramStackScreens.ProgramEditExercise, {
+            workoutParams,
+          });
         }
       }
     }
+
     if (goBack) {
-      return navigation.navigate(HomeStackScreens.SearchExercises);
+      return navigation.navigate(HomeStackScreens.SearchExercises, {
+        workoutParams,
+      });
     } else {
-      return navigation.navigate(HomeStackScreens.EditExercise);
+      return navigation.navigate(HomeStackScreens.EditExercise, {
+        workoutParams,
+      });
     }
   };
 
