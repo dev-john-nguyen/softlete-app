@@ -114,12 +114,13 @@ const RestructureMoveable = ({
     'worklet';
     const { absoluteY: eventAbsY, absoluteX } = event;
 
-    const absoluteY = eventAbsY - HEIGHT;
+    let absoluteY = eventAbsY - HEIGHT;
 
     //check if the item is in the header
     if (absoluteY < headerPos.value.y && scrollY.value <= 20) {
       //allow to move horizontally
-      left.value = absoluteX;
+      left.value = absoluteX - width.value;
+      absoluteY += HEIGHT / 2;
       //check if it is overlapping a group
       runOnJS(onMovingGroup)(
         findOverlapGroup(groupsPos, trashPos, absoluteX, headerPos.value.x),
