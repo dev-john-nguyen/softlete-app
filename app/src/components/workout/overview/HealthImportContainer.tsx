@@ -264,7 +264,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
           </ScrollView>
         </FlexBox>
       ) : (
-        workout.status !== WorkoutStatus.pending && <WorkoutReflection />
+        workout.status === WorkoutStatus.completed && <WorkoutReflection />
       )}
     </FlexBox>
   );

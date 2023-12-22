@@ -2,7 +2,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, rgba } from '@app/utils';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
   ImageLibraryOptions,
@@ -71,9 +71,9 @@ const ReflectionImage = ({
   const svgElement = (() => {
     if (allowUpload && !hideSvg) {
       return (
-        <View style={styles.addSvg}>
+        <Pressable style={styles.addSvg} onPress={onSelectImage}>
           <AddImageSvg fillColor={rgba(Colors.lightWhiteRgb, 0.6)} />
-        </View>
+        </Pressable>
       );
     } else {
       if (!imageUri && !image?.uri) {
