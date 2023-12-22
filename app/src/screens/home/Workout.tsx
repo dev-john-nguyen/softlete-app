@@ -60,7 +60,6 @@ const Workout = ({
 }: Props) => {
   const [program, setProgram] = useState<GeneratedProgramProps>();
   const [reflection, setReflection] = useState('');
-  const [image, setImage] = useState<ImageProps>();
   const { workout, genPrograms, targetProgram } = useSelector(
     (state: ReducerProps) => ({
       workout: state.workout.viewWorkout,
@@ -147,6 +146,7 @@ const Workout = ({
 
   const onCompleteWorkout = async (
     exercises?: WorkoutExerciseProps[] | void,
+    image?: ImageProps,
   ) => {
     if (!workout) return;
 
@@ -201,8 +201,6 @@ const Workout = ({
   return (
     <WorkoutProvider
       onNavigateToExercise={onNavigateToExercise}
-      setImage={setImage}
-      image={image}
       onCompleteWorkout={onCompleteWorkout}
       onNavigateToAddExercise={onNavigateToAddExercise}
       onUpdateStatus={onUpdateStatus}
@@ -220,17 +218,13 @@ const Workout = ({
               color={Colors.white}
               onPress={() => navigation.navigate(HomeStackScreens.Timer)}
             />
-            {workout?.status !== WorkoutStatus.inProgress && (
-              <Icon
-                icon="ellipsis"
-                size={20}
-                color={Colors.white}
-                onPress={() =>
-                  navigation.navigate(HomeStackScreens.WorkoutModal)
-                }
-                containerStyles={{ marginLeft: 10 }}
-              />
-            )}
+            <Icon
+              icon="ellipsis"
+              size={20}
+              color={Colors.white}
+              onPress={() => navigation.navigate(HomeStackScreens.WorkoutModal)}
+              containerStyles={{ marginLeft: 10 }}
+            />
           </FlexBox>
         }>
         <DemoArrow

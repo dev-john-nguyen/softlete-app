@@ -1,7 +1,7 @@
-import { InfoListBox, Input, PrimaryText } from '@app/elements';
+import { InfoListBox } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, StyleConstants } from '@app/utils';
+import { Colors } from '@app/utils';
 import _ from 'lodash';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,9 +19,7 @@ import AutoId from '../../../utils/AutoId';
 import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
 import { WorkoutContext } from '@app/contexts';
-import { Pressable, Keyboard, View } from 'react-native';
-import ReflectionImage from './ReflectionImage';
-import { ImageProps } from 'src/services/user/types';
+import WorkoutReflection from '../WorkoutReflection';
 
 interface ImportItemProps {
   onImportData: () => void;
@@ -59,72 +57,6 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
         />
       </FlexBox>
       <HealthContainer data={formattedData} />
-    </FlexBox>
-  );
-};
-
-const WorkoutReflection = () => {
-  const { setReflection, setImage, image, workout, isProgram } =
-    useContext(WorkoutContext);
-
-  return (
-    <FlexBox
-      column
-      backgroundColor={
-        workout.status === WorkoutStatus.completed
-          ? Colors.lightPrimary
-          : undefined
-      }
-      borderRadius={5}
-      applyBoxShadow={workout.status === WorkoutStatus.completed}>
-      <Pressable onPress={() => Keyboard.dismiss()}>
-        {workout.status === WorkoutStatus.inProgress && (
-          <Input
-            label="Summary"
-            onChangeText={txt => setReflection?.(txt)}
-            defaultValue={workout.reflection}
-            placeholder="Write a caption..."
-            multiline={true}
-            onSubmitEditing={() => Keyboard.dismiss()}
-            blurOnSubmit={true}
-            maxLength={150}
-            styles={{
-              marginBottom: StyleConstants.baseMargin,
-              borderRadius: 0,
-            }}
-          />
-        )}
-        {!isProgram && (
-          <ReflectionImage
-            setImage={
-              setImage as React.Dispatch<
-                React.SetStateAction<ImageProps | undefined>
-              >
-            }
-            image={image}
-            imageUri={
-              workout.imageUri ? workout.imageUri : workout.localImageUri
-            }
-            allowUpload={workout.status === WorkoutStatus.inProgress}
-          />
-        )}
-        {workout.status === WorkoutStatus.completed && (
-          <FlexBox column padding={15}>
-            <PrimaryText opacity={0.6} marginBottom={5} size="medium">
-              Summary
-            </PrimaryText>
-            <FlexBox>
-              <ScrollView>
-                <View onStartShouldSetResponder={() => true}>
-                  <PrimaryText>
-                    {workout.reflection || 'Nothing to say...'}
-                  </PrimaryText>
-                </View>
-              </ScrollView>
-            </FlexBox>
-          </FlexBox>
-        )}
-      </Pressable>
     </FlexBox>
   );
 };

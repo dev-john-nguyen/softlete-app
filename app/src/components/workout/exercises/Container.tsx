@@ -61,10 +61,12 @@ const ExercisesContainer = ({
         return;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
     scrollToFirstItem(navGroupState.group);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navGroupState]);
 
   const scrollToFirstItem = (group: number) => {
@@ -97,12 +99,6 @@ const ExercisesContainer = ({
 
     return false;
   };
-
-  const renderListFooterComponent = useCallback(() => {
-    //prevent the auto save from refreshing state
-    if (workout.status !== WorkoutStatus.inProgress || athlete) return <></>;
-    return <OverviewContainer />;
-  }, [athlete, workout.status]);
 
   const renderListHeaderComponent = useCallback(() => {
     //prevent the auto save from refreshing state
@@ -159,7 +155,6 @@ const ExercisesContainer = ({
         });
       }}
       keyboardShouldPersistTaps="always"
-      ListFooterComponent={renderListFooterComponent}
       ListHeaderComponent={renderListHeaderComponent}
       renderItem={renderItem}
       showsHorizontalScrollIndicator={false}

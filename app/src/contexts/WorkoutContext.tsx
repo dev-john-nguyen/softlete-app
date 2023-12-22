@@ -16,12 +16,11 @@ type WorkoutContextProps = {
   onNavigateToAddExercise?: (group: number, order: number) => void;
   onCompleteWorkout?: (
     exercises?: void | WorkoutExerciseProps[] | undefined,
+    image?: ImageProps,
   ) => Promise<void>;
   onUpdateStatus?: (status: WorkoutStatus) => Promise<void>;
   program?: GeneratedProgramProps;
   setReflection?: React.Dispatch<React.SetStateAction<string>>;
-  setImage?: React.Dispatch<React.SetStateAction<ImageProps | undefined>>;
-  image?: ImageProps;
   isProgram?: boolean;
   athlete?: boolean;
   updateWoHealthData?: WorkoutActionProps['updateWoHealthData'];

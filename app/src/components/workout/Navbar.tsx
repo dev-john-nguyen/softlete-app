@@ -10,7 +10,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { DemoStates } from '@app/services';
-import Icon from '@app/icons';
 
 interface NavbarItemProps {
   index: number;
@@ -79,28 +78,10 @@ const WorkoutNavbar = ({
             onPress={() =>
               curGroup === g ? onAddExercise(false) : onGroupPress(g)
             }
-            color={
-              status === WorkoutStatus.completed ||
-              (status === WorkoutStatus.inProgress &&
-                curGroup === groupKeys[groupKeys.length - 1])
-                ? Colors.green
-                : Colors.white
-            }
-            lightColor={
-              status === WorkoutStatus.completed
-                ? rgba(Colors.greenRbg, 0.5)
-                : rgba(Colors.whiteRbg, 0.2)
-            }
+            color={Colors.white}
+            lightColor={rgba(Colors.whiteRbg, 0.2)}
           />
         ))}
-        {status === WorkoutStatus.inProgress && (
-          <Icon
-            icon="notebook"
-            onPress={() => onGroupPress(-2)}
-            size={20}
-            color={Colors.white}
-          />
-        )}
       </FlexBox>
     </ScrollView>
   );

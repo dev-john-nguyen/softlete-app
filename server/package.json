@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start index.ts --watch",
+    "start": "pm2 start index.ts --watch && pm2 logs",
     "server": "$(yarn bin)/pm2 install typescript && pm2 start index.ts --watch",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",

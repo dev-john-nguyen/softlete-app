@@ -302,7 +302,7 @@ const WorkoutContainer = () => {
 
   const shouldAddCom = useMemo(() => {
     if (athlete) return false;
-    if (workout.status === WorkoutStatus.pending) return true;
+    if (workout.status !== WorkoutStatus.completed) return true;
     if (workout.programTemplateUid) return true;
     return false;
   }, [athlete, workout]);
