@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
   },
   groupContainer: {
     position: 'absolute',
-    top: 0,
-    right: '105%',
-    backgroundColor: rgba(Colors.whiteRbg, 0.8),
+    top: '20%',
+    left: '-7%',
+    backgroundColor: rgba(Colors.whiteRbg, 1),
     padding: 10,
     borderRadius: 100,
   },

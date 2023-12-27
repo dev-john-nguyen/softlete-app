@@ -1,4 +1,3 @@
-import { PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors, moderateScale, rgba } from '@app/utils';
@@ -17,6 +16,7 @@ interface Props {
   setImage: (img: ImageProps) => void;
   image: ImageProps | undefined;
   imageUri?: string;
+  hideSvg?: boolean;
 }
 
 const imageOptions: ImageLibraryOptions = {
@@ -28,7 +28,13 @@ const imageOptions: ImageLibraryOptions = {
   includeBase64: true,
 };
 
-const ReflectionImage = ({ allowUpload, setImage, image, imageUri }: Props) => {
+const ReflectionImage = ({
+  allowUpload,
+  setImage,
+  image,
+  imageUri,
+  hideSvg = false,
+}: Props) => {
   const onSelectImage = async () => {
     if (!allowUpload) return;
     launchImageLibrary(
@@ -63,7 +69,7 @@ const ReflectionImage = ({ allowUpload, setImage, image, imageUri }: Props) => {
   };
 
   const svgElement = (() => {
-    if (allowUpload) {
+    if (allowUpload && !hideSvg) {
       return (
         <Pressable style={styles.addSvg} onPress={onSelectImage}>
           <AddImageSvg fillColor={rgba(Colors.lightWhiteRgb, 0.6)} />
@@ -92,6 +98,18 @@ const ReflectionImage = ({ allowUpload, setImage, image, imageUri }: Props) => {
         styles.container,
         { borderWidth: imageUri || (image && image.uri) ? 0 : 1 },
       ]}>
+      <Icon
+        onPress={onSelectImage}
+        icon="pencil"
+        size={20}
+        containerStyles={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          zIndex: 100,
+        }}
+        color={Colors.white}
+      />
       <FastImage
         style={styles.image}
         source={{ uri: image && image.uri ? image.uri : imageUri }}

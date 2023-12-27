@@ -98,16 +98,29 @@ const RestructureMoveable = ({
     }
   };
 
+  const onGestureFinishHandler = () => {
+    if (!movingGroup) return;
+
+    if (movingGroup === 'trash') {
+      onTrashExercise(id);
+    } else {
+      onExerciseToGroup(id, movingGroup);
+    }
+  };
+
   const onGestureActive = (
     event: Readonly<GestureEventPayload & PanGestureHandlerEventPayload>,
   ) => {
     'worklet';
-    const { absoluteY, absoluteX } = event;
+    const { absoluteY: eventAbsY, absoluteX } = event;
+
+    let absoluteY = eventAbsY - HEIGHT;
 
     //check if the item is in the header
     if (absoluteY < headerPos.value.y && scrollY.value <= 20) {
       //allow to move horizontally
-      left.value = absoluteX;
+      left.value = absoluteX - width.value;
+      absoluteY += HEIGHT / 2;
       //check if it is overlapping a group
       runOnJS(onMovingGroup)(
         findOverlapGroup(groupsPos, trashPos, absoluteX, headerPos.value.x),
@@ -142,27 +155,7 @@ const RestructureMoveable = ({
     event: Readonly<GestureEventPayload & PanGestureHandlerEventPayload>,
   ) => {
     'worklet';
-    //find group it dropped it in
-    const { absoluteY, absoluteX } = event;
-
-    if (absoluteY < headerPos.value.y && scrollY.value <= 20) {
-      const targetGroup = findOverlapGroup(
-        groupsPos,
-        trashPos,
-        absoluteX,
-        headerPos.value.x,
-      );
-
-      if (targetGroup && targetGroup !== curGroup) {
-        //update exercises
-        if (targetGroup === 'trash') {
-          runOnJS(onTrashExercise)(id);
-        } else {
-          runOnJS(onExerciseToGroup)(id, targetGroup);
-        }
-      }
-    }
-
+    runOnJS(onGestureFinishHandler)();
     top.value = exercisePos.value[id] * HEIGHT;
     width.value = withTiming(90);
     left.value = withTiming(leftStart);
