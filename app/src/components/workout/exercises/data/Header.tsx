@@ -12,7 +12,7 @@ interface Props {
 
 const ExerciseDataHeader = ({ status, measSubCat }: Props) => {
   return (
-    <FlexBox width="100%" marginBottom={5} paddingLeft={15} paddingRight={15}>
+    <FlexBox width="100%" marginBottom={10} paddingLeft={15} paddingRight={15}>
       <FlexBox flex={SET_COLUMN_WIDTHS.one} marginRight={10}></FlexBox>
       <FlexBox flex={SET_COLUMN_WIDTHS.two} marginRight={10}>
         <PrimaryText size="medium">Reps</PrimaryText>
