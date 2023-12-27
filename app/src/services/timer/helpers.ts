@@ -10,6 +10,7 @@ export const notifyHandler = async () => {
           badge: true,
           sound: true,
         },
+        sound: 'default',
       },
     });
     return true;
