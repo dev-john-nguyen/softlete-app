@@ -155,6 +155,14 @@ const WorkoutContainer = () => {
       return;
     }
 
+    const exercises: WorkoutExerciseProps[] = await (async () =>
+      new Promise(resolve => {
+        setExercises(e => {
+          resolve(e);
+          return e;
+        });
+      }))();
+
     saving.current = true;
 
     const stateData = exercises.map(e => {
