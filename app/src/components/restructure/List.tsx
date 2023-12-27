@@ -82,6 +82,7 @@ const RestructureList = ({
         trashPos={trashPos}
       />
     ));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     list,
     exercisePos,

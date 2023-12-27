@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { AppDispatch } from '../../../App';
 import {
@@ -19,6 +19,7 @@ import { useTemplates } from '../../hooks/program/templates.hooks';
 import { CircleAdd, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { Colors } from '@app/utils';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const TemplateList = ({ dispatch, navigation, fetchPrograms }: Props) => {
-  const { programs } = useTemplates({
+  const { programs, isFetching } = useTemplates({
     fetchPrograms,
   });
 
@@ -79,6 +80,11 @@ const TemplateList = ({ dispatch, navigation, fetchPrograms }: Props) => {
         data={programs}
         keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
         renderItem={renderItem}
+        ListFooterComponent={() =>
+          isFetching ? (
+            <ActivityIndicator size="large" color={Colors.white} />
+          ) : null
+        }
       />
       <CircleAdd onPress={onAddPress} style={{ bottom: 20 }} />
     </ScreenTemplate>

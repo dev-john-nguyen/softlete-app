@@ -57,6 +57,11 @@ const WorkoutContainer = () => {
   const statusRef = useRef('');
   const exercisePropsRef: any = useRef([]);
   const prevWorkoutRefId = useRef<string>('');
+  const autoSaveHandler = useRef(
+    _.debounce(() => {
+      saveExercisesDataHandler();
+    }, Constants.autoSaveDuration),
+  );
 
   const handleUpdateWorkoutStates = useCallback(() => {
     if (!workout.exercises) return;
@@ -84,15 +89,6 @@ const WorkoutContainer = () => {
     setGroupKeys(keys);
   }, [workout]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const autoSaveHandler = useCallback(
-    _.debounce(exercises => {
-      if (!mount.current) return;
-      saveExercisesDataHandler(exercises, athlete);
-    }, Constants.autoSaveDuration),
-    [athlete],
-  );
-
   useLayoutEffect(() => {
     setMiddleContent(
       <WorkoutNavbar
@@ -112,11 +108,8 @@ const WorkoutContainer = () => {
       // Prevent default navigation behavior
       e.preventDefault();
       // Save data before leaving
-      setExercises(e => {
-        saveExercisesDataHandler(e, athlete);
-        return e;
-      });
-      autoSaveHandler.cancel();
+      saveExercisesDataHandler();
+      autoSaveHandler.current.cancel();
       // Then navigate to the next screen
       navigation.dispatch(e.data.action);
     });
@@ -135,8 +128,13 @@ const WorkoutContainer = () => {
   }, [workout.exercises]);
 
   useEffect(() => {
-    if (mount.current) autoSaveHandler(exercises);
-  }, [exercises]);
+    saveExercisesDataHandler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workout.status]);
+
+  useEffect(() => {
+    if (mount.current) autoSaveHandler.current();
+  }, [exercises, athlete]);
 
   useEffect(() => {
     prevWorkoutRefId.current = workout._id;
@@ -152,13 +150,18 @@ const WorkoutContainer = () => {
     }
   }, [workout]);
 
-  const saveExercisesDataHandler = async (
-    exercises: WorkoutExerciseProps[],
-    athlete?: boolean,
-  ) => {
+  const saveExercisesDataHandler = async () => {
     if (athlete || saving.current || prevWorkoutRefId.current !== workout._id) {
       return;
     }
+
+    const exercises: WorkoutExerciseProps[] = await (async () =>
+      new Promise(resolve => {
+        setExercises(e => {
+          resolve(e);
+          return e;
+        });
+      }))();
 
     saving.current = true;
 
@@ -287,8 +290,8 @@ const WorkoutContainer = () => {
       groupProps = groupState.cur;
     }
     const order = newGroup ? 0 : exercises ? exercises.length - 1 : 0;
-    //save exercise data if there are any changes
-    saveExercisesDataHandler(exercises, athlete);
+    // save exercise data if there are any changes
+    saveExercisesDataHandler();
     onNavigateToAddExercise(groupProps, order);
   };
 
@@ -302,7 +305,7 @@ const WorkoutContainer = () => {
 
   const shouldAddCom = useMemo(() => {
     if (athlete) return false;
-    if (workout.status === WorkoutStatus.pending) return true;
+    if (workout.status !== WorkoutStatus.completed) return true;
     if (workout.programTemplateUid) return true;
     return false;
   }, [athlete, workout]);

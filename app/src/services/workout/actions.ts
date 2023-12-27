@@ -61,7 +61,7 @@ export const updateWorkoutHeader =
       const { workouts } = workout;
       const newWoDate = DateTools.strToDate(workoutHeader.date);
       const wos = workouts.filter(w => {
-        const d = new Date(w.date);
+        const d = new Date(w.date as string);
         return DateTools.isSameDate(d, newWoDate);
       });
 

@@ -46,13 +46,12 @@ const ExerciseData = ({
   goToFirstItem,
   showGoBack,
 }: Props) => {
-  const [editable, setEditable] = useState(true);
   const [keyboardShow, setKeyboardShow] = useState(false);
   const _kh = useSharedValue(normalize.height(5));
-
-  useEffect(() => {
-    setEditable(workout.status !== WorkoutStatus.completed);
-  }, [workout]);
+  const editable = useMemo(
+    () => workout.status !== WorkoutStatus.completed,
+    [workout],
+  );
 
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardWillShow', e => {
@@ -211,7 +210,7 @@ const ExerciseData = ({
 
   const onWarmUpPress = (index: number) => {
     //set all the items before the pressed as warm up
-    if (athlete || workout.status === WorkoutStatus.completed) return;
+    if (athlete) return;
     //check if the user double tap the last warm up
     let removeAll = false;
     for (let i = 0; i < data.length; i++) {
@@ -237,9 +236,6 @@ const ExerciseData = ({
   };
 
   const DataElement = useMemo(() => {
-    let warmupCom = false;
-    let noWarmUp = false;
-
     return data.map((item, index) => {
       const { placeholder, value } = renderPInput(item);
 
@@ -247,21 +243,19 @@ const ExerciseData = ({
         workout.status === WorkoutStatus.inProgress
           ? DataKeys.performVal
           : DataKeys.predictVal;
+
       let showWarmUp = false;
 
-      if (index === 0 && !item.warmup) {
-        noWarmUp = true;
-      }
+      const nextData = data[index + 1];
 
-      if (!item.warmup && !warmupCom && !noWarmUp) {
-        warmupCom = true;
+      if (item.warmup && !nextData?.warmup) {
         showWarmUp = true;
       }
 
       return (
         <SetContainer
           key={item._id ? item._id : index}
-          showWarmUp={warmupCom && showWarmUp}
+          showWarmUp={showWarmUp}
           editable={editable}
           onRemoveSet={onRemoveSet}
           onWarmUpPress={onWarmUpPress}
@@ -300,7 +294,7 @@ const ExerciseData = ({
             )}
           </FlexBox>
           <FlexBox flex={1}>
-            {workout.status === WorkoutStatus.pending && !athlete && (
+            {!athlete && editable && (
               <CalcRef calcRef={calcRef} onCalcRefUpdate={onCalcRefUpdate} />
             )}
           </FlexBox>

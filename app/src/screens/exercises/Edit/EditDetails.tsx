@@ -30,7 +30,7 @@ import Icon from '@app/icons';
 import useBanner from 'src/hooks/utils/useBanner';
 import { BannerTypes } from 'src/services/banner/types';
 import { Colors } from '@app/utils';
-import { useDelete } from './hooks';
+import { useDelete, useIsOwner } from './hooks';
 
 interface Props {
   navigation: any;
@@ -60,11 +60,12 @@ const EditExerciseDetails = ({
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Categories>(Categories.other);
   const [loading, setLoading] = useState(false);
-  const [isOwner, setIsOwner] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [picker, setPicker] = useState<PickerOptions>(PickerOptions.disable);
   const setBanner = useBanner();
   const { onDelete } = useDelete();
+  const { isOwner } = useIsOwner();
+  const workoutParams = route.params?.workoutParams;
 
   const handleNavigation = (goBack?: boolean) => {
     if (route && route.params) {
@@ -72,16 +73,24 @@ const EditExerciseDetails = ({
         if (goBack) {
           return navigation.navigate(
             ProgramStackScreens.ProgramSearchExercises,
+            { workoutParams },
           );
         } else {
-          return navigation.navigate(ProgramStackScreens.ProgramEditExercise);
+          return navigation.navigate(ProgramStackScreens.ProgramEditExercise, {
+            workoutParams,
+          });
         }
       }
     }
+
     if (goBack) {
-      return navigation.navigate(HomeStackScreens.SearchExercises);
+      return navigation.navigate(HomeStackScreens.SearchExercises, {
+        workoutParams,
+      });
     } else {
-      return navigation.navigate(HomeStackScreens.EditExercise);
+      return navigation.navigate(HomeStackScreens.EditExercise, {
+        workoutParams,
+      });
     }
   };
 
@@ -113,14 +122,6 @@ const EditExerciseDetails = ({
     setDescription(exerciseProps.description ? exerciseProps.description : '');
     setCategory(
       exerciseProps.category ? exerciseProps.category : Categories.other,
-    );
-    //if softlete exerciseProps and user is an admin allow user to edit
-    setIsOwner(
-      exerciseProps.userUid === user.uid ||
-        (exerciseProps.softlete && user.admin) ||
-        !exerciseProps._id
-        ? true
-        : false,
     );
 
     setIsAdmin(admin || user.admin ? true : false);

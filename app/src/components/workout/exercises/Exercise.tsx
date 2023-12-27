@@ -95,7 +95,8 @@ const WorkoutExercise = ({
             <ActivityIndicator size="small" color={Colors.white} />
           )}
         </FlexBox>
-        {(!athlete && workout.status === WorkoutStatus.pending) || isProgram ? (
+        {(!athlete && workout.status !== WorkoutStatus.completed) ||
+        isProgram ? (
           loading ? (
             <ActivityIndicator size="small" color={Colors.white} />
           ) : (

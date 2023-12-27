@@ -29,22 +29,15 @@ async function softleteHandler(
     err => console.log(err),
   );
 
-  if (docs)
+  if (docs) {
     return routerParams.res
       .status(401)
       .send('Exercise already exists. Please try again.');
+  }
 
-  Exercises.findOneAndUpdate({ videoId: exercise.videoId }, exercise, {
-    new: true,
-    runValidators: true,
-    upsert: true,
-  })
-    .then(doc => {
-      doc
-        ? routerParams.res.send(doc.toObject())
-        : routerParams.res.status(500).send('Unexpected error occurred.');
-    })
-    .catch(err => errorCatch(err, routerParams.res, routerParams.next));
+  const newExercise = new Exercises(exercise);
+  await newExercise.save();
+  return routerParams.res.send(newExercise.toObject());
 }
 
 async function userHandler(
@@ -53,11 +46,23 @@ async function userHandler(
   uid: string,
   routerParams: { res: Response; next: NextFunction },
 ) {
-  const exercise = await UserExercise.findOneAndUpdate(
-    { videoId: data.videoId, userUid: uid },
-    data,
-    { new: true, runValidators: true, upsert: true },
-  );
+  const docs = await UserExercise.countDocuments({
+    name: data.name,
+    userUid: uid,
+  });
+
+  if (docs) {
+    return routerParams.res
+      .status(401)
+      .send('Looks like this exercise as already been created.');
+  }
+
+  const exercise = new UserExercise({
+    ...data,
+    userUid: uid,
+  });
+
+  await exercise.save();
 
   const newExMeas = new UserExerciseMeas({
     userUid: uid,

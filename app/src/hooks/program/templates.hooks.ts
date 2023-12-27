@@ -18,17 +18,16 @@ export function useTemplates({ fetchPrograms }: Props) {
   const { programTemplates = [] } = useSelector((state: ReducerProps) => ({
     programTemplates: state.program.programs,
   }));
-  const { data: softletePrograms = [] } = useQuery<ProgramHeaderProps[]>(
-    ['softlete-programs'],
-    async () => {
-      const { data } = await request<ProgramHeaderProps[]>(
-        'GET',
-        PATHS.programs.getSoftlete(),
-        dispatch,
-      );
-      return data;
-    },
-  );
+  const { data: softletePrograms = [], isFetching } = useQuery<
+    ProgramHeaderProps[]
+  >(['softlete-programs'], async () => {
+    const { data } = await request<ProgramHeaderProps[]>(
+      'GET',
+      PATHS.programs.getSoftlete(),
+      dispatch,
+    );
+    return data;
+  });
 
   useEffect(() => {
     fetchPrograms().catch(err => console.log(err));
@@ -38,5 +37,5 @@ export function useTemplates({ fetchPrograms }: Props) {
     return [...softletePrograms, ...programTemplates];
   }, [programTemplates, softletePrograms]);
 
-  return { programs };
+  return { programs, isFetching };
 }
