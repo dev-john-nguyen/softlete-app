@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import { AppDispatch } from '../../../App';
 import { ChatActionProps } from '../../services/chat/types';
 import { ExerciseActionProps } from '../../services/exercises/types';
@@ -76,9 +77,24 @@ export function useApiHooks(
         .unwrap()
         .catch(err => console.log(err));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offline]);
 
   useEffect(() => {
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        initReduxState();
+      }
+    };
+
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, [initReduxState]);
+
+  useEffect(() => {
     initReduxState();
-  }, [offline]);
+  }, [initReduxState, offline]);
 }
