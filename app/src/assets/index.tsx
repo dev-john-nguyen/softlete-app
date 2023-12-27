@@ -67,8 +67,10 @@ import Cardio from './Cardio';
 import KettleBell from './KettleBell';
 import Bot from './Bot';
 import Timer from './Timer';
+import Thermometer from './Thermometer';
 
 const Icons = {
+  thermometer: (props: any) => <Thermometer {...props} />,
   bot: (props: any) => <Bot {...props} />,
   kettlebell: (props: any) => <KettleBell {...props} />,
   cardio: (props: any) => <Cardio {...props} />,

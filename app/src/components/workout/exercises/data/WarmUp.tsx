@@ -1,7 +1,7 @@
 import React from 'react';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { Colors } from '@app/utils';
 
 const WarmUp = () => {
   return (

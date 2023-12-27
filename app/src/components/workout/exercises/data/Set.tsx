@@ -1,61 +1,18 @@
 import { Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, rgba, StyleConstants } from '@app/utils';
+import { Colors, StyleConstants, rgba } from '@app/utils';
 import React, { Fragment } from 'react';
 import { useMemo } from 'react';
-import {
-  StyleSheet,
-  Pressable,
-  PressableStateCallbackType,
-  ViewStyle,
-  StyleProp,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   WorkoutExerciseDataProps,
   WorkoutStatus,
 } from '../../../../services/workout/types';
 import { DataKeys } from './types';
 import WarmUp from './WarmUp';
-
-type CompletedProps = {
-  onPress?: () => void;
-  checked?: boolean;
-};
-
-const Completed = ({ onPress, checked }: CompletedProps) => {
-  return (
-    <Pressable
-      style={({ pressed }) => ({
-        borderColor: pressed
-          ? rgba(Colors.greenRbg, 0.5)
-          : checked
-          ? Colors.green
-          : Colors.white,
-        flex: 1,
-        borderWidth: 1,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-      })}
-      onPress={onPress}
-      hitSlop={5}>
-      {({ pressed }) => (
-        <Icon
-          icon="checked"
-          color={
-            pressed
-              ? rgba(Colors.greenRbg, 0.5)
-              : checked
-              ? Colors.green
-              : rgba(Colors.whiteRbg, 0.1)
-          }
-          size={30}
-        />
-      )}
-    </Pressable>
-  );
-};
+import Checkmark from './Checkmark';
+import { SET_COLUMN_WIDTHS } from './constants';
 
 interface Props {
   showWarmUp: boolean;
@@ -100,22 +57,6 @@ export const SetContainer = ({
   status,
   dataKey,
 }: Props) => {
-  const numberPressableStyle = ({
-    pressed,
-  }: PressableStateCallbackType): StyleProp<ViewStyle> => {
-    return {
-      backgroundColor: pressed
-        ? rgba(Colors.lightWhiteRgb, 0.2)
-        : 'transparent',
-      justifyContent: 'center',
-      padding: 10,
-      flex: 1,
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: rgba(Colors.whiteRbg, 0.8),
-    };
-  };
-
   const inputStyles = useMemo(() => {
     return {
       style: {
@@ -130,19 +71,18 @@ export const SetContainer = ({
 
   return (
     <Fragment>
-      {showWarmUp && <WarmUp />}
       <FlexBox width="100%" marginBottom={10}>
-        <FlexBox flex={0.6} marginRight={10}>
-          <Pressable
-            style={numberPressableStyle}
-            onLongPress={() => editable && onRemoveSet(index)}
-            onPress={() => editable && onWarmUpPress(index)}>
-            <PrimaryText size="large" variant="secondary">
-              {(index + 1).toString()}
-            </PrimaryText>
-          </Pressable>
+        <FlexBox flex={SET_COLUMN_WIDTHS.one} marginRight={10}>
+          <Checkmark
+            editable={editable}
+            onPress={() =>
+              !athlete && editable && onCircleCheckPress(item, index)
+            }
+            checked={item.completed}
+            status={status}
+          />
         </FlexBox>
-        <FlexBox flex={0.8} marginRight={10}>
+        <FlexBox flex={SET_COLUMN_WIDTHS.two} marginRight={10}>
           <Input
             value={item.reps.toString()}
             onChangeText={val => onChangeText(item, index, DataKeys.reps, val)}
@@ -152,7 +92,7 @@ export const SetContainer = ({
             {...inputStyles}
           />
         </FlexBox>
-        <FlexBox flex={1} marginRight={10}>
+        <FlexBox flex={SET_COLUMN_WIDTHS.three} marginRight={10}>
           <Input
             value={value}
             onChangeText={val => onChangePText(item, index, dataKey, val)}
@@ -163,29 +103,40 @@ export const SetContainer = ({
             {...inputStyles}
           />
         </FlexBox>
-        <FlexBox flex={0.8}>
-          {!athlete && status === WorkoutStatus.inProgress ? (
-            <Completed
-              onPress={() => onCircleCheckPress(item, index)}
-              checked={item.completed}
-            />
-          ) : (
-            <>
-              <Input
-                value={item.pct ? item.pct.toString() : '0'}
-                onChangeText={val =>
-                  onChangeText(item, index, DataKeys.pct, val)
-                }
-                numbers={true}
-                keyboardType="numeric"
-                editable={editable && !athlete}
-                {...inputStyles}
-              />
-              <PrimaryText styles={styles.percent}>%</PrimaryText>
-            </>
-          )}
+        <FlexBox flex={SET_COLUMN_WIDTHS.four} marginRight={10}>
+          <Input
+            value={item.pct ? item.pct.toString() : '0'}
+            onChangeText={val => onChangeText(item, index, DataKeys.pct, val)}
+            numbers={true}
+            keyboardType="numeric"
+            editable={editable && !athlete}
+            {...inputStyles}
+          />
+          <PrimaryText styles={styles.percent}>%</PrimaryText>
+        </FlexBox>
+        <FlexBox flex={SET_COLUMN_WIDTHS.five} alignItems="center">
+          <Icon
+            icon="thermometer"
+            size={25}
+            color={
+              item.warmup
+                ? status === WorkoutStatus.completed
+                  ? rgba(Colors.whiteRbg, 0.5)
+                  : Colors.white
+                : rgba(Colors.whiteRbg, 0.2)
+            }
+            onPress={() => editable && onWarmUpPress(index)}
+            containerStyles={{ marginRight: 10 }}
+          />
+          <Icon
+            icon="trash_bin"
+            size={23}
+            color={editable ? Colors.white : rgba(Colors.whiteRbg, 0.2)}
+            onPress={() => editable && onRemoveSet(index)}
+          />
         </FlexBox>
       </FlexBox>
+      {showWarmUp && <WarmUp />}
     </Fragment>
   );
 };
