@@ -10,11 +10,11 @@ const ProgramWorkoutHelp = () => {
       applyContentPadding>
       <FlexBox column marginBottom={10}>
         <PrimaryText marginBottom={5} bold>
-          How to add another group?
+          How to add another circuit?
         </PrimaryText>
         <PrimaryText>
-          Tap on the circle plus icon in the navbar located at the top of the
-          screen.
+          Press and hold on the plus icon and drag your finger to the icon with
+          multiple dumbbells.
         </PrimaryText>
       </FlexBox>
 
@@ -22,17 +22,17 @@ const ProgramWorkoutHelp = () => {
         <PrimaryText marginBottom={5} bold>
           How to add warm up sets?
         </PrimaryText>
-        <PrimaryText>Tap the last set that the warm up will occur.</PrimaryText>
+        <PrimaryText>
+          Press on the thermometer icon of the last set you want the warm up to
+          end.
+        </PrimaryText>
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
         <PrimaryText marginBottom={5} bold>
           How to delete sets?
         </PrimaryText>
-        <PrimaryText>
-          You can remove a set by tapping and holding on the set you want to
-          remove.
-        </PrimaryText>
+        <PrimaryText>Press on the trash bin icon.</PrimaryText>
       </FlexBox>
 
       <FlexBox column marginBottom={10}>
