@@ -39,6 +39,8 @@ import './permissions/health';
 import PrimaryText from './components/elements/PrimaryText';
 import Demo from './components/elements/Demo';
 import { TimerBanner } from './components/TimerBanner';
+import { Colors } from './utils';
+import AppLoadingIndicator from './components/AppLoadingIndicator';
 
 const Tab = createBottomTabNavigator<IndexStackParamsList>();
 
@@ -66,10 +68,7 @@ const Main = ({
   return (
     <SafeAreaProvider>
       {loading ? (
-        <FlexBox flex={1} justifyContent="center" alignItems="center" column>
-          <Icon icon="logo" variant="secondary" size={50} />
-          <PrimaryText marginTop={10}>Loading ...</PrimaryText>
-        </FlexBox>
+        <AppLoadingIndicator />
       ) : (
         <NavigationContainer
           theme={{
