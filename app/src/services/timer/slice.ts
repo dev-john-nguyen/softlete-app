@@ -1,7 +1,7 @@
 import { Vibration } from 'react-native';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TimerProps, defaultTime } from './types';
-import { secondsToTime } from './helpers';
+import { notifyHandler, secondsToTime } from './helpers';
 import { setBanner } from '@app/services';
 import { BannerTypes } from '../banner/types';
 import { ReducerProps } from '..';
@@ -22,7 +22,7 @@ export const startTimerHandler = createAsyncThunk(
       return;
     }
     dispatch(setRunning(true));
-    const timerRef = setInterval(() => {
+    const timerRef = setInterval(async () => {
       const {
         timer: { time: prevTime },
       } = getState() as ReducerProps;
@@ -35,13 +35,16 @@ export const startTimerHandler = createAsyncThunk(
           250, // Vibrate for 500ms, pause for 250ms
           500,
         ]);
-        dispatch(
-          setBanner(
-            BannerTypes.default,
-            'Workout timer has finished!',
-            5 * ONE_SECOND_IN_MS,
-          ),
-        );
+
+        if (!(await notifyHandler())) {
+          dispatch(
+            setBanner(
+              BannerTypes.default,
+              'Workout timer has finished!',
+              5 * ONE_SECOND_IN_MS,
+            ),
+          );
+        }
         dispatch(clearTime());
       } else {
         prevTimeInSecs--;
