@@ -16,6 +16,7 @@ import {
   WorkoutStatus,
 } from '../../../../services/workout/types';
 import { DataKeys } from './types';
+import WarmUp from './WarmUp';
 
 type CompletedProps = {
   onPress?: () => void;
@@ -129,30 +130,7 @@ export const SetContainer = ({
 
   return (
     <Fragment>
-      {showWarmUp && (
-        <FlexBox
-          width="100%"
-          marginBottom={10}
-          alignItems="center"
-          justifyContent="space-between"
-          opacity={0.5}>
-          <FlexBox
-            height={1}
-            width="30%"
-            borderRadius={100}
-            backgroundColor={Colors.lightGrey}
-          />
-          <PrimaryText color={Colors.lightWhite} size="small">
-            End Warm Up
-          </PrimaryText>
-          <FlexBox
-            height={1}
-            width="30%"
-            borderRadius={100}
-            backgroundColor={Colors.lightGrey}
-          />
-        </FlexBox>
-      )}
+      {showWarmUp && <WarmUp />}
       <FlexBox width="100%" marginBottom={10}>
         <FlexBox flex={0.6} marginRight={10}>
           <Pressable
