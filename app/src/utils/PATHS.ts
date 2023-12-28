@@ -210,6 +210,12 @@ export default {
   },
 };
 
-// export const SERVERURL = 'http://localhost:3000/';
-// export const SERVERURL = 'http://192.168.86.27:3000/';
-export const SERVERURL = 'https://www.softlete.com/';
+let TEMP = 'https://www.softlete.com/';
+
+if (process.env.NODE_ENV === 'development') {
+  TEMP = 'http://localhost:3000/';
+}
+
+console.log('env', process.env.NODE_ENV, TEMP);
+
+export const SERVERURL = TEMP;

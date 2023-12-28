@@ -119,15 +119,9 @@ export const SetContainer = ({
         </FlexBox>
         <FlexBox flex={SET_COLUMN_WIDTHS.five} alignItems="center">
           <Icon
-            icon="thermometer"
+            icon={item.warmup ? 'thermometer' : 'fire'}
             size={25}
-            color={
-              item.warmup
-                ? status === WorkoutStatus.completed
-                  ? rgba(Colors.whiteRbg, 0.5)
-                  : Colors.white
-                : rgba(Colors.whiteRbg, 0.2)
-            }
+            color={editable ? Colors.white : rgba(Colors.whiteRbg, 0.2)}
             onPress={() => editable && onWarmUpPress(index)}
             containerStyles={{ marginRight: 10 }}
           />
