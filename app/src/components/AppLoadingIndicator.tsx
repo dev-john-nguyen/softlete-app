@@ -32,7 +32,7 @@ const AppLoadingIndicator = () => {
           style={{
             transform: [{ rotate: spin }],
           }}>
-          <Icon icon="logo" variant="secondary" size={150} />
+          <Icon icon="logo" variant="secondary" size={100} />
         </Animated.View>
       </FlexBox>
     </SafeAreaProvider>
