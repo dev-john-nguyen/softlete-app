@@ -72,7 +72,10 @@ export const SetContainer = ({
   return (
     <Fragment>
       <FlexBox width="100%" marginBottom={10}>
-        <FlexBox flex={SET_COLUMN_WIDTHS.one} marginRight={10}>
+        <FlexBox
+          flex={SET_COLUMN_WIDTHS.one}
+          marginRight={10}
+          alignItems="center">
           <Checkmark
             editable={editable}
             onPress={() =>

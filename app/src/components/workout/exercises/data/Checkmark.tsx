@@ -28,16 +28,17 @@ const Checkmark: FC<Props> = ({ checked, onPress, editable, status }) => {
     <Pressable
       style={({ pressed }) => ({
         borderColor: colorHandler(pressed),
-        flex: 1,
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 1000,
         alignItems: 'center',
         justifyContent: 'center',
+        height: 40,
+        width: 40,
       })}
       onPress={onPress}
       hitSlop={5}>
       {({ pressed }) => (
-        <Icon icon="checked" color={colorHandler(pressed)} size={20} />
+        <Icon icon="checked" color={colorHandler(pressed)} size={12} />
       )}
     </Pressable>
   );
