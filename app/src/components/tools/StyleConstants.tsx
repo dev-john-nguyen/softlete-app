@@ -1,10 +1,8 @@
-import { normalize } from '../../utils/tools';
 import { Dimensions } from 'react-native';
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 //Guideline sizes are based on standard ~5" screen mobile device
 const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
 
 const scale = (size: any) => (width / guidelineBaseWidth) * size;
 // const verticalScale = size => height / guidelineBaseHeight * size;
@@ -23,7 +21,7 @@ export default {
   mediumFont: moderateScale(20),
   mediumLargeFont: moderateScale(25),
   largeFont: moderateScale(30),
-  numFont: normalize.width(15),
+  numFont: moderateScale(20),
   fontSize: {
     large: 22,
     medium: 18,

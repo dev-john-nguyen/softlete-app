@@ -78,7 +78,7 @@ const Input = ({
     }
 
     return {
-      fontSize: numbers ? StyleConstants.numFont : StyleConstants.smallFont,
+      fontSize: numbers ? moderateScale(20) : StyleConstants.smallFont,
       paddingTop: multiline ? 10 : undefined,
       borderBottomColor:
         editable || editable == null

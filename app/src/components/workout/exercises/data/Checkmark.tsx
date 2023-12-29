@@ -1,5 +1,5 @@
 import Icon from '@app/icons';
-import { Colors, normalize, rgba } from '@app/utils';
+import { Colors, moderateScale, rgba } from '@app/utils';
 import React, { FC, useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { WorkoutStatus } from 'src/services/workout/types';
@@ -32,8 +32,8 @@ const Checkmark: FC<Props> = ({ checked, onPress, editable, status }) => {
         borderRadius: 1000,
         alignItems: 'center',
         justifyContent: 'center',
-        height: normalize.width(10),
-        width: normalize.width(10),
+        height: moderateScale(30),
+        width: moderateScale(30),
       })}
       onPress={onPress}
       hitSlop={5}>
