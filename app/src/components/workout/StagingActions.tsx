@@ -1,21 +1,22 @@
 import { Colors, rgba } from '@app/utils';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import { WorkoutStatus } from '../../services/workout/types';
 import PrimaryText from '../elements/PrimaryText';
 import { FlexBox } from '@app/ui';
+import { WorkoutContext } from '@app/contexts';
 
-interface Props {
-  status: WorkoutStatus;
-  onUpdateStatus?: (status: WorkoutStatus) => void;
-  athlete?: boolean;
-}
+const StagingActions = () => {
+  const { workout, athlete, onUpdateStatus, isProgram } =
+    useContext(WorkoutContext);
+  const status = workout.status;
 
-const StagingActions = ({ status, onUpdateStatus, athlete }: Props) => {
   const onPress = (s: WorkoutStatus) => {
     if (status === s || athlete) return;
     onUpdateStatus && onUpdateStatus(s);
   };
+
+  if (isProgram) return null;
 
   return (
     <FlexBox

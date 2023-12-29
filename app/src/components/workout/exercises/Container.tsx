@@ -11,6 +11,7 @@ import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
 import OverviewContainer from '../overview/Container';
 import { WorkoutContext } from '@app/contexts';
+import { FlexBox } from '@app/ui';
 
 interface Props {
   exercises: WorkoutExerciseProps[];
@@ -133,33 +134,38 @@ const ExercisesContainer = ({
   };
 
   return (
-    <FlatList
-      style={styles.container}
-      ref={listRef}
-      initialNumToRender={1}
-      nestedScrollEnabled={true}
-      data={exercises}
-      onViewableItemsChanged={onViewableItemsChanged}
-      keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
-      horizontal={true}
-      pagingEnabled={true}
-      getItemLayout={(data, index) => ({
-        length: ITEM_HEIGHT,
-        offset: ITEM_HEIGHT * index,
-        index,
-      })}
-      onScrollToIndexFailed={info => {
-        const wait = new Promise(resolve => setTimeout(resolve, 500));
-        wait.then(() => {
-          listRef.current?.scrollToIndex({ index: info.index, animated: true });
-        });
-      }}
-      keyboardShouldPersistTaps="always"
-      ListHeaderComponent={renderListHeaderComponent}
-      renderItem={renderItem}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-    />
+    <FlexBox flex={1}>
+      <FlatList
+        style={styles.container}
+        ref={listRef}
+        initialNumToRender={1}
+        nestedScrollEnabled={true}
+        data={exercises}
+        onViewableItemsChanged={onViewableItemsChanged}
+        keyExtractor={(item, index) => (item._id ? item._id : index.toString())}
+        horizontal={true}
+        pagingEnabled={true}
+        getItemLayout={(data, index) => ({
+          length: ITEM_HEIGHT,
+          offset: ITEM_HEIGHT * index,
+          index,
+        })}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            listRef.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
+        keyboardShouldPersistTaps="always"
+        ListHeaderComponent={renderListHeaderComponent}
+        renderItem={renderItem}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      />
+    </FlexBox>
   );
 };
 

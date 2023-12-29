@@ -3,7 +3,6 @@ import React, {
   useState,
   useRef,
   useCallback,
-  useLayoutEffect,
   useContext,
   useMemo,
 } from 'react';
@@ -29,7 +28,6 @@ import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
 } from 'src/services/program/actions';
-import { useScreenTemplateState } from '@app/elements';
 import AddExercise from './components/AddExercise';
 
 const WorkoutContainer = () => {
@@ -40,7 +38,6 @@ const WorkoutContainer = () => {
     athlete,
     workout,
   } = useContext(WorkoutContext);
-  const { setMiddleContent } = useScreenTemplateState();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const [groupKeys, setGroupKeys] = useState<number[]>([]);
@@ -88,20 +85,6 @@ const WorkoutContainer = () => {
     setExercises(cloneExs);
     setGroupKeys(keys);
   }, [workout]);
-
-  useLayoutEffect(() => {
-    setMiddleContent(
-      <WorkoutNavbar
-        status={workout.status}
-        groupKeys={groupKeys}
-        onGroupPress={key => setNavGroupState({ group: key })}
-        curGroup={groupState.cur}
-        onAddExercise={onAddExercise}
-        athlete={athlete}
-      />,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [athlete, workout, groupKeys, groupState]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
@@ -311,7 +294,12 @@ const WorkoutContainer = () => {
   }, [athlete, workout]);
 
   return (
-    <FlexBox flex={1} zIndex={100} justifyContent="center">
+    <FlexBox
+      flex={1}
+      zIndex={100}
+      justifyContent="center"
+      alignItems="center"
+      column>
       <ExercisesContainer
         exercises={exercises}
         onUpdateData={onUpdateData}
@@ -325,6 +313,14 @@ const WorkoutContainer = () => {
         navGroupState={navGroupState}
       />
       {shouldAddCom && <AddExercise onAddExercise={onAddExercise} />}
+      <WorkoutNavbar
+        status={workout.status}
+        groupKeys={groupKeys}
+        onGroupPress={key => setNavGroupState({ group: key })}
+        curGroup={groupState.cur}
+        onAddExercise={onAddExercise}
+        athlete={athlete}
+      />
     </FlexBox>
   );
 };

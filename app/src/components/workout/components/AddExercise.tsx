@@ -129,12 +129,7 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
   };
 
   return (
-    <FlexBox
-      column
-      backgroundColor
-      position="absolute"
-      bottom="0%"
-      alignItems="center">
+    <FlexBox column alignItems="center">
       <FlexBox column alignItems="center" justifyContent="center">
         <Animated.View style={dropWrapper}>
           {showOptions && (

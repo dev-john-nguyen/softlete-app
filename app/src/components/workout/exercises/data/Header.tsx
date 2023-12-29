@@ -15,15 +15,17 @@ const ExerciseDataHeader = ({ status, measSubCat }: Props) => {
     <FlexBox width="100%" marginBottom={10} paddingLeft={15} paddingRight={15}>
       <FlexBox flex={SET_COLUMN_WIDTHS.one} marginRight={10}></FlexBox>
       <FlexBox flex={SET_COLUMN_WIDTHS.two} marginRight={10}>
-        <PrimaryText size="medium">Reps</PrimaryText>
+        <PrimaryText opacity={0.8} size={12}>
+          Reps
+        </PrimaryText>
       </FlexBox>
       <FlexBox flex={SET_COLUMN_WIDTHS.three} marginRight={10}>
-        <PrimaryText size="medium" textTransform="capitalize">
+        <PrimaryText textTransform="capitalize" opacity={0.8} size={12}>
           {measSubCat ? measSubCat : 'Pounds'}
         </PrimaryText>
       </FlexBox>
       <FlexBox flex={SET_COLUMN_WIDTHS.four}>
-        <PrimaryText size="medium" textTransform="capitalize">
+        <PrimaryText textTransform="capitalize" opacity={0.8} size={12}>
           Percent
         </PrimaryText>
       </FlexBox>
