@@ -104,6 +104,8 @@ export const SetContainer = ({
             placeholder={placeholder}
             keyboardType="numeric"
             editable={editable && !athlete}
+            multiline
+            maxHeight={50}
             {...inputStyles}
           />
         </FlexBox>
