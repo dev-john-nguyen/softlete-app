@@ -19,6 +19,7 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
   return (
     <FlexBox
       marginTop={StyleConstants.smallMargin}
+      borderRadius={1000}
       justifyContent="space-around"
       marginRight={20}
       marginLeft={20}
@@ -59,7 +60,7 @@ export const HomeNavBar = ({ currentIndex, scrollRef }: HomeNavBarProps) => {
         color={currentIndex === 1 ? Colors.white : rgba(Colors.whiteRbg, 0.5)}
       />
       <Icon
-        icon="graph"
+        icon="kettlebell"
         size={22}
         containerStyles={{
           borderBottomWidth: currentIndex === 2 ? 1 : 0,
