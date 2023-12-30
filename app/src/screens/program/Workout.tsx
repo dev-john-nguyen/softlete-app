@@ -142,6 +142,7 @@ const Workout = ({
       updateWoHealthData={onUpdateWoHealthData}
       isProgram>
       <ScreenTemplate
+        headerTitleFormatted={workout.name}
         isBackVisible
         onGoBack={onBackButtonPress}
         rightContent={
