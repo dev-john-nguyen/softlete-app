@@ -73,7 +73,7 @@ const OverviewContainer = () => {
             Train
           </PrimaryText>
           <Icon
-            icon="heart"
+            icon="cardio"
             size={120}
             color={Colors.white}
             containerStyles={{ opacity: 0.1, position: 'absolute' }}
