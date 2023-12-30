@@ -61,7 +61,7 @@ const HomeExercises = ({
                 containerStyles={{ marginRight: 10 }}
               />
               <Icon
-                icon="kettlebell"
+                icon="list"
                 size={20}
                 color={Colors.white}
                 onPress={onNavigateToSearchExercises}

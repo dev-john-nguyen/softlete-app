@@ -52,7 +52,7 @@ const Input = ({
   onSubmitEditing,
   numbers,
   onBlur,
-  editable,
+  editable = true,
   onFocus,
   styles,
   autoCorrect,
@@ -78,16 +78,10 @@ const Input = ({
     }
 
     return {
-      fontSize: numbers ? StyleConstants.numFont : StyleConstants.smallFont,
+      fontSize: numbers ? moderateScale(20) : StyleConstants.smallFont,
       paddingTop: multiline ? 10 : undefined,
-      borderBottomColor:
-        editable || editable == null
-          ? rgba(BaseColors.whiteRbg, 0.7)
-          : rgba(BaseColors.whiteRbg, 0.2),
-      color:
-        editable || editable == null
-          ? BaseColors.lightWhite
-          : rgba(BaseColors.lightWhiteRgb, 0.5),
+      borderBottomColor: BaseColors.white,
+      color: BaseColors.white,
       maxHeight: maxHeight,
       ...borderStyles,
     };
@@ -102,6 +96,7 @@ const Input = ({
           marginTop: props.mt,
           marginBottom: props.mb,
           margin: props.m,
+          opacity: editable ? 1 : 0.5,
         },
         containerStyles,
       ]}>

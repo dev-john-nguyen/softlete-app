@@ -3,7 +3,6 @@ import React, {
   useState,
   useRef,
   useCallback,
-  useLayoutEffect,
   useContext,
   useMemo,
 } from 'react';
@@ -29,8 +28,10 @@ import {
   removeProgramWorkoutExercise,
   updateProgramExerciseData,
 } from 'src/services/program/actions';
-import { useScreenTemplateState } from '@app/elements';
 import AddExercise from './components/AddExercise';
+import PrimaryText from '../elements/PrimaryText';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 const WorkoutContainer = () => {
   const {
@@ -40,7 +41,6 @@ const WorkoutContainer = () => {
     athlete,
     workout,
   } = useContext(WorkoutContext);
-  const { setMiddleContent } = useScreenTemplateState();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const [groupKeys, setGroupKeys] = useState<number[]>([]);
@@ -88,20 +88,6 @@ const WorkoutContainer = () => {
     setExercises(cloneExs);
     setGroupKeys(keys);
   }, [workout]);
-
-  useLayoutEffect(() => {
-    setMiddleContent(
-      <WorkoutNavbar
-        status={workout.status}
-        groupKeys={groupKeys}
-        onGroupPress={key => setNavGroupState({ group: key })}
-        curGroup={groupState.cur}
-        onAddExercise={onAddExercise}
-        athlete={athlete}
-      />,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [athlete, workout, groupKeys, groupState]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
@@ -311,20 +297,47 @@ const WorkoutContainer = () => {
   }, [athlete, workout]);
 
   return (
-    <FlexBox flex={1} zIndex={100} justifyContent="center">
-      <ExercisesContainer
-        exercises={exercises}
-        onUpdateData={onUpdateData}
-        curGroup={groupState.cur}
-        onGroupSelect={onGroupSelect}
-        navIsActive={navIsActive}
-        setCurEx={setCurEx}
-        onNavigateToExercise={onNavigateToExercise}
-        onCalcRefUpdate={onCalcRefUpdate}
-        removeWorkoutExercise={onRemoveExercise}
-        navGroupState={navGroupState}
-      />
+    <FlexBox
+      flex={1}
+      zIndex={100}
+      justifyContent="center"
+      alignItems="center"
+      column>
+      {exercises.length === 0 ? (
+        <FlexBox flex={1} alignItems="center">
+          <PrimaryText variant="primary" fontSize={50} opacity={1}>
+            Train
+          </PrimaryText>
+          <Icon
+            icon="dumb_bell"
+            size={150}
+            color={Colors.white}
+            containerStyles={{ opacity: 0.1, position: 'absolute' }}
+          />
+        </FlexBox>
+      ) : (
+        <ExercisesContainer
+          exercises={exercises}
+          onUpdateData={onUpdateData}
+          curGroup={groupState.cur}
+          onGroupSelect={onGroupSelect}
+          navIsActive={navIsActive}
+          setCurEx={setCurEx}
+          onNavigateToExercise={onNavigateToExercise}
+          onCalcRefUpdate={onCalcRefUpdate}
+          removeWorkoutExercise={onRemoveExercise}
+          navGroupState={navGroupState}
+        />
+      )}
       {shouldAddCom && <AddExercise onAddExercise={onAddExercise} />}
+      <WorkoutNavbar
+        status={workout.status}
+        groupKeys={groupKeys}
+        onGroupPress={key => setNavGroupState({ group: key })}
+        curGroup={groupState.cur}
+        onAddExercise={onAddExercise}
+        athlete={athlete}
+      />
     </FlexBox>
   );
 };

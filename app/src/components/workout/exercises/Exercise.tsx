@@ -86,8 +86,9 @@ const WorkoutExercise = ({
           alignItem="center">
           {exercise.exercise ? (
             <PrimaryText
-              size="large"
               numberOfLines={1}
+              size="medium"
+              bold
               textTransform="capitalize">
               {exercise.exercise.name}
             </PrimaryText>

@@ -64,37 +64,57 @@ const WorkoutNavbar = ({
   athlete,
 }: Props) => {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      horizontal>
-      <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
-      <FlexBox alignItems="center">
-        {groupKeys.map((g, index) => (
-          <NavbarItem
-            index={index}
-            curGroup={curGroup}
-            key={index}
-            onPress={() =>
-              curGroup === g ? onAddExercise(false) : onGroupPress(g)
-            }
-            color={Colors.white}
-            lightColor={rgba(Colors.whiteRbg, 0.2)}
-          />
-        ))}
+    <FlexBox
+      flexShrink={1}
+      padding={10}
+      alignItems="center"
+      justifyContent="center">
+      <FlexBox flex={0.5}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+          horizontal>
+          <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
+          <FlexBox alignItems="center" flex={1}>
+            {groupKeys.length > 0 ? (
+              groupKeys.map((g, index) => (
+                <NavbarItem
+                  index={index}
+                  curGroup={curGroup}
+                  key={index}
+                  onPress={() =>
+                    curGroup === g ? onAddExercise(false) : onGroupPress(g)
+                  }
+                  color={Colors.white}
+                  lightColor={rgba(Colors.whiteRbg, 0.2)}
+                />
+              ))
+            ) : (
+              <FlexBox
+                width={circleWidth}
+                height={circleWidth}
+                backgroundColor={Colors.white}
+                borderRadius={100}
+                opacity={0.2}
+              />
+            )}
+          </FlexBox>
+        </ScrollView>
       </FlexBox>
-    </ScrollView>
+    </FlexBox>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    borderRadius: 100,
+    backgroundColor: rgba(Colors.whiteRbg, 0.05),
   },
   contentContainer: {
-    flexGrow: 1, // Ensures that the container will grow to fit the content if it's not full screen
-    justifyContent: 'center', // Centers content vertically in the container
-    alignItems: 'center', // Centers content horizontally in the container
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
   },
   reflect: {
     height: circleWidth,

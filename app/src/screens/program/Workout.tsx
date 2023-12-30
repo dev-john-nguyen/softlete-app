@@ -17,7 +17,6 @@ import {
   completeWorkout,
   updateWoHealthData,
 } from '../../services/workout/actions';
-import WorkoutHeader from '../../components/workout/Header';
 import Loading from '../../components/elements/Loading';
 import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
@@ -34,6 +33,7 @@ import { FlexBox } from '@app/ui';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import useBanner from 'src/hooks/utils/useBanner';
 import { useNavigationState } from '@react-navigation/native';
+import StagingActions from 'src/components/workout/StagingActions';
 
 interface Props {
   route: any;
@@ -142,6 +142,7 @@ const Workout = ({
       updateWoHealthData={onUpdateWoHealthData}
       isProgram>
       <ScreenTemplate
+        headerTitleFormatted={workout.name}
         isBackVisible
         onGoBack={onBackButtonPress}
         rightContent={
@@ -163,7 +164,7 @@ const Workout = ({
         ) : (
           <OverviewContainer />
         )}
-        <WorkoutHeader />
+        <StagingActions />
       </ScreenTemplate>
     </WorkoutProvider>
   );

@@ -21,6 +21,7 @@ const HeaderMiddleContent: FC<HeaderMiddleContentProps> = ({
       flex={headerTitleFormatted ? 1 : middleContentFlex ?? 1}
       alignItems="center"
       paddingLeft={headerTitleFormatted ? 10 : 0}
+      paddingRight={headerTitleFormatted ? 10 : 0}
       justifyContent={headerTitleFormatted ? 'flex-start' : 'center'}>
       {headerTitleFormatted ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>

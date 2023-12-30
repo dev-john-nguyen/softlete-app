@@ -68,6 +68,7 @@ import KettleBell from './KettleBell';
 import Bot from './Bot';
 import Timer from './Timer';
 import Thermometer from './Thermometer';
+import List from './List';
 
 const Icons = {
   thermometer: (props: any) => <Thermometer {...props} />,
@@ -136,6 +137,7 @@ const Icons = {
   pause: (props: any) => <PauseSvg {...props} />,
   world: (props: any) => <World {...props} />,
   timer: (props: any) => <Timer {...props} />,
+  list: (props: any) => <List {...props} />,
 };
 
 export type IconOptions = keyof typeof Icons;
