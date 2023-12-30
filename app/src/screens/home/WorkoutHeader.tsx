@@ -24,11 +24,18 @@ import { HealthActivity } from 'react-native-health';
 import { renderHealthActivityName } from '../../utils/format';
 import useBanner from 'src/hooks/utils/useBanner';
 import { RouteProp } from '@react-navigation/native';
+import { Colors } from '@app/utils';
+import Icon from '@app/icons';
 
 interface Props {
   route: RouteProp<any>;
   navigation: any;
   updateWorkoutHeader: WorkoutActionProps['updateWorkoutHeader'];
+}
+
+enum PickerOptions {
+  programs = 'programs',
+  type = 'type',
 }
 
 const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
@@ -37,7 +44,7 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
     targetProgram: state.program.targetProgram,
     workoutHeader: state.workout.workoutHeader,
   }));
-
+  const [editable, setEditable] = useState(true);
   const [type, setType] = useState<HealthActivity>(
     WorkoutTypes.TraditionalStrengthTraining,
   );
@@ -46,12 +53,18 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
   const [programUid, setProgramUid] = useState('');
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
-  const [picker, setPicker] = useState('');
+  const [picker, setPicker] = useState<PickerOptions>();
   const [datePicker, setDatePicker] = useState(false);
   const setBanner = useBanner();
+  const workoutProgram = useMemo(() => {
+    if (workoutHeader) {
+      return genPrograms.find(p => p._id === workoutHeader.programUid);
+    }
+  }, [workoutHeader, genPrograms]);
 
   const init = useCallback(() => {
     if (workoutHeader) {
+      setEditable(workoutHeader._id ? false : true);
       setType(
         workoutHeader.type
           ? workoutHeader.type
@@ -65,6 +78,7 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
         : new Date();
       setDate(d);
     } else {
+      setEditable(true);
       setName('');
       setDescription('');
       setProgramUid('');
@@ -120,14 +134,14 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
 
   const pickerOptions = useMemo(() => {
     switch (picker) {
-      case 'type':
+      case PickerOptions.type:
         return Object.values(WorkoutTypes).map(type => {
           return {
             label: renderHealthActivityName(type),
             value: type,
           };
         });
-      case 'program':
+      case PickerOptions.programs:
     }
 
     const generatedPrograms = genPrograms.map(item => ({
@@ -145,9 +159,9 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
 
   const getPickerValue = () => {
     switch (picker) {
-      case 'type':
+      case PickerOptions.type:
         return type;
-      case 'program':
+      case PickerOptions.programs:
         return programUid;
     }
 
@@ -156,9 +170,9 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
 
   const onPickerChangeValue = (val: string) => {
     switch (picker) {
-      case 'type':
+      case PickerOptions.type:
         return setType(val as any);
-      case 'program':
+      case PickerOptions.programs:
         return setProgramUid(val);
     }
   };
@@ -180,7 +194,7 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
       isPickerOpen={picker ? true : false}
       onGoBack={onGoBackHandler}
       rotateBack="-90deg"
-      onPickerClose={() => setPicker('')}
+      onPickerClose={() => setPicker(undefined)}
       pickerValue={getPickerValue()}
       pickerOptions={pickerOptions}
       onPickerChangeValue={onPickerChangeValue}
@@ -188,23 +202,39 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
       datePickerValue={date}
       onDatePickerClose={() => setDatePicker(false)}
       onDatePickerChange={value => setDate(value)}
-      middleContent={<PrimaryText size="large">Workout Details</PrimaryText>}>
+      headerTitleFormatted="Workout Details"
+      rightContent={
+        <FlexBox flex={1} justifyContent="flex-end" alignItems="center">
+          {workoutHeader?._id && (
+            <Icon
+              icon="pencil"
+              size={20}
+              color={Colors.white}
+              onPress={() => setEditable(true)}
+            />
+          )}
+        </FlexBox>
+      }>
       <FlexBox column>
         <PrimaryText size="small" marginBottom={10}>
-          Fill out the form below.
+          {editable
+            ? 'Fill out the form below.'
+            : 'Details of your workout can be found below.'}
         </PrimaryText>
 
         <PickerButton
+          disabled={!editable}
           arrow
           arrowDirection="down"
           borderBottom
           label="Type:"
-          onPress={() => setPicker(p => (p ? '' : 'type'))}>
+          onPress={() => setPicker(p => (p ? undefined : PickerOptions.type))}>
           {renderHealthActivityName(type)}
         </PickerButton>
 
         {type === WorkoutTypes.TraditionalStrengthTraining && (
           <Input
+            editable={editable}
             label="Name:"
             value={name}
             placeholder="Name"
@@ -215,9 +245,10 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
           />
         )}
         <Input
+          editable={editable}
           label="Description:"
           value={description}
-          placeholder="Description"
+          placeholder={editable ? 'Description' : ''}
           multiline={true}
           onChangeText={txt => setDescription(txt)}
           maxLength={100}
@@ -227,6 +258,19 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
         />
 
         <PickerButton
+          disabled // disable change right now. Need to configure the ability to dynamically change program -> ticket #70
+          arrow
+          arrowDirection="down"
+          borderBottom
+          label="Program:"
+          onPress={() =>
+            setPicker(p => (p ? undefined : PickerOptions.programs))
+          }>
+          {workoutProgram?.name ?? 'None'}
+        </PickerButton>
+
+        <PickerButton
+          disabled={!editable}
           arrow
           arrowDirection="down"
           borderBottom
@@ -234,7 +278,9 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
           onPress={() => setDatePicker(p => (p ? false : true))}>
           {date.toDateString()}
         </PickerButton>
+
         <PrimaryButton
+          disabled={!editable}
           onPress={onContinuePress}
           marginTop={20}
           loading={loading}>

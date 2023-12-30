@@ -101,8 +101,8 @@ const WorkoutModal = ({ navigation, route }: Props) => {
   const menuItems = useMemo(() => {
     const options: MenuItemProps[] = [
       {
-        text: 'Edit',
-        icon: 'pencil',
+        text: 'Details',
+        icon: 'notebook',
         onPress: onEditWorkoutHeader,
       },
       {
