@@ -223,23 +223,21 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
 
   return (
     <FlexBox column margin={15} marginTop={0} marginBottom={0} flex={1}>
-      {workout.status !== WorkoutStatus.inProgress && (
-        <FlexBox
-          padding={6}
-          borderRadius={100}
-          borderWidth={1}
-          borderColor={Colors.white}
-          alignSelf="flex-end"
-          marginBottom={5}
-          onPress={() => setDeviceWosIsVisible(isVisible => !isVisible)}>
-          <Icon
-            icon={deviceWosIsVisible ? 'close' : 'pencil'}
-            size={10}
-            direction="left"
-            color={Colors.white}
-          />
-        </FlexBox>
-      )}
+      <FlexBox
+        padding={6}
+        borderRadius={100}
+        borderWidth={1}
+        borderColor={Colors.white}
+        alignSelf="flex-end"
+        marginBottom={5}
+        onPress={() => setDeviceWosIsVisible(isVisible => !isVisible)}>
+        <Icon
+          icon={deviceWosIsVisible ? 'close' : 'pencil'}
+          size={10}
+          direction="left"
+          color={Colors.white}
+        />
+      </FlexBox>
       <FlexBox column marginBottom={10}>
         <HealthContainer
           data={workout.healthData}
