@@ -52,7 +52,7 @@ const Input = ({
   onSubmitEditing,
   numbers,
   onBlur,
-  editable,
+  editable = true,
   onFocus,
   styles,
   autoCorrect,
