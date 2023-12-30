@@ -76,18 +76,28 @@ const WorkoutNavbar = ({
           horizontal>
           <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
           <FlexBox alignItems="center" flex={1}>
-            {groupKeys.map((g, index) => (
-              <NavbarItem
-                index={index}
-                curGroup={curGroup}
-                key={index}
-                onPress={() =>
-                  curGroup === g ? onAddExercise(false) : onGroupPress(g)
-                }
-                color={Colors.white}
-                lightColor={rgba(Colors.whiteRbg, 0.2)}
+            {groupKeys.length > 0 ? (
+              groupKeys.map((g, index) => (
+                <NavbarItem
+                  index={index}
+                  curGroup={curGroup}
+                  key={index}
+                  onPress={() =>
+                    curGroup === g ? onAddExercise(false) : onGroupPress(g)
+                  }
+                  color={Colors.white}
+                  lightColor={rgba(Colors.whiteRbg, 0.2)}
+                />
+              ))
+            ) : (
+              <FlexBox
+                width={circleWidth}
+                height={circleWidth}
+                backgroundColor={Colors.white}
+                borderRadius={100}
+                opacity={0.2}
               />
-            ))}
+            )}
           </FlexBox>
         </ScrollView>
       </FlexBox>

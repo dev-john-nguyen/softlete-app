@@ -29,6 +29,9 @@ import {
   updateProgramExerciseData,
 } from 'src/services/program/actions';
 import AddExercise from './components/AddExercise';
+import PrimaryText from '../elements/PrimaryText';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 const WorkoutContainer = () => {
   const {
@@ -300,18 +303,32 @@ const WorkoutContainer = () => {
       justifyContent="center"
       alignItems="center"
       column>
-      <ExercisesContainer
-        exercises={exercises}
-        onUpdateData={onUpdateData}
-        curGroup={groupState.cur}
-        onGroupSelect={onGroupSelect}
-        navIsActive={navIsActive}
-        setCurEx={setCurEx}
-        onNavigateToExercise={onNavigateToExercise}
-        onCalcRefUpdate={onCalcRefUpdate}
-        removeWorkoutExercise={onRemoveExercise}
-        navGroupState={navGroupState}
-      />
+      {exercises.length === 0 ? (
+        <FlexBox flex={1} alignItems="center">
+          <PrimaryText variant="primary" fontSize={50} opacity={1}>
+            Train
+          </PrimaryText>
+          <Icon
+            icon="dumb_bell"
+            size={150}
+            color={Colors.white}
+            containerStyles={{ opacity: 0.1, position: 'absolute' }}
+          />
+        </FlexBox>
+      ) : (
+        <ExercisesContainer
+          exercises={exercises}
+          onUpdateData={onUpdateData}
+          curGroup={groupState.cur}
+          onGroupSelect={onGroupSelect}
+          navIsActive={navIsActive}
+          setCurEx={setCurEx}
+          onNavigateToExercise={onNavigateToExercise}
+          onCalcRefUpdate={onCalcRefUpdate}
+          removeWorkoutExercise={onRemoveExercise}
+          navGroupState={navGroupState}
+        />
+      )}
       {shouldAddCom && <AddExercise onAddExercise={onAddExercise} />}
       <WorkoutNavbar
         status={workout.status}
