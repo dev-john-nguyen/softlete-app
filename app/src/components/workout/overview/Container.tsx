@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import {
   HealthDataProps,
   HealthDisMeas,
+  WorkoutStatus,
   WorkoutTypes,
 } from '../../../services/workout/types';
 import HealthImportContainer from './HealthImportContainer';
@@ -10,6 +11,9 @@ import _ from 'lodash';
 import { FlexBox } from '@app/ui';
 import { useNavigation } from '@react-navigation/native';
 import { WorkoutContext } from '@app/contexts';
+import { PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 const OverviewContainer = () => {
   const navigation = useNavigation();
@@ -63,6 +67,19 @@ const OverviewContainer = () => {
         type={AppleHealthKit.Constants.Observers.Workout}
         onImportData={onChangeHealthData}
       />
+      {workout.status !== WorkoutStatus.completed && (
+        <FlexBox flex={1} alignItems="center" justifyContent="center">
+          <PrimaryText variant="primary" fontSize={50} opacity={1}>
+            Train
+          </PrimaryText>
+          <Icon
+            icon="heart"
+            size={120}
+            color={Colors.white}
+            containerStyles={{ opacity: 0.1, position: 'absolute' }}
+          />
+        </FlexBox>
+      )}
     </FlexBox>
   );
 };

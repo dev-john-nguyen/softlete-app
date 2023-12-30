@@ -229,7 +229,7 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
           borderRadius={100}
           borderWidth={1}
           borderColor={Colors.white}
-          alignSelf="flex-start"
+          alignSelf="flex-end"
           marginBottom={5}
           onPress={() => setDeviceWosIsVisible(isVisible => !isVisible)}>
           <Icon
