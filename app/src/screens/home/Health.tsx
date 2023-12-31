@@ -54,7 +54,8 @@ const chartDimensions = {
 };
 
 const Health = () => {
-  const { hrvs, sleeps, rrs, rhrs } = useHealthSamples();
+  const { hrvs, sleeps, rrs, rhrs, sleepAvg, hrvAvg, rrAvg, rhrAvg } =
+    useHealthSamples();
   const [activeItem, setActiveItem] = useState('rhr');
 
   const lineChartConfig = useMemo(() => {
@@ -100,27 +101,6 @@ const Health = () => {
         };
     }
   }, [activeItem, hrvs, rhrs, rrs, sleeps]);
-
-  const { sleepToday, hrvToday, rrToday, rhrToday } = useMemo(() => {
-    const getAverage = (healthEval: HealthEvalProps, fixed = 1) => {
-      let avg = 0;
-      if (healthEval.data.length > 0) {
-        // skip zeros
-        const filtered = healthEval.data.filter(d => d.value);
-        avg =
-          filtered.reduce((state, val) => state + val.value, 0) /
-          filtered.length;
-      }
-      return String(avg.toFixed(fixed));
-    };
-
-    return {
-      sleepToday: getAverage(sleeps, 2),
-      hrvToday: getAverage(hrvs),
-      rrToday: getAverage(rrs),
-      rhrToday: getAverage(rhrs),
-    };
-  }, [hrvs, rhrs, rrs, sleeps]);
 
   const renderDotContent = (props: {
     x: number;
@@ -219,10 +199,10 @@ const Health = () => {
       <HealthContainer
         setActiveItem={setActiveItem}
         activeItem={activeItem}
-        sleepVal={sleepToday}
-        rrVal={rrToday}
-        hrvVal={hrvToday}
-        rhrVal={rhrToday}
+        sleepVal={sleepAvg}
+        rrVal={rrAvg}
+        hrvVal={hrvAvg}
+        rhrVal={rhrAvg}
       />
       <FlexBox marginTop={15} alignSelf="center">
         <PrimaryText size="small">Last 7 Days Averages</PrimaryText>
