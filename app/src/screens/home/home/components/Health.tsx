@@ -35,7 +35,12 @@ const HomeHealth = ({ healthData }: Props) => {
       activeCaloriesGoal: state.goals.user.healths.activeCalories,
     }),
   );
-  const { sleepToday: sleepDuration } = useHealthSamples();
+  const {
+    sleepToday: sleepDuration,
+    hrvToday,
+    rrToday,
+    rhrToday,
+  } = useHealthSamples();
 
   const fetchHealthData = useCallback(async () => {
     const d = new Date();
@@ -153,9 +158,9 @@ const HomeHealth = ({ healthData }: Props) => {
         setActiveItem={() => undefined}
         activeItem={''}
         sleepVal={String(sleepDuration).replace('.', ':')}
-        hrvVal={'50'}
-        rhrVal={'80'}
-        rrVal={'78.3'}
+        hrvVal={String(hrvToday)}
+        rhrVal={String(rhrToday)}
+        rrVal={String(rrToday)}
       />
       <FlexBox marginTop={15} alignSelf="center">
         <PrimaryText size="small">{`Today's Results`}</PrimaryText>

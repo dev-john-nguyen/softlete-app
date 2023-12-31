@@ -160,14 +160,14 @@ export const useHealthSamples = () => {
 
   const todayProps = useMemo(() => {
     const today = new Date();
-    const getTodayResult = (value: HealthEvalProps) => {
+    const getTodayResult = (value: HealthEvalProps, fixed = 1) => {
       const result = value.data.find(
         d => DateTools.compareTwoDates(d.date, today) === 'same',
       );
-      return result?.value ?? 0;
+      return (result?.value ?? 0).toFixed(fixed);
     };
     return {
-      sleepToday: getTodayResult(sleeps),
+      sleepToday: getTodayResult(sleeps, 2),
       hrvToday: getTodayResult(hrvs),
       rrToday: getTodayResult(rrs),
       rhrToday: getTodayResult(rhrs),
