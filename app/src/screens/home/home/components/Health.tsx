@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DemoStates } from '@app/services';
+import { useHealthSamples } from 'src/hooks/health/health.hooks';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -27,7 +28,6 @@ interface Props {
 const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
-  const [sleepDuration, setSleepDuration] = useState(0);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const { sleepGoal, activeCaloriesGoal } = useSelector(
     (state: ReducerProps) => ({
@@ -35,6 +35,7 @@ const HomeHealth = ({ healthData }: Props) => {
       activeCaloriesGoal: state.goals.user.healths.activeCalories,
     }),
   );
+  const { sleepToday: sleepDuration } = useHealthSamples();
 
   const fetchHealthData = useCallback(async () => {
     const d = new Date();
@@ -42,15 +43,6 @@ const HomeHealth = ({ healthData }: Props) => {
     const options: HealthInputOptions = {
       startDate: today.toISOString(),
     };
-    const yesterday = new Date(today.setDate(today.getDate() - 3));
-
-    const sleepStore = await getSleepDailyAmts(yesterday, new Date());
-
-    const sleepAmt = sleepStore.length > 0 ? sleepStore[0].value : 0;
-    9;
-
-    setSleepDuration(sleepAmt);
-
     AppleHealthKit.getBasalEnergyBurned(
       options,
       (err, results: HealthValue[]) => {
