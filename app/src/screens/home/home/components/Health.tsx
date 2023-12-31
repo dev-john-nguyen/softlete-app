@@ -132,7 +132,7 @@ const HomeHealth = ({ healthData }: Props) => {
         <HealthCircle
           name="Sleep"
           value={String(sleepDuration).replace('.', ':') + ' hrs'}
-          progress={sleepDuration / (sleepGoal?.goal ?? 8)}
+          progress={parseFloat(sleepDuration) / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
           size={normalize.width(2.5)}
           circleWidth={13}
