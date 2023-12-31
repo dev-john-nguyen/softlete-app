@@ -113,7 +113,7 @@ const HomeHealth = ({ healthData }: Props) => {
               ]}
             />
             <Icon
-              icon="pencil"
+              icon="target"
               color={Colors.white}
               size={19}
               onPress={onNavToEditGoalForm}
