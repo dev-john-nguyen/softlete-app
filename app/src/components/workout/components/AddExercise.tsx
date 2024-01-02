@@ -104,6 +104,8 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
   const dropWrapper = useAnimatedStyle(() => {
     return {
       opacity: showOptions ? withTiming(1) : withTiming(0),
+      position: 'absolute',
+      bottom: '100%',
     };
   }, [showOptions]);
 
