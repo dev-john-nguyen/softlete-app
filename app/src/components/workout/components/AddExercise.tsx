@@ -71,11 +71,11 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
       context.startX = translateX.value;
       context.startY = translateY.value;
     },
-    onActive: (event, context) => {
-      translateX.value = context.startX + event.translationX;
-      translateY.value = context.startY + event.translationY;
-      const finalPositionX = plusPos.x + plusPos.width / 2 + translateX.value;
-      const finalPositionY = plusPos.y + plusPos.height / 2 + translateY.value;
+    onActive: event => {
+      translateX.value = event.absoluteX;
+      translateY.value = event.absoluteY;
+      const finalPositionX = event.absoluteX;
+      const finalPositionY = event.absoluteY;
       runOnJS(activateDropHandler)(finalPositionX, finalPositionY);
     },
     onEnd: () => {
