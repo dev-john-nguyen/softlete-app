@@ -4,12 +4,10 @@ import { normalize } from '../../utils/tools';
 import { WorkoutStatus } from '../../services/workout/types';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
-import { DemoArrow } from '@app/elements';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { DemoStates } from '@app/services';
 
 interface NavbarItemProps {
   index: number;
@@ -74,7 +72,6 @@ const WorkoutNavbar = ({
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
           horizontal>
-          <DemoArrow state={[DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]} />
           <FlexBox alignItems="center" flex={1}>
             {groupKeys.length > 0 ? (
               groupKeys.map((g, index) => (

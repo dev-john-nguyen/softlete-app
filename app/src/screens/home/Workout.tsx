@@ -233,8 +233,9 @@ const Workout = ({
             DemoStates.WORKOUT_VIEW,
             DemoStates.WORKOUT_VIEW_STATUS,
             DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
-            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
             DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
           ]}
         />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
