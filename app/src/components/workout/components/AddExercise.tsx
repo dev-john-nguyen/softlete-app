@@ -104,6 +104,8 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
   const dropWrapper = useAnimatedStyle(() => {
     return {
       opacity: showOptions ? withTiming(1) : withTiming(0),
+      position: 'absolute',
+      bottom: '100%',
     };
   }, [showOptions]);
 
@@ -130,12 +132,7 @@ const AddExercise: FC<Props> = ({ onAddExercise }) => {
 
   return (
     <FlexBox column alignItems="center">
-      <FlexBox
-        column
-        alignItems="center"
-        justifyContent="center"
-        position="absolute"
-        bottom="100%">
+      <FlexBox column alignItems="center" justifyContent="center">
         <Animated.View style={dropWrapper}>
           {showOptions && (
             <FlexBox bottom={5}>
