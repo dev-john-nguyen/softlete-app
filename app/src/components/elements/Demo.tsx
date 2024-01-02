@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
-import { DemoStatePositions, DemoStates, setDemoState } from '@app/services';
+import { DemoStates, setDemoState, DemoStatePositions } from '@app/services';
 import { CLEAR_DEMO_STATE_DATA } from 'src/services/global/actionTypes';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -45,9 +45,10 @@ const Demo = () => {
     if (
       demo.state &&
       DemoStatePositions[demo.state] &&
-      DemoStatePositions[demo.state].bannerY
+      typeof DemoStatePositions[demo.state].bannerY === 'number'
     ) {
-      translationY.value = DemoStatePositions[demo.state]?.bannerY as number;
+      const value = DemoStatePositions[demo.state]?.bannerY || 50;
+      translationY.value = value;
     }
   }, [demo, translationY]);
 
@@ -101,18 +102,23 @@ const Demo = () => {
             borderRadius={100}>
             <Icon icon="bot" size={20} color={Colors.white} />
           </FlexBox>
-          <FlexBox column marginLeft={10} justifyContent="center" flex={1}>
+          <FlexBox
+            column
+            marginLeft={10}
+            justifyContent="center"
+            flex={1}
+            marginRight={10}>
             <PrimaryText color={Colors.primary}>{demo.state}</PrimaryText>
           </FlexBox>
         </FlexBox>
         <FlexBox
+          position="absolute"
+          top={10}
+          right={10}
           onPress={exitHandler}
-          backgroundColor={Colors.primary}
-          borderRadius={8}
-          padding={5}
-          paddingLeft={8}
-          paddingRight={8}>
-          <PrimaryText fontSize={12}>Exit</PrimaryText>
+          alignItems="center"
+          justifyContent="center">
+          <Icon icon="close" size={10} color={Colors.primary} />
         </FlexBox>
       </Animated.View>
     </PanGestureHandler>
