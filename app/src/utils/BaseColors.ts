@@ -1,7 +1,7 @@
 export default {
-  primary: '#0C0001',
-  lightPrimary: '#15090A',
-  primaryRgb: '12, 0, 1',
+  primary: '#140000',
+  lightPrimary: 'rgba(255,255,255,.05)',
+  primaryRgb: '20, 0, 0',
   lightWhite: '#FAFAFA',
   lightWhiteRgb: '250, 250, 250',
   black: '#250000',
