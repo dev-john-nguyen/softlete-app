@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.4faad5ee.chunk.css",
-    "main.js": "/static/js/main.dec3cf0e.chunk.js",
-    "main.js.map": "/static/js/main.dec3cf0e.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.900dd88b.js",
-    "runtime-main.js.map": "/static/js/runtime-main.900dd88b.js.map",
-    "static/js/2.5d1d5e93.chunk.js": "/static/js/2.5d1d5e93.chunk.js",
-    "static/js/2.5d1d5e93.chunk.js.map": "/static/js/2.5d1d5e93.chunk.js.map",
+    "main.css": "/static/css/main.e5e3e209.chunk.css",
+    "main.js": "/static/js/main.26b8d550.chunk.js",
+    "main.js.map": "/static/js/main.26b8d550.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c3a4a7fb.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c3a4a7fb.js.map",
+    "static/js/2.6bbc98d4.chunk.js": "/static/js/2.6bbc98d4.chunk.js",
+    "static/js/2.6bbc98d4.chunk.js.map": "/static/js/2.6bbc98d4.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.4faad5ee.chunk.css.map": "/static/css/main.4faad5ee.chunk.css.map",
-    "static/js/2.5d1d5e93.chunk.js.LICENSE.txt": "/static/js/2.5d1d5e93.chunk.js.LICENSE.txt",
-    "static/media/HomeBgSvg.ebb63bab.svg": "/static/media/HomeBgSvg.ebb63bab.svg",
-    "static/media/HomeScreen.21841a0c.png": "/static/media/HomeScreen.21841a0c.png",
-    "static/media/LoginScreen.31a800ee.png": "/static/media/LoginScreen.31a800ee.png",
-    "static/media/WorkoutScreen.2568d96d.png": "/static/media/WorkoutScreen.2568d96d.png",
-    "static/media/logo.014b7b5a.svg": "/static/media/logo.014b7b5a.svg"
+    "static/css/main.e5e3e209.chunk.css.map": "/static/css/main.e5e3e209.chunk.css.map",
+    "static/js/2.6bbc98d4.chunk.js.LICENSE.txt": "/static/js/2.6bbc98d4.chunk.js.LICENSE.txt",
+    "static/media/HomeBgSvg.428ada32.svg": "/static/media/HomeBgSvg.428ada32.svg",
+    "static/media/HomeScreen.1c79778e.png": "/static/media/HomeScreen.1c79778e.png",
+    "static/media/LoginScreen.c0c85e0f.png": "/static/media/LoginScreen.c0c85e0f.png",
+    "static/media/WorkoutScreen.4bb52e78.png": "/static/media/WorkoutScreen.4bb52e78.png",
+    "static/media/logo.f96ab06d.svg": "/static/media/logo.f96ab06d.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.900dd88b.js",
-    "static/js/2.5d1d5e93.chunk.js",
-    "static/css/main.4faad5ee.chunk.css",
-    "static/js/main.dec3cf0e.chunk.js"
+    "static/js/runtime-main.c3a4a7fb.js",
+    "static/js/2.6bbc98d4.chunk.js",
+    "static/css/main.e5e3e209.chunk.css",
+    "static/js/main.26b8d550.chunk.js"
   ]
 }
