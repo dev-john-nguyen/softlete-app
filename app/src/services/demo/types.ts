@@ -10,12 +10,11 @@ export enum DemoStates {
   HOME_WORKOUTS_DEVICE_ACTIVITES = 'If you have activites that are stored on your device via your iOS Health & Fitness apps, you can import them here.',
   HOME_WORKOUS_TODAY_WORKOUT = 'The workouts you have scheduled for today will appear here as well.',
   HOME_WORKOUT_TODAY_PRESS = "Please navigate to today's workout so we can take a look at what a workout might look like.",
-  WORKOUT_VIEW = "A workout's name, description, and program association will appear at the bottom of the screen.",
+  WORKOUT_VIEW = "The workout's name will appear at the top of the screen. You can see more details via the menu.",
   WORKOUT_VIEW_STATUS = 'There are 3 stages of a workout to allow you and others to identify the current status.',
-  WORKOUT_VIEW_ADD_EXERCISE = 'There are two ways to add exercises to your workout.',
-  WORKOUT_VIEW_ADD_EXERCISE_BOTTOM = 'The bottom plus will add an exercise to the circuit in view.',
-  WORKOUT_VIEW_ADD_EXERCISE_TOP = 'And the top plus icon will create a new set and add the exercise to it.',
-  WORKOUT_VIEW_CHANGE_WARM_UP = 'You can define a range of warm up sets. To change the range, you can press on the desired set number. Warm ups always start from 1.',
+  WORKOUT_VIEW_ADD_EXERCISE = 'Press the + icon to add an exercise to the circuit in view.',
+  WORKOUT_VIEW_ADD_EXERCISE_BOTTOM = 'Press and hold the + icon to create a new circuit.',
+  WORKOUT_VIEW_CHANGE_WARM_UP = 'You can define a range of warm up sets. To change the range, press on the fire/temp icon.',
   WORKOUT_VIEW_MENU = 'The workout menu has other actions that you can utilize like restructuring or removing your workout.',
   WORKOUT_VIEW_BACK = 'Please press on the back arrow to go back to the home screen.',
   EXERCISE_HOME_VIEW_PRESS = 'Now please navigate to the exercise section of the home screen.',
@@ -39,6 +38,7 @@ export const DemoStatePositions: {
     bottom?: number | string;
     direction?: 'left' | 'right' | 'down' | 'up';
     bannerY?: number;
+    arrowVisible?: boolean;
   };
 } = {
   [DemoStates.INIT]: {},
@@ -46,6 +46,7 @@ export const DemoStatePositions: {
   [DemoStates.HOME_NAVIGATION_HEALTH]: {
     left: 50,
     bottom: 45,
+    direction: 'down',
   },
   [DemoStates.HOME_HEALTH_EDIT]: {
     left: -35,
@@ -77,35 +78,37 @@ export const DemoStatePositions: {
   },
   [DemoStates.HOME_WORKOUS_TODAY_WORKOUT]: {
     left: '50%',
+    bottom: '0%',
   },
   [DemoStates.HOME_WORKOUT_TODAY_PRESS]: {
     left: '50%',
     bottom: '0%',
   },
   [DemoStates.WORKOUT_VIEW]: {
-    left: '10%',
-    bottom: '10%',
+    left: '20%',
+    top: '0%',
+    bannerY: 200,
+    direction: 'up',
   },
   [DemoStates.WORKOUT_VIEW_STATUS]: {
-    bottom: '14%',
-    left: '0%',
-    direction: 'right',
+    bottom: '10%',
+    left: '45%',
+    bannerY: 0,
   },
-  [DemoStates.WORKOUT_VIEW_ADD_EXERCISE]: {},
+  [DemoStates.WORKOUT_VIEW_ADD_EXERCISE]: {
+    left: '47%',
+    bottom: '25%',
+    bannerY: 0,
+  },
   [DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM]: {
-    left: '46.5%',
-    bottom: '30%',
-  },
-  [DemoStates.WORKOUT_VIEW_ADD_EXERCISE_TOP]: {
-    left: '40%',
-    top: '20%',
-    direction: 'right',
-    bannerY: 120,
+    left: '47%',
+    bottom: '25%',
+    bannerY: 0,
   },
   [DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP]: {
-    left: '8%',
+    right: '9%',
     top: '15%',
-    bannerY: 50,
+    bannerY: 0,
   },
   [DemoStates.WORKOUT_VIEW_MENU]: {
     right: '50%',
@@ -114,15 +117,17 @@ export const DemoStatePositions: {
     bannerY: 120,
   },
   [DemoStates.WORKOUT_VIEW_BACK]: {
-    direction: 'left',
-    left: '60%',
+    bannerY: 120,
+    arrowVisible: false,
   },
   [DemoStates.EXERCISE_HOME_VIEW_PRESS]: {
     right: '15%',
     bottom: 45,
     bannerY: 60,
   },
-  [DemoStates.EXERCISE_HOME]: {},
+  [DemoStates.EXERCISE_HOME]: {
+    arrowVisible: false,
+  },
   [DemoStates.EXERCISE_HOME_EXERCISE_LIST]: {
     right: 30,
     bottom: 0,
@@ -134,28 +139,34 @@ export const DemoStatePositions: {
     direction: 'right',
   },
   [DemoStates.EXERCISE_HOME_PINNED]: {
-    top: '0%',
-    left: '50%',
+    top: '40%',
+    left: '30%',
+    bannerY: 0,
   },
   [DemoStates.BOTTOM_NAV]: {
     left: '47%',
     top: '-120%',
+    bannerY: 0,
   },
   [DemoStates.PERSONAL]: {
     left: '9%',
     top: '-50%',
+    bannerY: 0,
   },
   [DemoStates.PROGRAMS]: {
     left: '34%',
     top: '-50%',
+    bannerY: 0,
   },
   [DemoStates.SOCIAL]: {
     right: '34.5%',
     top: '-50%',
+    bannerY: 0,
   },
   [DemoStates.SETTINGS]: {
     right: '9%',
     top: '-50%',
+    bannerY: 0,
   },
   [DemoStates.END]: {},
 };

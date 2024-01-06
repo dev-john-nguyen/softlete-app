@@ -12,6 +12,7 @@ interface Props {
   variant?: 'primary' | 'secondary';
   fontSize?: 'small' | 'medium' | 'large';
   fontVariant?: 'primary' | 'secondary';
+  disabled?: boolean;
 }
 
 const PrimaryButton = ({
@@ -22,6 +23,7 @@ const PrimaryButton = ({
   variant = 'primary',
   fontSize,
   fontVariant,
+  disabled,
   ...stylesProps
 }: Props & StyleProp<any>) => {
   return (
@@ -54,6 +56,7 @@ const PrimaryButton = ({
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
+            opacity: disabled ? 0.5 : 1,
           },
           {
             ...renderCustomStyles(),
@@ -62,7 +65,7 @@ const PrimaryButton = ({
           stylesProps,
         ];
       }}
-      onPress={onPress}>
+      onPress={() => !disabled && onPress()}>
       <PrimaryText
         textTransform={stylesProps.textTransform}
         color={variant === 'secondary' ? Colors.primary : Colors.white}

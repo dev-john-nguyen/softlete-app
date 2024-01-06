@@ -23,7 +23,9 @@ const DemoArrow: React.FC<Props> = ({ state = [] }) => {
 
   if (!state.find(s => s === demo.state)) return <></>;
 
-  const { direction = 'down', ...positions } = demoPos;
+  const { direction = 'down', arrowVisible = true, ...positions } = demoPos;
+
+  if (!arrowVisible) return null;
 
   return (
     <FlexBox

@@ -1,7 +1,7 @@
 import { Input, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
-import { Colors, StyleConstants, rgba } from '@app/utils';
+import { Colors, StyleConstants, moderateScale, rgba } from '@app/utils';
 import React, { Fragment } from 'react';
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
@@ -72,7 +72,11 @@ export const SetContainer = ({
   return (
     <Fragment>
       <FlexBox width="100%" marginBottom={10}>
-        <FlexBox flex={SET_COLUMN_WIDTHS.one} marginRight={10}>
+        <FlexBox
+          flexBasis={moderateScale(30)}
+          flexShrink={1}
+          marginRight={5}
+          alignItems="center">
           <Checkmark
             editable={editable}
             onPress={() =>
@@ -100,6 +104,8 @@ export const SetContainer = ({
             placeholder={placeholder}
             keyboardType="numeric"
             editable={editable && !athlete}
+            multiline
+            maxHeight={50}
             {...inputStyles}
           />
         </FlexBox>
@@ -114,23 +120,20 @@ export const SetContainer = ({
           />
           <PrimaryText styles={styles.percent}>%</PrimaryText>
         </FlexBox>
-        <FlexBox flex={SET_COLUMN_WIDTHS.five} alignItems="center">
+        <FlexBox
+          flexBasis={moderateScale(38)}
+          alignItems="center"
+          justifyContent="flex-end">
           <Icon
-            icon="thermometer"
-            size={25}
-            color={
-              item.warmup
-                ? status === WorkoutStatus.completed
-                  ? rgba(Colors.whiteRbg, 0.5)
-                  : Colors.white
-                : rgba(Colors.whiteRbg, 0.2)
-            }
+            icon={item.warmup ? 'thermometer' : 'fire'}
+            size={20}
+            color={editable ? Colors.white : rgba(Colors.whiteRbg, 0.2)}
             onPress={() => editable && onWarmUpPress(index)}
-            containerStyles={{ marginRight: 10 }}
+            containerStyles={{ marginRight: 5 }}
           />
           <Icon
             icon="trash_bin"
-            size={23}
+            size={18}
             color={editable ? Colors.white : rgba(Colors.whiteRbg, 0.2)}
             onPress={() => editable && onRemoveSet(index)}
           />

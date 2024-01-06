@@ -10,6 +10,8 @@ interface HealthItemProps {
   icon: IconOptions;
   value: string;
   isActive: boolean;
+  borderRadiusRight?: boolean;
+  borderRadiusLeft?: boolean;
 }
 
 const HealthItem = ({
@@ -18,6 +20,8 @@ const HealthItem = ({
   icon,
   value,
   isActive,
+  borderRadiusLeft,
+  borderRadiusRight,
 }: HealthItemProps) => {
   return (
     <FlexBox
@@ -26,6 +30,10 @@ const HealthItem = ({
       marginRight={1}
       marginLeft={1}
       justifyContent="center"
+      borderTopRightRadius={borderRadiusRight ? 10 : 0}
+      borderBottomRightRadius={borderRadiusRight ? 10 : 0}
+      borderTopLeftRadius={borderRadiusLeft ? 10 : 0}
+      borderBottomLeftRadius={borderRadiusLeft ? 10 : 0}
       alignItems="center"
       padding={10}
       backgroundColor={
@@ -73,6 +81,7 @@ const HealthDataVisual = ({
           onPress={() => setActiveItem('recovery')}
           isActive={activeItem === 'recovery'}
           value={recoveryVal + '%'}
+          borderRadiusLeft
         />
       ) : (
         <HealthItem
@@ -81,6 +90,7 @@ const HealthDataVisual = ({
           onPress={() => setActiveItem('rhr')}
           isActive={activeItem === 'rhr'}
           value={(rhrVal ? rhrVal : '0') + ' bpm'}
+          borderRadiusLeft
         />
       )}
       <HealthItem
@@ -103,6 +113,7 @@ const HealthDataVisual = ({
         onPress={() => setActiveItem('rr')}
         isActive={activeItem === 'rr'}
         value={rrVal + ' rr'}
+        borderRadiusRight
       />
     </FlexBox>
   );

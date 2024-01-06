@@ -23,7 +23,6 @@ import {
   updateWoHealthData,
   updateWoWorkoutRoute,
 } from '../../services/workout/actions';
-import WorkoutHeader from '../../components/workout/Header';
 import { HomeStackScreens } from './types';
 import Loading from '../../components/elements/Loading';
 import { BannerTypes } from '../../services/banner/types';
@@ -43,6 +42,7 @@ import useBanner from 'src/hooks/utils/useBanner';
 import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
+import StagingActions from 'src/components/workout/StagingActions';
 
 interface Props {
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
@@ -208,6 +208,7 @@ const Workout = ({
       updateWoHealthData={onUpdateWoHealthData}>
       <ScreenTemplate
         isBackVisible
+        headerTitleFormatted={workout.name}
         onGoBack={onBackButtonPress}
         rightContent={
           <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
@@ -232,8 +233,9 @@ const Workout = ({
             DemoStates.WORKOUT_VIEW,
             DemoStates.WORKOUT_VIEW_STATUS,
             DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
-            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
             DemoStates.WORKOUT_VIEW_CHANGE_WARM_UP,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE,
+            DemoStates.WORKOUT_VIEW_ADD_EXERCISE_BOTTOM,
           ]}
         />
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
@@ -241,7 +243,7 @@ const Workout = ({
         ) : (
           <OverviewContainer />
         )}
-        <WorkoutHeader program={program} />
+        <StagingActions />
       </ScreenTemplate>
     </WorkoutProvider>
   );

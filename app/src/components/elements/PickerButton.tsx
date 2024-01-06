@@ -26,7 +26,10 @@ type Props = {
 
 const PickerButton: React.FC<Props> = props => {
   return (
-    <FlexBox {...props.containerStyles} column>
+    <FlexBox
+      {...props.containerStyles}
+      column
+      opacity={props.disabled ? 0.5 : 1}>
       {!!props.label && (
         <PrimaryText
           variant="secondary"
@@ -42,7 +45,6 @@ const PickerButton: React.FC<Props> = props => {
         alignItems="center"
         justifyContent="space-between"
         backgroundColor={rgba(Colors.whiteRbg, props.isActive ? 0.2 : 0.05)}
-        opacity={props.disabled ? 0.5 : 1}
         borderRadius={props.borderRadius || 5}
         borderBottomWidth={props.borderBottom ? 1 : 0}
         borderBottomColor={BaseColors.lightGrey}
@@ -57,7 +59,7 @@ const PickerButton: React.FC<Props> = props => {
         {props.arrow && (
           <Icon
             icon="chevron"
-            size={15}
+            size={17}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}
             containerStyles={{ opacity: props.valueOpacity ?? 1 }}
@@ -66,7 +68,7 @@ const PickerButton: React.FC<Props> = props => {
         {props.icon && (
           <Icon
             icon={props.icon}
-            size={15}
+            size={17}
             color={BaseColors.lightWhite}
             direction={props.arrowDirection || 'right'}
           />

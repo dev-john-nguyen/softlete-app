@@ -1,5 +1,6 @@
+import { DateTools } from '@app/utils';
 import uniqBy from 'lodash/uniqBy';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { hrvDesc, sleepDesc, rrDesc } from 'src/content/health';
 import {
   getHRSamples,
@@ -136,7 +137,44 @@ export const useHealthSamples = () => {
     evalRhrSamples();
   }, []);
 
-  return { hrvs, sleeps, rrs, rhrs };
+  const averageProps = useMemo(() => {
+    const getAverage = (healthEval: HealthEvalProps, fixed = 1) => {
+      let avg = 0;
+      if (healthEval.data.length > 0) {
+        // skip zeros
+        const filtered = healthEval.data.filter(d => d.value);
+        avg =
+          filtered.reduce((state, val) => state + val.value, 0) /
+          filtered.length;
+      }
+      return String(avg.toFixed(fixed));
+    };
+
+    return {
+      sleepAvg: getAverage(sleeps, 2),
+      hrvAvg: getAverage(hrvs),
+      rrAvg: getAverage(rrs),
+      rhrAvg: getAverage(rhrs),
+    };
+  }, [hrvs, rhrs, rrs, sleeps]);
+
+  const todayProps = useMemo(() => {
+    const today = new Date();
+    const getTodayResult = (value: HealthEvalProps, fixed = 1) => {
+      const result = value.data.find(
+        d => DateTools.compareTwoDates(d.date, today) === 'same',
+      );
+      return (result?.value ?? 0).toFixed(fixed);
+    };
+    return {
+      sleepToday: getTodayResult(sleeps, 2),
+      hrvToday: getTodayResult(hrvs),
+      rrToday: getTodayResult(rrs),
+      rhrToday: getTodayResult(rhrs),
+    };
+  }, [hrvs, rhrs, rrs, sleeps]);
+
+  return { hrvs, sleeps, rrs, rhrs, ...averageProps, ...todayProps };
 };
 
 const emptyEval = {

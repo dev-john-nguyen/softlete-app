@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DemoStates } from '@app/services';
+import { useHealthSamples } from 'src/hooks/health/health.hooks';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -27,7 +28,6 @@ interface Props {
 const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
-  const [sleepDuration, setSleepDuration] = useState(0);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const { sleepGoal, activeCaloriesGoal } = useSelector(
     (state: ReducerProps) => ({
@@ -35,6 +35,12 @@ const HomeHealth = ({ healthData }: Props) => {
       activeCaloriesGoal: state.goals.user.healths.activeCalories,
     }),
   );
+  const {
+    sleepToday: sleepDuration,
+    hrvToday,
+    rrToday,
+    rhrToday,
+  } = useHealthSamples();
 
   const fetchHealthData = useCallback(async () => {
     const d = new Date();
@@ -42,15 +48,6 @@ const HomeHealth = ({ healthData }: Props) => {
     const options: HealthInputOptions = {
       startDate: today.toISOString(),
     };
-    const yesterday = new Date(today.setDate(today.getDate() - 3));
-
-    const sleepStore = await getSleepDailyAmts(yesterday, new Date());
-
-    const sleepAmt = sleepStore.length > 0 ? sleepStore[0].value : 0;
-    9;
-
-    setSleepDuration(sleepAmt);
-
     AppleHealthKit.getBasalEnergyBurned(
       options,
       (err, results: HealthValue[]) => {
@@ -113,7 +110,7 @@ const HomeHealth = ({ healthData }: Props) => {
               ]}
             />
             <Icon
-              icon="pencil"
+              icon="target"
               color={Colors.white}
               size={19}
               onPress={onNavToEditGoalForm}
@@ -135,7 +132,7 @@ const HomeHealth = ({ healthData }: Props) => {
         <HealthCircle
           name="Sleep"
           value={String(sleepDuration).replace('.', ':') + ' hrs'}
-          progress={sleepDuration / (sleepGoal?.goal ?? 8)}
+          progress={parseFloat(sleepDuration) / (sleepGoal?.goal ?? 8)}
           progressColor={BaseColors.blue}
           size={normalize.width(2.5)}
           circleWidth={13}
@@ -161,9 +158,9 @@ const HomeHealth = ({ healthData }: Props) => {
         setActiveItem={() => undefined}
         activeItem={''}
         sleepVal={String(sleepDuration).replace('.', ':')}
-        hrvVal={'50'}
-        rhrVal={'80'}
-        rrVal={'78.3'}
+        hrvVal={String(hrvToday)}
+        rhrVal={String(rhrToday)}
+        rrVal={String(rrToday)}
       />
       <FlexBox marginTop={15} alignSelf="center">
         <PrimaryText size="small">{`Today's Results`}</PrimaryText>
