@@ -84,7 +84,7 @@ router.post('/', async (req: any, res: any, next: any) => {
       workoutUid: duplicateWorkout._id,
       userUid: uid,
       data: e.data.map(dta => {
-        const { _id, performVal, ...restD } = dta;
+        const { _id, performVal, completed, ...restD } = dta;
         return {
           ...restD,
         };
