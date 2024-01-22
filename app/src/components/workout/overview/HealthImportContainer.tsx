@@ -20,13 +20,21 @@ import HealthForm from './HealthForm';
 import HealthContainer from './HealthContainer';
 import { WorkoutContext } from '@app/contexts';
 import WorkoutReflection from '../WorkoutReflection';
+import { useMutation } from '@tanstack/react-query';
+import { ActivityIndicator } from 'react-native';
 
 interface ImportItemProps {
-  onImportData: () => void;
+  onImportData: (data: HealthDataProps) => Promise<void>;
   data: HealthDataProps;
 }
 
 const ImportItem = ({ data, onImportData }: ImportItemProps) => {
+  const { workout } = useContext(WorkoutContext);
+  const isWorkoutData = workout.healthData?.activityId === data.activityId;
+  const { isLoading, mutateAsync } = useMutation(() => {
+    return onImportData(data);
+  });
+
   const formattedData: HealthDataProps = useMemo(() => {
     return {
       activityName: data.activityName,
@@ -49,12 +57,16 @@ const ImportItem = ({ data, onImportData }: ImportItemProps) => {
         alignItems="center"
         paddingBottom={5}
         paddingTop={5}>
-        <Icon
-          icon="download"
-          onPress={onImportData}
-          size={20}
-          color={Colors.white}
-        />
+        {isLoading ? (
+          <ActivityIndicator color={Colors.white} />
+        ) : (
+          <Icon
+            icon={isWorkoutData ? 'checkmark' : 'download'}
+            onPress={() => !isWorkoutData && mutateAsync()}
+            size={20}
+            color={Colors[isWorkoutData ? 'green' : 'white']}
+          />
+        )}
       </FlexBox>
       <HealthContainer data={formattedData} />
     </FlexBox>
@@ -74,6 +86,34 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
   const [deviceWosIsVisible, setDeviceWosIsVisible] = useState(false);
   const mount = useRef(false);
   const { workout, isProgram } = useContext(WorkoutContext);
+
+  const getActiveEnergy = async () => {
+    if (!workout.date) return;
+    const d = new Date(workout.date);
+
+    const options = {
+      startDate: new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getUTCDate(),
+        0,
+      ).toISOString(),
+      endDate: new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getUTCDate(),
+        24,
+      ).toISOString(),
+      type,
+    };
+
+    try {
+      const woSamples = await getWoSample(options);
+      fetchHeartRateData(woSamples);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     getActiveEnergy();
@@ -155,34 +195,6 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
     }) as Promise<HealthValue[]>;
   };
 
-  const getActiveEnergy = async () => {
-    if (!workout.date) return;
-    const d = new Date(workout.date);
-
-    const options = {
-      startDate: new Date(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getUTCDate(),
-        0,
-      ).toISOString(),
-      endDate: new Date(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getUTCDate(),
-        24,
-      ).toISOString(),
-      type,
-    };
-
-    try {
-      const woSamples = await getWoSample(options);
-      fetchHeartRateData(woSamples);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const onCustomStateChange = () => setCustom(m => (m ? false : true));
 
   const onCustomImportSubmit = async (data: HealthDataProps) => {
@@ -197,11 +209,18 @@ const HealthImportContainer = ({ type: type, onImportData }: Props) => {
     }
   };
 
+  const onImportDataHandler = async (data: HealthDataProps) => {
+    await onImportData(data).catch(error => {
+      console.error(error);
+    });
+    setDeviceWosIsVisible(false);
+  };
+
   const renderDataOptions = useMemo(() => {
     return data.map((item, i) => (
       <ImportItem
         data={item}
-        onImportData={() => onImportData(item)}
+        onImportData={onImportDataHandler}
         key={item.activityId ? item.activityId : i}
       />
     ));

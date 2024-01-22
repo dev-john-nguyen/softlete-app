@@ -14,10 +14,12 @@ import { WorkoutContext } from '@app/contexts';
 import { PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
+import useBanner from 'src/hooks/utils/useBanner';
 
 const OverviewContainer = () => {
   const navigation = useNavigation();
   const { updateWoHealthData, workout } = useContext(WorkoutContext);
+  const setBanner = useBanner();
 
   useEffect(() => {
     if (workout.type !== WorkoutTypes.TraditionalStrengthTraining) {
@@ -55,9 +57,14 @@ const OverviewContainer = () => {
     };
 
     if (updateWoHealthData) {
-      await updateWoHealthData(workout._id, updatedHealthData).catch(err =>
-        console.log(err),
-      );
+      await updateWoHealthData(workout._id, updatedHealthData)
+        .then(() => {
+          setBanner('Data successfully imported!');
+        })
+        .catch(err => {
+          setBanner('Oops! Something went wrong. Please try again.');
+          console.log(err);
+        });
     }
   };
 

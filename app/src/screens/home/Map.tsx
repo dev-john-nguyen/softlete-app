@@ -91,7 +91,7 @@ const Map = () => {
         />
         <Polyline
           coordinates={workoutTracker.coordinates}
-          strokeColor={BaseColors.lightPrimary}
+          strokeColor={BaseColors.primary}
           strokeWidth={3}
         />
       </MapAnimated>
