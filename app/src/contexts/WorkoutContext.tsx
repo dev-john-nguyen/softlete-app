@@ -1,4 +1,4 @@
-import React, { createContext, FC } from 'react';
+import React, { createContext, FC, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { ExerciseProps } from 'src/services/exercises/types';
@@ -44,4 +44,8 @@ export const WorkoutProvider: FC<ProviderProps> = ({ children, ...props }) => {
       {children}
     </WorkoutContext.Provider>
   );
+};
+
+export const useWorkoutState = () => {
+  return useContext(WorkoutContext);
 };

@@ -27,7 +27,6 @@ import { HomeStackScreens } from './types';
 import Loading from '../../components/elements/Loading';
 import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
-import OverviewContainer from '../../components/workout/overview/Container';
 import { updateProgramWoHealthData } from '../../services/program/actions';
 import ScreenTemplate from '../../components/elements/screen-template';
 import { LocationValue } from 'react-native-health';
@@ -43,6 +42,7 @@ import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
 import StagingActions from 'src/components/workout/StagingActions';
+import EnduranceWrapper from 'src/components/workout/endurance';
 
 interface Props {
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
@@ -241,7 +241,7 @@ const Workout = ({
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (
-          <OverviewContainer />
+          <EnduranceWrapper />
         )}
         <StagingActions />
       </ScreenTemplate>
