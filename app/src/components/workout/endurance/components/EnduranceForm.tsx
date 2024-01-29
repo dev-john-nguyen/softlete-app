@@ -13,7 +13,11 @@ enum ActivityImportOptions {
   Device,
 }
 
-const EnduranceForm = () => {
+type Props = {
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
   const { workout, updateWoHealthData } = useWorkoutState();
   const [importValue, setImportValue] = useState<ActivityImportOptions>();
   const setBanner = useBanner();
@@ -57,6 +61,7 @@ const EnduranceForm = () => {
           setBanner('Oops! Something went wrong. Please try again.');
           console.log(err);
         });
+      setEdit(false);
     }
   };
 

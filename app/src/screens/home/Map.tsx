@@ -12,7 +12,7 @@ import ScreenTemplate from '../../components/elements/screen-template';
 import {
   useMapAdjustView,
   useRouteMarkers,
-  zoomToMarker,
+  useZoomToMarker,
 } from '../../hooks/workout/route.hooks';
 import MapRouteContents from '../../components/route/map/MapRouteContents';
 import PrimaryText from '../../components/elements/PrimaryText';
@@ -51,7 +51,7 @@ const Map = () => {
   const navigation = useNavigation<NavigationProps>();
   const mapRef = useRef<MapAnimated>();
   const { redirectToScreen, workoutTracker } = useRouteMarkers();
-  const { activeMarkIndex, setActiveMarkIndex } = zoomToMarker(
+  const { activeMarkIndex, setActiveMarkIndex } = useZoomToMarker(
     region,
     workoutTracker.getMarkers(),
   );
