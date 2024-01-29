@@ -18,7 +18,7 @@ type Props = {
 };
 
 const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
-  const { workout, updateWoHealthData } = useWorkoutState();
+  const { workout, updateWoHealthData, isProgram } = useWorkoutState();
   const [importValue, setImportValue] = useState<ActivityImportOptions>();
   const setBanner = useBanner();
 
@@ -55,7 +55,7 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
     if (updateWoHealthData) {
       await updateWoHealthData(workout._id, updatedHealthData)
         .then(() => {
-          setBanner('Data successfully imported!');
+          setBanner('Your data has successfully saved!');
         })
         .catch(err => {
           setBanner('Oops! Something went wrong. Please try again.');
@@ -70,6 +70,7 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
       <CustomImport
         onClose={() => setImportValue(undefined)}
         onImportHealthData={onImportHealthData}
+        healthData={workout.healthData}
       />
     );
   }
@@ -91,13 +92,16 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
           desc="Customize Activity"
           secondary
         />
-        <InfoListBox
-          onPress={() => setImportValue(ActivityImportOptions.Device)}
-          label="Import"
-          icon="download"
-          desc="Device Import"
-          secondary
-        />
+        {!isProgram && (
+          <InfoListBox
+            opacity={isProgram ? 0.5 : 1}
+            onPress={() => setImportValue(ActivityImportOptions.Device)}
+            label="Import"
+            icon="download"
+            desc="Device Import"
+            secondary
+          />
+        )}
       </FlexBox>
     </FlexBox>
   );

@@ -7,12 +7,18 @@ import { PrimaryText } from '@app/elements';
 type Props = {
   onClose: () => void;
   onImportHealthData: (data: HealthDataProps) => Promise<void>;
+  healthData?: HealthDataProps;
 };
 
-const CustomImport: FC<Props> = ({ onClose, onImportHealthData }) => {
+const CustomImport: FC<Props> = ({
+  onClose,
+  onImportHealthData,
+  healthData,
+}) => {
   const onSubmitHandler = async (data: HealthDataProps) => {
     onImportHealthData(data);
   };
+
   return (
     <FlexBox flex={1} column>
       <PrimaryText marginBottom={10}>Customize Your Activity</PrimaryText>
@@ -20,6 +26,7 @@ const CustomImport: FC<Props> = ({ onClose, onImportHealthData }) => {
         onSubmit={onSubmitHandler}
         activityName=""
         onClose={onClose}
+        healthData={healthData}
       />
     </FlexBox>
   );

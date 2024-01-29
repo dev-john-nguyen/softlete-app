@@ -180,6 +180,9 @@ export default (state: any = INITIAL_STATE, action: ActionProps) => {
       return {
         ...state,
         targetProgram: newProgram,
+        viewWorkout: newProgram.workouts.find(
+          (wo: ProgramWorkoutProps) => action.payload.workoutUid === wo._id,
+        ),
       };
     case SET_PROGRAM_VIEW_WORKOUT:
       return {

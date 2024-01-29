@@ -20,7 +20,6 @@ import {
 import Loading from '../../components/elements/Loading';
 import { BannerTypes } from '../../services/banner/types';
 import { ImageProps } from '../../services/user/types';
-import OverviewContainer from '../../components/workout/overview/Container';
 import {
   updateProgramExerciseData,
   updateProgramWoHealthData,
@@ -34,6 +33,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import useBanner from 'src/hooks/utils/useBanner';
 import { useNavigationState } from '@react-navigation/native';
 import StagingActions from 'src/components/workout/StagingActions';
+import EnduranceWrapper from 'src/components/workout/endurance';
 
 interface Props {
   route: any;
@@ -123,7 +123,6 @@ const Workout = ({
       workoutUid,
       data,
     ).catch(err => console.error(err));
-    setBanner('Successfully saved!');
   };
 
   const onNavigateToExercise = (exercise: ExerciseProps) => {
@@ -162,7 +161,7 @@ const Workout = ({
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (
-          <OverviewContainer />
+          <EnduranceWrapper />
         )}
         <StagingActions />
       </ScreenTemplate>

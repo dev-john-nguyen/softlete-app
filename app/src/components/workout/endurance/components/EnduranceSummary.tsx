@@ -1,6 +1,5 @@
 import React from 'react';
 import { useWorkoutState } from '@app/contexts';
-import { useEffect, useState } from 'react';
 import WorkoutTracker from 'src/classes/WorkoutTracker';
 import ActivitySummary from 'src/components/ActivitySummary';
 import { getWoRouteSamples } from 'src/helpers/health.helpers';
