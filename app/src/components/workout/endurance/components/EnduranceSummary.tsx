@@ -27,6 +27,9 @@ const EnduranceSummary = () => {
       }
       return tracker;
     },
+    {
+      refetchOnMount: true,
+    },
   );
 
   return (

@@ -179,6 +179,7 @@ export default (state: any = INITIAL_STATE, action: ActionProps) => {
       };
       return {
         ...state,
+        programs: findAndUpdateProgram(state.programs, newProgram),
         targetProgram: newProgram,
         viewWorkout: newProgram.workouts.find(
           (wo: ProgramWorkoutProps) => action.payload.workoutUid === wo._id,
