@@ -64,7 +64,10 @@ export const useMapAdjustView = (mapRef: any, polyCords: LatLng[]) => {
   }, [mapRef, polyCords]);
 };
 
-export function zoomToMarker(region: AnimatedRegion, markers: MarkerProps[]) {
+export function useZoomToMarker(
+  region: AnimatedRegion,
+  markers: MarkerProps[],
+) {
   const [activeMarkIndex, setActiveMarkIndex] = useState<number>();
 
   useEffect(() => {

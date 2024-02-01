@@ -33,8 +33,8 @@ const PrimaryButton = ({
           if (variant === 'secondary') {
             return {
               backgroundColor: pressed
-                ? rgba(Colors.whiteRbg, 0.5)
-                : rgba(Colors.whiteRbg, 0.8),
+                ? rgba(Colors.whiteRbg, 0.4)
+                : rgba(Colors.whiteRbg, 0.5),
               borderWidth: 1,
               borderColor: Colors.white,
             };

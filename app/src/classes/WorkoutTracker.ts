@@ -81,7 +81,8 @@ class WorkoutTracker {
   }
 
   getDate(formatType = '/', formatOrder = 'd', showYear = true) {
-    if (!this.healthData) return '12/31/9999';
+    if (!this.healthData || !this.healthData.date) return '12/31/9999';
+
     return DateTools.convertUTCStrToLocalStr(
       this.healthData.date,
       formatType,
