@@ -7,6 +7,8 @@ import { HealthDataProps, HealthDisMeas } from 'src/services/workout/types';
 import { useWorkoutState } from '@app/contexts';
 import isEqual from 'lodash/isEqual';
 import useBanner from 'src/hooks/utils/useBanner';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 enum ActivityImportOptions {
   Custom,
@@ -80,7 +82,7 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
   }
 
   return (
-    <FlexBox column>
+    <FlexBox column flex={1}>
       <PrimaryText marginBottom={10}>
         How do you want to customize your activity?
       </PrimaryText>
@@ -102,6 +104,18 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
             secondary
           />
         )}
+      </FlexBox>
+
+      <FlexBox flex={1} alignItems="center" justifyContent="center">
+        <PrimaryText variant="primary" fontSize={50} opacity={1}>
+          Train
+        </PrimaryText>
+        <Icon
+          icon="cardio"
+          size={120}
+          color={Colors.white}
+          containerStyles={{ opacity: 0.1, position: 'absolute' }}
+        />
       </FlexBox>
     </FlexBox>
   );
