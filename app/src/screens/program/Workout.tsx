@@ -41,12 +41,6 @@ const Workout = ({ route, navigation, updateProgramWoHealthData }: Props) => {
   }));
   const navigationState = useNavigationState(state => state);
 
-  console.info(
-    workout.healthData?.distance,
-    targetProgram.workouts?.find(w => w._id === workout._id)?.healthData
-      ?.distance,
-  );
-
   const onBackButtonPress = () => {
     const routes = navigationState.routes;
     // Don't allow go back to workout header
