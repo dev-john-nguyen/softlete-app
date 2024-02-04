@@ -122,7 +122,7 @@ export default {
       images: 'api/workouts/update/images',
       healthData: 'api/workouts/update/batch/health-data',
     },
-    complete: 'api/workouts/complete',
+    updateReflection: 'api/workouts/update/reflection',
     getHealthAnalytics: (
       enduranceType: any,
       dateFilterType: DateSelectionTypes,
