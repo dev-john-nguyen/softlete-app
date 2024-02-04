@@ -214,10 +214,19 @@ const Workout = ({
           <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             <Icon
+              icon="notebook"
+              size={25}
+              color={Colors.white}
+              onPress={() =>
+                navigation.navigate(HomeStackScreens.WorkoutReflectionModal)
+              }
+            />
+            <Icon
               icon="timer"
               size={25}
               color={Colors.white}
               onPress={() => navigation.navigate(HomeStackScreens.Timer)}
+              containerStyles={{ marginLeft: 10 }}
             />
             <Icon
               icon="ellipsis"

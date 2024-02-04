@@ -144,7 +144,6 @@ class HealthForm extends React.Component<Props, StateProps> {
               <DurationForm
                 onDurationUpdate={num => this.setState({ duration: num })}
                 onClose={() => this.setState({ editName: '' })}
-                duration={this.state.duration}
               />
             </FlexBox>
           );

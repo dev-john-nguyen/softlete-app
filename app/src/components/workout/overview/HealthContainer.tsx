@@ -17,7 +17,7 @@ import { ProgramWorkoutProps } from 'src/services/program/types';
 
 interface Props {
   data?: HealthDataProps;
-  workout?: ProgramWorkoutProps;
+  workout?: ProgramWorkoutProps | WorkoutProps;
   isProgram?: boolean;
 }
 

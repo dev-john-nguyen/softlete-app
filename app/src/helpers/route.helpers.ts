@@ -18,7 +18,7 @@ interface ImportActionsProps {
   updateWoHealthData: WorkoutActionProps['updateWoHealthData'];
 }
 
-async function validateSkipRouteSamples() {
+export async function validateSkipRouteSamples() {
   return new Promise((resolve, reject) => {
     Alert.alert(
       'No Route Found',

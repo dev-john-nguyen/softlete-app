@@ -222,7 +222,7 @@ const Home = ({
         showsVerticalScrollIndicator={false}
         ref={scrollRef}>
         <HomeHealth healthData={healthData} />
-        <HomeWorkouts wos={wos} deviceWos={deviceWos} desc={bannerTxt} />
+        <HomeWorkouts wos={wos} desc={bannerTxt} />
         <HomeExercises
           pinAnalytics={pinExercisesAnalytics}
           setPicker={setPicker}
