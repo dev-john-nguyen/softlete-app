@@ -91,12 +91,16 @@ const WorkoutReflectionModal = () => {
               icon="cardio"
               size={120}
               color={Colors.white}
-              containerStyles={{ opacity: 0.1, position: 'absolute' }}
+              containerStyles={{
+                opacity: 0.1,
+                position: 'absolute',
+                zIndex: -1,
+              }}
             />
           </FlexBox>
         </FlexBox>
       ) : (
-        <FlexBox column flex={1}>
+        <FlexBox column flex={1} onPress={() => Keyboard.dismiss()}>
           <ReflectionImage
             setImage={
               setImage as React.Dispatch<
@@ -133,7 +137,11 @@ const WorkoutReflectionModal = () => {
               icon="notebook"
               size={100}
               color={Colors.white}
-              containerStyles={{ opacity: 0.1, position: 'absolute' }}
+              containerStyles={{
+                opacity: 0.1,
+                position: 'absolute',
+                zIndex: -1,
+              }}
             />
           </FlexBox>
         </FlexBox>

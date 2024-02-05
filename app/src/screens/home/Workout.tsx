@@ -183,8 +183,13 @@ const Workout = ({
         isBackVisible
         headerTitleFormatted={workout.name}
         onGoBack={onBackButtonPress}
+        rightContentFlex={0.4}
         rightContent={
-          <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
+          <FlexBox
+            flex={1}
+            width="auto"
+            alignItems="center"
+            justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
             <Icon
               icon="notebook"
