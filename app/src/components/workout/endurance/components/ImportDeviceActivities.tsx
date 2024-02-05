@@ -4,12 +4,19 @@ import { ScrollView } from 'react-native';
 import { useFetchHealthData } from '../../hooks/fetch-health-data.hooks';
 import DeviceHealthImportItem from '../../components/DeviceHealthImportItem';
 import { HealthDataProps } from 'src/services/workout/types';
+import { PrimaryButton, PrimaryText } from '@app/elements';
+import Icon from '@app/icons';
+import { Colors } from '@app/utils';
 
 type Props = {
   onImportHealthData: (data: HealthDataProps) => Promise<void>;
+  onCancel: () => void;
 };
 
-const ImportDeviceActivities: FC<Props> = ({ onImportHealthData }) => {
+const ImportDeviceActivities: FC<Props> = ({
+  onImportHealthData,
+  onCancel,
+}) => {
   const { data } = useFetchHealthData();
 
   const renderDataOptions = useMemo(() => {
@@ -25,12 +32,29 @@ const ImportDeviceActivities: FC<Props> = ({ onImportHealthData }) => {
 
   return (
     <FlexBox column flex={1}>
-      <ScrollView
-        style={{ flex: 1 }}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}>
-        {renderDataOptions}
-      </ScrollView>
+      <PrimaryButton onPress={onCancel} alignSelf="flex-start">
+        Back
+      </PrimaryButton>
+      {renderDataOptions.length === 0 ? (
+        <FlexBox flex={1} alignItems="center" justifyContent="center">
+          <Icon
+            size={100}
+            icon="upload"
+            color={Colors.white}
+            containerStyles={{ opacity: 0.2, position: 'absolute' }}
+          />
+          <PrimaryText fontSize={40} variant="primary">
+            Empty
+          </PrimaryText>
+        </FlexBox>
+      ) : (
+        <ScrollView
+          style={{ flex: 1 }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          {renderDataOptions}
+        </ScrollView>
+      )}
     </FlexBox>
   );
 };
