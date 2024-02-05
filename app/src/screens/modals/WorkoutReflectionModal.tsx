@@ -52,7 +52,10 @@ const WorkoutReflectionModal = () => {
   const onSaveReflection = () => {
     if (isLoading) return;
 
-    if ((!reflection && !image) || reflection === workout.reflection) {
+    if (
+      (!reflection && !image) ||
+      (reflection === workout.reflection && !image)
+    ) {
       return setBanner('No updates found!', BannerTypes.warning);
     }
     saveReflection();
