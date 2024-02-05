@@ -4,19 +4,22 @@ import {
   PrimaryText,
   ScreenTemplate,
 } from '@app/elements';
-import { ImageProps, setBanner } from '@app/services';
+import { ImageProps } from '@app/services';
 import { FlexBox } from '@app/ui';
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReflectionImage from 'src/components/workout/overview/ReflectionImage';
-import { ReducerProps } from 'src/services';
+import { ReducerProps, ThunkAppDispatch } from 'src/services';
 import DeviceHealthImport from './components/DeviceHealthImport';
 import { HealthDataProps, HealthDisMeas } from 'src/services/workout/types';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
 import { useImportDeviceActivities } from 'src/hooks/base/device-import.hooks';
 import useBanner from 'src/hooks/utils/useBanner';
+import { updateReflection } from 'src/services/workout/actions';
+import { useMutation } from '@tanstack/react-query';
+import { BannerTypes } from 'src/services/banner/types';
 
 const WorkoutReflectionModal = () => {
   const [image, setImage] = useState<ImageProps>();
@@ -27,12 +30,33 @@ const WorkoutReflectionModal = () => {
   }));
   const { importDeviceActivity } = useImportDeviceActivities();
   const setBanner = useBanner();
+  const dispatch = useDispatch<ThunkAppDispatch>();
+  const { mutateAsync: saveReflection, isLoading } = useMutation(
+    () => {
+      const defaultStrainRating = 0;
+      return dispatch(
+        updateReflection(workout, defaultStrainRating, reflection, image),
+      );
+    },
+    {
+      onSuccess: () => {
+        setBanner('Successfully saved!', BannerTypes.success);
+      },
+    },
+  );
 
   const workoutImageUri = workout.imageUri
     ? workout.imageUri
     : workout.localImageUri;
 
-  const onSaveReflection = () => {};
+  const onSaveReflection = () => {
+    if (isLoading) return;
+
+    if ((!reflection && !image) || reflection === workout.reflection) {
+      return setBanner('No updates found!', BannerTypes.warning);
+    }
+    saveReflection();
+  };
 
   const onImportData = async (data: HealthDataProps) => {
     // does this handle program differently
@@ -94,7 +118,8 @@ const WorkoutReflectionModal = () => {
           <PrimaryButton
             marginTop={20}
             alignSelf="flex-end"
-            onPress={onSaveReflection}>
+            onPress={onSaveReflection}
+            loading={isLoading}>
             Save
           </PrimaryButton>
           <FlexBox flex={1} alignItems="center" justifyContent="center">

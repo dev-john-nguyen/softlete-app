@@ -646,6 +646,7 @@ export const updateReflection =
           } as WorkoutProps,
         },
       });
+      return data;
     }
   };
 

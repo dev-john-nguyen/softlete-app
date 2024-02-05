@@ -8,12 +8,8 @@ import React, {
 import { Pressable, StyleSheet } from 'react-native';
 import { ReducerProps } from '../../services';
 import { connect } from 'react-redux';
-import {
-  WorkoutStatus,
-  ViewWorkoutProps,
-  WorkoutTypes,
-} from '../../services/workout/types';
-import BaseColors, { rgba } from '../../utils/BaseColors';
+import { ViewWorkoutProps } from '../../services/workout/types';
+import BaseColors from '../../utils/BaseColors';
 import { ExerciseProps } from '../../services/exercises/types';
 import WorkoutContainer from '../../components/workout/Container';
 import { GeneratedProgramProps } from '../../services/program/types';
@@ -25,7 +21,6 @@ import { normalize } from '../../utils/tools';
 import { likeWorkout } from '../../services/athletes/actions';
 import { AthleteActionProps } from '../../services/athletes/types';
 import { UserProps } from '../../services/user/types';
-import OverviewContainer from '../../components/workout/overview/Container';
 import ErrorSvg from '../../assets/ErrorSvg';
 import reportWo from '../utils/report-wo';
 import StagingActions from 'src/components/workout/StagingActions';
@@ -118,17 +113,13 @@ const AthleteWorkout = ({
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
-        <WorkoutContainer
-          isProgramTemplate={isProgramTemplate}
-          workout={workout}
-          onNavigateToExercise={onNavigateToExercise}
-          navigation={navigation}
-          athlete
-        />
-      ) : (
-        <OverviewContainer navigation={navigation} workout={workout} athlete />
-      )}
+      <WorkoutContainer
+        isProgramTemplate={isProgramTemplate}
+        workout={workout}
+        onNavigateToExercise={onNavigateToExercise}
+        navigation={navigation}
+        athlete
+      />
       <StagingActions />
     </SafeAreaView>
   );
