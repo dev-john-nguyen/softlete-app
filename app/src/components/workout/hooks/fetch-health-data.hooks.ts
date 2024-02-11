@@ -1,7 +1,7 @@
 import { useWorkoutState } from '@app/contexts';
 import { useEffect, useRef, useState } from 'react';
 import { getWoSample } from 'src/helpers/health.helpers';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps, WorkoutProps } from 'src/services/workout/types';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
@@ -10,9 +10,11 @@ import AppleHealthKit, {
 import _ from 'lodash';
 
 export const useFetchHealthData = (
+  workoutProp?: WorkoutProps,
   type = AppleHealthKit.Constants.Observers.Workout,
 ) => {
-  const { workout } = useWorkoutState();
+  const { workout: workoutFromContext } = useWorkoutState();
+  const workout = workoutProp ?? workoutFromContext;
   const [data, setData] = useState<HealthDataProps[]>([]);
   const mount = useRef(false);
 

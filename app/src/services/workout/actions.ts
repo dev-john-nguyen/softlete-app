@@ -492,9 +492,9 @@ export const setViewWorkout =
 export const updateWorkoutStatus =
   (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    const { offline } = getState().global;
+    const { global, workout: rootWorkout } = getState();
 
-    if (!offline && !online) {
+    if (!global.offline && !online) {
       const { data } = await request(
         'POST',
         PATHS.workouts.updateStatus,
@@ -502,6 +502,10 @@ export const updateWorkoutStatus =
         { _id: workoutUid, status },
       );
       if (!data) return;
+    }
+
+    if (status === WorkoutStatus.completed) {
+      processAnalyticsExercises(rootWorkout.viewWorkout)(dispatch, getState);
     }
 
     dispatch({
@@ -571,7 +575,7 @@ export const updateWorkoutExerciseData =
     return updatedExercises;
   };
 
-export const completeWorkout =
+export const updateReflection =
   (
     workout: WorkoutProps,
     strainRating: number,
@@ -617,11 +621,10 @@ export const completeWorkout =
 
     const { data }: { data?: WorkoutProps } = await request(
       'POST',
-      PATHS.workouts.complete,
+      PATHS.workouts.updateReflection,
       dispatch,
       {
         _id: workout._id,
-        status: WorkoutStatus.completed,
         strainRating,
         reflection,
         imageId,
@@ -630,9 +633,6 @@ export const completeWorkout =
     );
 
     if (data) {
-      //update analytics
-      processAnalyticsExercises(workout)(dispatch, getState);
-
       dispatch({
         type: UPDATE_WORKOUT_INFO,
         payload: {
@@ -646,6 +646,7 @@ export const completeWorkout =
           } as WorkoutProps,
         },
       });
+      return data;
     }
   };
 

@@ -130,7 +130,7 @@ const ScreenTemplate = ({
               flex={
                 headerTitleFormatted
                   ? rightContent
-                    ? 0.2
+                    ? rightContentFlex ?? 0.2
                     : 0
                   : rightContentFlex ?? 0.3
               }>

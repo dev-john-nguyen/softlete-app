@@ -162,6 +162,7 @@ router.post('/', async (req: any, res: any, next: any) => {
           calcRef: calcRef,
           data: eRest.data.map(d => ({
             ...d,
+            completed: false,
             predictValL: d.predictVal,
             performVal: 0,
           })),

@@ -43,7 +43,7 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
 
     // does this handle program differently
     const updatedHealthData: HealthDataProps = {
-      activityName: data.activityName,
+      activityName: data.activityName || workout.type,
       sourceName: data.sourceName,
       duration: data.duration,
       calories: data.calories,
@@ -78,7 +78,12 @@ const EnduranceForm: React.FC<Props> = ({ setEdit }) => {
   }
 
   if (importValue === ActivityImportOptions.Device) {
-    return <ImportDeviceActivities onImportHealthData={onImportHealthData} />;
+    return (
+      <ImportDeviceActivities
+        onImportHealthData={onImportHealthData}
+        onCancel={() => setImportValue(undefined)}
+      />
+    );
   }
 
   return (

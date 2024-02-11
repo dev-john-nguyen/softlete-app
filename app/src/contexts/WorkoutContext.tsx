@@ -3,21 +3,15 @@ import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { ExerciseProps } from 'src/services/exercises/types';
 import { GeneratedProgramProps } from 'src/services/program/types';
-import { ImageProps } from 'src/services/user/types';
 import {
   ViewWorkoutProps,
   WorkoutActionProps,
-  WorkoutExerciseProps,
   WorkoutStatus,
 } from 'src/services/workout/types';
 
 type WorkoutContextProps = {
   onNavigateToExercise: (exercise: ExerciseProps) => void;
   onNavigateToAddExercise?: (group: number, order: number) => void;
-  onCompleteWorkout?: (
-    exercises?: void | WorkoutExerciseProps[] | undefined,
-    image?: ImageProps,
-  ) => Promise<void>;
   onUpdateStatus?: (status: WorkoutStatus) => Promise<void>;
   program?: GeneratedProgramProps;
   setReflection?: React.Dispatch<React.SetStateAction<string>>;

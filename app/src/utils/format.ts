@@ -22,6 +22,8 @@ export const renderHealthActivityName = (type: string) => {
       return AppleHealthKit.Constants.Activities.Hiking;
     case AppleHealthKit.Constants.Activities.Running:
       return AppleHealthKit.Constants.Activities.Running;
+    case AppleHealthKit.Constants.Activities.SurfingSports:
+      return 'Surfing';
     default:
       return 'Activity';
   }
