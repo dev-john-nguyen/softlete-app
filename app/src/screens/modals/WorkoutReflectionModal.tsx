@@ -146,14 +146,29 @@ const WorkoutReflectionModal = () => {
           </FlexBox>
         </FlexBox>
       )}
-      <FlexBox
-        marginBottom={20}
-        justifyContent={viewHealth ? 'flex-start' : 'flex-end'}
-        alignItems="flex-start">
-        <PrimaryButton onPress={() => setViewHealth(s => !s)}>
-          {viewHealth ? 'View Reflection' : 'View Health'}
-        </PrimaryButton>
-      </FlexBox>
+      {viewHealth ? (
+        <FlexBox
+          onPress={() => setViewHealth(s => !s)}
+          marginBottom={20}
+          justifyContent={'flex-start'}
+          alignItems="center">
+          <FlexBox marginRight={5}>
+            {<Icon icon="chevron" color={Colors.white} size={15} />}
+          </FlexBox>
+          <PrimaryText>{'View Health'}</PrimaryText>
+        </FlexBox>
+      ) : (
+        <FlexBox
+          onPress={() => setViewHealth(s => !s)}
+          marginBottom={20}
+          justifyContent={'flex-end'}
+          alignItems="center">
+          <PrimaryText>{'View Reflection'}</PrimaryText>
+          <FlexBox transform={[{ rotate: '180deg' }]} marginLeft={5}>
+            {<Icon icon="chevron" color={Colors.white} size={15} />}
+          </FlexBox>
+        </FlexBox>
+      )}
     </ScreenTemplate>
   );
 };
