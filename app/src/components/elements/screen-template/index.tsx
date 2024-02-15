@@ -185,6 +185,7 @@ const ScreenTemplate = ({
       <DatePicker
         modal
         mode="date"
+        theme="dark"
         open={isDatePickerOpen}
         date={datePickerValue || new Date()}
         onConfirm={date => {
@@ -192,7 +193,7 @@ const ScreenTemplate = ({
           onDatePickerChange && onDatePickerChange(date);
         }}
         onCancel={() => onDatePickerClose && onDatePickerClose()}
-        textColor={Colors.primary}
+        textColor={Colors.white}
       />
     </ScreenTemplateProvider>
   );
