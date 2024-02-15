@@ -28,7 +28,7 @@ export const useRouteMarkers = () => {
 
     const workoutHandler = async () => {
       const { data } = route.params as { data: HealthDataProps };
-      const tracker = new WorkoutTracker();
+      const tracker = new WorkoutTracker(data.workoutUid);
       tracker.initializeHealthData(data);
       try {
         const routeSamples = await getWoRouteSamples(data.activityId);
@@ -40,7 +40,7 @@ export const useRouteMarkers = () => {
     };
 
     workoutHandler().catch(err => console.log(err));
-  }, [route]);
+  }, [navigation, route]);
 
   return {
     redirectToScreen,
