@@ -76,7 +76,7 @@ app.use(
   },
 );
 
-const root = path.resolve(__dirname, 'client', 'build');
+const root = path.resolve(__dirname, 'Valentines');
 app.use(express.static(root));
 app.get('*', (req, res) => {
   res.sendFile('index.html', { root });

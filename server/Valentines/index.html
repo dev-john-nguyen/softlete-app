@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Indie Flower", cursive;
+      }
+      button {
+        background: #ff8585;
+        border-radius: 100px;
+        font-family: "Indie Flower";
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        padding: 10px 50px;
+        border: none;
+        color: black;
+      }
+    </style>
+  </head>
+  <body style="background-color: #ffc0c0; height: 90vh">
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
+        flex-direction: column;
+      "
+    >
+      <object type="image/svg+xml" data="./dog.svg" id="dog_svg">
+        <!-- Fallback content for browsers that don't support SVG -->
+        Your browser does not support SVG
+      </object>
+      <h1 style="font-size: 40px; text-align: center" id="title">
+        Will you be my Valentine?
+      </h1>
+      <div style="display: flex; gap: 50px">
+        <button onclick="onYesClick()">Yes</button>
+        <button id="no" onclick="onNoClick()">No</button>
+      </div>
+    </div>
+    <script>
+      let count = 0;
+      function onYesClick() {
+        const dog_svg = document.getElementById("dog_svg");
+        const title = document.getElementById("title");
+        dog_svg.data = "./butt_dog.svg";
+        title.innerText = "Perfect! You get all the kisses and cuddles!";
+      }
+      function onNoClick() {
+        const title = document.getElementById("title");
+        const dog_svg = document.getElementById("dog_svg");
+
+        let str = "";
+
+        switch (count) {
+          case 0:
+            str = "Really? Not even for cuddles?";
+            break;
+          case 1:
+            str = "How about kisses?";
+            break;
+          case 2:
+            str = "Now you're just playing hard to get!";
+            break;
+          case 3:
+            str = "Third time's the charm?";
+            break;
+          case 4:
+            str = "I think you have some issues.";
+            break;
+          case 5:
+            str = "I'm starting to feel unloved.";
+            break;
+          case 6:
+            str = "You do realize there's no escape, right?";
+            break;
+          case 7:
+            str = "It's not me, it's you.";
+            break;
+          case 8:
+            str = "This button is getting tired.";
+            break;
+          case 9:
+            str = "Almost there, keep trying!";
+            break;
+          default:
+            str = "Well too bad! You're my Valentine!";
+            dog_svg.data = "./butt_dog.svg";
+        }
+        count++;
+        title.innerText = str;
+      }
+    </script>
+  </body>
+</html>
