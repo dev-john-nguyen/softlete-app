@@ -50,7 +50,7 @@ const Map = () => {
   const region = useRef(new AnimatedRegion()).current;
   const navigation = useNavigation<NavigationProps>();
   const mapRef = useRef<MapAnimated>();
-  const { workoutTracker } = useRouteMarkers();
+  const { workoutTracker, isLoading } = useRouteMarkers();
   const { activeMarkIndex, setActiveMarkIndex } = useZoomToMarker(
     region,
     workoutTracker.getMarkers(),
@@ -112,7 +112,7 @@ const Map = () => {
           onPress={onZoomOut}
         />
       </FlexBox>
-      {!workoutTracker.workoutId || workoutTracker.coordinates.length < 1 ? (
+      {!isLoading && workoutTracker.coordinates.length < 1 ? (
         <FlexBox
           position="absolute"
           top={0}

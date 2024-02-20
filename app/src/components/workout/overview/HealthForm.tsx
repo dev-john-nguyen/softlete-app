@@ -203,6 +203,7 @@ class HealthForm extends React.Component<Props, StateProps> {
             label="Back"
             onPress={this.props.onClose}
             alignSelf="flex-start"
+            marginBottom={15}
           />
         )}
         <FlexBox justifyContent="space-between" marginBottom={10}>

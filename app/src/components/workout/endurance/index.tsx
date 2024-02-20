@@ -42,6 +42,7 @@ const EnduranceWrapper = () => {
             right
             onPress={onChangeEditHandler}
             label="View Summary"
+            marginBottom={10}
           />
         ) : (
           <FlexBox

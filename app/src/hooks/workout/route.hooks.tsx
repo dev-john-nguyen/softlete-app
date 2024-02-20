@@ -19,6 +19,7 @@ export const useRouteMarkers = () => {
   const route = useRoute<MyRouteProps>();
   const navigation = useNavigation<NavigationProps>();
   const [workoutTracker, setWorkoutTracker] = useState(new WorkoutTracker());
+  const [isLoading, setIsLoading] = useState(true);
 
   const redirectToScreen = (screen: HomeStackScreens) => () =>
     navigation.push(screen, { data: route.params.data });
@@ -40,6 +41,7 @@ export const useRouteMarkers = () => {
         console.log(err);
       }
       setWorkoutTracker(tracker);
+      setIsLoading(false);
     };
 
     workoutHandler().catch(err => console.log(err));
@@ -48,6 +50,7 @@ export const useRouteMarkers = () => {
   return {
     redirectToScreen,
     workoutTracker,
+    isLoading,
   };
 };
 

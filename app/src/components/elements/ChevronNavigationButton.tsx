@@ -17,6 +17,7 @@ const ChevronNavigationButton: React.FC<Props> = ({
   right,
   label,
   alignSelf = 'flex-end',
+  marginBottom,
 }) => {
   return (
     <FlexBox
@@ -27,8 +28,8 @@ const ChevronNavigationButton: React.FC<Props> = ({
       paddingLeft={right ? 15 : 12}
       borderRadius={100}
       alignSelf={alignSelf}
+      marginBottom={marginBottom}
       alignItems="center"
-      marginBottom={10}
       onPress={onPress}>
       {!right && (
         <Icon
