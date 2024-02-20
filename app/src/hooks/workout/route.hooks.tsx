@@ -12,6 +12,9 @@ import {
 import WorkoutTracker from '../../classes/WorkoutTracker';
 import { getWoRouteSamples } from 'src/helpers/health.helpers';
 
+/*
+  Note: data passed as params can be an existing workout or a device activites workout that doesn't have a workout id
+*/
 export const useRouteMarkers = () => {
   const route = useRoute<MyRouteProps>();
   const navigation = useNavigation<NavigationProps>();
