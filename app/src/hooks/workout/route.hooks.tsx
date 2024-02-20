@@ -85,7 +85,6 @@ export function useZoomToMarker(
           .start();
       }
     }
-  }, [activeMarkIndex]);
 
   return {
     activeMarkIndex,
