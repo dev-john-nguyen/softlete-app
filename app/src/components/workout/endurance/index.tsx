@@ -8,6 +8,7 @@ import { Colors } from '@app/utils';
 import { PrimaryText } from '@app/elements';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { useNavigation } from '@react-navigation/native';
+import ChevronNavigationButton from './components/ChevronNavigationButton';
 
 const EnduranceWrapper = () => {
   const { workout } = useWorkoutState();
@@ -38,42 +39,20 @@ const EnduranceWrapper = () => {
     <FlexBox column flex={1} zIndex={100} margin={15} marginTop={10}>
       {hasHealthData ? (
         edit ? (
-          <FlexBox
-            borderWidth={1}
-            borderColor={Colors.white}
-            padding={6}
-            paddingRight={12}
-            paddingLeft={15}
-            borderRadius={100}
-            alignSelf="flex-end"
-            alignItems="center"
-            marginBottom={10}
-            onPress={onChangeEditHandler}>
-            <PrimaryText marginRight={5}>View Summary</PrimaryText>
-            <Icon
-              icon={'chevron'}
-              size={15}
-              color={Colors.white}
-              direction="right"
-            />
-          </FlexBox>
+          <ChevronNavigationButton
+            right
+            onPress={onChangeEditHandler}
+            label="View Summary"
+          />
         ) : (
           <FlexBox
             marginBottom={10}
             justifyContent="space-between"
             alignItems="center">
-            <FlexBox
-              borderWidth={1}
-              borderColor={Colors.white}
-              padding={6}
-              paddingRight={15}
-              paddingLeft={12}
-              borderRadius={100}
-              alignItems="center"
-              onPress={onChangeEditHandler}>
-              <Icon icon={'chevron'} size={15} color={Colors.white} />
-              <PrimaryText marginLeft={5}>Edit Summary</PrimaryText>
-            </FlexBox>
+            <ChevronNavigationButton
+              onPress={onChangeEditHandler}
+              label="Edit Summary"
+            />
             {hasHealthData && (
               <FlexBox
                 onPress={onNavToMapView}

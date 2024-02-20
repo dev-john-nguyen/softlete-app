@@ -4,9 +4,9 @@ import { FlexBox } from '@app/ui';
 import { useMutation } from '@tanstack/react-query';
 import React, { FC, useMemo } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { HealthDataProps } from 'src/services/workout/types';
 import HealthContainer from '../overview/HealthContainer';
+import { Colors } from '@app/utils';
 
 interface ImportItemProps {
   onImportData: (data: HealthDataProps) => Promise<void>;
