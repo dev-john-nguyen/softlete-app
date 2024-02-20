@@ -50,17 +50,25 @@ export const useRouteMarkers = () => {
 
 export const useMapAdjustView = (mapRef: any, polyCords: LatLng[]) => {
   useLayoutEffect(() => {
-    //mount zoom into the coordinates
+    // mount zoom into the coordinates
+    let timeout: undefined | NodeJS.Timeout = undefined;
+
     if (mapRef.current && polyCords.length > 0) {
-      mapRef.current.fitToCoordinates(polyCords, {
-        edgePadding: {
-          top: moderateScale(20),
-          right: moderateScale(20),
-          bottom: moderateScale(50),
-          left: moderateScale(20),
-        },
-      });
+      timeout = setTimeout(() => {
+        mapRef.current.fitToCoordinates(polyCords, {
+          edgePadding: {
+            top: moderateScale(20),
+            right: moderateScale(20),
+            bottom: moderateScale(50),
+            left: moderateScale(20),
+          },
+        });
+      }, 100);
     }
+
+    () => {
+      timeout && clearTimeout(timeout);
+    };
   }, [mapRef, polyCords]);
 };
 
@@ -85,6 +93,7 @@ export function useZoomToMarker(
           .start();
       }
     }
+  }, [activeMarkIndex, markers, region]);
 
   return {
     activeMarkIndex,
