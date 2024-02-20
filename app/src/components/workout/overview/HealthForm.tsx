@@ -6,7 +6,11 @@ import {
   HealthDisMeas,
 } from '../../../services/workout/types';
 import { FlexBox } from '@app/ui';
-import { InfoListBox, PrimaryButton } from '@app/elements';
+import {
+  ChevronNavigationButton,
+  InfoListBox,
+  PrimaryButton,
+} from '@app/elements';
 import { convertTimeToFormatTime, strToFloat } from '@app/utils';
 import { HealthActivity } from 'react-native-health';
 import AutoId from 'src/utils/AutoId';
@@ -194,6 +198,13 @@ class HealthForm extends React.Component<Props, StateProps> {
     }
     return (
       <View>
+        {this.props.onClose && (
+          <ChevronNavigationButton
+            label="Back"
+            onPress={this.props.onClose}
+            alignSelf="flex-start"
+          />
+        )}
         <FlexBox justifyContent="space-between" marginBottom={10}>
           <InfoListBox
             secondary
@@ -238,14 +249,7 @@ class HealthForm extends React.Component<Props, StateProps> {
             onPress={() => this.setState({ editName: 'avghr' })}
           />
         </FlexBox>
-        <FlexBox justifyContent="space-between" marginTop={10}>
-          {this.props.onClose ? (
-            <PrimaryButton variant="secondary" onPress={this.props.onClose}>
-              Cancel
-            </PrimaryButton>
-          ) : (
-            <FlexBox />
-          )}
+        <FlexBox justifyContent="flex-end" marginTop={5}>
           <PrimaryButton
             onPress={this.onSubmitHandler}
             loading={this.state.isLoading}>

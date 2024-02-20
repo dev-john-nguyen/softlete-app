@@ -4,10 +4,10 @@ import { ScrollView } from 'react-native';
 import { useFetchHealthData } from '../../hooks/fetch-health-data.hooks';
 import DeviceHealthImportItem from '../../components/DeviceHealthImportItem';
 import { HealthDataProps } from 'src/services/workout/types';
-import { PrimaryText } from '@app/elements';
+import { ChevronNavigationButton, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import ChevronNavigationButton from './ChevronNavigationButton';
+import { useWorkoutState } from '@app/contexts';
 
 type Props = {
   onImportHealthData: (data: HealthDataProps) => Promise<void>;
@@ -19,6 +19,7 @@ const ImportDeviceActivities: FC<Props> = ({
   onCancel,
 }) => {
   const { data } = useFetchHealthData();
+  const { workout } = useWorkoutState();
 
   const renderDataOptions = useMemo(() => {
     return data.map((item, i) => (
@@ -26,10 +27,11 @@ const ImportDeviceActivities: FC<Props> = ({
         data={item}
         onImportData={onImportHealthData}
         key={item.activityId ? item.activityId : i}
+        workout={workout}
       />
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, workout]);
 
   return (
     <FlexBox column flex={1}>

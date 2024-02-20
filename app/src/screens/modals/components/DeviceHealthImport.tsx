@@ -3,7 +3,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import _ from 'lodash';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
 import AutoId from '../../../utils/AutoId';
@@ -48,10 +48,11 @@ const DeviceHealthImport = ({ onImportData, workout }: Props) => {
         data={item}
         onImportData={onImportDataHandler}
         key={item.activityId ? item.activityId : i}
+        workout={workout}
       />
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, workout]);
 
   if (custom) {
     return (
@@ -69,12 +70,12 @@ const DeviceHealthImport = ({ onImportData, workout }: Props) => {
   return (
     <FlexBox column flex={1}>
       <FlexBox
-        padding={6}
+        padding={7}
         borderRadius={100}
         borderWidth={1}
         borderColor={Colors.white}
         alignSelf="flex-end"
-        marginBottom={5}
+        marginBottom={10}
         onPress={() => setEditImport(isVisible => !isVisible)}>
         <Icon
           icon={editImport ? 'close' : 'pencil'}
@@ -94,6 +95,7 @@ const DeviceHealthImport = ({ onImportData, workout }: Props) => {
             showsVerticalScrollIndicator={false}>
             {renderDataOptions}
             <InfoListBox
+              marginTop={20}
               secondary
               icon="devices"
               label="Source"

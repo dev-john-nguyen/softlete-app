@@ -1,23 +1,23 @@
-import { useWorkoutState } from '@app/contexts';
 import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { useMutation } from '@tanstack/react-query';
 import React, { FC, useMemo } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps, WorkoutProps } from 'src/services/workout/types';
 import HealthContainer from '../overview/HealthContainer';
 import { Colors } from '@app/utils';
 
 interface ImportItemProps {
   onImportData: (data: HealthDataProps) => Promise<void>;
   data: HealthDataProps;
+  workout: WorkoutProps;
 }
 
 const DeviceHealthImportItem: FC<ImportItemProps> = ({
   data,
   onImportData,
+  workout,
 }) => {
-  const { workout } = useWorkoutState();
   const isWorkoutData = workout.healthData?.activityId === data.activityId;
   const { isLoading, mutateAsync } = useMutation(() => {
     return onImportData(data);

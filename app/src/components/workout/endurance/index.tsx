@@ -5,10 +5,9 @@ import EnduranceForm from './components/EnduranceForm';
 import EnduranceSummary from './components/EnduranceSummary';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { PrimaryText } from '@app/elements';
+import { ChevronNavigationButton, PrimaryText } from '@app/elements';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { useNavigation } from '@react-navigation/native';
-import ChevronNavigationButton from './components/ChevronNavigationButton';
 
 const EnduranceWrapper = () => {
   const { workout } = useWorkoutState();

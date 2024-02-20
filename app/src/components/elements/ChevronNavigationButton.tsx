@@ -9,6 +9,7 @@ type Props = {
   right?: boolean;
   label: string;
   alignSelf?: string;
+  marginBottom?: number;
 };
 
 const ChevronNavigationButton: React.FC<Props> = ({
