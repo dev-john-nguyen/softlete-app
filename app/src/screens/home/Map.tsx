@@ -112,7 +112,7 @@ const Map = () => {
           onPress={onZoomOut}
         />
       </FlexBox>
-      {workoutTracker.workoutId && workoutTracker.coordinates.length < 1 ? (
+      {!workoutTracker.workoutId || workoutTracker.coordinates.length < 1 ? (
         <FlexBox
           position="absolute"
           top={0}
