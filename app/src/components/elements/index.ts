@@ -28,4 +28,5 @@ export { default as HealthCircle } from './HealthCircle';
 export { default as Demo } from './Demo';
 export { default as DemoArrow } from './DemoArrow';
 export { default as CustomPicker } from './Picker';
+export { default as ChevronNavigationButton } from './ChevronNavigationButton';
 export * from './screen-template/context';

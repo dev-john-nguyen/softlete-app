@@ -13,7 +13,6 @@ import CustomPicker, { PickerOptionProp } from '../Picker';
 import DatePicker from 'react-native-date-picker';
 import { Colors, moderateScale } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
-import PrimaryText from '../PrimaryText';
 import { DemoStates } from '@app/services';
 import DemoArrow from '../DemoArrow';
 import { ScreenTemplateProvider } from './context';
@@ -162,11 +161,8 @@ const ScreenTemplate = ({
                 applyKeyboardDismiss ? () => Keyboard.dismiss() : undefined
               }>
               {isLoading ? (
-                <FlexBox alignItems="center" justifyContent="center">
-                  <PrimaryText marginRight={10} size="large">
-                    Loading
-                  </PrimaryText>
-                  <ActivityIndicator size="small" color={Colors.white} />
+                <FlexBox alignItems="center" justifyContent="center" flex={1}>
+                  <ActivityIndicator size="large" color={Colors.white} />
                 </FlexBox>
               ) : (
                 children
@@ -185,6 +181,7 @@ const ScreenTemplate = ({
       <DatePicker
         modal
         mode="date"
+        theme="dark"
         open={isDatePickerOpen}
         date={datePickerValue || new Date()}
         onConfirm={date => {
@@ -192,7 +189,7 @@ const ScreenTemplate = ({
           onDatePickerChange && onDatePickerChange(date);
         }}
         onCancel={() => onDatePickerClose && onDatePickerClose()}
-        textColor={Colors.primary}
+        textColor={Colors.white}
       />
     </ScreenTemplateProvider>
   );

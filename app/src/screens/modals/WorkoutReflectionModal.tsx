@@ -79,12 +79,33 @@ const WorkoutReflectionModal = () => {
   };
 
   return (
-    <ScreenTemplate applyContentPadding isBackVisible rotateBack="-90deg">
+    <ScreenTemplate
+      applyContentPadding
+      isBackVisible
+      rotateBack="-90deg"
+      rightContentFlex={1}
+      rightContent={
+        <FlexBox flex={1} justifyContent="flex-end" alignItems="center">
+          <Icon
+            icon={viewHealth ? 'notebook' : 'cardio'}
+            size={25}
+            color={Colors.white}
+            onPress={() => setViewHealth(view => !view)}
+          />
+        </FlexBox>
+      }>
       {viewHealth ? (
         <FlexBox column flex={1}>
           <DeviceHealthImport workout={workout} onImportData={onImportData} />
-          <FlexBox flex={1} alignItems="center" justifyContent="center">
-            <PrimaryText variant="primary" fontSize={50} opacity={1}>
+          <FlexBox
+            flex={1}
+            alignItems="center"
+            justifyContent="center"
+            position="absolute"
+            bottom="30%"
+            zIndex={-1}
+            alignSelf="center">
+            <PrimaryText variant="primary" fontSize={50} opacity={0.5}>
               Health
             </PrimaryText>
             <Icon
@@ -130,7 +151,7 @@ const WorkoutReflectionModal = () => {
             Save
           </PrimaryButton>
           <FlexBox flex={1} alignItems="center" justifyContent="center">
-            <PrimaryText variant="primary" fontSize={40} opacity={1}>
+            <PrimaryText variant="primary" fontSize={40} opacity={0.5}>
               Reflect
             </PrimaryText>
             <Icon
@@ -143,29 +164,6 @@ const WorkoutReflectionModal = () => {
                 zIndex: -1,
               }}
             />
-          </FlexBox>
-        </FlexBox>
-      )}
-      {viewHealth ? (
-        <FlexBox
-          onPress={() => setViewHealth(s => !s)}
-          marginBottom={20}
-          justifyContent={'flex-start'}
-          alignItems="center">
-          <FlexBox marginRight={5}>
-            {<Icon icon="chevron" color={Colors.white} size={15} />}
-          </FlexBox>
-          <PrimaryText>{'View Health'}</PrimaryText>
-        </FlexBox>
-      ) : (
-        <FlexBox
-          onPress={() => setViewHealth(s => !s)}
-          marginBottom={20}
-          justifyContent={'flex-end'}
-          alignItems="center">
-          <PrimaryText>{'View Reflection'}</PrimaryText>
-          <FlexBox transform={[{ rotate: '180deg' }]} marginLeft={5}>
-            {<Icon icon="chevron" color={Colors.white} size={15} />}
           </FlexBox>
         </FlexBox>
       )}

@@ -490,7 +490,7 @@ export const setViewWorkout =
   };
 
 export const updateWorkoutStatus =
-  (workoutUid: string, status: WorkoutStatus, online?: boolean) =>
+  (workoutUid: string, status: WorkoutStatus, online = true) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global, workout: rootWorkout } = getState();
 

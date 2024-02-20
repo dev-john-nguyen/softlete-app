@@ -6,10 +6,7 @@ import { useRouteMarkers } from 'src/hooks/workout/route.hooks';
 const WorkoutActivitySummary = () => {
   const { workoutTracker } = useRouteMarkers();
   return (
-    <ScreenTemplate
-      isBackVisible
-      isLoading={!workoutTracker.workoutId}
-      headerTitleFormatted="Running">
+    <ScreenTemplate isBackVisible headerTitleFormatted="Running">
       <ActivitySummary workout={workoutTracker} />
     </ScreenTemplate>
   );

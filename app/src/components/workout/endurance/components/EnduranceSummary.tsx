@@ -23,7 +23,7 @@ const EnduranceSummary = () => {
           .then(routeSamples => {
             tracker.initializeLocations(routeSamples.data.locations);
           })
-          .catch(e => console.error(e));
+          .catch(e => console.log(e));
       }
       return tracker;
     },

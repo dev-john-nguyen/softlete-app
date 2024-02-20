@@ -5,11 +5,14 @@ import EnduranceForm from './components/EnduranceForm';
 import EnduranceSummary from './components/EnduranceSummary';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { PrimaryText } from '@app/elements';
+import { ChevronNavigationButton, PrimaryText } from '@app/elements';
+import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
+import { useNavigation } from '@react-navigation/native';
 
 const EnduranceWrapper = () => {
   const { workout } = useWorkoutState();
   const [edit, setEdit] = useState(false);
+  const navigation = useNavigation<HomeStackParamsList>();
   const hasHealthData = Boolean(workout.healthData);
 
   useEffect(() => {
@@ -25,28 +28,47 @@ const EnduranceWrapper = () => {
     });
   };
 
+  const onNavToMapView = () => {
+    if (workout.healthData) {
+      navigation.push(HomeStackScreens.Map, { data: workout.healthData });
+    }
+  };
+
   return (
     <FlexBox column flex={1} zIndex={100} margin={15} marginTop={10}>
-      {hasHealthData && (
-        <FlexBox
-          alignSelf="flex-start"
-          alignItems="center"
-          marginBottom={10}
-          padding={10}
-          borderWidth={1}
-          borderRadius={10}
-          onPress={onChangeEditHandler}
-          borderColor={Colors.white}>
-          <Icon
-            icon={edit ? 'notebook' : 'pencil'}
-            size={20}
-            color={Colors.white}
+      {hasHealthData ? (
+        edit ? (
+          <ChevronNavigationButton
+            right
+            onPress={onChangeEditHandler}
+            label="View Summary"
+            marginBottom={10}
           />
-          <PrimaryText marginLeft={5}>
-            {edit ? 'View Summary' : 'Edit Summary'}
-          </PrimaryText>
-        </FlexBox>
-      )}
+        ) : (
+          <FlexBox
+            marginBottom={10}
+            justifyContent="space-between"
+            alignItems="center">
+            <ChevronNavigationButton
+              onPress={onChangeEditHandler}
+              label="Edit Summary"
+            />
+            {hasHealthData && (
+              <FlexBox
+                onPress={onNavToMapView}
+                borderWidth={1}
+                borderColor={Colors.white}
+                padding={6}
+                paddingRight={15}
+                paddingLeft={15}
+                borderRadius={100}>
+                <PrimaryText marginRight={5}>View Map</PrimaryText>
+                <Icon icon="compass" size={20} color={Colors.white} />
+              </FlexBox>
+            )}
+          </FlexBox>
+        )
+      ) : null}
       {edit ? <EnduranceForm setEdit={setEdit} /> : <EnduranceSummary />}
     </FlexBox>
   );

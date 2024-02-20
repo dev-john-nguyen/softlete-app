@@ -4,9 +4,10 @@ import { ScrollView } from 'react-native';
 import { useFetchHealthData } from '../../hooks/fetch-health-data.hooks';
 import DeviceHealthImportItem from '../../components/DeviceHealthImportItem';
 import { HealthDataProps } from 'src/services/workout/types';
-import { PrimaryButton, PrimaryText } from '@app/elements';
+import { ChevronNavigationButton, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
+import { useWorkoutState } from '@app/contexts';
 
 type Props = {
   onImportHealthData: (data: HealthDataProps) => Promise<void>;
@@ -18,6 +19,7 @@ const ImportDeviceActivities: FC<Props> = ({
   onCancel,
 }) => {
   const { data } = useFetchHealthData();
+  const { workout } = useWorkoutState();
 
   const renderDataOptions = useMemo(() => {
     return data.map((item, i) => (
@@ -25,16 +27,19 @@ const ImportDeviceActivities: FC<Props> = ({
         data={item}
         onImportData={onImportHealthData}
         key={item.activityId ? item.activityId : i}
+        workout={workout}
       />
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, workout]);
 
   return (
     <FlexBox column flex={1}>
-      <PrimaryButton onPress={onCancel} alignSelf="flex-start">
-        Back
-      </PrimaryButton>
+      <ChevronNavigationButton
+        onPress={onCancel}
+        label="Back to Menu"
+        alignSelf="flex-start"
+      />
       {renderDataOptions.length === 0 ? (
         <FlexBox flex={1} alignItems="center" justifyContent="center">
           <Icon

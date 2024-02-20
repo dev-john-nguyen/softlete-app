@@ -7779,10 +7779,10 @@ react-native-create-thumbnail@^1.5.0:
   resolved "https://registry.yarnpkg.com/react-native-create-thumbnail/-/react-native-create-thumbnail-1.5.0.tgz#37bfcc5ae6b744606fcebc508460b40b51ddae24"
   integrity sha512-G03x0OsFgtZEwIQ95Bl8SgwTWwz9Z7bdlOk/1jiaXtU5djzaUSo+H4vKlg43sd0ya1O/gRA5DyD1E966sJZ0lg==
 
-react-native-date-picker@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.1.1.tgz#7f41b86e5b625c0c695686eea538677fe84fc4a6"
-  integrity sha512-2KzwFZoPNmGCgDFP8FrrtIBrKMEzTkLG5Zq68CbyUxG7aFPmeP7ik//lSB0gPwfO9TKQyKFVqTod5jTp0PTnbw==
+react-native-date-picker@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.2.0.tgz#c47521112f15b9d68333602373d112fc84257d97"
+  integrity sha512-IfbK7Eh5By8rdjiu/pvqLF8NkFX9pVsY7Vn6+MkLSiFcLIGFd7NaENRJKl75/xNZuY5CkIiRVksS9abEl/II8g==
 
 react-native-fast-image@^8.5.11:
   version "8.5.11"

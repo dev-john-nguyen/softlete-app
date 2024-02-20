@@ -360,7 +360,7 @@ PODS:
     - React-Core
   - react-native-create-thumbnail (1.5.0):
     - React-Core
-  - react-native-date-picker (4.1.1):
+  - react-native-date-picker (4.2.0):
     - React-Core
   - react-native-flipper (0.103.0):
     - React-Core
@@ -830,7 +830,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
   react-native-compressor: ebcf8bc36f8e44581a8f831583caee8a27e55a01
   react-native-create-thumbnail: 88dae6041e7d7b43ea23e00ea8cc608650612cfe
-  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
+  react-native-date-picker: d83ab9cccbc497642a93fdca783ae76ecd6b17b6
   react-native-flipper: 169e8ba429b73ad637ce007337ce4b415e783799
   react-native-image-picker: a6e56460d34905c849ada551db30897dc7f3d535
   react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f

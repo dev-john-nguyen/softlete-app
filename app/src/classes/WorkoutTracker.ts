@@ -66,8 +66,6 @@ class WorkoutTracker {
   initializeHealthData(healthData: HealthDataProps) {
     this.healthData = healthData;
     this.calculateAveragePace();
-    // not sure why I need this? This doesn't make sense
-    this.workoutId = healthData.activityId;
     if (healthData.heartRates) {
       this.statistics.averageHeartRate = mean(this.healthData.heartRates || []);
     }

@@ -1,11 +1,10 @@
 import { useWorkoutState } from '@app/contexts';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getWoSample } from 'src/helpers/health.helpers';
 import { HealthDataProps, WorkoutProps } from 'src/services/workout/types';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
-  HealthObserver,
 } from 'react-native-health';
 import _ from 'lodash';
 
@@ -16,7 +15,6 @@ export const useFetchHealthData = (
   const { workout: workoutFromContext } = useWorkoutState();
   const workout = workoutProp ?? workoutFromContext;
   const [data, setData] = useState<HealthDataProps[]>([]);
-  const mount = useRef(false);
 
   const getActiveEnergy = async () => {
     if (!workout.date) return;
@@ -76,8 +74,6 @@ export const useFetchHealthData = (
     }
 
     if (heartRateStore.length > 0) {
-      if (!mount.current) return;
-
       setData(d => {
         const h = healthData.map(i => {
           const heartRates = heartRateStore.find(
