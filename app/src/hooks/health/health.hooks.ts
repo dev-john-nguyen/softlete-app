@@ -9,6 +9,7 @@ import {
   getSleepDailyAmts,
 } from 'src/helpers/health.helpers';
 import { HealthEvalProps, DateValueProps } from 'src/services/workout/types';
+import { useAppState } from '../base/app-state.hook';
 
 export const getDates = (prevD: number) => {
   const today = new Date();
@@ -28,6 +29,7 @@ export const useHealthSamples = () => {
   const [sleeps, setSleeps] = useState<HealthEvalProps>(emptyEval);
   const [rrs, setRrs] = useState<HealthEvalProps>(emptyEval);
   const [rhrs, setRhrs] = useState<HealthEvalProps>(emptyEval);
+  const { appState } = useAppState();
 
   const evalHrvSamples = async () => {
     const { startDate, endDate } = getDates(6);
@@ -135,7 +137,7 @@ export const useHealthSamples = () => {
     evalRRSamples();
     evalSleepSamples();
     evalRhrSamples();
-  }, []);
+  }, [appState]);
 
   const averageProps = useMemo(() => {
     const getAverage = (healthEval: HealthEvalProps, fixed = 1) => {

@@ -3,13 +3,11 @@ import { StyleSheet, FlatList, ViewToken } from 'react-native';
 import {
   WorkoutExerciseProps,
   WorkoutExerciseDataProps,
-  WorkoutStatus,
   WorkoutActionProps,
 } from '../../../services/workout/types';
 import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
-import OverviewContainer from '../overview/Container';
 import { WorkoutContext } from '@app/contexts';
 import { FlexBox } from '@app/ui';
 
@@ -101,12 +99,6 @@ const ExercisesContainer = ({
     return false;
   };
 
-  const renderListHeaderComponent = useCallback(() => {
-    //prevent the auto save from refreshing state
-    if (workout.status !== WorkoutStatus.completed) return <></>;
-    return <OverviewContainer />;
-  }, [workout]);
-
   const renderItem = useCallback(
     ({ item, index }: { item: WorkoutExerciseProps; index: number }) => (
       <WorkoutExercise
@@ -160,7 +152,6 @@ const ExercisesContainer = ({
           });
         }}
         keyboardShouldPersistTaps="always"
-        ListHeaderComponent={renderListHeaderComponent}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}

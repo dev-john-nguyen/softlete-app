@@ -20,6 +20,7 @@ import { ReducerProps } from 'src/services';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DemoStates } from '@app/services';
 import { useHealthSamples } from 'src/hooks/health/health.hooks';
+import { useAppState } from 'src/hooks/base/app-state.hook';
 
 interface Props {
   healthData: HealthDataProps[];
@@ -29,6 +30,7 @@ const HomeHealth = ({ healthData }: Props) => {
   const [basal, setBasal] = useState(0);
   const [activeCals, setActiveCals] = useState(0);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
+  const { appState } = useAppState();
   const { sleepGoal, activeCaloriesGoal } = useSelector(
     (state: ReducerProps) => ({
       sleepGoal: state.goals.user.healths.sleep,
@@ -83,7 +85,7 @@ const HomeHealth = ({ healthData }: Props) => {
 
   useEffect(() => {
     fetchHealthData().catch(err => console.log(err));
-  }, [fetchHealthData, healthData]);
+  }, [fetchHealthData, healthData, appState]);
 
   const onNavToHealth = () => {
     navigation.navigate(HomeStackScreens.Health);

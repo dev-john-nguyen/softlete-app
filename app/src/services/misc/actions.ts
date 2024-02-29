@@ -41,7 +41,7 @@ export const processAnalyticsExercises =
             const wOEx = analyticsStore[foundIndex].data[wOExIndex];
             analyticsStore[foundIndex].data[wOExIndex] = {
               ...wOEx,
-              date: workout.date,
+              date: workout.date as string,
               data: [...e.data],
             };
           } else {
@@ -49,7 +49,7 @@ export const processAnalyticsExercises =
             analyticsStore[foundIndex].data.push({
               workoutExerciseUid: e._id ? e._id : '',
               data: [...e.data],
-              date: workout.date,
+              date: workout.date as string,
             });
           }
         } else {
@@ -61,7 +61,7 @@ export const processAnalyticsExercises =
               {
                 workoutExerciseUid: e._id ? e._id : '',
                 data: [...e.data],
-                date: workout.date,
+                date: workout.date as string,
               },
             ],
           });
@@ -184,12 +184,12 @@ export const fetchExerciseAnalytics =
 
     if (uniqExerciseUids.length < 1) return;
 
-    return request(
+    return request<WorkoutExerciseProps[]>(
       'GET',
       PATHS.workouts.getExerciseData(fromDate, toDate, uid, uniqExerciseUids),
       dispatch,
     )
-      .then(async ({ data }: { data?: WorkoutExerciseProps[] }) =>
+      .then(async ({ data }) =>
         handleAnalyticsFetched(data, athlete)(dispatch, getState),
       )
       .catch(err => console.log(err));
@@ -212,12 +212,12 @@ export const fetchExerciseAnalyticsDates =
 
     if (uniqExerciseUids.length < 1) return;
 
-    return request(
+    return request<WorkoutExerciseProps[]>(
       'GET',
       PATHS.workouts.getExerciseDataByDates(dates, uniqExerciseUids, uid),
       dispatch,
     )
-      .then(async ({ data }: { data?: WorkoutExerciseProps[] }) =>
+      .then(async ({ data }) =>
         handleAnalyticsFetched(data, athlete)(dispatch, getState),
       )
       .catch(err => console.log(err));

@@ -33,10 +33,10 @@ const PrimaryButton = ({
           if (variant === 'secondary') {
             return {
               backgroundColor: pressed
-                ? rgba(Colors.whiteRbg, 0.5)
-                : rgba(Colors.whiteRbg, 0.8),
+                ? rgba(Colors.whiteRbg, 0.4)
+                : rgba(Colors.whiteRbg, 0.2),
               borderWidth: 1,
-              borderColor: Colors.white,
+              borderColor: rgba(Colors.whiteRbg, 0.3),
             };
           }
           return {
@@ -68,7 +68,7 @@ const PrimaryButton = ({
       onPress={() => !disabled && onPress()}>
       <PrimaryText
         textTransform={stylesProps.textTransform}
-        color={variant === 'secondary' ? Colors.primary : Colors.white}
+        color={variant === 'secondary' ? Colors.white : Colors.white}
         variant={fontVariant}
         size={fontSize}>
         {children}

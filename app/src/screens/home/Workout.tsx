@@ -6,8 +6,6 @@ import { connect, useSelector } from 'react-redux';
 import {
   WorkoutActionProps,
   WorkoutStatus,
-  WorkoutExerciseProps,
-  WorkoutProps,
   WorkoutTypes,
   HealthDataProps,
 } from '../../services/workout/types';
@@ -19,15 +17,12 @@ import {
 } from '../../services/program/types';
 import {
   updateWorkoutStatus,
-  completeWorkout,
   updateWoHealthData,
   updateWoWorkoutRoute,
 } from '../../services/workout/actions';
 import { HomeStackScreens } from './types';
 import Loading from '../../components/elements/Loading';
 import { BannerTypes } from '../../services/banner/types';
-import { ImageProps } from '../../services/user/types';
-import OverviewContainer from '../../components/workout/overview/Container';
 import { updateProgramWoHealthData } from '../../services/program/actions';
 import ScreenTemplate from '../../components/elements/screen-template';
 import { LocationValue } from 'react-native-health';
@@ -43,10 +38,10 @@ import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
 import StagingActions from 'src/components/workout/StagingActions';
+import EnduranceWrapper from 'src/components/workout/endurance';
 
 interface Props {
   updateWorkoutStatus: WorkoutActionProps['updateWorkoutStatus'];
-  completeWorkout: WorkoutActionProps['completeWorkout'];
   updateWoHealthData: WorkoutActionProps['updateWoHealthData'];
   updateProgramWoHealthData: ProgramActionProps['updateProgramWoHealthData'];
   updateWoWorkoutRoute: WorkoutActionProps['updateWoWorkoutRoute'];
@@ -54,7 +49,6 @@ interface Props {
 
 const Workout = ({
   updateWorkoutStatus,
-  completeWorkout,
   updateWoHealthData,
   updateWoWorkoutRoute,
 }: Props) => {
@@ -134,23 +128,8 @@ const Workout = ({
       return;
     }
 
-    if (status === WorkoutStatus.completed) {
-      await onCompleteWorkout();
-      return;
-    }
-
-    await updateWorkoutStatus(workout._id, status).catch(err => {
-      console.log(err);
-    });
-  };
-
-  const onCompleteWorkout = async (
-    exercises?: WorkoutExerciseProps[] | void,
-    image?: ImageProps,
-  ) => {
-    if (!workout) return;
-
     if (
+      status === WorkoutStatus.completed &&
       workout.type === WorkoutTypes.TraditionalStrengthTraining &&
       (!workout.exercises || workout.exercises.length < 1)
     ) {
@@ -161,12 +140,7 @@ const Workout = ({
       return;
     }
 
-    const completedWorkout: WorkoutProps = {
-      ...workout,
-      exercises: exercises ? exercises : workout.exercises,
-    };
-
-    await completeWorkout(completedWorkout, 0, reflection, image).catch(err => {
+    await updateWorkoutStatus(workout._id, status).catch(err => {
       console.log(err);
     });
   };
@@ -201,7 +175,6 @@ const Workout = ({
   return (
     <WorkoutProvider
       onNavigateToExercise={onNavigateToExercise}
-      onCompleteWorkout={onCompleteWorkout}
       onNavigateToAddExercise={onNavigateToAddExercise}
       onUpdateStatus={onUpdateStatus}
       setReflection={setReflection}
@@ -210,14 +183,28 @@ const Workout = ({
         isBackVisible
         headerTitleFormatted={workout.name}
         onGoBack={onBackButtonPress}
+        rightContentFlex={0.4}
         rightContent={
-          <FlexBox flex={1} alignItems="center" justifyContent="flex-end">
+          <FlexBox
+            flex={1}
+            width="auto"
+            alignItems="center"
+            justifyContent="flex-end">
             <DemoArrow state={[DemoStates.WORKOUT_VIEW_MENU]} />
+            <Icon
+              icon="notebook"
+              size={25}
+              color={Colors.white}
+              onPress={() =>
+                navigation.navigate(HomeStackScreens.WorkoutReflectionModal)
+              }
+            />
             <Icon
               icon="timer"
               size={25}
               color={Colors.white}
               onPress={() => navigation.navigate(HomeStackScreens.Timer)}
+              containerStyles={{ marginLeft: 10 }}
             />
             <Icon
               icon="ellipsis"
@@ -241,7 +228,7 @@ const Workout = ({
         {workout.type === WorkoutTypes.TraditionalStrengthTraining ? (
           <WorkoutContainer />
         ) : (
-          <OverviewContainer />
+          <EnduranceWrapper />
         )}
         <StagingActions />
       </ScreenTemplate>
@@ -252,12 +239,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     updateWorkoutStatus: async (workoutUid: string, status: WorkoutStatus) =>
       dispatch(updateWorkoutStatus(workoutUid, status)),
-    completeWorkout: async (
-      workout: WorkoutProps,
-      strainRating: number,
-      reflection: string,
-      image?: ImageProps,
-    ) => dispatch(completeWorkout(workout, strainRating, reflection, image)),
     updateWoHealthData: async (workoutUid: string, data: HealthDataProps) =>
       dispatch(updateWoHealthData(workoutUid, data)),
     updateProgramWoHealthData: async (

@@ -25,6 +25,7 @@ export interface WorkoutExerciseDataProps {
   predictVal: Number;
   pct: Number;
   warmup: Boolean;
+  completed?: Boolean;
 }
 
 function formatHandler(value: mongoose.Types.Decimal128) {

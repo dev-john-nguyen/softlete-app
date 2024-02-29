@@ -40,7 +40,7 @@ const FormContainer: FC<FormContainerProps> = ({
         <PrimaryButton onPress={onClose} variant="secondary">
           Cancel
         </PrimaryButton>
-        <PrimaryButton onPress={onSave}>Save</PrimaryButton>
+        <PrimaryButton onPress={onSave}>Apply</PrimaryButton>
       </FlexBox>
     </FlexBox>
   );
@@ -95,14 +95,20 @@ export const BaseForm = ({
 interface DurationFormProps {
   onDurationUpdate: (num: number) => void;
   onClose: () => void;
+  hours?: number;
+  mins?: number;
+  duration?: number;
 }
 
 export const DurationForm = ({
   onDurationUpdate,
   onClose,
+  duration = 0,
 }: DurationFormProps) => {
-  const [hours, setHours] = useState(0);
-  const [mins, setMins] = useState(0);
+  const defaultHours = Math.round(duration / 3600);
+  const defaultMinutes = Math.round((duration % 3600) / 60);
+  const [hours, setHours] = useState(defaultHours);
+  const [mins, setMins] = useState(defaultMinutes);
 
   const onSave = () => {
     const secs = hours * 3600 + mins * 60;

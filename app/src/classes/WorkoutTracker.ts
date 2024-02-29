@@ -66,8 +66,6 @@ class WorkoutTracker {
   initializeHealthData(healthData: HealthDataProps) {
     this.healthData = healthData;
     this.calculateAveragePace();
-    // not sure why I need this? This doesn't make sense
-    this.workoutId = healthData.activityId;
     if (healthData.heartRates) {
       this.statistics.averageHeartRate = mean(this.healthData.heartRates || []);
     }
@@ -81,7 +79,8 @@ class WorkoutTracker {
   }
 
   getDate(formatType = '/', formatOrder = 'd', showYear = true) {
-    if (!this.healthData) return '12/31/9999';
+    if (!this.healthData || !this.healthData.date) return '12/31/9999';
+
     return DateTools.convertUTCStrToLocalStr(
       this.healthData.date,
       formatType,

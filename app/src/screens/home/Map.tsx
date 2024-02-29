@@ -12,7 +12,7 @@ import ScreenTemplate from '../../components/elements/screen-template';
 import {
   useMapAdjustView,
   useRouteMarkers,
-  zoomToMarker,
+  useZoomToMarker,
 } from '../../hooks/workout/route.hooks';
 import MapRouteContents from '../../components/route/map/MapRouteContents';
 import PrimaryText from '../../components/elements/PrimaryText';
@@ -20,7 +20,7 @@ import { FlexBox } from '@app/ui';
 import Icon from '@app/icons';
 import { Colors, moderateScale } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
-import { NavigationProps, HomeStackScreens } from './types';
+import { NavigationProps } from './types';
 import { BackButton } from '@app/elements';
 import { MarkerProps } from 'src/types/route/route.types';
 
@@ -50,8 +50,8 @@ const Map = () => {
   const region = useRef(new AnimatedRegion()).current;
   const navigation = useNavigation<NavigationProps>();
   const mapRef = useRef<MapAnimated>();
-  const { redirectToScreen, workoutTracker } = useRouteMarkers();
-  const { activeMarkIndex, setActiveMarkIndex } = zoomToMarker(
+  const { workoutTracker, isLoading } = useRouteMarkers();
+  const { activeMarkIndex, setActiveMarkIndex } = useZoomToMarker(
     region,
     workoutTracker.getMarkers(),
   );
@@ -91,7 +91,7 @@ const Map = () => {
         />
         <Polyline
           coordinates={workoutTracker.coordinates}
-          strokeColor={BaseColors.lightPrimary}
+          strokeColor={BaseColors.primary}
           strokeWidth={3}
         />
       </MapAnimated>
@@ -111,14 +111,8 @@ const Map = () => {
           containerStyles={{ marginRight: 10 }}
           onPress={onZoomOut}
         />
-        <Icon
-          icon="notebook"
-          size={30}
-          color={Colors.white}
-          onPress={redirectToScreen(HomeStackScreens.WorkoutActivitySummary)}
-        />
       </FlexBox>
-      {workoutTracker.workoutId && workoutTracker.coordinates.length < 1 ? (
+      {!isLoading && workoutTracker.coordinates.length < 1 ? (
         <FlexBox
           position="absolute"
           top={0}

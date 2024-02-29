@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator='iPhone 14 Pro'",
+    "ios": "react-native run-ios --simulator='iPhone 15 Pro'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -43,7 +43,7 @@
     "react-native-chart-kit": "^6.11.0",
     "react-native-compressor": "^1.6.1",
     "react-native-create-thumbnail": "^1.5.0",
-    "react-native-date-picker": "^4.1.1",
+    "react-native-date-picker": "4.2.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-flipper": "^0.103.0",
     "react-native-fs": "^2.18.0",

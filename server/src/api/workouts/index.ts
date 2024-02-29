@@ -5,7 +5,6 @@ import get from './get';
 import authenticate from '../../utils/authenticate';
 import duplicate from './duplicate';
 import remove from './remove';
-import complete from './complete';
 import like from './like';
 import removeExercise from './remove/exercise';
 import updateRoutes from './update';
@@ -18,7 +17,6 @@ router.use('/create', create);
 router.use('/duplicate', duplicate);
 router.use('/remove/exercise', removeExercise);
 router.use('/remove', remove);
-router.use('/complete', complete);
 router.use('/like', like);
 
 router.use('/update', updateRoutes);

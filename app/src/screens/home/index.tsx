@@ -31,6 +31,7 @@ import { EnduranceAnalytics } from './endurance';
 import WorkoutHelp from './WorkoutHelp';
 import WorkoutModal from '../modals/WorkoutModal';
 import Timer from '../modals/Timer';
+import WorkoutReflectionModal from '../modals/WorkoutReflectionModal';
 
 const Tab = createStackNavigator<HomeStackParamsList>();
 
@@ -69,6 +70,17 @@ function HomeStack(parentProps: any) {
         <Tab.Screen
           name={HomeStackScreens.EnduranceAnalytics}
           component={EnduranceAnalytics}
+          options={{
+            headerTitle: '',
+            headerRight: undefined,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            gestureDirection: 'vertical',
+          }}
+        />
+
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutReflectionModal}
+          component={WorkoutReflectionModal}
           options={{
             headerTitle: '',
             headerRight: undefined,

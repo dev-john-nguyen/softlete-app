@@ -1,6 +1,6 @@
 export default {
   primary: '#140000',
-  lightPrimary: 'rgba(255,255,255,.05)',
+  lightPrimary: '#200C0C',
   primaryRgb: '20, 0, 0',
   lightWhite: '#FAFAFA',
   lightWhiteRgb: '250, 250, 250',

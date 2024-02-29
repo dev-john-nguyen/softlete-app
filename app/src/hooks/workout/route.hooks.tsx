@@ -12,10 +12,14 @@ import {
 import WorkoutTracker from '../../classes/WorkoutTracker';
 import { getWoRouteSamples } from 'src/helpers/health.helpers';
 
+/*
+  Note: data passed as params can be an existing workout or a device activites workout that doesn't have a workout id
+*/
 export const useRouteMarkers = () => {
   const route = useRoute<MyRouteProps>();
   const navigation = useNavigation<NavigationProps>();
   const [workoutTracker, setWorkoutTracker] = useState(new WorkoutTracker());
+  const [isLoading, setIsLoading] = useState(true);
 
   const redirectToScreen = (screen: HomeStackScreens) => () =>
     navigation.push(screen, { data: route.params.data });
@@ -28,7 +32,7 @@ export const useRouteMarkers = () => {
 
     const workoutHandler = async () => {
       const { data } = route.params as { data: HealthDataProps };
-      const tracker = new WorkoutTracker();
+      const tracker = new WorkoutTracker(data.workoutUid);
       tracker.initializeHealthData(data);
       try {
         const routeSamples = await getWoRouteSamples(data.activityId);
@@ -37,34 +41,47 @@ export const useRouteMarkers = () => {
         console.log(err);
       }
       setWorkoutTracker(tracker);
+      setIsLoading(false);
     };
 
     workoutHandler().catch(err => console.log(err));
-  }, [route]);
+  }, [navigation, route]);
 
   return {
     redirectToScreen,
     workoutTracker,
+    isLoading,
   };
 };
 
 export const useMapAdjustView = (mapRef: any, polyCords: LatLng[]) => {
   useLayoutEffect(() => {
-    //mount zoom into the coordinates
+    // mount zoom into the coordinates
+    let timeout: undefined | NodeJS.Timeout = undefined;
+
     if (mapRef.current && polyCords.length > 0) {
-      mapRef.current.fitToCoordinates(polyCords, {
-        edgePadding: {
-          top: moderateScale(20),
-          right: moderateScale(20),
-          bottom: moderateScale(50),
-          left: moderateScale(20),
-        },
-      });
+      timeout = setTimeout(() => {
+        mapRef.current.fitToCoordinates(polyCords, {
+          edgePadding: {
+            top: moderateScale(20),
+            right: moderateScale(20),
+            bottom: moderateScale(50),
+            left: moderateScale(20),
+          },
+        });
+      }, 100);
     }
+
+    () => {
+      timeout && clearTimeout(timeout);
+    };
   }, [mapRef, polyCords]);
 };
 
-export function zoomToMarker(region: AnimatedRegion, markers: MarkerProps[]) {
+export function useZoomToMarker(
+  region: AnimatedRegion,
+  markers: MarkerProps[],
+) {
   const [activeMarkIndex, setActiveMarkIndex] = useState<number>();
 
   useEffect(() => {
@@ -82,7 +99,7 @@ export function zoomToMarker(region: AnimatedRegion, markers: MarkerProps[]) {
           .start();
       }
     }
-  }, [activeMarkIndex]);
+  }, [activeMarkIndex, markers, region]);
 
   return {
     activeMarkIndex,
