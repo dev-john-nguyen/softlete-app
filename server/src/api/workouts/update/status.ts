@@ -26,10 +26,16 @@ router.post('/', (req: any, res: any, next: any) => {
 
   Workout.findByIdAndUpdate(_id, { status: status })
     .then(doc => {
-      if (!doc)
+      // send headers
+      if (!doc) {
         return res
           .status(500)
           .send('Failed to update status of the workout. Please try again');
+      } else {
+        res.send(doc.toObject());
+      }
+
+      // post notification processing
 
       // don't process notification if sent already
       if (doc.sentNotification) return;
