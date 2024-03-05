@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps } from '../../services';
 import { logout } from '../../services/user/actions';
@@ -26,6 +26,9 @@ const InitUser = () => {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const setBanner = useBanner();
+  const authUserState = useMemo(() => {
+    return auth().currentUser;
+  }, []);
 
   useEffect(() => {
     if (user && user.username)
@@ -39,7 +42,8 @@ const InitUser = () => {
       return setBanner('Username must be between 8-20 characters.');
     }
 
-    if (!name) return setBanner('Name is required');
+    if (!authUserState?.displayName && !name)
+      return setBanner('Name is required');
 
     if (!validateUsername(username)) {
       return setBanner('Invalid username. Please try again.');
@@ -49,15 +53,17 @@ const InitUser = () => {
 
     let email = '';
 
-    const currentUser = auth().currentUser;
-
     // get email if available
-    if (currentUser?.email) {
-      email = currentUser.email;
+    if (authUserState?.email) {
+      email = authUserState.email;
     }
 
     axios
-      .post(SERVERURL + paths.signin.register, { name, username, email })
+      .post(SERVERURL + paths.signin.register, {
+        name: authUserState?.displayName || name,
+        username,
+        email,
+      })
       .then(({ data }) => {
         if (data) {
           dispatch({ type: SIGNIN_USER, payload: { ...user, ...data } });
@@ -106,14 +112,16 @@ const InitUser = () => {
         mb={10}
       />
 
-      <Input
-        value={name}
-        placeholder="John Doe"
-        onChangeText={txt => setName(txt)}
-        maxLength={200}
-        autoCapitalize="words"
-        label={`Name`}
-      />
+      {!authUserState?.displayName && (
+        <Input
+          value={name}
+          placeholder="John Doe"
+          onChangeText={txt => setName(txt)}
+          maxLength={200}
+          autoCapitalize="words"
+          label={`Name`}
+        />
+      )}
 
       <PrimaryText bold marginBottom={10} marginTop={15}>
         Username Criteria

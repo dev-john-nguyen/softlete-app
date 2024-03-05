@@ -25,8 +25,6 @@ import { navigationRef } from './RootNavigation';
 import { AppDispatch } from '../App';
 import ProgramStack from './screens/program';
 import TabBar from './components/bottom-tab/TabBar';
-import Icon from '@app/icons';
-import { FlexBox } from './ui';
 
 import {
   useAuth,
@@ -36,10 +34,8 @@ import {
 
 //get health permissions
 import './permissions/health';
-import PrimaryText from './components/elements/PrimaryText';
 import Demo from './components/elements/Demo';
 import { TimerBanner } from './components/TimerBanner';
-import { Colors } from './utils';
 import AppLoadingIndicator from './components/AppLoadingIndicator';
 
 const Tab = createBottomTabNavigator<IndexStackParamsList>();

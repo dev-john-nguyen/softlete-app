@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Linking, Keyboard } from 'react-native';
+import { Pressable, Linking } from 'react-native';
 import LoginForm from './LoginForm';
 import ForgotPassword from './ForgotPassword';
 import {
@@ -36,12 +36,12 @@ const SignIn = () => {
     }
   };
 
-  async function onAppleButtonPress() {
+  const onAppleButtonPress = async () => {
     // performs login request
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
 
       // get current authentication state for user
@@ -68,11 +68,28 @@ const SignIn = () => {
       );
 
       // Sign the user in with the credential
-      return auth().signInWithCredential(appleCredential);
+      const userCredential = await auth().signInWithCredential(appleCredential);
+
+      const displayName =
+        appleAuthRequestResponse.fullName?.givenName +
+        ' ' +
+        appleAuthRequestResponse.fullName?.familyName;
+
+      if (displayName) {
+        await userCredential.user.updateProfile({
+          displayName: displayName,
+        });
+      }
+
+      const email = appleAuthRequestResponse.email;
+
+      if (email) {
+        await userCredential.user.updateEmail(email);
+      }
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   if (forgot) return <ForgotPassword onGoBack={onNavigateToForgot} />;
 
