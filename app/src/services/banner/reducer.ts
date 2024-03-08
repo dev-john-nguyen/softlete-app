@@ -12,12 +12,6 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action: any) => {
   switch (action.type) {
     case SET_BANNER:
-      if (action.payload.msg.includes('There was a network error')) {
-        const exists = state.banners.find((b: any) =>
-          b.msg.includes('There was a network error'),
-        );
-        if (exists) return state;
-      }
       const newBanner = { ...action.payload, id: AutoId.newId() };
       return {
         ...state,
