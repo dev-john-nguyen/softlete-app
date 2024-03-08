@@ -1,5 +1,8 @@
 import { genCharArray, getNumArray } from './tools';
 
+export const defaultErrorMsg =
+  "Oops! We can't reach our servers right now. If you're online, try closing and reopening the app.";
+
 export default {
   daysOfWeek: [
     'sunday',

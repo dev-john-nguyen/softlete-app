@@ -30,6 +30,7 @@ import { SET_NEW_USER_STATE, SET_OFFLINE } from '../global/actionTypes';
 import { BannerTypes } from '../banner/types';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
 import Limits from '../../utils/Limits';
+import { defaultErrorMsg } from 'src/utils/Constants';
 
 export const login = (token: string) => async (dispatch: AppDispatch) => {
   //get profile
@@ -62,9 +63,7 @@ export const login = (token: string) => async (dispatch: AppDispatch) => {
   userProps = data;
 
   if (networkError) {
-    dispatch(
-      setBanner(BannerTypes.warning, 'Please check your internet connection.'),
-    );
+    dispatch(setBanner(BannerTypes.error, defaultErrorMsg));
     //attempt to get user local storage
     const lsUserStr = await AsyncStorage.getItem(LocalStoragePaths.user);
 

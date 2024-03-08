@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import remove from 'lodash/remove';
 import AutoId from 'src/utils/AutoId';
 import { REMOVE_BANNER, SET_BANNER } from './actionTypes';

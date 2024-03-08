@@ -494,7 +494,7 @@ export const updateWorkoutStatus =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global, workout: rootWorkout } = getState();
 
-    if (!global.offline && !online) {
+    if (!global.offline && online) {
       const { data } = await request(
         'POST',
         PATHS.workouts.updateStatus,

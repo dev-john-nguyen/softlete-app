@@ -7,6 +7,7 @@ import { SIGNOUT_USER } from '../user/actionTypes';
 import { SERVERURL } from '../../utils/PATHS';
 import { BannerTypes } from '../banner/types';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { defaultErrorMsg } from 'src/utils/Constants';
 
 const undefinedResult = { data: undefined };
 
@@ -77,8 +78,7 @@ export async function sendRequest(
 
     if (err.message === 'Network Error') {
       return {
-        errorMessage:
-          'There was a network error. Please check your internet connection.',
+        errorMessage: defaultErrorMsg,
         ...undefinedResult,
       };
     }
@@ -124,10 +124,7 @@ export default async function request<DataType>(
   const resultOne = await sendRequest(method, path, data);
 
   if (resultOne.errorMessage) {
-    if (
-      resultOne.errorMessage ===
-      'There was a network error. Please check your internet connection.'
-    ) {
+    if (resultOne.errorMessage === defaultErrorMsg) {
       dispatch(setBanner(BannerTypes.error, resultOne.errorMessage));
       return { networkError: true, data: undefined } as Request<DataType>;
     } else {
