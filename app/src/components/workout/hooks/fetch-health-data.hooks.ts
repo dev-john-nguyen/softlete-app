@@ -22,14 +22,14 @@ export const useFetchHealthData = (
 
     const options = {
       startDate: new Date(
-        d.getFullYear(),
-        d.getMonth(),
+        d.getUTCFullYear(),
+        d.getUTCMonth(),
         d.getUTCDate(),
         0,
       ).toISOString(),
       endDate: new Date(
-        d.getFullYear(),
-        d.getMonth(),
+        d.getUTCFullYear(),
+        d.getUTCMonth(),
         d.getUTCDate(),
         24,
       ).toISOString(),
