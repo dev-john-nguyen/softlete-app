@@ -57,6 +57,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-/ios/softlete/
 
 /ios/GoogleService-Info.plist
