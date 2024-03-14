@@ -17,10 +17,10 @@
 		A747510A2715E01300F892D3 /* Fix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74751092715E01300F892D3 /* Fix.swift */; };
 		A747510B2715E01400F892D3 /* Fix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74751092715E01300F892D3 /* Fix.swift */; };
 		A74C0146275FCF7000C2025C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74C0145275FCF7000C2025C /* HealthKit.framework */; };
-		A74E2E5D27AD968D00064C06 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A74E2E5C27AD968D00064C06 /* GoogleService-Info.plist */; };
 		A78986C627923CD7001E12B4 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A78986C527923CD7001E12B4 /* Launch Screen.storyboard */; };
 		A7967D4826FA9C2D009121E4 /* libswiftDataDetection.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7967D4726FA9C2D009121E4 /* libswiftDataDetection.tbd */; };
 		A7967D4A26FA9C43009121E4 /* libswiftFileProvider.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7967D4926FA9C43009121E4 /* libswiftFileProvider.tbd */; };
+		A7C0C91F2BA357A10067CEFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7C0C91E2BA357A10067CEFA /* GoogleService-Info.plist */; };
 		A7D575FD27593BA800051806 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D575FC27593BA800051806 /* CoreMedia.framework */; };
 		A7D575FF27593BB100051806 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D575FE27593BB100051806 /* CoreVideo.framework */; };
 		A7D5760127593BBB00051806 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D5760027593BBB00051806 /* OpenGLES.framework */; };
@@ -68,7 +68,6 @@
 		9D689A3B7B3C38ED54F17AC1 /* Pods-softlete.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-softlete.release.xcconfig"; path = "Target Support Files/Pods-softlete/Pods-softlete.release.xcconfig"; sourceTree = "<group>"; };
 		A74751092715E01300F892D3 /* Fix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fix.swift; sourceTree = "<group>"; };
 		A74C0145275FCF7000C2025C /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		A74E2E5C27AD968D00064C06 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "softlete/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A77F648A272456C60036CEC2 /* softlete.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = softlete.entitlements; path = softlete/softlete.entitlements; sourceTree = "<group>"; };
 		A78986C327923B72001E12B4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = softlete/Info.plist; sourceTree = "<group>"; };
 		A78986C527923CD7001E12B4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "softlete/Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -76,6 +75,7 @@
 		A7967D4626FA9B70009121E4 /* softleteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = softleteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7967D4726FA9C2D009121E4 /* libswiftDataDetection.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftDataDetection.tbd; path = usr/lib/swift/libswiftDataDetection.tbd; sourceTree = SDKROOT; };
 		A7967D4926FA9C43009121E4 /* libswiftFileProvider.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftFileProvider.tbd; path = usr/lib/swift/libswiftFileProvider.tbd; sourceTree = SDKROOT; };
+		A7C0C91E2BA357A10067CEFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7D575FC27593BA800051806 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A7D575FE27593BB100051806 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A7D5760027593BBB00051806 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -138,7 +138,7 @@
 		13B07FAE1A68108700A75B9A /* softlete */ = {
 			isa = PBXGroup;
 			children = (
-				A74E2E5C27AD968D00064C06 /* GoogleService-Info.plist */,
+				A7C0C91E2BA357A10067CEFA /* GoogleService-Info.plist */,
 				A77F648A272456C60036CEC2 /* softlete.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -317,7 +317,7 @@
 				81D7DB38D04C438783384E0D /* Lato-Bold.ttf in Resources */,
 				E146B892300C4B17A31B8A40 /* Lato-Regular.ttf in Resources */,
 				675AD8A0F3504D6DAA297120 /* Raleway-Bold.ttf in Resources */,
-				A74E2E5D27AD968D00064C06 /* GoogleService-Info.plist in Resources */,
+				A7C0C91F2BA357A10067CEFA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +336,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "set -e\n\nexport NODE_BINARY=/Users/nguyening/.nvm/versions/node/v16.20.2/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		0DC27ED2895571EE126D35E6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -674,7 +674,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -734,7 +734,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
