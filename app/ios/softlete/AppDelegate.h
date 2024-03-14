@@ -1,9 +1,9 @@
-#import <React/RCTBridgeDelegate.h>
+#import <RCTAppDelegate.h>
 #import <UIKit/UIKit.h>
 
 #import <UMCore/UMAppDelegateWrapper.h>
  
-@interface AppDelegate : UMAppDelegateWrapper <UIApplicationDelegate, RCTBridgeDelegate>
+@interface AppDelegate : RCTAppDelegate
 
 @property (nonatomic, strong) UIWindow *window;
 

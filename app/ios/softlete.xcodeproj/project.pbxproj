@@ -11,7 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2B19481B70971E969771C9CD /* libPods-softlete-softleteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60673A5322F1F20A9834A918 /* libPods-softlete-softleteTests.a */; };
+		6470E4DEDE574269FEEE1CF6 /* libPods-softlete.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 565065E865CBECC485659878 /* libPods-softlete.a */; };
 		675AD8A0F3504D6DAA297120 /* Raleway-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125CFFF44D402BBD1612B1 /* Raleway-Bold.ttf */; };
 		81D7DB38D04C438783384E0D /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD03E77F9B634778AB4007BE /* Lato-Bold.ttf */; };
 		A747510A2715E01300F892D3 /* Fix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74751092715E01300F892D3 /* Fix.swift */; };
@@ -27,7 +27,7 @@
 		A7D5760327593BC300051806 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D5760227593BC300051806 /* AVFoundation.framework */; };
 		A7D5760527593BD700051806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D5760427593BD700051806 /* QuartzCore.framework */; };
 		A7D5760727593BDD00051806 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D5760627593BDD00051806 /* MobileCoreServices.framework */; };
-		C5A408AEA2617DA353797739 /* libPods-softlete.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0B080BCE4A0439247E8ACC2 /* libPods-softlete.a */; };
+		AFB736478DA45A757E0C536F /* libPods-softlete-softleteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 151C33784EAB5B67C98B7F03 /* libPods-softlete-softleteTests.a */; };
 		E146B892300C4B17A31B8A40 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B001631992B04403B8EDC071 /* Lato-Regular.ttf */; };
 /* End PBXBuildFile section */
 
@@ -61,10 +61,11 @@
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = softlete/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = softlete/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = softlete/main.m; sourceTree = "<group>"; };
+		151C33784EAB5B67C98B7F03 /* libPods-softlete-softleteTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-softlete-softleteTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B125CFFF44D402BBD1612B1 /* Raleway-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Raleway-Bold.ttf"; path = "../fonts/Raleway-Bold.ttf"; sourceTree = "<group>"; };
 		465756F93E4E6CE2E11CFCFC /* Pods-softlete-softleteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-softlete-softleteTests.release.xcconfig"; path = "Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests.release.xcconfig"; sourceTree = "<group>"; };
+		565065E865CBECC485659878 /* libPods-softlete.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-softlete.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		574FD2BAD7F7C74899400F9E /* Pods-softlete.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-softlete.debug.xcconfig"; path = "Target Support Files/Pods-softlete/Pods-softlete.debug.xcconfig"; sourceTree = "<group>"; };
-		60673A5322F1F20A9834A918 /* libPods-softlete-softleteTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-softlete-softleteTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D689A3B7B3C38ED54F17AC1 /* Pods-softlete.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-softlete.release.xcconfig"; path = "Target Support Files/Pods-softlete/Pods-softlete.release.xcconfig"; sourceTree = "<group>"; };
 		A74751092715E01300F892D3 /* Fix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fix.swift; sourceTree = "<group>"; };
 		A74C0145275FCF7000C2025C /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -85,7 +86,6 @@
 		B001631992B04403B8EDC071 /* Lato-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Regular.ttf"; path = "../fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
 		B3B9E981C7C3AA6B2D3B53C6 /* Pods-softlete-softleteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-softlete-softleteTests.debug.xcconfig"; path = "Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F0B080BCE4A0439247E8ACC2 /* libPods-softlete.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-softlete.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD03E77F9B634778AB4007BE /* Lato-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Bold.ttf"; path = "../fonts/Lato-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B19481B70971E969771C9CD /* libPods-softlete-softleteTests.a in Frameworks */,
+				AFB736478DA45A757E0C536F /* libPods-softlete-softleteTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,12 +106,12 @@
 				A7D575FD27593BA800051806 /* CoreMedia.framework in Frameworks */,
 				A7967D4A26FA9C43009121E4 /* libswiftFileProvider.tbd in Frameworks */,
 				A7967D4826FA9C2D009121E4 /* libswiftDataDetection.tbd in Frameworks */,
-				C5A408AEA2617DA353797739 /* libPods-softlete.a in Frameworks */,
 				A7D575FF27593BB100051806 /* CoreVideo.framework in Frameworks */,
 				A7D5760727593BDD00051806 /* MobileCoreServices.framework in Frameworks */,
 				A74C0146275FCF7000C2025C /* HealthKit.framework in Frameworks */,
 				A7D5760327593BC300051806 /* AVFoundation.framework in Frameworks */,
 				A7D5760127593BBB00051806 /* OpenGLES.framework in Frameworks */,
+				6470E4DEDE574269FEEE1CF6 /* libPods-softlete.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,8 +163,8 @@
 				A7967D4926FA9C43009121E4 /* libswiftFileProvider.tbd */,
 				A7967D4726FA9C2D009121E4 /* libswiftDataDetection.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				F0B080BCE4A0439247E8ACC2 /* libPods-softlete.a */,
-				60673A5322F1F20A9834A918 /* libPods-softlete-softleteTests.a */,
+				565065E865CBECC485659878 /* libPods-softlete.a */,
+				151C33784EAB5B67C98B7F03 /* libPods-softlete-softleteTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -226,7 +226,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				3A527E1B5690F1E52CF5F68E /* [CP] Copy Pods Resources */,
+				3624CA2A8B6CDE4B81918D95 /* [CP] Embed Pods Frameworks */,
+				4DA7D6A54E7C00CBC7BA4152 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,9 +249,10 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				3B5B372CF7328F23E5ECAFEA /* [CP] Copy Pods Resources */,
 				EF0EA4F1EAD4B8B28CDFEB46 /* [CP-User] [RNFB] Core Configuration */,
 				A7D5760A27593BE500051806 /* Embed Frameworks */,
+				E018BD58AE861D4274B53FFA /* [CP] Embed Pods Frameworks */,
+				7D5AF772F018B1029BD1D11B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,7 +360,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3A527E1B5690F1E52CF5F68E /* [CP] Copy Pods Resources */ = {
+		3624CA2A8B6CDE4B81918D95 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4DA7D6A54E7C00CBC7BA4152 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -375,7 +394,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-softlete-softleteTests/Pods-softlete-softleteTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3B5B372CF7328F23E5ECAFEA /* [CP] Copy Pods Resources */ = {
+		7D5AF772F018B1029BD1D11B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -390,6 +409,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-softlete/Pods-softlete-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E018BD58AE861D4274B53FFA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-softlete/Pods-softlete-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-softlete/Pods-softlete-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-softlete/Pods-softlete-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EF0EA4F1EAD4B8B28CDFEB46 /* [CP-User] [RNFB] Core Configuration */ = {
@@ -551,6 +587,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 96D27NCJX4;
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = softlete/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -584,6 +621,7 @@
 				CODE_SIGN_ENTITLEMENTS = softlete/softlete.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 96D27NCJX4;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = softlete/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -640,7 +678,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64  i386";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -656,6 +694,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -665,10 +714,13 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				USE_HERMES = false;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -705,7 +757,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64  i386";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -714,6 +766,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -722,10 +785,13 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				USE_HERMES = false;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
