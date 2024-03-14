@@ -20,6 +20,12 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -52,10 +58,16 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
+/vendor/bundle/
+
 # Bundle artifact
 *.jsbundle
 
 # CocoaPods
 /ios/Pods/
 
+
 /ios/GoogleService-Info.plist
+.metro-health-check*
+/coverage
+ 
