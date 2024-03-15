@@ -160,11 +160,8 @@ export default async function request<DataType>(
 
   // all attempts
   if (resultOne.deniedAccess) {
-    dispatch(
-      setBanner(
-        BannerTypes.error,
-        "Looks like you don't have permission. Try logging in again.",
-      ),
+    console.error(
+      'Looks like the user token expired. User may need to login again',
     );
     return undefinedResult as Request<DataType>;
   }
