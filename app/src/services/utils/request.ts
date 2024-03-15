@@ -1,14 +1,15 @@
 import auth from '@react-native-firebase/auth';
 import axios, { Method } from 'axios';
-import { AppDispatch } from '../../../App';
 import { setBanner } from '../banner/actions';
 import messages from './messages';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { SERVERURL } from '../../utils/PATHS';
 import { BannerTypes } from '../banner/types';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { defaultErrorMsg } from 'src/utils/Constants';
 
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 const undefinedResult = { data: undefined };
 
 export function getRequestURL(path: string) {
@@ -107,7 +108,7 @@ export interface Request<DataType = undefined> {
 export default async function request<DataType>(
   method: Method,
   path: string,
-  dispatch: AppDispatch | ThunkDispatch<unknown, unknown, AnyAction>,
+  dispatch: any,
   data?: any,
 ): Promise<Request<DataType>> {
   //check auth and update if no there
@@ -145,6 +146,8 @@ export default async function request<DataType>(
     dispatch({ type: SIGNOUT_USER });
     return undefinedResult as Request<DataType>;
   }
+
+  await sleep(3000);
 
   const resultTwo = await sendRequest(method, path, data);
 
