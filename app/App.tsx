@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import reducers from './src/services';
 import store from './src/utils/init-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ LogBox.ignoreLogs([
   'Warning: Function components cannot be given refs',
   'Could not locate shadow',
   'Sending `healthKit',
+  'Selector unknown',
 ]);
 
 const App = () => {
@@ -27,10 +29,12 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <View style={backgroundStyle}>
-          <StatusBar barStyle={'light-content'} />
-          <Home />
-        </View>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <View style={backgroundStyle}>
+            <StatusBar barStyle={'light-content'} />
+            <Home />
+          </View>
+        </GestureHandlerRootView>
       </Provider>
     </QueryClientProvider>
   );

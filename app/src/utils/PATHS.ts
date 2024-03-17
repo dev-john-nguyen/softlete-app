@@ -55,7 +55,7 @@ export default {
       `api/chat/fetch?${userUid ? `userUid=${userUid}` : ''}${
         chatId ? `&chatId=${chatId}` : ''
       }`,
-    get: `api/chat/get`,
+    get: 'api/chat/get',
     remove: 'api/chat/remove',
     messages: {
       send: 'api/chat/messages/send',
@@ -63,7 +63,7 @@ export default {
   },
   friends: {
     getFriends: (userUid: string) => `api/user/friends/get/friends/${userUid}`,
-    getAll: `api/user/friends/get/all`,
+    getAll: 'api/user/friends/get/all',
     update: 'api/user/friends/update',
   },
   user: {
@@ -87,7 +87,7 @@ export default {
         userUid ? userUid : ''
       }&limit=${limit ? limit : 5}`,
     fetchBulkUsers: (exerciseUids: string[], userUid: string) => {
-      let strArr = ``;
+      let strArr = '';
 
       exerciseUids.forEach(id => {
         strArr += `exUids=${id}&`;
@@ -128,7 +128,7 @@ export default {
       dateFilterType: DateSelectionTypes,
       dates: string[],
     ) => {
-      let datesArrStr = ``;
+      let datesArrStr = '';
       dates.forEach(date => {
         datesArrStr += `dates=${date}&`;
       });
@@ -140,7 +140,7 @@ export default {
       userUid: string,
       exerciseUids: string[],
     ) => {
-      let strArr = ``;
+      let strArr = '';
       exerciseUids.forEach((id, i) => {
         strArr += `${i > 0 ? '&' : ''}exerciseUids=${id}`;
       });
@@ -151,8 +151,8 @@ export default {
       ids: string[],
       userUid: string,
     ) => {
-      let exerciseUids = ``;
-      let datesArrStr = ``;
+      let exerciseUids = '';
+      let datesArrStr = '';
       dates.forEach(date => {
         datesArrStr += `dates=${date}&`;
       });
@@ -174,7 +174,7 @@ export default {
   },
   programs: {
     get: (userUid: string) => `api/programs/get?userUid=${userUid}`,
-    getSoftlete: () => `api/programs/get-softlete`,
+    getSoftlete: () => 'api/programs/get-softlete',
     create: 'api/programs/create',
     createWorkout: 'api/programs/workouts/create',
     updateWorkoutHeader: 'api/programs/workouts/update/header',
@@ -194,10 +194,10 @@ export default {
     removeWorkout: 'api/programs/workouts/remove',
     generated: {
       get: (userUid: string) => `api/programs/generated/get?userUid=${userUid}`,
-      remove: `api/programs/generated/remove`,
+      remove: 'api/programs/generated/remove',
     },
-    addAccessCode: `api/programs/access/add`,
-    removeAccessCode: `api/programs/access/remove`,
+    addAccessCode: 'api/programs/access/add',
+    removeAccessCode: 'api/programs/access/remove',
   },
   misc: {
     get: 'api/misc/get',
@@ -218,4 +218,4 @@ if (process.env.NODE_ENV === 'development') {
 
 console.log('env', process.env.NODE_ENV, TEMP);
 
-export const SERVERURL = TEMP;
+export const SERVERURL = 'https://softlete-sandbox.herokuapp.com/';

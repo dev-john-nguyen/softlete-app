@@ -5,9 +5,8 @@ import PrimaryText from './PrimaryText';
 import Icon from '@app/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -19,26 +18,23 @@ const { height: screenHeight } = Dimensions.get('window');
 
 const Demo = () => {
   const translationY = useSharedValue(50);
+  const initialTranslationY = useSharedValue(50);
   const { demo } = useSelector((state: ReducerProps) => ({
     demo: state.demo,
   }));
   const dispatch = useDispatch();
 
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart: (_, context: any) => {
-      context.startY = translationY.value;
-    },
-    onActive: (event, context) => {
-      translationY.value = context.startY + event.translationY;
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      initialTranslationY.value = translationY.value;
+    })
+    .onUpdate(event => {
+      translationY.value = initialTranslationY.value + event.translationY;
       translationY.value = Math.min(
         Math.max(translationY.value, 50),
         screenHeight - 50,
       );
-    },
-    onEnd: () => {
-      // action
-    },
-  });
+    });
 
   useEffect(() => {
     // can reposition for certain stages
@@ -84,10 +80,12 @@ const Demo = () => {
     dispatch({ type: CLEAR_DEMO_STATE_DATA });
   };
 
-  if (!demo.state) return <></>;
+  if (!demo.state) {
+    return <></>;
+  }
 
   return (
-    <PanGestureHandler onGestureEvent={gestureHandler}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View style={animatedStyle}>
         <FlexBox
           flex={1}
@@ -121,7 +119,7 @@ const Demo = () => {
           <Icon icon="close" size={10} color={Colors.primary} />
         </FlexBox>
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 };
 
