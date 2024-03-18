@@ -19,3 +19,11 @@ yarn install
 yarn start
 ```
  
+### Resources To Run Locally
+https://github.com/facebook/react-native/issues/33017
+
+https://github.com/facebook/react-native/issues/22918
+
+https://stackoverflow.com/questions/66742033/phasescriptexecution-cp-user-error-in-react-native
+
+https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
