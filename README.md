@@ -25,6 +25,8 @@ https://github.com/facebook/react-native/issues/33017
 https://github.com/facebook/react-native/issues/22918
 
 https://stackoverflow.com/questions/66742033/phasescriptexecution-cp-user-error-in-react-native
+![image](https://github.com/dev-john-nguyen/softlete-app/assets/36948494/7c0fbbc8-f969-425b-a2c5-a5f6af069ace)
+
 
 https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
 
