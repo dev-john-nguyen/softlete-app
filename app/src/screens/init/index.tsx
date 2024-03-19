@@ -22,7 +22,6 @@ const InitUser = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: ReducerProps) => state.user);
   const navigation = useNavigation<any>();
-  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const setBanner = useBanner();
@@ -42,9 +41,6 @@ const InitUser = () => {
       return setBanner('Username must be between 8-20 characters.');
     }
 
-    if (!authUserState?.displayName && !name)
-      return setBanner('Name is required');
-
     if (!validateUsername(username)) {
       return setBanner('Invalid username. Please try again.');
     }
@@ -60,7 +56,7 @@ const InitUser = () => {
 
     axios
       .post(SERVERURL + paths.signin.register, {
-        name: authUserState?.displayName || name,
+        name: username,
         username,
         email,
       })
@@ -111,17 +107,6 @@ const InitUser = () => {
         label="Username"
         mb={10}
       />
-
-      {!authUserState?.displayName && (
-        <Input
-          value={name}
-          placeholder="John Doe"
-          onChangeText={txt => setName(txt)}
-          maxLength={200}
-          autoCapitalize="words"
-          label={`Name`}
-        />
-      )}
 
       <PrimaryText bold marginBottom={10} marginTop={15}>
         Username Criteria
