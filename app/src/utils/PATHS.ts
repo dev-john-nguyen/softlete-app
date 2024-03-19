@@ -210,12 +210,12 @@ export default {
   },
 };
 
-let TEMP = 'https://www.softlete.com/';
+// Define path depending on target env
 
-if (process.env.NODE_ENV === 'development') {
-  TEMP = 'http://localhost:3000/';
+enum PATHS {
+  PROD = 'https://www.softlete.com/',
+  TEST = 'https://softlete-sandbox.herokuapp.com/',
+  LOCAL = 'http://localhost:3000/',
 }
 
-console.log('env', process.env.NODE_ENV, TEMP);
-
-export const SERVERURL = TEMP;
+export const SERVERURL = PATHS.LOCAL;
