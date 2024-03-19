@@ -35,7 +35,7 @@ https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-
 **App**
 1. Need GoogleService-Info file in Xcode Project
 2. Need Development Team assigned in Xcode Project
-3. Make sure to set your terminal to use **Node Version 16**
+3. Make sure to set your terminal to use **Node Version 16** (This might not be needed)
 4. `yarn install` within app directory ( can run `yarn cache clean` to clear cache)
 6. `cd ios` and `pod install` ( can run `pod cache clean --all`, clean build folder in Xcode, delete Pods folder, and Podfile.lock to clear cache) 
 7. Back in app directory run `yarn run ios` to run the project
