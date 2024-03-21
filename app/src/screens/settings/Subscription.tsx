@@ -30,7 +30,7 @@ const Subscription = () => {
       headerTitleFormatted="Subscription"
       applyContentPadding>
       <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
-        The app is currently free to use
+        The app is currently free to use.
       </PrimaryText>
     </ScreenTemplate>
   );
