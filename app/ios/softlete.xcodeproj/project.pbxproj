@@ -17,9 +17,9 @@
 		A78986C627923CD7001E12B4 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A78986C527923CD7001E12B4 /* Launch Screen.storyboard */; };
 		A7967D4826FA9C2D009121E4 /* libswiftDataDetection.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7967D4726FA9C2D009121E4 /* libswiftDataDetection.tbd */; };
 		A7967D4A26FA9C43009121E4 /* libswiftFileProvider.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7967D4926FA9C43009121E4 /* libswiftFileProvider.tbd */; };
-		A798AAC72BA78A8C000E261D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A798AAC62BA78A8C000E261D /* GoogleService-Info.plist */; };
 		A798AACE2BA7A89D000E261D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A798AAC92BA7A85C000E261D /* AppDelegate.mm */; };
 		A798AACF2BA7A8A2000E261D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A798AACC2BA7A88B000E261D /* main.m */; };
+		A798AAD92BAC943C000E261D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A798AAD82BAC943C000E261D /* GoogleService-Info.plist */; };
 		A7D575FD27593BA800051806 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D575FC27593BA800051806 /* CoreMedia.framework */; };
 		A7D575FF27593BB100051806 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D575FE27593BB100051806 /* CoreVideo.framework */; };
 		A7D5760127593BBB00051806 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D5760027593BBB00051806 /* OpenGLES.framework */; };
@@ -70,10 +70,10 @@
 		A7967D4626FA9B70009121E4 /* softleteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = softleteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7967D4726FA9C2D009121E4 /* libswiftDataDetection.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftDataDetection.tbd; path = usr/lib/swift/libswiftDataDetection.tbd; sourceTree = SDKROOT; };
 		A7967D4926FA9C43009121E4 /* libswiftFileProvider.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftFileProvider.tbd; path = usr/lib/swift/libswiftFileProvider.tbd; sourceTree = SDKROOT; };
-		A798AAC62BA78A8C000E261D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A798AAC92BA7A85C000E261D /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = softlete/AppDelegate.mm; sourceTree = "<group>"; };
 		A798AACA2BA7A871000E261D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = softlete/AppDelegate.h; sourceTree = "<group>"; };
 		A798AACC2BA7A88B000E261D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = softlete/main.m; sourceTree = "<group>"; };
+		A798AAD82BAC943C000E261D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Desktop/Softlete/creds/development/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7D575FC27593BA800051806 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A7D575FE27593BB100051806 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A7D5760027593BBB00051806 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -137,7 +137,7 @@
 		13B07FAE1A68108700A75B9A /* softlete */ = {
 			isa = PBXGroup;
 			children = (
-				A798AAC62BA78A8C000E261D /* GoogleService-Info.plist */,
+				A798AAD82BAC943C000E261D /* GoogleService-Info.plist */,
 				A77F648A272456C60036CEC2 /* softlete.entitlements */,
 				A798AAC92BA7A85C000E261D /* AppDelegate.mm */,
 				A798AACA2BA7A871000E261D /* AppDelegate.h */,
@@ -316,7 +316,7 @@
 				81D7DB38D04C438783384E0D /* Lato-Bold.ttf in Resources */,
 				E146B892300C4B17A31B8A40 /* Lato-Regular.ttf in Resources */,
 				675AD8A0F3504D6DAA297120 /* Raleway-Bold.ttf in Resources */,
-				A798AAC72BA78A8C000E261D /* GoogleService-Info.plist in Resources */,
+				A798AAD92BAC943C000E261D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
