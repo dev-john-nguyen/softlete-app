@@ -9,6 +9,7 @@ import { Colors, rgba } from '@app/utils';
 
 const Subscription = () => {
   const user = useSelector((state: ReducerProps) => state.user);
+
   const renderSubscription = () => {
     if (user.subscriptionType) {
       switch (user.subscriptionType) {
@@ -29,23 +30,7 @@ const Subscription = () => {
       headerTitleFormatted="Subscription"
       applyContentPadding>
       <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
-        All Access ({renderSubscription()}) Subscription
-      </PrimaryText>
-      <PrimaryText
-        variant="secondary"
-        color={rgba(Colors.whiteRbg, 0.8)}
-        marginBottom={20}>
-        With this subscription you have all access to the tools that we offer.
-        Thank you for subscribing :).
-      </PrimaryText>
-      <PrimaryText fontSize={14} variant="secondary" bold marginBottom={5}>
-        How To Update Subscription?
-      </PrimaryText>
-      <PrimaryText variant="secondary" color={rgba(Colors.whiteRbg, 0.8)}>
-        To update your subscription, go to settings on your phone, tap the My
-        Account button or your profile picture at the top right, then tap
-        Subscriptions. You can change or cancel an existing subscription, or
-        resubscribe to an expired subscription.
+        The app is currently free to use
       </PrimaryText>
     </ScreenTemplate>
   );
