@@ -16,11 +16,10 @@ const Home = () => {
               others.
             </p>
             <button
-              onClick={() =>
-                alert(
-                  "Hi! Sorry, the app hasn't release yet. The app will be coming out soon."
-                )
-              }
+              onClick={() => {
+                window.location.href =
+                  "https://apps.apple.com/us/app/softlete/id1590865556";
+              }}
             >
               Download (Beta)
             </button>
