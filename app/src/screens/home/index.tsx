@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import Workout from './Workout';
+import Workout from './workout';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit/Edit';

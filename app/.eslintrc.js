@@ -18,8 +18,11 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'react-hooks'],
   rules: {
     'react/prop-types': 0,
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'react-native/no-inline-styles': 'off',
   },
 };
