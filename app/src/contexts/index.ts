@@ -1,1 +1,1 @@
-export * from './WorkoutContext';
+export * from './Workout.context';

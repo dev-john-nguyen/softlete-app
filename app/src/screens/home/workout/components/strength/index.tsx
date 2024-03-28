@@ -8,7 +8,7 @@ import ImportDeviceActivity from '../ImportDeviceActivity';
 const WorkoutStrength = () => {
   const { workout } = useWorkoutState();
   return (
-    <FlexBox flex={1} column>
+    <FlexBox flex={1} column marginBottom={20}>
       {workout.exercises.length ? <ExerciseBanner /> : <EmptyPlaceholder />}
       <AddExercise />
       <ImportDeviceActivity />

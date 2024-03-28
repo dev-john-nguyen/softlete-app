@@ -4,16 +4,20 @@ import { Colors, rgba } from '@app/utils';
 import { Pressable, StyleSheet } from 'react-native';
 import { PrimaryText } from '@app/elements';
 import { WorkoutStatus } from 'src/services/workout/types';
+import { updateWorkoutStatus } from 'src/services/workout/actions';
+import { useDispatch } from 'react-redux';
+import { ThunkAppDispatch } from 'src/services';
 
 const WorkoutStages = () => {
-  const { workout, athlete, onUpdateStatus, isProgram } = useWorkoutState();
+  const { workout, isProgram } = useWorkoutState();
+  const dispatch = useDispatch<ThunkAppDispatch>();
   const status = workout.status;
 
   const onPress = (s: WorkoutStatus) => {
-    if (status === s || athlete) {
+    if (status === s) {
       return;
     }
-    onUpdateStatus && onUpdateStatus(s);
+    dispatch(updateWorkoutStatus(workout._id, s));
   };
 
   if (isProgram) {
@@ -29,20 +33,17 @@ const WorkoutStages = () => {
         style={({ pressed }) => [
           styles.tabContainer,
           {
-            backgroundColor:
-              pressed && !athlete
-                ? status === WorkoutStatus.completed
-                  ? rgba(Colors.greenRbg, 0.1)
-                  : rgba(Colors.whiteRbg, 0.2)
-                : status === WorkoutStatus.pending
-                ? rgba(Colors.whiteRbg, 0.1)
-                : 'transparent',
+            backgroundColor: pressed
+              ? status === WorkoutStatus.completed
+                ? rgba(Colors.greenRbg, 0.1)
+                : rgba(Colors.whiteRbg, 0.2)
+              : status === WorkoutStatus.pending
+              ? rgba(Colors.whiteRbg, 0.1)
+              : 'transparent',
             borderTopLeftRadius: 100,
             borderBottomLeftRadius: 100,
             borderRadius:
-              status === WorkoutStatus.pending || (pressed && !athlete)
-                ? 100
-                : undefined,
+              status === WorkoutStatus.pending || pressed ? 100 : undefined,
           },
         ]}
         onPress={() => onPress(WorkoutStatus.pending)}>
@@ -59,18 +60,15 @@ const WorkoutStages = () => {
         style={({ pressed }) => [
           styles.tabContainer,
           {
-            backgroundColor:
-              pressed && !athlete
-                ? status === WorkoutStatus.completed
-                  ? rgba(Colors.greenRbg, 0.1)
-                  : rgba(Colors.whiteRbg, 0.2)
-                : status === WorkoutStatus.inProgress
-                ? rgba(Colors.whiteRbg, 0.1)
-                : 'transparent',
+            backgroundColor: pressed
+              ? status === WorkoutStatus.completed
+                ? rgba(Colors.greenRbg, 0.1)
+                : rgba(Colors.whiteRbg, 0.2)
+              : status === WorkoutStatus.inProgress
+              ? rgba(Colors.whiteRbg, 0.1)
+              : 'transparent',
             borderRadius:
-              status === WorkoutStatus.inProgress || (pressed && !athlete)
-                ? 100
-                : undefined,
+              status === WorkoutStatus.inProgress || pressed ? 100 : undefined,
           },
         ]}
         onPress={() => onPress(WorkoutStatus.inProgress)}>
@@ -87,18 +85,15 @@ const WorkoutStages = () => {
         style={({ pressed }) => [
           styles.tabContainer,
           {
-            backgroundColor:
-              pressed && !athlete
-                ? rgba(Colors.greenRbg, 0.1)
-                : status === WorkoutStatus.completed
-                ? Colors.green
-                : 'transparent',
+            backgroundColor: pressed
+              ? rgba(Colors.greenRbg, 0.1)
+              : status === WorkoutStatus.completed
+              ? Colors.green
+              : 'transparent',
             borderTopRightRadius: 100,
             borderBottomRightRadius: 100,
             borderRadius:
-              status === WorkoutStatus.completed || (pressed && !athlete)
-                ? 100
-                : undefined,
+              status === WorkoutStatus.completed || pressed ? 100 : undefined,
           },
         ]}
         onPress={() => onPress(WorkoutStatus.completed)}>

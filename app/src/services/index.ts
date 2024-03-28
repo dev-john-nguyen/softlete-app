@@ -25,7 +25,6 @@ import { AthletesRootProps } from './athletes/types';
 import { ChatRootProps } from './chat/types';
 import { NotificationRootProps } from './notifications/types';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action } from '@reduxjs/toolkit';
 import { DemoProps } from './services';
 import { TimerProps } from './timer/types';
 
@@ -61,4 +60,4 @@ export interface ReducerProps {
   timer: TimerProps;
 }
 
-export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;
+export type ThunkAppDispatch = ThunkDispatch<ReducerProps, any, any>;
