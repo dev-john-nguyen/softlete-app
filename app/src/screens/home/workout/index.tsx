@@ -15,7 +15,7 @@ import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
 import WorkoutContainer from './components/WorkoutContainer';
-import { WorkoutContextProvider } from 'src/contexts/Workout.context';
+import { WorkoutContextProvider } from './contexts';
 
 const Workout = () => {
   const { workout, targetProgram } = useSelector((state: ReducerProps) => ({

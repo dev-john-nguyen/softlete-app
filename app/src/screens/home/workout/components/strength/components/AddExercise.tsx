@@ -1,8 +1,6 @@
-import { useWorkoutState } from '@app/contexts';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import _ from 'lodash';
 import { useMemo } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -11,6 +9,7 @@ import { HomeStackScreens } from 'src/screens/home/types';
 import { WorkoutStatus } from 'src/services/workout/types';
 import ExerciseGroupIcon from './ExerciseGroupIcon';
 import { useExerciseGroupParams } from '../../../hooks/strength.hook';
+import { useWorkoutState } from '../../../contexts';
 
 const AddExercise = () => {
   const { workout } = useWorkoutState();

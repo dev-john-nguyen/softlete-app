@@ -1,9 +1,9 @@
 import { FlexBox } from '@app/ui';
 import ExerciseBanner from './components/ExerciseBanner';
-import { useWorkoutState } from '@app/contexts';
 import EmptyPlaceholder from './components/EmptyPlaceholder';
 import AddExercise from './components/AddExercise';
 import ImportDeviceActivity from '../ImportDeviceActivity';
+import { useWorkoutState } from '../../contexts';
 
 const WorkoutStrength = () => {
   const { workout } = useWorkoutState();

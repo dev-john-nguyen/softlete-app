@@ -1,4 +1,3 @@
-import { useWorkoutState } from '@app/contexts';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
@@ -6,6 +5,7 @@ import { useMemo, useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
+import { useWorkoutState } from '../contexts';
 
 const WorkoutHeader = () => {
   const [showDescription, setShowDescription] = useState(false);

@@ -1,4 +1,4 @@
-import { useWorkoutState } from '@app/contexts';
+import { useWorkoutState } from '../contexts';
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { WorkoutExerciseProps } from 'src/services/workout/types';

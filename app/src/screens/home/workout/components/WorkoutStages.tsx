@@ -1,5 +1,4 @@
 import { FlexBox } from '@app/ui';
-import { useWorkoutState } from '@app/contexts';
 import { Colors, rgba } from '@app/utils';
 import { Pressable, StyleSheet } from 'react-native';
 import { PrimaryText } from '@app/elements';
@@ -7,6 +6,7 @@ import { WorkoutStatus } from 'src/services/workout/types';
 import { updateWorkoutStatus } from 'src/services/workout/actions';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
+import { useWorkoutState } from '../contexts';
 
 const WorkoutStages = () => {
   const { workout, isProgram } = useWorkoutState();
