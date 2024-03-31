@@ -1,7 +1,6 @@
 import { FlexBox } from '@app/ui';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ListRenderItemInfo } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import ExerciseGroup from './components/ExerciseGroup';
 import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
 import { ExerciseDataProps, ItemLayoutProps, ItemPositionProps } from './types';
@@ -64,21 +63,18 @@ const ExercisesContainer = () => {
         const itemProps = itemLayoutProps.get(item.id);
         accumulatedHeight += (itemProps?.height as number) + 10;
       });
+      console.log(accumulatedHeight);
       return new Map(itemPosState);
     });
   }, [data, itemLayoutProps]);
 
   const renderItemHandler = useCallback(
-    (
-      props: ListRenderItemInfo<{
-        id: string;
-        label: string;
-      }>,
-    ) => {
+    (item: ExerciseDataProps, index: number) => {
       return (
         <ExerciseGroup
-          item={props.item}
-          index={props.index}
+          key={item.id}
+          item={item}
+          index={index}
           setItemLayoutProps={setItemLayoutProps}
           itemLayoutProps={itemLayoutProps}
           itemPositions={itemPositions}
@@ -92,7 +88,7 @@ const ExercisesContainer = () => {
 
   return (
     <FlexBox flex={1}>
-      <FlatList data={data} renderItem={renderItemHandler} />
+      <ScrollView>{data.map(renderItemHandler)}</ScrollView>
     </FlexBox>
   );
 };
