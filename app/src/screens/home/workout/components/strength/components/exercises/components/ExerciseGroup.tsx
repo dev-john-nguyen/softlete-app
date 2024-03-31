@@ -9,15 +9,19 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useEffect, useRef } from 'react';
-import { ItemLayoutAttributesProps } from '../types';
+import { ItemLayoutProps, ItemPositionProps } from '../types';
 
 type Props = {
   index: number;
   item: any;
-  setItemLayoutProps: React.Dispatch<React.SetStateAction<Map<any, any>>>;
-  itemLayoutProps: Map<any, any>;
-  itemPositions: Map<any, any>;
-  setItemPositions: React.Dispatch<React.SetStateAction<Map<any, any>>>;
+  setItemLayoutProps: React.Dispatch<
+    React.SetStateAction<Map<string, ItemLayoutProps>>
+  >;
+  itemLayoutProps: Map<string, ItemLayoutProps>;
+  itemPositions: Map<string, ItemPositionProps>;
+  setItemPositions: React.Dispatch<
+    React.SetStateAction<Map<string, ItemPositionProps>>
+  >;
   setData: React.Dispatch<
     React.SetStateAction<
       {
@@ -55,7 +59,9 @@ const ExerciseGroup = ({
 
     // Calculate new translateY values for all items based on the new index of the dragged item
     const sortedItems = ids.sort(
-      (a, b) => itemPositions.get(a).sortOrder - itemPositions.get(b).sortOrder,
+      (a, b) =>
+        (itemPositions.get(a)?.sortOrder as number) -
+        (itemPositions.get(b)?.sortOrder as number),
     );
 
     // Remove the dragged item and splice it into its new position
@@ -78,17 +84,20 @@ const ExerciseGroup = ({
         sortOrder: i,
       });
       const itemProps = itemLayoutProps.get(itemId);
-      accumulatedHeight += itemProps.height + 10;
+      accumulatedHeight += (itemProps?.height as number) + 10;
     });
 
     setItemPositions(newItemPositions);
   };
 
   const moveHandler = (newPosition: number) => {
-    translateY.value = newPosition + itemPositions.get(item.id).originalY;
+    translateY.value =
+      newPosition + (itemPositions.get(item.id)?.originalY as number);
 
     const orderedItemIds = [...itemPositions.keys()].sort(
-      (a, b) => itemPositions.get(a).positionY - itemPositions.get(b).positionY,
+      (a, b) =>
+        (itemPositions.get(a)?.positionY as number) -
+        (itemPositions.get(b)?.positionY as number),
     );
 
     const currentIndex = orderedItemIds.indexOf(item.id);
@@ -101,10 +110,10 @@ const ExerciseGroup = ({
         continue;
       }
 
-      const itemPosition = itemPositions.get(itemId).positionY;
-      const itemHeight = itemLayoutProps.get(itemId).height;
+      const itemPosition = itemPositions.get(itemId)?.positionY as number;
+      const itemHeight = itemLayoutProps.get(itemId)?.height as number;
       const dragPosition =
-        translateY.value + itemLayoutProps.get(itemId).height / 2;
+        translateY.value + (itemLayoutProps.get(itemId)?.height as number) / 2;
 
       if (currentIndex < i && dragPosition > itemPosition + itemHeight / 2) {
         newIndex = i;
@@ -125,7 +134,7 @@ const ExerciseGroup = ({
 
   const finalizedPositions = () => {
     const sortedPositions = Array.from(itemPositions.entries())
-      .sort((a, b) => a[0].sortOrder - b[0].sortOrder)
+      .sort((a, b) => (a[1]?.sortOrder as number) - (b[1]?.sortOrder as number))
       .map(([key]) => ({ id: key, label: key }));
     setData(sortedPositions);
     setItemPositions(props => {

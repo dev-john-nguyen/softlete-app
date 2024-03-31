@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import ExerciseGroup from './components/ExerciseGroup';
+import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
+import { ItemLayoutProps, ItemPositionProps } from './types';
 
 const DATA = Array.from({ length: 5 }, (_, i) => ({
   id: `Item ${i + 1}`,
@@ -10,13 +12,25 @@ const DATA = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 const ExercisesContainer = () => {
-  const [itemLayoutProps, setItemLayoutProps] = useState(new Map());
-  const [itemPositions, setItemPositions] = useState(new Map());
+  const { workout } = useWorkoutState();
+  const [itemLayoutProps, setItemLayoutProps] = useState<
+    Map<string, ItemLayoutProps>
+  >(new Map());
+  const [itemPositions, setItemPositions] = useState<
+    Map<string, ItemPositionProps>
+  >(new Map());
   const [data, setData] = useState(DATA);
 
   useEffect(() => {
-    // validate that all items have a height before proceeding
+    const results = [...itemPositions.entries()].map(([id, value]) => [
+      id,
+      value.sortOrder,
+    ]);
+    console.log(results);
+  }, [itemPositions]);
 
+  useEffect(() => {
+    // validate that all items have a height before proceeding
     if (itemLayoutProps.size !== data.length) {
       return;
     }
@@ -46,7 +60,7 @@ const ExercisesContainer = () => {
           itemPosState.set(item.id, newLayoutProps);
         }
         const itemProps = itemLayoutProps.get(item.id);
-        accumulatedHeight += itemProps.height + 10;
+        accumulatedHeight += (itemProps?.height as number) + 10;
       });
       return new Map(itemPosState);
     });
