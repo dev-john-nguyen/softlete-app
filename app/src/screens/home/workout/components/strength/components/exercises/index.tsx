@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import ExerciseGroup from './components/ExerciseGroup';
-import { ItemLayoutAttributesProps } from './types';
 
 const DATA = Array.from({ length: 5 }, (_, i) => ({
   id: `Item ${i + 1}`,
@@ -11,32 +10,47 @@ const DATA = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 const ExercisesContainer = () => {
-  const [itemLayoutProps, setItemLayoutProps] = useState<{
-    [id: string]: ItemLayoutAttributesProps;
-  }>({});
+  const [itemLayoutProps, setItemLayoutProps] = useState(new Map());
   const [itemPositions, setItemPositions] = useState(new Map());
   const [data, setData] = useState(DATA);
 
   useEffect(() => {
-    // Calculate new translateY values for all items based on the new index of the dragged item
-    const sortedItems = Object.keys(itemLayoutProps).sort(
-      (a, b) => itemLayoutProps[a].pageY - itemLayoutProps[b].pageY,
-    );
-    const newItemPositions = new Map();
-    // Update translateY based on new order
-    let accumulatedHeight = 0;
-    sortedItems.forEach((itemId, index) => {
-      newItemPositions.set(itemId, {
-        positionY: accumulatedHeight,
-        originalY: accumulatedHeight,
-        sortOrder: index,
-      });
-      const itemProps = itemLayoutProps[itemId];
-      accumulatedHeight += itemProps.height + 10;
-    });
+    // validate that all items have a height before proceeding
 
-    setItemPositions(newItemPositions);
-  }, [itemLayoutProps]);
+    if (itemLayoutProps.size !== data.length) {
+      return;
+    }
+
+    for (const layoutProps of itemLayoutProps.values()) {
+      if (!layoutProps.height) {
+        return;
+      }
+    }
+
+    setItemPositions(itemPosState => {
+      // Update translateY based on new order
+      let accumulatedHeight = 0;
+      data.forEach((item, index) => {
+        const itemPos = itemPosState.get(item.id);
+        const newLayoutProps = {
+          positionY: accumulatedHeight,
+          originalY: accumulatedHeight,
+          sortOrder: index,
+        };
+        if (itemPos) {
+          itemPosState.set(item.id, {
+            ...itemPos,
+            ...newLayoutProps,
+          });
+        } else {
+          itemPosState.set(item.id, newLayoutProps);
+        }
+        const itemProps = itemLayoutProps.get(item.id);
+        accumulatedHeight += itemProps.height + 10;
+      });
+      return new Map(itemPosState);
+    });
+  }, [data, itemLayoutProps]);
 
   const renderItemHandler = useCallback(
     (

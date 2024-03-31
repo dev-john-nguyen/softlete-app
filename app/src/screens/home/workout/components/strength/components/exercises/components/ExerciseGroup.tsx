@@ -14,12 +14,8 @@ import { ItemLayoutAttributesProps } from '../types';
 type Props = {
   index: number;
   item: any;
-  setItemLayoutProps: React.Dispatch<
-    React.SetStateAction<{
-      [id: string]: ItemLayoutAttributesProps;
-    }>
-  >;
-  itemLayoutProps: { [id: string]: ItemLayoutAttributesProps };
+  setItemLayoutProps: React.Dispatch<React.SetStateAction<Map<any, any>>>;
+  itemLayoutProps: Map<any, any>;
   itemPositions: Map<any, any>;
   setItemPositions: React.Dispatch<React.SetStateAction<Map<any, any>>>;
   setData: React.Dispatch<
@@ -55,13 +51,11 @@ const ExerciseGroup = ({
   }, [isDragging.value, item.id, itemPositions, translateY]);
 
   const updateAllPositions = (draggedItemId: string, newIndex: number) => {
-    // Calculate new translateY values for all items based on the new index of the dragged item
-    // Create a shallow copy of the itemLayoutProps to manipulate
-    const updatedLayoutProps = { ...itemLayoutProps };
+    const ids = [...itemPositions.keys()];
 
     // Calculate new translateY values for all items based on the new index of the dragged item
-    const sortedItems = Object.keys(updatedLayoutProps).sort(
-      (a, b) => updatedLayoutProps[a].pageY - updatedLayoutProps[b].pageY,
+    const sortedItems = ids.sort(
+      (a, b) => itemPositions.get(a).sortOrder - itemPositions.get(b).sortOrder,
     );
 
     // Remove the dragged item and splice it into its new position
@@ -69,11 +63,13 @@ const ExerciseGroup = ({
       sortedItems.indexOf(draggedItemId),
       1,
     )[0];
+
     sortedItems.splice(newIndex, 0, removedItem);
 
     const newItemPositions = new Map();
     // Update translateY based on new order
     let accumulatedHeight = 0;
+
     sortedItems.forEach((itemId, i) => {
       const props = itemPositions.get(itemId);
       newItemPositions.set(itemId, {
@@ -81,7 +77,7 @@ const ExerciseGroup = ({
         positionY: accumulatedHeight,
         sortOrder: i,
       });
-      const itemProps = itemLayoutProps[itemId];
+      const itemProps = itemLayoutProps.get(itemId);
       accumulatedHeight += itemProps.height + 10;
     });
 
@@ -106,9 +102,9 @@ const ExerciseGroup = ({
       }
 
       const itemPosition = itemPositions.get(itemId).positionY;
-      const itemHeight = itemLayoutProps[itemId].height;
+      const itemHeight = itemLayoutProps.get(itemId).height;
       const dragPosition =
-        translateY.value + itemLayoutProps[item.id].height / 2;
+        translateY.value + itemLayoutProps.get(itemId).height / 2;
 
       if (currentIndex < i && dragPosition > itemPosition + itemHeight / 2) {
         newIndex = i;
@@ -165,15 +161,24 @@ const ExerciseGroup = ({
 
   const onLayout = () => {
     myComponentRef.current?.measure((x, y, width, height, pageX, pageY) => {
+      const newLayoutMeasurements = {
+        height: height,
+        translateY: 0,
+        pageX,
+        pageY,
+      };
       setItemLayoutProps(layoutProps => {
-        if (layoutProps[item.id]) {
-          return layoutProps;
+        const itemProps = layoutProps.get(item.id);
+        if (itemProps) {
+          layoutProps.set(item.id, {
+            ...itemProps,
+            ...newLayoutMeasurements,
+          });
+          return layoutProps; // don't rerender
+        } else {
+          layoutProps.set(item.id, newLayoutMeasurements);
         }
-        const newLayoutProps = {
-          ...layoutProps,
-          [item.id]: { pageX, pageY, height, translateY: 0 },
-        };
-        return newLayoutProps;
+        return new Map(layoutProps);
       });
     });
   };
