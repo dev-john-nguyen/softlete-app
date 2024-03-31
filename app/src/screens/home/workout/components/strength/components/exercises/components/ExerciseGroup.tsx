@@ -9,7 +9,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useEffect, useRef } from 'react';
-import { ItemLayoutProps, ItemPositionProps } from '../types';
+import {
+  ExerciseDataProps,
+  ItemLayoutProps,
+  ItemPositionProps,
+} from '../types';
 
 type Props = {
   index: number;
@@ -22,14 +26,7 @@ type Props = {
   setItemPositions: React.Dispatch<
     React.SetStateAction<Map<string, ItemPositionProps>>
   >;
-  setData: React.Dispatch<
-    React.SetStateAction<
-      {
-        id: string;
-        label: string;
-      }[]
-    >
-  >;
+  setData: React.Dispatch<React.SetStateAction<ExerciseDataProps[]>>;
 };
 
 const lightColor = rgba(Colors.whiteRbg, 0.2);
@@ -133,10 +130,14 @@ const ExerciseGroup = ({
   };
 
   const finalizedPositions = () => {
-    const sortedPositions = Array.from(itemPositions.entries())
-      .sort((a, b) => (a[1]?.sortOrder as number) - (b[1]?.sortOrder as number))
-      .map(([key]) => ({ id: key, label: key }));
-    setData(sortedPositions);
+    setData(() => {
+      const sortedPositions = Array.from(itemPositions.entries())
+        .sort(
+          (a, b) => (a[1]?.sortOrder as number) - (b[1]?.sortOrder as number),
+        )
+        .map(([, props]) => props.data);
+      return sortedPositions;
+    });
     setItemPositions(props => {
       props.forEach((prop, key) => {
         props.set(key, {

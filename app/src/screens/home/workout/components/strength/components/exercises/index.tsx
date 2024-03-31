@@ -4,30 +4,29 @@ import { ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import ExerciseGroup from './components/ExerciseGroup';
 import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
-import { ItemLayoutProps, ItemPositionProps } from './types';
-
-const DATA = Array.from({ length: 5 }, (_, i) => ({
-  id: `Item ${i + 1}`,
-  label: `Item ${i + 1}`,
-}));
+import { ExerciseDataProps, ItemLayoutProps, ItemPositionProps } from './types';
 
 const ExercisesContainer = () => {
   const { workout } = useWorkoutState();
+  const exercises = useMemo(() => {
+    return workout.exercises.map(exercise => {
+      return {
+        id: exercise._id as string,
+        label: exercise.exercise?.name ?? '',
+      };
+    });
+  }, [workout]);
   const [itemLayoutProps, setItemLayoutProps] = useState<
     Map<string, ItemLayoutProps>
   >(new Map());
   const [itemPositions, setItemPositions] = useState<
     Map<string, ItemPositionProps>
   >(new Map());
-  const [data, setData] = useState(DATA);
+  const [data, setData] = useState<ExerciseDataProps[]>(exercises);
 
   useEffect(() => {
-    const results = [...itemPositions.entries()].map(([id, value]) => [
-      id,
-      value.sortOrder,
-    ]);
-    console.log(results);
-  }, [itemPositions]);
+    console.log(data.map(props => props.label));
+  }, [data]);
 
   useEffect(() => {
     // validate that all items have a height before proceeding
@@ -57,7 +56,10 @@ const ExercisesContainer = () => {
             ...newLayoutProps,
           });
         } else {
-          itemPosState.set(item.id, newLayoutProps);
+          itemPosState.set(item.id, {
+            ...newLayoutProps,
+            data: item,
+          });
         }
         const itemProps = itemLayoutProps.get(item.id);
         accumulatedHeight += (itemProps?.height as number) + 10;
