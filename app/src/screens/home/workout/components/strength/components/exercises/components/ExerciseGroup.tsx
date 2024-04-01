@@ -1,6 +1,6 @@
 import { PrimaryText } from '@app/elements';
 import { Colors, rgba } from '@app/utils';
-import { StyleSheet, View, Vibration } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -9,100 +9,98 @@ import Animated, {
   withTiming,
   SharedValue,
   cancelAnimation,
+  useAnimatedReaction,
+  withSpring,
 } from 'react-native-reanimated';
-import { useEffect, useRef } from 'react';
-import {
-  ExerciseDataProps,
-  ItemLayoutProps,
-  ItemPositionProps,
-} from '../types';
+import { useRef, useState } from 'react';
+import { CUSTOM_OFF_SET, ExerciseDataProps, ItemLayoutProps } from '../types';
+import { objectMove } from '../helpers';
 
 type Props = {
-  index: number;
   item: any;
   setItemLayoutProps: React.Dispatch<
     React.SetStateAction<Map<string, ItemLayoutProps>>
-  >;
-  itemLayoutProps: Map<string, ItemLayoutProps>;
-  itemPositions: Map<string, ItemPositionProps>;
-  setItemPositions: React.Dispatch<
-    React.SetStateAction<Map<string, ItemPositionProps>>
   >;
   setData: React.Dispatch<React.SetStateAction<ExerciseDataProps[]>>;
   scrollLayoutProps: ItemLayoutProps | undefined;
   scrollY: SharedValue<number>;
   scrollViewHeight: number;
   isAnItemDragging: SharedValue<boolean>;
+  positions: SharedValue<any>;
 };
 
 const lightColor = rgba(Colors.whiteRbg, 0.2);
 
 const ExerciseGroup = ({
-  index,
   item,
   setItemLayoutProps,
-  itemLayoutProps,
-  itemPositions,
-  setItemPositions,
   setData,
   scrollLayoutProps,
   scrollY,
   scrollViewHeight,
   isAnItemDragging,
+  positions,
 }: Props) => {
   const translateY = useSharedValue(0);
-  const isDragging = useSharedValue(false);
+  const [isMoving, setIsMoving] = useState(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
-  const isAnimationRunning = useSharedValue(false);
 
-  useEffect(() => {
-    const itemPos = itemPositions.get(item.id);
-    if (itemPos && !isDragging.value) {
-      translateY.value = withTiming(itemPos.positionY);
-    }
-  }, [isDragging.value, item.id, itemPositions, translateY]);
+  useAnimatedReaction(
+    () => positions.value[item.id]?.positionY,
+    (currentPosition, previousPosition) => {
+      if (
+        currentPosition !== undefined &&
+        currentPosition !== previousPosition &&
+        !isMoving
+      ) {
+        translateY.value = withSpring(currentPosition);
+      }
+    },
+    [isMoving],
+  );
 
-  const updateAllPositions = (draggedItemId: string, newIndex: number) => {
-    const ids = [...itemPositions.keys()];
+  const finalizedPositions = () => {
+    setData(data => {
+      const ids = Object.keys(positions.value);
+      const sortedPositions = ids.sort(
+        (a, b) =>
+          (positions.value[a]?.sortOrder as number) -
+          (positions.value[b]?.sortOrder as number),
+      );
+      const sortedData: ExerciseDataProps[] = [];
 
-    // Calculate new translateY values for all items based on the new index of the dragged item
-    const sortedItems = ids.sort(
-      (a, b) =>
-        (itemPositions.get(a)?.sortOrder as number) -
-        (itemPositions.get(b)?.sortOrder as number),
-    );
-
-    // Remove the dragged item and splice it into its new position
-    const removedItem = sortedItems.splice(
-      sortedItems.indexOf(draggedItemId),
-      1,
-    )[0];
-
-    sortedItems.splice(newIndex, 0, removedItem);
-
-    const newItemPositions = new Map();
-    // Update translateY based on new order
-    let accumulatedHeight = 0;
-
-    sortedItems.forEach((itemId, i) => {
-      const props = itemPositions.get(itemId);
-      newItemPositions.set(itemId, {
-        ...props,
-        positionY: accumulatedHeight,
-        sortOrder: i,
+      sortedPositions.forEach(id => {
+        const targetData = data.find(d => d.id === id);
+        if (targetData) {
+          sortedData.push(targetData);
+        }
       });
-      const itemProps = itemLayoutProps.get(itemId);
-      accumulatedHeight += (itemProps?.height as number) + 10;
+      return sortedData;
     });
+  };
 
-    setItemPositions(newItemPositions);
+  const autoScrollHandler = () => {
+    'worklet';
+    const scrollHeight = scrollLayoutProps?.height ?? 0;
+    // auto scroll logic
+    if (translateY.value <= scrollY.value + CUSTOM_OFF_SET) {
+      scrollY.value = withTiming(0, { duration: 1500 });
+    } else if (translateY.value >= scrollY.value + scrollHeight - 50) {
+      const contentHeight = scrollViewHeight;
+      const containerHeight = scrollHeight;
+      const maxScroll = contentHeight - containerHeight;
+      scrollY.value = withTiming(maxScroll, { duration: 1500 });
+    } else {
+      cancelAnimation(scrollY);
+    }
   };
 
   const moveHandler = () => {
-    const orderedItemIds = [...itemPositions.keys()].sort(
+    'worklet';
+    const orderedItemIds = Object.keys(positions.value).sort(
       (a, b) =>
-        (itemPositions.get(a)?.positionY as number) -
-        (itemPositions.get(b)?.positionY as number),
+        (positions.value[a].positionY as number) -
+        (positions.value[b].positionY as number),
     );
 
     const currentIndex = orderedItemIds.indexOf(item.id);
@@ -115,10 +113,9 @@ const ExerciseGroup = ({
         continue;
       }
 
-      const itemPosition = itemPositions.get(itemId)?.positionY as number;
-      const itemHeight = itemLayoutProps.get(itemId)?.height as number;
-      const dragPosition =
-        translateY.value + (itemLayoutProps.get(itemId)?.height as number) / 2;
+      const itemPosition = positions.value[itemId]?.positionY as number;
+      const itemHeight = positions.value[itemId]?.height as number;
+      const dragPosition = translateY.value + itemHeight / 2;
 
       if (currentIndex < i && dragPosition > itemPosition + itemHeight / 2) {
         newIndex = i;
@@ -131,76 +128,40 @@ const ExerciseGroup = ({
         break; // Found the new position, exit loop
       }
     }
-
     if (newIndex !== currentIndex) {
-      Vibration.vibrate();
-      updateAllPositions(item.id, newIndex);
+      positions.value = objectMove(positions.value, item.id, newIndex);
     }
-  };
-
-  const finalizedPositions = () => {
-    setData(() => {
-      const sortedPositions = Array.from(itemPositions.entries())
-        .sort(
-          (a, b) => (a[1]?.sortOrder as number) - (b[1]?.sortOrder as number),
-        )
-        .map(([, props]) => props.data);
-      return sortedPositions;
-    });
-    setItemPositions(props => {
-      props.forEach((prop, key) => {
-        props.set(key, {
-          ...prop,
-          originalY: prop.positionY,
-        });
-      });
-      return new Map(props);
-    });
   };
 
   const gesture = Gesture.Pan()
     .onStart(() => {
-      isDragging.value = true; // Set to true when the drag starts
+      runOnJS(setIsMoving)(true);
       isAnItemDragging.value = true;
     })
     .onUpdate(event => {
-      const customOffSet = 50;
       const scrollPageY = scrollLayoutProps?.pageY ?? 0;
-      const scrollHeight = scrollLayoutProps?.height ?? 0;
-
       const positionY =
-        scrollY.value + event.absoluteY - scrollPageY - customOffSet;
-
-      if (positionY <= scrollY.value + customOffSet) {
-        scrollY.value = withTiming(0, { duration: 1500 });
-      } else if (
-        positionY >= scrollY.value + scrollHeight - 50 &&
-        !isAnimationRunning.value
-      ) {
-        const contentHeight = scrollViewHeight;
-        const containerHeight = scrollHeight;
-        const maxScroll = contentHeight - containerHeight;
-        scrollY.value = withTiming(maxScroll, { duration: 1500 });
-      } else {
-        cancelAnimation(scrollY);
-      }
-
+        scrollY.value + event.absoluteY - scrollPageY - CUSTOM_OFF_SET;
       translateY.value = positionY;
-      runOnJS(moveHandler)();
+      autoScrollHandler();
+      moveHandler();
     })
     .onEnd(() => {
       runOnJS(finalizedPositions)();
-      isDragging.value = false; // Reset dragging state when the drag ends
+      runOnJS(setIsMoving)(false);
       isAnItemDragging.value = false;
+      translateY.value = positions.value[item.id]?.positionY;
     });
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    // transform: [{ translateY: translateY.value }],
-    position: 'absolute',
-    top: translateY.value,
-    zIndex: isDragging ? 100 : 1,
-    backgroundColor: isDragging.value ? Colors.white : lightColor,
-  }));
+  const animatedStyle = useAnimatedStyle(
+    () => ({
+      position: 'absolute',
+      top: translateY.value,
+      zIndex: isMoving ? 100 : 1,
+      backgroundColor: isMoving ? Colors.white : lightColor,
+    }),
+    [isMoving],
+  );
 
   const onLayout = () => {
     myComponentRef.current?.measure((x, y, width, height, pageX, pageY) => {

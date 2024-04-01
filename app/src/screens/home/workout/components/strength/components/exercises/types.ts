@@ -5,14 +5,9 @@ export type ItemLayoutProps = {
   translateY: number;
 };
 
-export type ItemPositionProps = {
-  positionY: number;
-  originalY: number;
-  sortOrder: number;
-  data: ExerciseDataProps;
-};
-
 export type ExerciseDataProps = {
   label: string;
   id: string;
 };
+
+export const CUSTOM_OFF_SET = 50;

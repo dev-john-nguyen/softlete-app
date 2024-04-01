@@ -2,7 +2,7 @@ import { FlexBox } from '@app/ui';
 import { useEffect, useMemo, useState } from 'react';
 import ExerciseGroup from './components/ExerciseGroup';
 import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
-import { ExerciseDataProps, ItemLayoutProps, ItemPositionProps } from './types';
+import { ExerciseDataProps, ItemLayoutProps } from './types';
 import Animated, {
   AnimatedRef,
   scrollTo,
@@ -25,15 +25,13 @@ const ExercisesContainer = () => {
   const [itemLayoutProps, setItemLayoutProps] = useState<
     Map<string, ItemLayoutProps>
   >(new Map());
-  const [itemPositions, setItemPositions] = useState<
-    Map<string, ItemPositionProps>
-  >(new Map());
   const [data, setData] = useState<ExerciseDataProps[]>(exercises);
   const [scrollLayoutProps, setScrollLayoutProps] = useState<ItemLayoutProps>();
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const scrollViewRef = useAnimatedRef() as AnimatedRef<Animated.ScrollView>;
   const scrollY = useSharedValue(0);
   const isAnItemDragging = useSharedValue(false);
+  const positions = useSharedValue({}) as any;
 
   useEffect(() => {
     console.log(data.map(props => props.label));
@@ -50,51 +48,35 @@ const ExercisesContainer = () => {
         return;
       }
     }
+    const newPositions = {} as any;
 
-    setItemPositions(itemPosState => {
-      // Update translateY based on new order
-      let accumulatedHeight = 0;
-      data.forEach((item, index) => {
-        const itemPos = itemPosState.get(item.id);
-        const newLayoutProps = {
-          positionY: accumulatedHeight,
-          originalY: accumulatedHeight,
-          sortOrder: index,
-        };
-        if (itemPos) {
-          itemPosState.set(item.id, {
-            ...itemPos,
-            ...newLayoutProps,
-          });
-        } else {
-          itemPosState.set(item.id, {
-            ...newLayoutProps,
-            data: item,
-          });
-        }
-        const itemProps = itemLayoutProps.get(item.id);
-        accumulatedHeight += (itemProps?.height as number) + 10;
-      });
-      setScrollViewHeight(accumulatedHeight);
-      return new Map(itemPosState);
+    // Update translateY based on new order
+    let accumulatedHeight = 0;
+    data.forEach((item, index) => {
+      const itemProps = itemLayoutProps.get(item.id);
+      newPositions[item.id] = {
+        positionY: accumulatedHeight,
+        height: itemProps?.height as number,
+        sortOrder: index,
+      };
+      accumulatedHeight += (itemProps?.height as number) + 10;
     });
-  }, [data, itemLayoutProps]);
+    setScrollViewHeight(accumulatedHeight);
+    positions.value = newPositions;
+  }, [data, itemLayoutProps, positions]);
 
-  const renderItemHandler = (item: ExerciseDataProps, index: number) => {
+  const renderItemHandler = (item: ExerciseDataProps) => {
     return (
       <ExerciseGroup
         key={item.id}
         item={item}
-        index={index}
         setItemLayoutProps={setItemLayoutProps}
-        itemLayoutProps={itemLayoutProps}
-        itemPositions={itemPositions}
-        setItemPositions={setItemPositions}
         setData={setData}
         scrollLayoutProps={scrollLayoutProps}
         scrollY={scrollY}
         scrollViewHeight={scrollViewHeight}
         isAnItemDragging={isAnItemDragging}
+        positions={positions}
       />
     );
   };
