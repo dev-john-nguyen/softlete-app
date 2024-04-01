@@ -1,12 +1,14 @@
 import { PrimaryText } from '@app/elements';
 import { Colors, rgba } from '@app/utils';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Vibration } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   runOnJS,
   withTiming,
+  SharedValue,
+  cancelAnimation,
 } from 'react-native-reanimated';
 import { useEffect, useRef } from 'react';
 import {
@@ -27,6 +29,10 @@ type Props = {
     React.SetStateAction<Map<string, ItemPositionProps>>
   >;
   setData: React.Dispatch<React.SetStateAction<ExerciseDataProps[]>>;
+  scrollLayoutProps: ItemLayoutProps | undefined;
+  scrollY: SharedValue<number>;
+  scrollViewHeight: number;
+  isAnItemDragging: SharedValue<boolean>;
 };
 
 const lightColor = rgba(Colors.whiteRbg, 0.2);
@@ -39,10 +45,15 @@ const ExerciseGroup = ({
   itemPositions,
   setItemPositions,
   setData,
+  scrollLayoutProps,
+  scrollY,
+  scrollViewHeight,
+  isAnItemDragging,
 }: Props) => {
   const translateY = useSharedValue(0);
   const isDragging = useSharedValue(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
+  const isAnimationRunning = useSharedValue(false);
 
   useEffect(() => {
     const itemPos = itemPositions.get(item.id);
@@ -87,10 +98,7 @@ const ExerciseGroup = ({
     setItemPositions(newItemPositions);
   };
 
-  const moveHandler = (newPosition: number) => {
-    translateY.value =
-      newPosition + (itemPositions.get(item.id)?.originalY as number);
-
+  const moveHandler = () => {
     const orderedItemIds = [...itemPositions.keys()].sort(
       (a, b) =>
         (itemPositions.get(a)?.positionY as number) -
@@ -125,6 +133,7 @@ const ExerciseGroup = ({
     }
 
     if (newIndex !== currentIndex) {
+      Vibration.vibrate();
       updateAllPositions(item.id, newIndex);
     }
   };
@@ -152,13 +161,37 @@ const ExerciseGroup = ({
   const gesture = Gesture.Pan()
     .onStart(() => {
       isDragging.value = true; // Set to true when the drag starts
+      isAnItemDragging.value = true;
     })
     .onUpdate(event => {
-      runOnJS(moveHandler)(event.translationY);
+      const customOffSet = 50;
+      const scrollPageY = scrollLayoutProps?.pageY ?? 0;
+      const scrollHeight = scrollLayoutProps?.height ?? 0;
+
+      const positionY =
+        scrollY.value + event.absoluteY - scrollPageY - customOffSet;
+
+      if (positionY <= scrollY.value + customOffSet) {
+        scrollY.value = withTiming(0, { duration: 1500 });
+      } else if (
+        positionY >= scrollY.value + scrollHeight - 50 &&
+        !isAnimationRunning.value
+      ) {
+        const contentHeight = scrollViewHeight;
+        const containerHeight = scrollHeight;
+        const maxScroll = contentHeight - containerHeight;
+        scrollY.value = withTiming(maxScroll, { duration: 1500 });
+      } else {
+        cancelAnimation(scrollY);
+      }
+
+      translateY.value = positionY;
+      runOnJS(moveHandler)();
     })
     .onEnd(() => {
       runOnJS(finalizedPositions)();
       isDragging.value = false; // Reset dragging state when the drag ends
+      isAnItemDragging.value = false;
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -213,7 +246,7 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 50,
-    width: '100%',
+    width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,

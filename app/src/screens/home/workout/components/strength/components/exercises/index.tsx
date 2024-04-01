@@ -1,9 +1,16 @@
 import { FlexBox } from '@app/ui';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
 import ExerciseGroup from './components/ExerciseGroup';
 import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
 import { ExerciseDataProps, ItemLayoutProps, ItemPositionProps } from './types';
+import Animated, {
+  AnimatedRef,
+  scrollTo,
+  useAnimatedReaction,
+  useAnimatedRef,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const ExercisesContainer = () => {
   const { workout } = useWorkoutState();
@@ -22,6 +29,11 @@ const ExercisesContainer = () => {
     Map<string, ItemPositionProps>
   >(new Map());
   const [data, setData] = useState<ExerciseDataProps[]>(exercises);
+  const [scrollLayoutProps, setScrollLayoutProps] = useState<ItemLayoutProps>();
+  const [scrollViewHeight, setScrollViewHeight] = useState(0);
+  const scrollViewRef = useAnimatedRef() as AnimatedRef<Animated.ScrollView>;
+  const scrollY = useSharedValue(0);
+  const isAnItemDragging = useSharedValue(false);
 
   useEffect(() => {
     console.log(data.map(props => props.label));
@@ -63,32 +75,77 @@ const ExercisesContainer = () => {
         const itemProps = itemLayoutProps.get(item.id);
         accumulatedHeight += (itemProps?.height as number) + 10;
       });
-      console.log(accumulatedHeight);
+      setScrollViewHeight(accumulatedHeight);
       return new Map(itemPosState);
     });
   }, [data, itemLayoutProps]);
 
-  const renderItemHandler = useCallback(
-    (item: ExerciseDataProps, index: number) => {
-      return (
-        <ExerciseGroup
-          key={item.id}
-          item={item}
-          index={index}
-          setItemLayoutProps={setItemLayoutProps}
-          itemLayoutProps={itemLayoutProps}
-          itemPositions={itemPositions}
-          setItemPositions={setItemPositions}
-          setData={setData}
-        />
-      );
+  const renderItemHandler = (item: ExerciseDataProps, index: number) => {
+    return (
+      <ExerciseGroup
+        key={item.id}
+        item={item}
+        index={index}
+        setItemLayoutProps={setItemLayoutProps}
+        itemLayoutProps={itemLayoutProps}
+        itemPositions={itemPositions}
+        setItemPositions={setItemPositions}
+        setData={setData}
+        scrollLayoutProps={scrollLayoutProps}
+        scrollY={scrollY}
+        scrollViewHeight={scrollViewHeight}
+        isAnItemDragging={isAnItemDragging}
+      />
+    );
+  };
+
+  const getLayoutMeasurements = () => {
+    (scrollViewRef.current as any).measure(
+      (
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        pageX: number,
+        pageY: number,
+      ) => {
+        console.log(pageY);
+        setScrollLayoutProps({
+          height,
+          pageX,
+          pageY,
+          translateY: 0,
+        });
+      },
+    );
+  };
+
+  useAnimatedReaction(
+    () => scrollY.value,
+    scrolling => {
+      return scrollTo(scrollViewRef, 0, scrolling, false);
     },
-    [itemLayoutProps, setItemLayoutProps, itemPositions],
   );
+
+  const onScroll = useAnimatedScrollHandler(event => {
+    if (isAnItemDragging.value) {
+      return; // don't update if an item is dragging
+    }
+    scrollY.value = event.contentOffset.y;
+  });
 
   return (
     <FlexBox flex={1}>
-      <ScrollView>{data.map(renderItemHandler)}</ScrollView>
+      <Animated.ScrollView
+        ref={scrollViewRef}
+        onLayout={getLayoutMeasurements}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        contentContainerStyle={{
+          height: scrollViewHeight,
+        }}>
+        {data.map(renderItemHandler)}
+      </Animated.ScrollView>
     </FlexBox>
   );
 };
