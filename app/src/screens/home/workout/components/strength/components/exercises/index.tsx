@@ -1,8 +1,11 @@
 import { FlexBox } from '@app/ui';
 import { useEffect, useMemo, useState } from 'react';
 import ExerciseGroup from './components/ExerciseGroup';
-import { useWorkoutState } from 'src/screens/home/workout/contexts/Workout.context';
-import { ExerciseDataProps, ItemLayoutProps } from './types';
+import {
+  ExerciseDataProps,
+  GAP_BETWEEN_GROUPS,
+  ItemLayoutProps,
+} from './types';
 import Animated, {
   AnimatedRef,
   scrollTo,
@@ -11,21 +14,28 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
+import { useExerciseGroupParams } from 'src/screens/home/workout/hooks/strength.hook';
+import { alphabetMap } from 'src/screens/home/workout/constants';
 
 const ExercisesContainer = () => {
-  const { workout } = useWorkoutState();
-  const exercises = useMemo(() => {
-    return workout.exercises.map(exercise => {
+  const { groupParams } = useExerciseGroupParams();
+
+  const groupedExercises: ExerciseDataProps[] = useMemo(() => {
+    const groupLetterIndexes = [...groupParams.keys()].map(group => {
       return {
-        id: exercise._id as string,
-        label: exercise.exercise?.name ?? '',
+        id: alphabetMap.get(group) as string,
+        label: alphabetMap.get(group) as string,
+        exercises: groupParams.get(group)?.exercises ?? [],
+        letterIndex: group,
       };
     });
-  }, [workout]);
+    return groupLetterIndexes;
+  }, [groupParams]);
+
   const [itemLayoutProps, setItemLayoutProps] = useState<
     Map<string, ItemLayoutProps>
   >(new Map());
-  const [data, setData] = useState<ExerciseDataProps[]>(exercises);
+  const [data, setData] = useState<ExerciseDataProps[]>(groupedExercises);
   const [scrollLayoutProps, setScrollLayoutProps] = useState<ItemLayoutProps>();
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const scrollViewRef = useAnimatedRef() as AnimatedRef<Animated.ScrollView>;
@@ -59,7 +69,7 @@ const ExercisesContainer = () => {
         height: itemProps?.height as number,
         sortOrder: index,
       };
-      accumulatedHeight += (itemProps?.height as number) + 10;
+      accumulatedHeight += (itemProps?.height as number) + GAP_BETWEEN_GROUPS;
     });
     setScrollViewHeight(accumulatedHeight);
     positions.value = newPositions;

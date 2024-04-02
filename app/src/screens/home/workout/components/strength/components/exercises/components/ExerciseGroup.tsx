@@ -1,6 +1,5 @@
 import { PrimaryText } from '@app/elements';
-import { Colors, rgba } from '@app/utils';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Vibration, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
@@ -15,9 +14,10 @@ import Animated, {
 import { useRef, useState } from 'react';
 import { CUSTOM_OFF_SET, ExerciseDataProps, ItemLayoutProps } from '../types';
 import { objectMove } from '../helpers';
+import GroupExercises from './GroupExercises';
 
 type Props = {
-  item: any;
+  item: ExerciseDataProps;
   setItemLayoutProps: React.Dispatch<
     React.SetStateAction<Map<string, ItemLayoutProps>>
   >;
@@ -28,8 +28,6 @@ type Props = {
   isAnItemDragging: SharedValue<boolean>;
   positions: SharedValue<any>;
 };
-
-const lightColor = rgba(Colors.whiteRbg, 0.2);
 
 const ExerciseGroup = ({
   item,
@@ -95,6 +93,8 @@ const ExerciseGroup = ({
     }
   };
 
+  const triggerSingleVibrate = () => Vibration.vibrate();
+
   const moveHandler = () => {
     'worklet';
     const orderedItemIds = Object.keys(positions.value).sort(
@@ -129,11 +129,13 @@ const ExerciseGroup = ({
       }
     }
     if (newIndex !== currentIndex) {
+      runOnJS(triggerSingleVibrate)();
       positions.value = objectMove(positions.value, item.id, newIndex);
     }
   };
 
   const gesture = Gesture.Pan()
+    .minDistance(10)
     .onStart(() => {
       runOnJS(setIsMoving)(true);
       isAnItemDragging.value = true;
@@ -156,9 +158,17 @@ const ExerciseGroup = ({
   const animatedStyle = useAnimatedStyle(
     () => ({
       position: 'absolute',
+      borderRadius: 10,
       top: translateY.value,
       zIndex: isMoving ? 100 : 1,
-      backgroundColor: isMoving ? Colors.white : lightColor,
+      backgroundColor: isMoving ? '#160303' : 'transparent',
+      shadowColor: '#2C1A1A',
+      shadowOffset: {
+        height: 0,
+        width: 0,
+      },
+      shadowOpacity: withSpring(isMoving ? 1 : 0),
+      shadowRadius: 10,
     }),
     [isMoving],
   );
@@ -193,21 +203,15 @@ const ExerciseGroup = ({
         ref={myComponentRef}
         style={[styles.item, animatedStyle]}
         onLayout={onLayout}>
-        <PrimaryText>{item.label}</PrimaryText>
+        <GroupExercises item={item} />
       </Animated.View>
     </GestureDetector>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   item: {
-    height: 50,
-    width: '90%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,

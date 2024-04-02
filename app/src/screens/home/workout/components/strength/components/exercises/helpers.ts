@@ -1,3 +1,5 @@
+import { GAP_BETWEEN_GROUPS } from './types';
+
 export function objectMove(positions: any, fromId: any, newIndex: any) {
   'worklet';
   const newObject = Object.assign({}, positions);
@@ -26,7 +28,7 @@ export function objectMove(positions: any, fromId: any, newIndex: any) {
       positionY: accumulatedHeight,
       sortOrder: i,
     };
-    accumulatedHeight += props.height + 10;
+    accumulatedHeight += props.height + GAP_BETWEEN_GROUPS;
   });
 
   return newObject;
