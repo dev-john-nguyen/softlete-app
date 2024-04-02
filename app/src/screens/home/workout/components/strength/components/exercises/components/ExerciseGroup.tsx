@@ -1,4 +1,3 @@
-import { PrimaryText } from '@app/elements';
 import { StyleSheet, Vibration, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
