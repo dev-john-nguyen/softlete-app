@@ -4,10 +4,47 @@ import Home from './src';
 import { Provider } from 'react-redux';
 import reducers from './src/services';
 import store from './src/utils/init-redux';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import axios from 'axios';
+import auth from '@react-native-firebase/auth';
 
-const queryClient = new QueryClient();
+async function resetAuthHeader() {
+  const user = auth().currentUser;
+
+  if (!user) {
+    throw new Error('User is not signed in.');
+  }
+
+  const newAuthToken = await user.getIdToken();
+
+  // set new auth token in the header
+  axios.defaults.headers.common.Authorization = `Bearer ${newAuthToken}`;
+  return true;
+}
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      retryDelay: 3000,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error: any) => {
+      console.error(error);
+      const { data } = error.response;
+      if (data.tokenExpired) {
+        // token expired. Try to reapply
+        resetAuthHeader();
+      }
+    },
+  }),
+});
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof reducers>;

@@ -1,5 +1,15 @@
 import { WorkoutExerciseProps } from 'src/services/workout/types';
 
+export type Positions = {
+  [id: string]: PositionProps;
+};
+
+export type PositionProps = {
+  positionY: number;
+  height: number;
+  sortOrder: number;
+};
+
 export type ItemLayoutProps = {
   height: number;
   pageX: number;

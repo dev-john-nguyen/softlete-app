@@ -7,6 +7,9 @@ import { PrimaryText } from '@app/elements';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors } from '@app/utils';
 import ExerciseMoveMenu from './ExerciseMoveMenu';
+import { useDispatch } from 'react-redux';
+import { ThunkAppDispatch } from 'src/services';
+import { removeWorkoutExercise } from 'src/services/workout/actions';
 
 type Props = {
   exercise: WorkoutExerciseProps;
@@ -15,6 +18,9 @@ type Props = {
 
 const ExerciseContainer: FC<Props> = ({ exercise, item }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const dispatch = useDispatch<ThunkAppDispatch>();
+
+  const onRemove = () => dispatch(removeWorkoutExercise(exercise));
 
   if (isMenuOpen) {
     return <ExerciseMoveMenu onClose={() => setIsMenuOpen(false)} />;
@@ -35,7 +41,12 @@ const ExerciseContainer: FC<Props> = ({ exercise, item }) => {
           color={Colors.white}
           onPress={() => setIsMenuOpen(true)}
         />
-        <FontAwesome6Icon name="trash" size={18} color={Colors.white} />
+        <FontAwesome6Icon
+          name="trash"
+          size={18}
+          color={Colors.white}
+          onPress={onRemove}
+        />
         <FontAwesome6Icon name="chevron-right" size={20} color={Colors.white} />
       </FlexBox>
     </FlexBox>

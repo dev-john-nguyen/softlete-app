@@ -11,7 +11,12 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useRef, useState } from 'react';
-import { CUSTOM_OFF_SET, ExerciseDataProps, ItemLayoutProps } from '../types';
+import {
+  CUSTOM_OFF_SET,
+  ExerciseDataProps,
+  ItemLayoutProps,
+  Positions,
+} from '../types';
 import { objectMove } from '../helpers';
 import GroupExercises from './GroupExercises';
 
@@ -25,7 +30,7 @@ type Props = {
   scrollY: SharedValue<number>;
   scrollViewHeight: number;
   isAnItemDragging: SharedValue<boolean>;
-  positions: SharedValue<any>;
+  positions: SharedValue<Positions>;
 };
 
 const ExerciseGroup = ({
@@ -41,6 +46,7 @@ const ExerciseGroup = ({
   const translateY = useSharedValue(0);
   const [isMoving, setIsMoving] = useState(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
+  const initializedPosition = useSharedValue(false);
 
   useAnimatedReaction(
     () => positions.value[item.id]?.positionY,
@@ -50,7 +56,12 @@ const ExerciseGroup = ({
         currentPosition !== previousPosition &&
         !isMoving
       ) {
-        translateY.value = withSpring(currentPosition);
+        if (initializedPosition.value) {
+          translateY.value = withSpring(currentPosition);
+        } else {
+          translateY.value = currentPosition;
+          initializedPosition.value = true;
+        }
       }
     },
     [isMoving],

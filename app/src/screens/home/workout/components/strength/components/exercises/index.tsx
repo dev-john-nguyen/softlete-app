@@ -5,6 +5,7 @@ import {
   ExerciseDataProps,
   GAP_BETWEEN_GROUPS,
   ItemLayoutProps,
+  Positions,
 } from './types';
 import Animated, {
   AnimatedRef,
@@ -19,7 +20,16 @@ import { alphabetMap } from 'src/screens/home/workout/constants';
 
 const ExercisesContainer = () => {
   const { groupParams } = useExerciseGroupParams();
-
+  const [itemLayoutProps, setItemLayoutProps] = useState<
+    Map<string, ItemLayoutProps>
+  >(new Map());
+  const [data, setData] = useState<ExerciseDataProps[]>([]);
+  const [scrollLayoutProps, setScrollLayoutProps] = useState<ItemLayoutProps>();
+  const [scrollViewHeight, setScrollViewHeight] = useState(0);
+  const scrollViewRef = useAnimatedRef() as AnimatedRef<Animated.ScrollView>;
+  const scrollY = useSharedValue(0);
+  const isAnItemDragging = useSharedValue(false);
+  const positions = useSharedValue<Positions>({});
   const groupedExercises: ExerciseDataProps[] = useMemo(() => {
     const groupLetterIndexes = [...groupParams.keys()].map(group => {
       return {
@@ -32,20 +42,9 @@ const ExercisesContainer = () => {
     return groupLetterIndexes;
   }, [groupParams]);
 
-  const [itemLayoutProps, setItemLayoutProps] = useState<
-    Map<string, ItemLayoutProps>
-  >(new Map());
-  const [data, setData] = useState<ExerciseDataProps[]>(groupedExercises);
-  const [scrollLayoutProps, setScrollLayoutProps] = useState<ItemLayoutProps>();
-  const [scrollViewHeight, setScrollViewHeight] = useState(0);
-  const scrollViewRef = useAnimatedRef() as AnimatedRef<Animated.ScrollView>;
-  const scrollY = useSharedValue(0);
-  const isAnItemDragging = useSharedValue(false);
-  const positions = useSharedValue({}) as any;
-
   useEffect(() => {
-    console.log(data.map(props => props.label));
-  }, [data]);
+    setData(groupedExercises);
+  }, [groupedExercises]);
 
   useEffect(() => {
     // validate that all items have a height before proceeding
@@ -58,7 +57,7 @@ const ExercisesContainer = () => {
         return;
       }
     }
-    const newPositions = {} as any;
+    const newPositions = {} as Positions;
 
     // Update translateY based on new order
     let accumulatedHeight = 0;
@@ -101,7 +100,6 @@ const ExercisesContainer = () => {
         pageX: number,
         pageY: number,
       ) => {
-        console.log(pageY);
         setScrollLayoutProps({
           height,
           pageX,
