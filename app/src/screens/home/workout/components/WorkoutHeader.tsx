@@ -19,8 +19,12 @@ const WorkoutHeader = () => {
   }, [workout, generatedPrograms]);
 
   return (
-    <FlexBox column onPress={() => setShowDescription(!showDescription)}>
-      <FlexBox justifyContent="space-between">
+    <FlexBox
+      column
+      onPress={() => setShowDescription(!showDescription)}
+      marginLeft={15}
+      marginRight={15}>
+      <FlexBox justifyContent="space-between" alignItems="center">
         <PrimaryText size="large" textTransform="capitalize">
           {workout.name}
         </PrimaryText>

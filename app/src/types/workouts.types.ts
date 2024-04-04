@@ -152,6 +152,7 @@ export interface WorkoutExerciseProps {
   date?: string;
   programWorkoutUid?: string;
   programTemplateUid?: string;
+  details: ExerciseProps;
 }
 
 export interface WorkoutExerciseDataProps {

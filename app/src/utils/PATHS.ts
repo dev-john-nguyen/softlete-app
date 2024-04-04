@@ -1,5 +1,5 @@
 import { DateSelectionTypes } from 'src/components/analytics/types';
-import { Categories } from '../services/exercises/types';
+import { Categories } from '../types/exercises.types';
 import { GoalSubTypes } from 'src/services/goals/types';
 
 export default {
@@ -108,6 +108,9 @@ export default {
       `api/workouts/get/${userUid}?fromDate=${FromDate}&toDate=${toDate}`,
     fetchOne: (userUid: string, workoutUid: string) => {
       return `api/workouts/get/${userUid}/${workoutUid}`;
+    },
+    getWorkout: (userUid: string, workoutUid: string) => {
+      return `api/workouts/ng-get/${userUid}/${workoutUid}`;
     },
     remove: 'api/workouts/remove',
     removeExercise: 'api/workouts/remove/exercise',
@@ -218,4 +221,4 @@ enum PATHS {
   LOCAL = 'http://localhost:3000/',
 }
 
-export const SERVERURL = PATHS.TEST;
+export const SERVERURL = PATHS.LOCAL;

@@ -37,7 +37,7 @@ const ExerciseGroupIcon: FC<Props> = ({
   const sizeProps = customSizes ?? {
     container: 47,
     fontSize: 25,
-    iconSize: 35,
+    iconSize: 25,
   };
 
   return (

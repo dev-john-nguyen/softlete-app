@@ -27,11 +27,17 @@ const ExerciseContainer: FC<Props> = ({ exercise, item }) => {
   }
 
   return (
-    <FlexBox width="100%" padding={5} alignItems="center" gap={10}>
+    <FlexBox
+      width="100%"
+      padding={5}
+      paddingLeft={0}
+      paddingRight={0}
+      alignItems="center"
+      gap={10}>
       <ExerciseGroupIcon letterIndex={item.letterIndex} />
       <FlexBox flex={1}>
         <PrimaryText size="large" textTransform="capitalize">
-          {exercise.exercise?.name ?? 'N/A'}
+          {exercise.details.name}
         </PrimaryText>
       </FlexBox>
       <FlexBox gap={15}>

@@ -5,7 +5,7 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 
 const ImportDeviceActivity = () => {
   return (
-    <FlexBox column marginTop={20} gap={10}>
+    <FlexBox column marginTop={20} gap={10} marginLeft={25} marginRight={25}>
       <FlexBox gap={10} alignItems="center">
         <FontAwesome6Icon name="upload" size={20} color={Colors.white} />
         <PrimaryText>Import From Device</PrimaryText>

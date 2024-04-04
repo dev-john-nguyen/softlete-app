@@ -1,72 +1,42 @@
 import React from 'react';
-import { ReducerProps } from '../../../services';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
-import { useSelector } from 'react-redux';
 import { HomeStackScreens } from '.././types';
-import Loading from '../../../components/elements/Loading';
 import ScreenTemplate from '../../../components/elements/screen-template';
-import {
-  useNavigation,
-  useNavigationState,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
 import WorkoutContainer from './components/WorkoutContainer';
 import { WorkoutContextProvider } from './contexts';
+import { useFetchWorkout } from './hooks/workout.hooks';
+import { useGoBack } from './hooks/general.hooks';
+import WorkoutError from './components/WorkoutError';
+import WorkoutLoading from './components/WorkoutLoading';
+import WorkoutEmpty from './components/WorkoutEmpty';
 
 const Workout = () => {
-  const { workout, targetProgram } = useSelector((state: ReducerProps) => ({
-    workout: state.workout.viewWorkout,
-    targetProgram: state.program.targetProgram,
-  }));
-
-  const route = useRoute<any>();
   const navigation = useNavigation<any>();
-  const navigationState = useNavigationState(state => state);
+  const { workout, isFetching, isError } = useFetchWorkout();
+  const { onGoBackHandler } = useGoBack();
 
-  const onBackButtonPress = () => {
-    const routes = navigationState.routes;
-    // Don't allow go back to workout header
-    if (routes[routes.length - 2]?.name === HomeStackScreens.WorkoutHeader) {
-      return navigation.navigate(HomeStackScreens.Home);
-    }
+  if (isError) {
+    return <WorkoutError />;
+  }
 
-    if (route.params?.goBackScreen) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { workouts, ...rest } = targetProgram;
-      navigation.navigate(route.params.goBackScreen, {
-        program: rest,
-      });
-      return;
-    }
-
-    if (route.params?.directToDash) {
-      navigation.navigate(HomeStackScreens.Home, {
-        directToDash: true,
-      });
-      return;
-    }
-
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      navigation.navigate(HomeStackScreens.Home);
-    }
-  };
+  if (isFetching) {
+    return <WorkoutLoading />;
+  }
 
   if (!workout) {
-    return <Loading />;
+    return <WorkoutEmpty />;
   }
 
   return (
-    <WorkoutContextProvider>
+    <WorkoutContextProvider workout={workout}>
       <ScreenTemplate
         isBackVisible
-        applyContentPadding
-        onGoBack={onBackButtonPress}
+        onGoBack={onGoBackHandler}
         rightContentFlex={0.4}
         rightContent={
           <FlexBox

@@ -17,6 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useExerciseGroupParams } from 'src/screens/home/workout/hooks/strength.hook';
 import { alphabetMap } from 'src/screens/home/workout/constants';
+import { moderateScale } from '@app/utils';
 
 const ExercisesContainer = () => {
   const { groupParams } = useExerciseGroupParams();
@@ -31,14 +32,16 @@ const ExercisesContainer = () => {
   const isAnItemDragging = useSharedValue(false);
   const positions = useSharedValue<Positions>({});
   const groupedExercises: ExerciseDataProps[] = useMemo(() => {
-    const groupLetterIndexes = [...groupParams.keys()].map(group => {
-      return {
-        id: alphabetMap.get(group) as string,
-        label: alphabetMap.get(group) as string,
-        exercises: groupParams.get(group)?.exercises ?? [],
-        letterIndex: group,
-      };
-    });
+    const groupLetterIndexes = [...groupParams.keys()]
+      .sort((a, b) => a - b)
+      .map(group => {
+        return {
+          id: alphabetMap.get(group) as string,
+          label: alphabetMap.get(group) as string,
+          exercises: groupParams.get(group)?.exercises ?? [],
+          letterIndex: group,
+        };
+      });
     return groupLetterIndexes;
   }, [groupParams]);
 
@@ -133,6 +136,9 @@ const ExercisesContainer = () => {
         scrollEventThrottle={16}
         contentContainerStyle={{
           height: scrollViewHeight,
+          paddingLeft: moderateScale(15),
+          paddingRight: moderateScale(15),
+          alignItems: 'center',
         }}>
         {data.map(renderItemHandler)}
       </Animated.ScrollView>

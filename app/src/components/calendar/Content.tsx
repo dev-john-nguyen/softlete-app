@@ -3,7 +3,7 @@ import { ActivityIndicator } from 'react-native';
 import { FlexBox } from '@app/ui';
 import { PrimaryText } from '@app/elements';
 import { Colors, Constants, DateTools } from '@app/utils';
-import { WorkoutActionProps } from '../../services/workout/types';
+import { WorkoutActionProps } from '../../types/workouts.types';
 import WorkoutPreviewList from '../workout/preview/PreviewList';
 import { AppDispatch } from '../../../App';
 import {
@@ -48,7 +48,10 @@ const DashboardContent = ({
 
   const onNavToViewWorkout = async (workoutUid: string) => {
     setViewWorkout(workoutUid);
-    navigation.navigate(HomeStackScreens.Workout, { directToDash: true });
+    navigation.navigate(HomeStackScreens.Workout, {
+      directToDash: true,
+      workoutUid: workoutUid,
+    });
   };
 
   const onCopyWorkout = (workoutUid: string) => {
@@ -63,7 +66,9 @@ const DashboardContent = ({
         <FlexBox flex={1} column>
           {(() => {
             const d = DateTools.strToDate(selectedDate);
-            if (!d) return;
+            if (!d) {
+              return;
+            }
             return (
               <FlexBox justifyContent="space-between" marginBottom={10}>
                 <PrimaryText size="small">

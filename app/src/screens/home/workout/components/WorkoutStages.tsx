@@ -26,6 +26,8 @@ const WorkoutStages = () => {
 
   return (
     <FlexBox
+      marginLeft={15}
+      marginRight={15}
       borderRadius={100}
       alignSelf="center"
       backgroundColor={rgba(Colors.whiteRbg, 0.05)}>
