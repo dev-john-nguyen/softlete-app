@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { AnimatedRegion, LatLng } from 'react-native-maps';
 import { HealthDataProps } from '../../services/workout/types';
-import { MarkerProps } from '../../types/route/route.types';
+import { MarkerProps } from '../../types/route.types';
 import { moderateScale } from '../../components/tools/StyleConstants';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
