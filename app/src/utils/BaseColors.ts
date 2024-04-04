@@ -15,13 +15,13 @@ export default {
   blueRgb: '16, 185, 175',
   lightGreen: '#b7f0cb',
   greenRbg: '18, 206, 82',
-  red: '#CE1212',
-  redRgb: '206,18,18',
+  red: '#F13030',
+  redRgb: '241,48,48',
   medGrey: '#D9D9D9',
   lightGrey: '#E8E8E8',
   darkGrey: '#D9D9D9',
   darkerGrey: '#9A9A9A',
-  yellow: '#F7FF00',
+  yellow: '#F7E733',
   primaryBoxShadow: {
     shadowOffset: {
       width: 0,

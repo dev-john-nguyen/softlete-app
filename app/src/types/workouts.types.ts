@@ -55,7 +55,7 @@ export interface WorkoutProps {
   imageBase64?: string;
   imageId?: string;
   userUid?: string;
-  healthData?: HealthDataProps;
+  healthData?: HealthDataProps; // will deprecate because of HIPPA
   type: HealthActivity;
 }
 
@@ -142,7 +142,7 @@ export interface WorkoutExerciseProps {
   tempId?: string;
   data: WorkoutExerciseDataProps[];
   exerciseUid?: string;
-  exercise?: ExerciseProps;
+  exercise?: ExerciseProps; // will deprecate and move to details
   group: number;
   order: number;
   sets?: number;
