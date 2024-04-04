@@ -1,4 +1,4 @@
-import { WorkoutExerciseProps } from 'src/services/workout/types';
+import { WorkoutExerciseProps } from 'src/types/workouts.types';
 
 export type Positions = {
   [id: string]: PositionProps;

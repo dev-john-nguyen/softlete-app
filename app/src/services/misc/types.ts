@@ -1,4 +1,4 @@
-import { WorkoutExerciseDataProps } from '../workout/types';
+import { WorkoutExerciseDataProps } from '../../types/workouts.types';
 import { ExerciseProps } from '../exercises/types';
 
 export interface MiscProps {

@@ -12,7 +12,7 @@ import {
   INSERT_EXERCISES,
   SET_EXERCISES_MISC,
 } from './actionTypes';
-import { WorkoutProps, WorkoutExerciseProps } from '../workout/types';
+import { WorkoutProps, WorkoutExerciseProps } from '../../types/workouts.types';
 import _ from 'lodash';
 import { AnalyticsProps, PinExerciseProps } from '../misc/types';
 import { BannerTypes } from '../banner/types';
@@ -87,7 +87,9 @@ export const createNewExercise =
       exerciseProps,
     );
 
-    if (!data) throw new Error();
+    if (!data) {
+      throw new Error();
+    }
 
     if (
       exerciseProps.videoId &&
@@ -115,7 +117,9 @@ export const searchExercises =
     }
 
     //validate
-    if (/[^A-Za-z0-9\s]/.test(query)) return;
+    if (/[^A-Za-z0-9\s]/.test(query)) {
+      return;
+    }
 
     // if (global.offline) {
     //search state
@@ -182,7 +186,9 @@ export const findExercise =
       e => e.name && e.name.toLowerCase() === name.toLowerCase(),
     );
 
-    if (foundEx) return foundEx;
+    if (foundEx) {
+      return foundEx;
+    }
 
     const { uid } = getState().user;
 
@@ -192,7 +198,9 @@ export const findExercise =
     }
 
     //validate
-    if (/[^A-Za-z0-9\s]/.test(name)) return;
+    if (/[^A-Za-z0-9\s]/.test(name)) {
+      return;
+    }
 
     //send request
     const res = await request<ExerciseProps & { empty: boolean }>(
@@ -260,7 +268,9 @@ export const updateExercise =
       exerciseProps,
     );
 
-    if (!data) throw new Error();
+    if (!data) {
+      throw new Error();
+    }
 
     if (
       exerciseProps.videoId &&
@@ -320,8 +330,12 @@ export const removeExercise =
     const path = PATHS.exercises.remove;
 
     const res = await request('POST', path, dispatch, { _id: _id, softlete });
-    if (!res) return;
-    if (res.data) dispatch({ type: REMOVE_EXERCISE, payload: { _id: _id } });
+    if (!res) {
+      return;
+    }
+    if (res.data) {
+      dispatch({ type: REMOVE_EXERCISE, payload: { _id: _id } });
+    }
   };
 
 export const fetchExercises =
@@ -337,9 +351,13 @@ export const fetchExercises =
       uid = user.uid;
     }
 
-    if (!uid) return;
+    if (!uid) {
+      return;
+    }
 
-    if (exerciseUids.length < 1) return;
+    if (exerciseUids.length < 1) {
+      return;
+    }
 
     if (global.offline) {
       //search local storage
@@ -461,7 +479,9 @@ export const updateAnalyticsExercises =
           const exercise = exercisesFetched.find(
             fe => fe._id === a.exerciseUid,
           );
-          if (exercise) a.exercise = { ...exercise };
+          if (exercise) {
+            a.exercise = { ...exercise };
+          }
         });
       }
     }
@@ -496,7 +516,9 @@ export const updatePinExercisesWithExercises =
           const exercise = exercisesFetched.find(
             fe => fe._id === a.exerciseUid,
           );
-          if (exercise) a.exercise = { ...exercise };
+          if (exercise) {
+            a.exercise = { ...exercise };
+          }
         });
       }
     }

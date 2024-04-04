@@ -5,7 +5,7 @@ import { Colors } from '@app/utils';
 import _ from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
+import { HealthDataProps, WorkoutProps } from '../../../types/workouts.types';
 import AutoId from '../../../utils/AutoId';
 import { useFetchHealthData } from 'src/components/workout/hooks/fetch-health-data.hooks';
 import DeviceHealthImportItem from 'src/components/workout/components/DeviceHealthImportItem';

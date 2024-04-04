@@ -8,7 +8,7 @@ import {
 import {
   WorkoutActionProps,
   MonthWorkoutsProps,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import { Calendar } from 'react-native-calendars';
 import CalendarTheme from '../../components/calendar/CalendarTheme';
 import { Colors, rgba } from '@app/utils';

@@ -16,7 +16,7 @@ import { updateWorkoutExercises } from '../../services/workout/actions';
 import {
   WorkoutActionProps,
   WorkoutExerciseProps,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import { updateProgramWorkoutExercises } from '../../services/program/actions';
 import { ProgramActionProps } from '../../services/program/types';
 import _ from 'lodash';

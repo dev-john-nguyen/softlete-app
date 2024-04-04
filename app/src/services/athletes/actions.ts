@@ -1,6 +1,6 @@
 import { AppDispatch } from '../../../App';
 import { ReducerProps } from '..';
-import { HealthDataProps, WorkoutProps } from '../workout/types';
+import { HealthDataProps, WorkoutProps } from '../../types/workouts.types';
 import request from '../utils/request';
 import {
   insertExercises,
@@ -89,7 +89,9 @@ export const setAthleteViewWorkout =
         const { workouts } = programs[i];
         if (workouts) {
           workout = workouts.find(w => w._id === workoutUid);
-          if (workout) break;
+          if (workout) {
+            break;
+          }
         }
       }
     } else {

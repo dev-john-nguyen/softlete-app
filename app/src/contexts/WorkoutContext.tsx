@@ -7,7 +7,7 @@ import {
   ViewWorkoutProps,
   WorkoutActionProps,
   WorkoutStatus,
-} from 'src/services/workout/types';
+} from 'src/types/workouts.types';
 
 type WorkoutContextProps = {
   onNavigateToExercise: (exercise: ExerciseProps) => void;

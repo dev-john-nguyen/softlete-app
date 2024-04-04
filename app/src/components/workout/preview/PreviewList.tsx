@@ -11,7 +11,7 @@ import {
   WorkoutProps,
   WorkoutStatus,
   WorkoutTypes,
-} from '../../../services/workout/types';
+} from '../../../types/workouts.types';
 import CircleAdd from '../../elements/CircleAdd';
 import { FlatList } from 'react-native-gesture-handler';
 import { FlexBox } from '@app/ui';

@@ -6,7 +6,7 @@ import { ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { HomeStackScreens } from 'src/screens/home/types';
-import { WorkoutStatus } from 'src/services/workout/types';
+import { WorkoutStatus } from 'src/types/workouts.types';
 import ExerciseGroupIcon from './ExerciseGroupIcon';
 import { useExerciseGroupParams } from '../../../hooks/strength.hook';
 import { useWorkoutState } from '../../../contexts';

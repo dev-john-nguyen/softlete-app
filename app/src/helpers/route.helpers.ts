@@ -6,7 +6,7 @@ import {
   WorkoutActionProps,
   WorkoutHeaderProps,
   WorkoutStatus,
-} from '../services/workout/types';
+} from '../types/workouts.types';
 import DateTools from '../utils/DateTools';
 import { getWoRouteSamples } from './health.helpers';
 import request from '../services/utils/request';
@@ -72,12 +72,16 @@ export async function handleDeviceActivityImport(
       description: '',
       status: WorkoutStatus.completed,
     };
-    if (!updateWorkoutHeader) throw 'update workout header function required';
+    if (!updateWorkoutHeader) {
+      throw 'update workout header function required';
+    }
     const newWo = await updateWorkoutHeader(woHeader).then(res =>
       res ? res[0] : undefined,
     );
 
-    if (!newWo || !newWo._id) throw 'failed to create workout';
+    if (!newWo || !newWo._id) {
+      throw 'failed to create workout';
+    }
     workoutUid = newWo._id;
   }
 
@@ -90,7 +94,9 @@ export async function handleDeviceActivityImport(
 }
 
 export function filterRouteLocations(locations: LocationValue[]) {
-  if (locations.length <= 20) return locations;
+  if (locations.length <= 20) {
+    return locations;
+  }
 
   let distance = 0;
 
@@ -144,7 +150,9 @@ export async function fetchWorkoutRouteLocations(
     (() => null) as any,
   )
     .then(({ data }) => {
-      if (!data || !data.locations) return [];
+      if (!data || !data.locations) {
+        return [];
+      }
       return data.locations.map(({ latitude, longitude }: any) => ({
         latitude,
         longitude,

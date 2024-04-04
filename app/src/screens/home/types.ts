@@ -1,5 +1,5 @@
 import { ParamListBase, RouteProp } from '@react-navigation/native';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 import { ExerciseProps } from '../../services/exercises/types';
 import { GoalProps, GoalTypes } from 'src/services/goals/types';
 

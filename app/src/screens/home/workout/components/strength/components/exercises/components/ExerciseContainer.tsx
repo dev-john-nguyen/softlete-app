@@ -1,6 +1,6 @@
 import { FlexBox } from '@app/ui';
 import { FC, useState } from 'react';
-import { WorkoutExerciseProps } from 'src/services/workout/types';
+import { WorkoutExerciseProps } from 'src/types/workouts.types';
 import ExerciseGroupIcon from '../../ExerciseGroupIcon';
 import { ExerciseDataProps } from '../types';
 import { PrimaryText } from '@app/elements';

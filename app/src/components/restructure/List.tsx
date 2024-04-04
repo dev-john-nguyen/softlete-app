@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { HEIGHT } from './utils';
 import MoveableItem from './Moveable';
-import { WorkoutExerciseProps } from '../../services/workout/types';
+import { WorkoutExerciseProps } from '../../types/workouts.types';
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,

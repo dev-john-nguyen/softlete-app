@@ -8,7 +8,7 @@ import {
   WorkoutStatus,
   WorkoutTypes,
   HealthDataProps,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import { ExerciseProps } from '../../services/exercises/types';
 import WorkoutContainer from '../../components/workout/Container';
 import {

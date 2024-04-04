@@ -5,7 +5,7 @@ import {
   WorkoutExerciseDataProps,
   MonthWorkoutsProps,
   WorkoutStatus,
-} from './types';
+} from '../../types/workouts.types';
 import DateTools from '../../utils/DateTools';
 import { ProgramWorkoutProps } from '../program/types';
 import { ExerciseProps } from '../exercises/types';
@@ -65,8 +65,12 @@ export function findAndUpdateWorkouts(
   stateWorkouts: RootWorkoutProps['workouts'],
   newWorkouts: NewWorkoutProps[],
 ) {
-  if (stateWorkouts.length < 1) return [...newWorkouts];
-  if (newWorkouts.length < 1) return [...stateWorkouts];
+  if (stateWorkouts.length < 1) {
+    return [...newWorkouts];
+  }
+  if (newWorkouts.length < 1) {
+    return [...stateWorkouts];
+  }
 
   const mutateStateWorkouts = cloneDeep(stateWorkouts);
 
@@ -78,7 +82,9 @@ export function findAndUpdateWorkouts(
       mutateStateWorkouts[index] = { ...newWrkout } as WorkoutProps;
     } else {
       //need to ensure every workout has exercises key
-      if (!newWrkout.exercises) newWrkout.exercises = [];
+      if (!newWrkout.exercises) {
+        newWrkout.exercises = [];
+      }
       mutateStateWorkouts.push(newWrkout as WorkoutProps);
     }
   }
@@ -94,7 +100,9 @@ export function findAndRemoveWorkout(
   stateWorkouts: RootWorkoutProps['workouts'],
   workoutUids: string[],
 ) {
-  if (stateWorkouts.length < 1) return [];
+  if (stateWorkouts.length < 1) {
+    return [];
+  }
 
   const clonedStateWorkouts = cloneDeep(stateWorkouts);
 
@@ -114,7 +122,9 @@ export function findAllAndUpdateExerciseProps(
   exercise: ExerciseProps,
 ) {
   for (let i = 0; i < stateWorkouts.length; i++) {
-    if (!stateWorkouts[i]) return stateWorkouts;
+    if (!stateWorkouts[i]) {
+      return stateWorkouts;
+    }
     const { exercises } = stateWorkouts[i];
     for (let j = 0; j < exercises.length; j++) {
       const e = exercises[j];
@@ -134,7 +144,9 @@ export function findAndUpdateWorkoutExercises(
 ) {
   const workout = cloneDeep(stateWorkouts).find(w => w._id === workoutUid);
 
-  if (!workout) return;
+  if (!workout) {
+    return;
+  }
 
   let { exercises: workoutExercises } = workout;
 
@@ -169,15 +181,21 @@ export function findAndUpdateSelectedDateWorkouts(
   workouts: WorkoutProps[],
   filterByProgramUid: string,
 ) {
-  if (workouts.length < 1) return [];
+  if (workouts.length < 1) {
+    return [];
+  }
   //get the workout for today's date;
   return cloneDeep(workouts).filter(w => {
     //filter there is a program filter active check filter
-    if (filterByProgramUid && filterByProgramUid !== w.programUid) return false;
+    if (filterByProgramUid && filterByProgramUid !== w.programUid) {
+      return false;
+    }
 
     const date = DateTools.UTCISOToLocalDate(w.date as string);
     const dateStr = DateTools.dateToStr(date);
-    if (dateStr === selectedDate) return true;
+    if (dateStr === selectedDate) {
+      return true;
+    }
     return false;
   });
 }
@@ -187,7 +205,9 @@ export function findAndUpdateWorkoutData(
   workoutUid: string,
   updatedData: any,
 ) {
-  if (stateWorkoutsProps.length < 1) return [];
+  if (stateWorkoutsProps.length < 1) {
+    return [];
+  }
 
   const stateWorkouts = cloneDeep(stateWorkoutsProps);
 
@@ -208,11 +228,15 @@ export function findAndInsertLikeWo(
   workoutUid: string,
   userLikeUid: string,
 ) {
-  if (stateWorkouts.length < 1) return [];
+  if (stateWorkouts.length < 1) {
+    return [];
+  }
 
   const foundIndex = stateWorkouts.findIndex(w => w._id === workoutUid);
 
-  if (foundIndex > -1) stateWorkouts[foundIndex].likeUids?.push(userLikeUid);
+  if (foundIndex > -1) {
+    stateWorkouts[foundIndex].likeUids?.push(userLikeUid);
+  }
 
   return [...stateWorkouts];
 }
@@ -221,21 +245,29 @@ export function isInvalidExerciseData(
   data: WorkoutExerciseDataProps[],
   programTemplate?: boolean,
 ) {
-  if (!data || data.length < 1) return 'Invalid data associated with request';
+  if (!data || data.length < 1) {
+    return 'Invalid data associated with request';
+  }
 
   for (let i = 0; i < data.length; i++) {
     const curData = data[i];
     const { predictVal, performVal, pct, reps, warmup } = curData;
 
-    if (predictVal === null || typeof predictVal !== 'number')
+    if (predictVal === null || typeof predictVal !== 'number') {
       return 'Invalid predicted value associated with request';
-    if (performVal && !programTemplate && typeof performVal !== 'number')
+    }
+    if (performVal && !programTemplate && typeof performVal !== 'number') {
       return 'Invalid performed value associated with request';
-    if (pct === null || typeof pct !== 'number')
+    }
+    if (pct === null || typeof pct !== 'number') {
       return 'Invalid percentage associated with request';
-    if (reps === null || typeof reps !== 'number')
+    }
+    if (reps === null || typeof reps !== 'number') {
       return 'Invalid reps value associated with request';
-    if (warmup && typeof warmup !== 'boolean') return 'Invalid warm up value';
+    }
+    if (warmup && typeof warmup !== 'boolean') {
+      return 'Invalid warm up value';
+    }
   }
 }
 
@@ -259,7 +291,9 @@ export function findMonthWorkouts(
 ) {
   //get month
   const d = DateTools.strToDate(selectedDate);
-  if (!d) return stateWorkouts;
+  if (!d) {
+    return stateWorkouts;
+  }
   const month = d.getMonth();
 
   const monthWorkouts: MonthWorkoutsProps = {};
@@ -270,7 +304,9 @@ export function findMonthWorkouts(
     const key = w._id;
     if (wDate.getMonth() === month) {
       //if there is a filter only allow the program filter workouts to appear
-      if (filterByProgramUid && filterByProgramUid !== w.programUid) return;
+      if (filterByProgramUid && filterByProgramUid !== w.programUid) {
+        return;
+      }
 
       const color = getWoStatusColor(w.status);
 
@@ -299,7 +335,9 @@ export function filterByProgram(
   programUid: string,
   stateWorkouts: RootWorkoutProps['workouts'],
 ) {
-  if (!programUid) return [...stateWorkouts];
+  if (!programUid) {
+    return [...stateWorkouts];
+  }
   return stateWorkouts.filter(w => w.programUid === programUid);
 }
 

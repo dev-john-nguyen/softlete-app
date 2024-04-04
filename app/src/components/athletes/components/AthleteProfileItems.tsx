@@ -10,7 +10,7 @@ import RulerSvg from '../../../assets/RulerSvg';
 import SearchSvg from '../../../assets/SearchSvg';
 import { ExerciseProps } from '../../../services/exercises/types';
 import { FriendProps } from '../../../services/user/types';
-import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
+import { HealthDataProps, WorkoutProps } from '../../../types/workouts.types';
 import BaseColors from '../../../utils/BaseColors';
 import StyleConstants from '../../tools/StyleConstants';
 import { convertTimeToFormatTime } from '../../../utils/format';

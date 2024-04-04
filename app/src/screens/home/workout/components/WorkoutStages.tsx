@@ -2,7 +2,7 @@ import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
 import { Pressable, StyleSheet } from 'react-native';
 import { PrimaryText } from '@app/elements';
-import { WorkoutStatus } from 'src/services/workout/types';
+import { WorkoutStatus } from 'src/types/workouts.types';
 import { updateWorkoutStatus } from 'src/services/workout/actions';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';

@@ -1,5 +1,5 @@
 import { GroupPosProps, PositionProps } from './types';
-import { WorkoutExerciseProps } from '../../services/workout/types';
+import { WorkoutExerciseProps } from '../../types/workouts.types';
 import { moderateScale } from '../tools/StyleConstants';
 
 export const HEIGHT = moderateScale(50);

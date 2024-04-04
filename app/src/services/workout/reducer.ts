@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import {
   INITIATE_WORKOUT_HEADER,
   REMOVE_EDIT_WORKOUT,
@@ -31,7 +30,7 @@ import {
   findAndInsertLikeWo,
   demoWoHelper,
 } from './utils';
-import { WorkoutProps } from './types';
+import { WorkoutProps } from '../../types/workouts.types';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { UPDATE_EXERCISE } from '../exercises/actionTypes';
 import { ExerciseProps } from '../exercises/types';
@@ -126,7 +125,9 @@ export default (state: any = INITIAL_STATE, action: ActionProps) => {
         action.payload._id,
         action.payload.exercises,
       );
-      if (!updatedWorkout) return state;
+      if (!updatedWorkout) {
+        return state;
+      }
       updatedWorkouts = findAndUpdateWorkouts(state.workouts, [
         updatedWorkout,
       ]) as WorkoutProps[];

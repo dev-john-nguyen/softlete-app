@@ -4,7 +4,7 @@ import {
   WorkoutExerciseProps,
   WorkoutExerciseDataProps,
   WorkoutActionProps,
-} from '../../../services/workout/types';
+} from '../../../types/workouts.types';
 import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
 import { ExerciseProps } from '../../../services/exercises/types';
@@ -88,13 +88,17 @@ const ExercisesContainer = ({
 
   const isLastItemInGroup = (exercise: WorkoutExerciseProps) => {
     const exGroupItems = exercises.filter(e => e.group === exercise.group);
-    if (exGroupItems.length < 1) return true;
+    if (exGroupItems.length < 1) {
+      return true;
+    }
     //find the largest order number in the exgroupitems
     //sort
     //descending
     const ordered = exGroupItems.sort((a, b) => b.order - a.order);
     //first item has the highest order
-    if (ordered[0]._id === exercise._id) return true;
+    if (ordered[0]._id === exercise._id) {
+      return true;
+    }
 
     return false;
   };
@@ -122,7 +126,9 @@ const ExercisesContainer = ({
     data: WorkoutExerciseDataProps[],
     index: number,
   ) => {
-    if (onUpdateData) onUpdateData(data, index);
+    if (onUpdateData) {
+      onUpdateData(data, index);
+    }
   };
 
   return (

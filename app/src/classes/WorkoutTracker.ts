@@ -3,7 +3,7 @@ import { getDistance } from 'geolib';
 import mean from 'lodash/mean';
 import { LocationValue } from 'react-native-health';
 import { LatLng } from 'react-native-maps';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 import { MarkerProps } from 'src/types/route.types';
 import BaseColors from 'src/utils/BaseColors';
 

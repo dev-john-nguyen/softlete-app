@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { FlexBox } from '@app/ui';
 import HealthForm from '../../overview/HealthForm';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 import { PrimaryText } from '@app/elements';
 
 type Props = {

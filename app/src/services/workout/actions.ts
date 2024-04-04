@@ -8,7 +8,7 @@ import {
   WorkoutHeaderProps,
   HealthDataProps,
   WorkoutRouteProps,
-} from './types';
+} from '../../types/workouts.types';
 import { setBanner } from '../banner/actions';
 import {
   UPDATE_WORKOUTS,
@@ -141,7 +141,9 @@ export const updateWorkoutExercises =
     removedExercises?: WorkoutExerciseProps[],
   ) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    if (!workoutUid) return;
+    if (!workoutUid) {
+      return;
+    }
 
     const saveExercises = removedExercises
       ? [...exercises, ...removedExercises]
@@ -173,7 +175,9 @@ export const updateWorkoutExercises =
           dispatch,
           saveData,
         );
-      if (!resData) return;
+      if (!resData) {
+        return;
+      }
       const resDataExs = await insertExercises(resData)(dispatch, getState);
       dispatch({
         type: UPDATE_WORKOUT_EXERCISES,
@@ -269,7 +273,9 @@ export const fetchWorkouts =
     //can determine if a month was already fetched just store months
     const toFetchDate = DateTools.strToDate(fromDate);
 
-    if (!toFetchDate) return;
+    if (!toFetchDate) {
+      return;
+    }
 
     const toFetchMonth = toFetchDate.getMonth();
     const fetched = workout.fetchedMonths.find(m => m === toFetchMonth);
@@ -333,13 +339,17 @@ export const removeWorkout =
 
     if (!global.offline) {
       const wo = workout.workouts.find(w => w._id === workoutUid);
-      if (wo) removeImage([wo.imageUri]);
+      if (wo) {
+        removeImage([wo.imageUri]);
+      }
 
       request('POST', PATHS.workouts.remove, dispatch, {
         workoutUids: [workoutUid],
       })
         .then(({ data }) => {
-          if (data) console.log('removed');
+          if (data) {
+            console.log('removed');
+          }
         })
         .catch(err => {
           console.log(err);
@@ -354,7 +364,9 @@ export const duplicateWorkout =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { workout, global } = getState();
 
-    if (!workout.copiedWorkout || !date) return; //empty
+    if (!workout.copiedWorkout || !date) {
+      return;
+    } //empty
 
     if (global.offline) {
       const dupWorkout = workout.workouts.find(
@@ -429,7 +441,9 @@ export const setViewWorkout =
         const { workouts } = programs[i];
         if (workouts) {
           viewWorkout = workouts.find(w => w._id === workoutUid);
-          if (viewWorkout) break;
+          if (viewWorkout) {
+            break;
+          }
         }
       }
     } else {
@@ -478,7 +492,9 @@ export const setViewWorkout =
       // Note: I haven't configured the isProgram aspect to this yet. I don't think I need to. Just a reminder.
       try {
         const workout = await fetchWorkout(workoutUid)(dispatch, getState);
-        if (!workout) return;
+        if (!workout) {
+          return;
+        }
         dispatch({
           type: SET_VIEW_WORKOUT,
           payload: workout,
@@ -501,7 +517,9 @@ export const updateWorkoutStatus =
         dispatch,
         { _id: workoutUid, status },
       );
-      if (!data) return;
+      if (!data) {
+        return;
+      }
     }
 
     if (status === WorkoutStatus.completed) {
@@ -529,7 +547,9 @@ export const updateWorkoutExerciseData =
     for (let i = 0; i < dataArr.length; i++) {
       const { data, _id, tempId } = dataArr[i];
 
-      if ((!_id && !offline) || (offline && !tempId && !_id)) return;
+      if ((!_id && !offline) || (offline && !tempId && !_id)) {
+        return;
+      }
 
       const isInvalid = isInvalidExerciseData(data);
 
@@ -559,7 +579,9 @@ export const updateWorkoutExerciseData =
       }).catch(err => {
         console.log(err);
       });
-      if (!res || !res.data) return;
+      if (!res || !res.data) {
+        return;
+      }
     }
 
     dispatch({
@@ -616,7 +638,9 @@ export const updateReflection =
       localImageUri = image.uri;
       processImage(image.base64, imageId)(dispatch, getState);
       // remove old
-      if (workout.imageUri) removeImage([workout.imageUri]);
+      if (workout.imageUri) {
+        removeImage([workout.imageUri]);
+      }
     }
 
     const { data }: { data?: WorkoutProps } = await request(
@@ -713,7 +737,9 @@ export const updateWoWorkoutRoute =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global } = getState();
 
-    if (locations.length < 1) return;
+    if (locations.length < 1) {
+      return;
+    }
 
     if (global.offline) {
       dispatch(

@@ -2,7 +2,7 @@ import Icon from '@app/icons';
 import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import React, { useMemo } from 'react';
-import { WorkoutStatus } from '../services/workout/types';
+import { WorkoutStatus } from '../types/workouts.types';
 import { PrimaryText } from './elements';
 
 interface Props {

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReflectionImage from 'src/components/workout/overview/ReflectionImage';
 import { ReducerProps, ThunkAppDispatch } from 'src/services';
 import DeviceHealthImport from './components/DeviceHealthImport';
-import { HealthDataProps, HealthDisMeas } from 'src/services/workout/types';
+import { HealthDataProps, HealthDisMeas } from 'src/types/workouts.types';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';
 import { useImportDeviceActivities } from 'src/hooks/base/device-import.hooks';

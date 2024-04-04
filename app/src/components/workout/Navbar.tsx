@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { normalize } from '../../utils/tools';
-import { WorkoutStatus } from '../../services/workout/types';
+import { WorkoutStatus } from '../../types/workouts.types';
 import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
 import Animated, {

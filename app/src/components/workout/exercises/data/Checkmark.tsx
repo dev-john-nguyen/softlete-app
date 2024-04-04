@@ -2,7 +2,7 @@ import Icon from '@app/icons';
 import { Colors, moderateScale, rgba } from '@app/utils';
 import React, { FC, useCallback } from 'react';
 import { Pressable } from 'react-native';
-import { WorkoutStatus } from 'src/services/workout/types';
+import { WorkoutStatus } from 'src/types/workouts.types';
 
 type Props = {
   onPress?: () => void;
@@ -17,8 +17,12 @@ const Checkmark: FC<Props> = ({ checked, onPress, editable, status }) => {
       if (pressed && editable) {
         return rgba(Colors.greenRbg, 0.5);
       }
-      if (checked) return Colors.green;
-      if (status === WorkoutStatus.completed) return rgba(Colors.whiteRbg, 0.2);
+      if (checked) {
+        return Colors.green;
+      }
+      if (status === WorkoutStatus.completed) {
+        return rgba(Colors.whiteRbg, 0.2);
+      }
       return rgba(Colors.whiteRbg, 0.5);
     },
     [checked, editable, status],

@@ -8,7 +8,7 @@ import { NotificationActionProps } from '../../services/notifications/types';
 import { ProgramActionProps } from '../../services/program/types';
 import { UserActionProps, UserProps } from '../../services/user/types';
 import { SET_SELECTED_DATE } from '../../services/workout/actionTypes';
-import { WorkoutActionProps } from '../../services/workout/types';
+import { WorkoutActionProps } from '../../types/workouts.types';
 import DateTools from '../../utils/DateTools';
 import { useDispatch } from 'react-redux';
 import { fetchGoalsAsync } from 'src/services/goals/slice';

@@ -35,7 +35,7 @@ import {
   WorkoutProps,
   DataArrProps,
   HealthDataProps,
-} from '../workout/types';
+} from '../../types/workouts.types';
 import {
   prepareExercisesForRequest,
   findAndUpdateWorkoutExercises,
@@ -106,7 +106,9 @@ export const fetchPrograms =
       uid = getState().user.uid;
     }
 
-    if (!uid) return;
+    if (!uid) {
+      return;
+    }
 
     request<ProgramHeaderProps[]>('GET', PATHS.programs.get(uid), dispatch)
       .then(async ({ data }) => {
@@ -127,7 +129,9 @@ export const fetchPrograms =
 export const setTargetProgram =
   (programHeader: ProgramHeaderProps, athlete?: boolean, softlete?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    if (!programHeader || !programHeader._id) return;
+    if (!programHeader || !programHeader._id) {
+      return;
+    }
 
     if (!athlete) {
       //check to see if program was already fetched?
@@ -157,7 +161,9 @@ export const setTargetProgram =
       uid = getState().user.uid;
     }
 
-    if (!uid) return;
+    if (!uid) {
+      return;
+    }
 
     const { data }: { data?: ProgramWorkoutProps[] } = await request(
       'GET',
@@ -197,13 +203,17 @@ export const setTargetProgram =
 export const removeProgram =
   (programUid: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    if (!programUid) return;
+    if (!programUid) {
+      return;
+    }
 
     const { programs } = getState().program;
 
     const found = programs.find(p => p._id === programUid);
 
-    if (found) removeImage([found.imageUri]);
+    if (found) {
+      removeImage([found.imageUri]);
+    }
 
     const res = await request('POST', PATHS.programs.remove, dispatch, {
       programUid,
@@ -222,7 +232,9 @@ export const updateProgramWorkoutHeader =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     let path;
 
-    if (!workoutHeader.programTemplateUid) return;
+    if (!workoutHeader.programTemplateUid) {
+      return;
+    }
 
     if (workoutHeader._id) {
       path = PATHS.programs.updateWorkoutHeader;
@@ -258,7 +270,9 @@ export const updateProgramWorkoutExercises =
     removedExercises?: WorkoutExerciseProps[],
   ) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    if (!workoutUid) return;
+    if (!workoutUid) {
+      return;
+    }
 
     const saveExercises = removedExercises
       ? [...exercises, ...removedExercises]
@@ -366,7 +380,9 @@ export const duplicateProgramWorkout =
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { copiedProgramWorkout } = getState().program;
 
-    if (!copiedProgramWorkout) return;
+    if (!copiedProgramWorkout) {
+      return;
+    }
 
     const { data }: { data?: WorkoutProps } = await request(
       'POST',
@@ -465,7 +481,9 @@ export const fetchGeneratedPrograms =
       uid = getState().user.uid;
     }
 
-    if (!uid) return;
+    if (!uid) {
+      return;
+    }
 
     const res = await request(
       'GET',
@@ -516,7 +534,9 @@ export const updateProgramExerciseData =
     for (let i = 0; i < dataWoPerform.length; i++) {
       const { data, _id } = dataWoPerform[i];
 
-      if (!_id) return;
+      if (!_id) {
+        return;
+      }
 
       const isInvalid = isInvalidExerciseData(data, true);
 

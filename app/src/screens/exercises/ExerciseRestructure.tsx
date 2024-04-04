@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   WorkoutExerciseProps,
   WorkoutExercisesObjProps,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import ExerciseList from '../../components/restructure/List';
 import { useSharedValue } from 'react-native-reanimated';
 import { listToObject } from '../../components/restructure/utils';

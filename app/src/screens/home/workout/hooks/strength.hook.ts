@@ -1,7 +1,7 @@
 import { useWorkoutState } from '../contexts';
 import _ from 'lodash';
 import { useMemo } from 'react';
-import { WorkoutExerciseProps } from 'src/services/workout/types';
+import { WorkoutExerciseProps } from 'src/types/workouts.types';
 
 export type GroupParamsProps = {
   exercises: WorkoutExerciseProps[];

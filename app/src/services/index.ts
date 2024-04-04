@@ -18,7 +18,7 @@ import { MiscProps } from './misc/types';
 import { UserProps } from './user/types';
 import { BannersProps } from './banner/types';
 import { ExerciseBaseProps } from './exercises/types';
-import { RootWorkoutProps } from './workout/types';
+import { RootWorkoutProps } from '../types/workouts.types';
 import { GlobalProps } from './global/types';
 import { RootProgramProps } from './program/types';
 import { AthletesRootProps } from './athletes/types';
