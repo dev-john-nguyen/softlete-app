@@ -121,6 +121,7 @@ export default {
     updateHeader: 'api/workouts/update/header',
     updateHealthData: 'api/workouts/update/health-data',
     updateWorkoutRoute: 'api/workouts/update/workout-route',
+    updateExerciseOrder: 'api/workouts/update/order',
     batch: {
       images: 'api/workouts/update/images',
       healthData: 'api/workouts/update/batch/health-data',
