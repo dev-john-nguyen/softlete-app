@@ -7,7 +7,7 @@ import {
 } from '../../../types/workouts.types';
 import WorkoutExercise from './Exercise';
 import { normalize } from '../../../utils/tools';
-import { ExerciseProps } from '../../../services/exercises/types';
+import { ExerciseProps } from '../../../types/exercises.types';
 import { WorkoutContext } from '@app/contexts';
 import { FlexBox } from '@app/ui';
 

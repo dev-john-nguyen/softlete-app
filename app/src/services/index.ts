@@ -17,7 +17,7 @@ import { GoalsRootStateProps } from './goals/types';
 import { MiscProps } from './misc/types';
 import { UserProps } from './user/types';
 import { BannersProps } from './banner/types';
-import { ExerciseBaseProps } from './exercises/types';
+import { ExerciseBaseProps } from '../types/exercises.types';
 import { RootWorkoutProps } from '../types/workouts.types';
 import { GlobalProps } from './global/types';
 import { RootProgramProps } from './program/types';

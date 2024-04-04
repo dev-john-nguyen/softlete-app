@@ -5,7 +5,7 @@ import {
   ExerciseActionProps,
   Categories,
   ExerciseProps,
-} from '../../../services/exercises/types';
+} from '../../../types/exercises.types';
 import {
   removeExercise,
   findExercise,

@@ -12,7 +12,7 @@ import { GoalProps } from 'src/services/goals/types';
 import { setViewWorkout } from 'src/services/workout/actions';
 import { GoalStatusProps, RespWorkoutExerciseProps } from '../types';
 import { useGoalExerciseAnalytics } from '../hooks';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 
 const Item: FC<{
   item: RespWorkoutExerciseProps;

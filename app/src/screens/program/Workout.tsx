@@ -7,7 +7,7 @@ import {
   HealthDataProps,
   DataArrProps,
 } from '../../types/workouts.types';
-import { ExerciseProps } from '../../services/exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 import WorkoutContainer from '../../components/workout/Container';
 import { ProgramActionProps } from '../../services/program/types';
 import Loading from '../../components/elements/Loading';

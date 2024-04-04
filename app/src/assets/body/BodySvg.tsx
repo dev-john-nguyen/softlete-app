@@ -1,6 +1,6 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
-import { MuscleGroups } from '../../services/exercises/types';
+import { MuscleGroups } from '../../types/exercises.types';
 import BaseColors, { rgba } from '../../utils/BaseColors';
 
 const svg = (muscles: string[]) => {

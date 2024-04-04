@@ -27,7 +27,7 @@ import {
   MuscleGroups,
   Equipments,
   ExerciseProps,
-} from '../exercises/types';
+} from '../../types/exercises.types';
 import { BannerTypes } from '../banner/types';
 import { prefetchWoImages } from '../utils/prefetch-images';
 

@@ -37,7 +37,7 @@ import {
   Categories,
   MuscleGroups,
   Equipments,
-} from '../exercises/types';
+} from '../../types/exercises.types';
 import DateTools from '../../utils/DateTools';
 import { BannerTypes } from '../banner/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';

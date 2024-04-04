@@ -17,7 +17,7 @@ import AthletProfileItems from './components/AthleteProfileItems';
 import _ from 'lodash';
 import ProfileButton from './components/ProfileButton';
 import { HealthDataProps, WorkoutProps } from '../../types/workouts.types';
-import { ExerciseProps } from '../../services/exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 
 interface Props {
   user: UserProps | AthleteProfileProps;

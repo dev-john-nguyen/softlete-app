@@ -5,7 +5,7 @@ import { FlexBox } from '@app/ui';
 import { Colors } from '@app/utils';
 import _, { capitalize } from 'lodash';
 import React, { useMemo } from 'react';
-import { ExerciseProps } from '../../../services/exercises/types';
+import { ExerciseProps } from '../../../types/exercises.types';
 import { AnalyticsProps } from '../../../services/misc/types';
 import BaseColors, { rgba } from '../../../utils/BaseColors';
 import DateTools from '../../../utils/DateTools';

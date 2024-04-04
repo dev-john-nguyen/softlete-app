@@ -9,7 +9,7 @@ import {
   WorkoutStatus,
 } from '../../../../types/workouts.types';
 import ExerciseDataHeader from './Header';
-import { MeasSubCats } from '../../../../services/exercises/types';
+import { MeasSubCats } from '../../../../types/exercises.types';
 import CalcRef from './CalcRef';
 import Animated, {
   useAnimatedStyle,

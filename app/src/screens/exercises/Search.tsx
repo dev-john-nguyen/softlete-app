@@ -7,7 +7,7 @@ import {
   ExerciseProps,
   ExerciseActionProps,
   Categories,
-} from '../../services/exercises/types';
+} from '../../types/exercises.types';
 import { ReducerProps } from '../../services';
 import { connect, useSelector } from 'react-redux';
 import ExerciseSearchPreview from '../../components/ExerciseSearchPreview';

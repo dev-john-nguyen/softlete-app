@@ -8,7 +8,7 @@ import {
 } from '../../types/workouts.types';
 import DateTools from '../../utils/DateTools';
 import { ProgramWorkoutProps } from '../program/types';
-import { ExerciseProps } from '../exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';
 import cloneDeep from 'lodash/cloneDeep';

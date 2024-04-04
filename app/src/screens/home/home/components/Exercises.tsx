@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '@app/icons';
 import { Colors, rgba } from '@app/utils';
 import { FlexBox } from '@app/ui';
-import { ExerciseProps } from '../../../../services/exercises/types';
+import { ExerciseProps } from '../../../../types/exercises.types';
 import { AnalyticsProps } from '../../../../services/misc/types';
 import WoExerciseChart from '../../../../components/home/components/WoExerciseChart';
 import { HomeStackParamsList, HomeStackScreens } from '../../types';

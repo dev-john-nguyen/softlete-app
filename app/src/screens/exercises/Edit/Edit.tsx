@@ -15,7 +15,7 @@ import {
   DisCats,
   TimeCats,
   WtCats,
-} from '../../../services/exercises/types';
+} from '../../../types/exercises.types';
 import {
   updateExercise,
   createNewExercise,

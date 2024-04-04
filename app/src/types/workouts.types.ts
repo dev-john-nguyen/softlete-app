@@ -3,7 +3,7 @@ import {
   HKWorkoutEventType,
   LocationValue,
 } from 'react-native-health';
-import { ExerciseProps } from '../services/exercises/types';
+import { ExerciseProps } from './exercises.types';
 import { ProgramWorkoutProps } from '../services/program/types';
 import { ImageProps } from '../services/user/types';
 import AppleHealthKit from 'react-native-health';

@@ -1,7 +1,7 @@
 import React, { createContext, FC, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import { GeneratedProgramProps } from 'src/services/program/types';
 import {
   ViewWorkoutProps,

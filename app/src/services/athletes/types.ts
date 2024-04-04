@@ -7,7 +7,7 @@ import {
 } from '../../types/workouts.types';
 import { ProgramProps, GeneratedProgramProps } from '../program/types';
 import { FriendProps, FriendStatus } from '../user/types';
-import { ExerciseProps } from '../exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 
 export interface AthletesRootProps {
   workouts: WorkoutProps[];

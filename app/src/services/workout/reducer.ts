@@ -33,7 +33,7 @@ import {
 import { WorkoutProps } from '../../types/workouts.types';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import { UPDATE_EXERCISE } from '../exercises/actionTypes';
-import { ExerciseProps } from '../exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 import _ from 'lodash';
 import {
   CLEAR_DEMO_STATE_DATA,

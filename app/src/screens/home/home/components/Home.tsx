@@ -14,7 +14,7 @@ import {
 import {
   ExerciseActionProps,
   ExerciseProps,
-} from '../../../../services/exercises/types';
+} from '../../../../types/exercises.types';
 import {
   getGlobalVars,
   goOffline,

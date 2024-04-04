@@ -2,7 +2,7 @@ import { DateTools, getRequestURL, PATHS } from '@app/utils';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useCallback } from 'react';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import { GoalProps, GoalSubTypes } from 'src/services/goals/types';
 import { RespHealthDataProps, RespWorkoutExerciseProps } from './types';
 

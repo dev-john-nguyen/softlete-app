@@ -1,4 +1,8 @@
-import { Categories, ExerciseFormProps, ExerciseProps } from './types';
+import {
+  Categories,
+  ExerciseFormProps,
+  ExerciseProps,
+} from '../../types/exercises.types';
 import { AppDispatch } from '../../../App';
 import { ReducerProps } from '..';
 import { SIGNOUT_USER } from '../user/actionTypes';

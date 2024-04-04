@@ -1,5 +1,5 @@
 import { WorkoutExerciseDataProps } from '../../types/workouts.types';
-import { ExerciseProps } from '../exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 
 export interface MiscProps {
   pinExercisesAnalytics: AnalyticsProps[];

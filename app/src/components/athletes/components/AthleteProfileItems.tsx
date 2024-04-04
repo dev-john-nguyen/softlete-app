@@ -8,7 +8,7 @@ import HeartSvg from '../../../assets/HeartSvg';
 import PeopleSvg from '../../../assets/PeopleSvg';
 import RulerSvg from '../../../assets/RulerSvg';
 import SearchSvg from '../../../assets/SearchSvg';
-import { ExerciseProps } from '../../../services/exercises/types';
+import { ExerciseProps } from '../../../types/exercises.types';
 import { FriendProps } from '../../../services/user/types';
 import { HealthDataProps, WorkoutProps } from '../../../types/workouts.types';
 import BaseColors from '../../../utils/BaseColors';

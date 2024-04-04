@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import BaseColors from '../utils/BaseColors';
@@ -7,11 +6,7 @@ import PrimaryText from './elements/PrimaryText';
 import SecondaryText from './elements/SecondaryText';
 import { capitalize, normalize } from '../utils/tools';
 import CustomPicker, { PickerOptionProp } from './elements/Picker';
-import {
-  Categories,
-  Equipments,
-  MuscleGroups,
-} from '../services/exercises/types';
+import { Categories, Equipments, MuscleGroups } from '../types/exercises.types';
 import Animated, {
   Easing,
   useAnimatedStyle,

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { AppDispatch } from '../../../App';
 import { ChatActionProps } from '../../services/chat/types';
-import { ExerciseActionProps } from '../../services/exercises/types';
+import { ExerciseActionProps } from '../../types/exercises.types';
 import { MiscActionProps } from '../../services/misc/types';
 import { NotificationActionProps } from '../../services/notifications/types';
 import { ProgramActionProps } from '../../services/program/types';

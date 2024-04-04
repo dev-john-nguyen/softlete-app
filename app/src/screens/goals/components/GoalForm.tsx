@@ -7,7 +7,7 @@ import {
   ScreenTemplate,
 } from '@app/elements';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import { Colors, DateTools } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import useBanner from 'src/hooks/utils/useBanner';

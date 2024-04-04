@@ -1,6 +1,6 @@
 import React from 'react';
 import { WorkoutStatus } from '../../../../types/workouts.types';
-import { MeasSubCats } from '../../../../services/exercises/types';
+import { MeasSubCats } from '../../../../types/exercises.types';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { SET_COLUMN_WIDTHS } from './constants';
