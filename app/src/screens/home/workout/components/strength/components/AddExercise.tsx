@@ -9,10 +9,10 @@ import { HomeStackScreens } from 'src/screens/home/types';
 import { WorkoutStatus } from 'src/types/workouts.types';
 import ExerciseGroupIcon from './ExerciseGroupIcon';
 import { useExerciseGroupParams } from '../../../hooks/strength.hook';
-import { useWorkoutState } from '../../../contexts';
+import { useWorkout } from '../../../contexts';
 
 const AddExercise = () => {
-  const { workout } = useWorkoutState();
+  const { workout } = useWorkout();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { groupParams } = useExerciseGroupParams();

@@ -54,6 +54,8 @@ export type HomeStackParamsList = {
   WorkoutHelp: undefined;
   Timer: undefined;
   WorkoutReflectionModal: undefined;
+  WorkoutGroupExercises: undefined;
+  WorkoutExercise: undefined;
 };
 
 export enum HomeStackScreens {
@@ -83,6 +85,8 @@ export enum HomeStackScreens {
   WorkoutHelp = 'WorkoutHelp',
   Timer = 'Timer',
   WorkoutReflectionModal = 'WorkoutReflectionModal',
+  WorkoutGroupExercises = 'WorkoutGroupExercises',
+  WorkoutExercise = 'WorkoutExercise',
 }
 
 export enum HomeStackScreenTitle {
@@ -96,4 +100,6 @@ export enum HomeStackScreenTitle {
   Map = 'Map',
   WorkoutHelp = 'WorkoutHelp',
   Timer = 'Timer',
+  WorkoutGroupExercises = 'WorkoutGroupExercises',
+  WorkoutExercise = 'WorkoutExercise',
 }

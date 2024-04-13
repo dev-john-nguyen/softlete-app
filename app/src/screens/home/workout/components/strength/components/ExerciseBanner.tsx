@@ -1,8 +1,8 @@
 import { FlexBox } from '@app/ui';
-import { useWorkoutState } from '../../../contexts';
+import { useWorkout } from '../../../contexts';
 
 const ExerciseBanner = () => {
-  const { workout } = useWorkoutState();
+  const { workout } = useWorkout();
   return <FlexBox alignItems="center" justifyContent="center" flex={1} />;
 };
 

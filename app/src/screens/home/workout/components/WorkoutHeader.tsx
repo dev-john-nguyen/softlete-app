@@ -5,14 +5,14 @@ import { useMemo, useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
-import { useWorkoutState } from '../contexts';
+import { useWorkout } from '../contexts';
 
 const WorkoutHeader = () => {
   const [showDescription, setShowDescription] = useState(false);
   const generatedPrograms = useSelector(
     (state: ReducerProps) => state.program.generatedPrograms,
   );
-  const { workout } = useWorkoutState();
+  const { workout } = useWorkout();
 
   const program = useMemo(() => {
     return generatedPrograms.find(p => p._id === workout.programUid);

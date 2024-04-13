@@ -26,6 +26,6 @@ export const WorkoutContextProvider: FC<ProviderProps> = ({
   );
 };
 
-export const useWorkoutState = () => {
+export const useWorkout = () => {
   return useContext(WorkoutContext);
 };

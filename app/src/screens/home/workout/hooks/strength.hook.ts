@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useWorkoutState } from '../contexts';
+import { useWorkout } from '../contexts';
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { WorkoutExerciseProps } from 'src/types/workouts.types';
@@ -12,7 +12,7 @@ export type GroupParamsProps = {
 };
 
 export const useExerciseGroupParams = () => {
-  const { workout } = useWorkoutState();
+  const { workout } = useWorkout();
   const groupParams = useMemo(() => {
     const groupParamsByLetterIndex = new Map<number, GroupParamsProps>();
     if (!workout.exercises) {

@@ -6,10 +6,10 @@ import { WorkoutStatus } from 'src/types/workouts.types';
 import { updateWorkoutStatus } from 'src/services/workout/actions';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { useWorkoutState } from '../contexts';
+import { useWorkout } from '../contexts';
 
 const WorkoutStages = () => {
-  const { workout, isProgram } = useWorkoutState();
+  const { workout, isProgram } = useWorkout();
   const dispatch = useDispatch<ThunkAppDispatch>();
   const status = workout.status;
 

@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import Workout from './workout';
+import { Workout, WorkoutGroupExercises, WorkoutExercise } from './workout';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit/Edit';
@@ -173,14 +173,6 @@ function HomeStack(parentProps: any) {
         />
 
         <Tab.Screen
-          name={HomeStackScreens.Workout}
-          component={Workout}
-          options={{
-            gestureEnabled: false,
-          }}
-        />
-
-        <Tab.Screen
           name={HomeStackScreens.SearchExercises}
           component={SearchExercises}
           options={{
@@ -272,6 +264,24 @@ function HomeStack(parentProps: any) {
           name={HomeStackScreens.WorkoutActivitySummary}
           component={WorkoutActivitySummary}
           options={{}}
+        />
+      </Tab.Group>
+
+      <Tab.Group>
+        <Tab.Screen
+          name={HomeStackScreens.Workout}
+          component={Workout}
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutGroupExercises}
+          component={WorkoutGroupExercises}
+        />
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutExercise}
+          component={WorkoutExercise}
         />
       </Tab.Group>
 
