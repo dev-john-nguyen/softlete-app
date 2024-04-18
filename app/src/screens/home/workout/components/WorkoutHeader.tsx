@@ -7,11 +7,12 @@ import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 import { useWorkout } from '../contexts';
 
+const getGeneratedPrograms = (state: ReducerProps) =>
+  state.program.generatedPrograms;
+
 const WorkoutHeader = () => {
   const [showDescription, setShowDescription] = useState(false);
-  const generatedPrograms = useSelector(
-    (state: ReducerProps) => state.program.generatedPrograms,
-  );
+  const generatedPrograms = useSelector(getGeneratedPrograms);
   const { workout } = useWorkout();
 
   const program = useMemo(() => {

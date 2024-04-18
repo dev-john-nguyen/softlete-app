@@ -18,6 +18,8 @@ import { navigate } from 'src/RootNavigation';
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
 
+const getTimer = (state: ReducerProps) => state.timer;
+
 export const TimerBanner = () => {
   const insets = useSafeAreaInsets();
   const translationY = useSharedValue(insets.top);
@@ -26,7 +28,7 @@ export const TimerBanner = () => {
   // Add initial position shared values
   const initialTranslationX = useSharedValue(insets.top);
   const initialTranslationY = useSharedValue(insets.right);
-  const { time, isRunning } = useSelector((state: ReducerProps) => state.timer);
+  const { time, isRunning } = useSelector(getTimer);
   const snapPoints = [0, screenWidth - insets.right - widthOfBanner.value];
 
   const panGesture = Gesture.Pan()

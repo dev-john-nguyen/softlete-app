@@ -7,10 +7,10 @@ import { HomeStackScreens } from '../../types';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 
+const getTargetProgram = (state: ReducerProps) => state.program.targetProgram;
+
 export const useGoBack = () => {
-  const targetProgram = useSelector(
-    (state: ReducerProps) => state.program.targetProgram,
-  );
+  const targetProgram = useSelector(getTargetProgram);
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const navigationState = useNavigationState(state => state);
