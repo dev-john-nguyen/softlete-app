@@ -17,7 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useExerciseGroupParams } from 'src/screens/home/workout/hooks/strength.hook';
 import { alphabetMap } from 'src/screens/home/workout/constants';
-import { moderateScale } from '@app/utils';
+import { AutoId, moderateScale } from '@app/utils';
 
 const ExercisesContainer = () => {
   const { groupParams } = useExerciseGroupParams();
@@ -36,6 +36,7 @@ const ExercisesContainer = () => {
       .sort((a, b) => a - b)
       .map(group => {
         return {
+          key: AutoId.newId(),
           id: alphabetMap.get(group) as string,
           label: alphabetMap.get(group) as string,
           exercises: groupParams.get(group)?.exercises ?? [],
@@ -46,6 +47,7 @@ const ExercisesContainer = () => {
   }, [groupParams]);
 
   useEffect(() => {
+    setItemLayoutProps(new Map());
     setData(groupedExercises);
   }, [groupedExercises]);
 
@@ -60,6 +62,7 @@ const ExercisesContainer = () => {
         return;
       }
     }
+
     const newPositions = {} as Positions;
 
     // Update translateY based on new order
@@ -80,7 +83,7 @@ const ExercisesContainer = () => {
   const renderItemHandler = (item: ExerciseDataProps) => {
     return (
       <ExerciseGroup
-        key={item.id}
+        key={item.key}
         item={item}
         setItemLayoutProps={setItemLayoutProps}
         setData={setData}

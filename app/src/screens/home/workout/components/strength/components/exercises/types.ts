@@ -18,6 +18,7 @@ export type ItemLayoutProps = {
 };
 
 export type ExerciseDataProps = {
+  key: string;
   label: string;
   id: string;
   exercises: WorkoutExerciseProps[];

@@ -171,7 +171,7 @@ const ExerciseGroup = ({
       borderRadius: 10,
       top: translateY.value,
       zIndex: isMoving ? 100 : 1,
-      backgroundColor: isMoving ? '#160303' : 'transparent',
+      backgroundColor: '#160303',
       shadowColor: '#2C1A1A',
       shadowOffset: {
         height: 0,
