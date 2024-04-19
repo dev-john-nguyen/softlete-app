@@ -24,5 +24,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react-native/no-inline-styles': 'off',
+    curly: 'off',
   },
 };

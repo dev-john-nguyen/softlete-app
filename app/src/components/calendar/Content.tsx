@@ -26,16 +26,18 @@ interface Props {
   loading: boolean;
 }
 
+const getSelectDate = (state: ReducerProps) => state.workout.selectedDate;
+const getWorkouts = (state: ReducerProps) => state.workout.selectedDateWorkouts;
+
 const DashboardContent = ({
   dispatch,
   navigation,
   setViewWorkout,
   loading,
 }: Props) => {
-  const { selectedDate, workouts } = useSelector((state: ReducerProps) => ({
-    selectedDate: state.workout.selectedDate,
-    workouts: state.workout.selectedDateWorkouts,
-  }));
+  const workouts = useSelector(getWorkouts);
+  const selectedDate = useSelector(getSelectDate);
+
   const onNavToAddWorkout = () => {
     dispatch({
       type: INITIATE_WORKOUT_HEADER,

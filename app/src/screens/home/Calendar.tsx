@@ -35,19 +35,19 @@ interface Props {
   offline: boolean;
 }
 
+const getSelectedDate = (state: ReducerProps) => state.workout.selectedDate;
+const getMonthWorkouts = (state: ReducerProps) => state.workout.monthWorkouts;
+const getOffline = (state: ReducerProps) => state.global.offline;
+
 const Cal = ({
   navigation,
   fetchWorkouts,
   dispatch,
   duplicateWorkout,
 }: Props) => {
-  const { selectedDate, monthWorkouts, offline } = useSelector(
-    (state: ReducerProps) => ({
-      selectedDate: state.workout.selectedDate,
-      monthWorkouts: state.workout.monthWorkouts,
-      offline: state.global.offline,
-    }),
-  );
+  const selectedDate = useSelector(getSelectedDate);
+  const monthWorkouts = useSelector(getMonthWorkouts);
+  const offline = useSelector(getOffline);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
   const mount = useRef(false);
