@@ -36,9 +36,18 @@ export const removeExerciseAsync = createAsyncThunk(
 
 export const reorderExercisesAsync = createAsyncThunk(
   'active-workout/reorder-exercises',
-  async (payload: ExerciseOrderPayload, { dispatch, getState }) => {
+  async (
+    payload: Omit<ExerciseOrderPayload, 'workoutUid'>,
+    { dispatch, getState },
+  ) => {
+    const rootState = getState() as ReducerProps;
+    const workoutUid = rootState.activeWorkout.workout?._id as string;
+    const requestPayload: ExerciseOrderPayload = {
+      workoutUid,
+      exercises: payload.exercises,
+    };
     axios
-      .put(getURL(PATHS.workouts.updateExerciseOrder), payload)
+      .put(getURL(PATHS.workouts.updateExerciseOrder), requestPayload)
       .catch(error => {
         console.error(error);
         setBanner(

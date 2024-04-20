@@ -41,6 +41,7 @@ const ExercisesContainer = () => {
           label: alphabetMap.get(group) as string,
           exercises: groupParams.get(group)?.exercises ?? [],
           letterIndex: group,
+          groupIndex: groupParams.get(group)?.groupIndex ?? 0,
         };
       });
     return groupLetterIndexes;
@@ -49,7 +50,8 @@ const ExercisesContainer = () => {
   useEffect(() => {
     setItemLayoutProps(new Map());
     setData(groupedExercises);
-  }, [groupedExercises]);
+    positions.value = {};
+  }, [groupedExercises, positions]);
 
   useEffect(() => {
     // validate that all items have a height before proceeding

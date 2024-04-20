@@ -19,6 +19,9 @@ import {
 } from '../types';
 import { objectMove } from '../helpers';
 import GroupExercises from './GroupExercises';
+import { useDispatch } from 'react-redux';
+import { ThunkAppDispatch } from 'src/services';
+import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
 
 type Props = {
   item: ExerciseDataProps;
@@ -47,6 +50,7 @@ const ExerciseGroup = ({
   const [isMoving, setIsMoving] = useState(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
   const initializedPosition = useSharedValue(false);
+  const dispatch = useDispatch<ThunkAppDispatch>();
 
   useAnimatedReaction(
     () => positions.value[item.id]?.positionY,
@@ -83,7 +87,23 @@ const ExerciseGroup = ({
           sortedData.push(targetData);
         }
       });
-      return sortedData;
+
+      // This only updates groups
+      const payloadExercises: ExerciseOrderPayload['exercises'] = {};
+
+      sortedData.forEach((props, groupIndex) => {
+        props.exercises.forEach((exercise, index) => {
+          payloadExercises[exercise._id as string] = {
+            group: groupIndex,
+            order: index,
+          };
+        });
+      });
+
+      dispatch(reorderExercisesAsync({ exercises: payloadExercises }));
+
+      // Don't want to rerender. The dispatch action should update the state of workout which will force the rerender
+      return data;
     });
   };
 

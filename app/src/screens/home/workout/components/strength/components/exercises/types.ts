@@ -23,6 +23,7 @@ export type ExerciseDataProps = {
   id: string;
   exercises: WorkoutExerciseProps[];
   letterIndex: number;
+  groupIndex: number;
 };
 
 export const CUSTOM_OFF_SET = 50;
