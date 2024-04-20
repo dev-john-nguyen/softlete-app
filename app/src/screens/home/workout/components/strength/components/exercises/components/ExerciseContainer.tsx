@@ -2,25 +2,26 @@ import { FlexBox } from '@app/ui';
 import { FC, useState } from 'react';
 import { WorkoutExerciseProps } from 'src/types/workouts.types';
 import ExerciseGroupIcon from '../../ExerciseGroupIcon';
-import { ExerciseDataProps } from '../types';
 import { PrimaryText } from '@app/elements';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors } from '@app/utils';
 import ExerciseMoveMenu from './ExerciseMoveMenu';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { removeWorkoutExercise } from 'src/services/workout/actions';
+import { removeExerciseAsync } from '@app/services';
 
 type Props = {
   exercise: WorkoutExerciseProps;
-  item: ExerciseDataProps;
+  letterIndex: number;
 };
 
-const ExerciseContainer: FC<Props> = ({ exercise, item }) => {
+const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch<ThunkAppDispatch>();
 
-  const onRemove = () => dispatch(removeWorkoutExercise(exercise));
+  const onRemove = () => {
+    dispatch(removeExerciseAsync(exercise._id as string));
+  };
 
   if (isMenuOpen) {
     return <ExerciseMoveMenu onClose={() => setIsMenuOpen(false)} />;
@@ -34,7 +35,7 @@ const ExerciseContainer: FC<Props> = ({ exercise, item }) => {
       paddingRight={0}
       alignItems="center"
       gap={10}>
-      <ExerciseGroupIcon letterIndex={item.letterIndex} />
+      <ExerciseGroupIcon letterIndex={letterIndex} />
       <FlexBox flex={1}>
         <PrimaryText size="large" textTransform="capitalize">
           {exercise.details.name}

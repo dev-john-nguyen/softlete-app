@@ -7,3 +7,5 @@ export * from './banner/actions';
 export * from './banner/actionTypes';
 export * from './timer/slice';
 export * from './timer/types';
+export * from './active-workout/types';
+export * from './active-workout/slice';

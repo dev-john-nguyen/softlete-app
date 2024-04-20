@@ -53,7 +53,6 @@ LogBox.ignoreLogs([
   'Warning: Function components cannot be given refs',
   'Could not locate shadow',
   'Sending `healthKit',
-  'Selector unknown',
 ]);
 
 const App = () => {

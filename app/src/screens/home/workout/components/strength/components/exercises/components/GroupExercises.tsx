@@ -18,6 +18,7 @@ const GroupExercises: FC<Props> = ({ item }) => {
     // need to determine which screen to navigate to depending on the total amount of exercise in the group
     navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
       workoutUid: workout._id,
+      groupIndex: item.letterIndex,
     });
   };
 
@@ -27,7 +28,7 @@ const GroupExercises: FC<Props> = ({ item }) => {
         return (
           <ExerciseContainer
             exercise={exercise}
-            item={item}
+            letterIndex={item.letterIndex}
             key={exercise._id as string}
           />
         );

@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { WorkoutExerciseProps } from 'src/types/workouts.types';
 import axios from 'axios';
 import { PATHS, getURL } from '@app/utils';
+import { groupWoExercisesByGroup } from '../helpers/workout.helpers';
 
 export type GroupParamsProps = {
   exercises: WorkoutExerciseProps[];
@@ -14,23 +15,7 @@ export type GroupParamsProps = {
 export const useExerciseGroupParams = () => {
   const { workout } = useWorkout();
   const groupParams = useMemo(() => {
-    const groupParamsByLetterIndex = new Map<number, GroupParamsProps>();
-    if (!workout.exercises) {
-      return groupParamsByLetterIndex;
-    }
-    workout.exercises.forEach((e, i) => {
-      const groupInstance = groupParamsByLetterIndex.get(e.group);
-      if (groupInstance) {
-        groupInstance.exercises.push(e);
-        groupInstance.totalExercises++;
-      } else {
-        groupParamsByLetterIndex.set(e.group, {
-          exercises: [],
-          totalExercises: 1,
-        });
-      }
-    });
-    return groupParamsByLetterIndex;
+    return groupWoExercisesByGroup(workout);
   }, [workout]);
 
   return {

@@ -54,7 +54,10 @@ export type HomeStackParamsList = {
   WorkoutHelp: undefined;
   Timer: undefined;
   WorkoutReflectionModal: undefined;
-  WorkoutGroupExercises: undefined;
+  WorkoutGroupExercises: {
+    groupIndex: number;
+    workoutUid: string;
+  };
   WorkoutExercise: undefined;
 };
 
