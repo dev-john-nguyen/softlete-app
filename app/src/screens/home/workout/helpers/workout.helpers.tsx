@@ -1,5 +1,5 @@
 import { WorkoutProps } from '@app/types';
-import { GroupParamsProps } from '../hooks/strength.hook';
+import { GroupParamsProps } from '../types';
 
 export function groupWoExercisesByGroup(workout: WorkoutProps) {
   const groupParamsByLetterIndex = new Map<number, GroupParamsProps>();
@@ -18,6 +18,7 @@ export function groupWoExercisesByGroup(workout: WorkoutProps) {
       groupedExercise.set(e.group, {
         exercises: [],
         totalExercises: 1,
+        groupIndex: e.group,
       });
     }
   });

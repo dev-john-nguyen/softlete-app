@@ -1,16 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useWorkout } from '../contexts';
-import _ from 'lodash';
 import { useMemo } from 'react';
-import { WorkoutExerciseProps } from 'src/types/workouts.types';
 import axios from 'axios';
 import { PATHS, getURL } from '@app/utils';
 import { groupWoExercisesByGroup } from '../helpers/workout.helpers';
-
-export type GroupParamsProps = {
-  exercises: WorkoutExerciseProps[];
-  totalExercises: number;
-};
 
 export const useExerciseGroupParams = () => {
   const { workout } = useWorkout();

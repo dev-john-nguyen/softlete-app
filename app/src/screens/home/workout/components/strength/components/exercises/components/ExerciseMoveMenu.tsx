@@ -5,13 +5,20 @@ import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useExerciseGroupParams } from 'src/screens/home/workout/hooks/strength.hook';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors, rgba } from '@app/utils';
+import { useDispatch } from 'react-redux';
+import { ThunkAppDispatch } from 'src/services';
+import { MoveExercisePayload, moveExerciseAsync } from '@app/services';
+import { WorkoutExerciseProps } from '@app/types';
 
 type Props = {
   onClose: () => void;
+  letterIndex: number;
+  exercise: WorkoutExerciseProps;
 };
 
-const ExerciseMoveMenu: FC<Props> = ({ onClose }) => {
+const ExerciseMoveMenu: FC<Props> = ({ onClose, letterIndex, exercise }) => {
   const { groupParams } = useExerciseGroupParams();
+  const dispatch = useDispatch<ThunkAppDispatch>();
 
   const addOneToGroupLetterIndexes = useMemo(() => {
     const groupLetterIndexes = [...groupParams.keys()];
@@ -19,14 +26,25 @@ const ExerciseMoveMenu: FC<Props> = ({ onClose }) => {
       return [0];
     }
     const max = Math.max(...groupLetterIndexes);
-    return [...groupLetterIndexes, max + 1];
-  }, [groupParams]);
+    return [...groupLetterIndexes.filter(i => i !== letterIndex), max + 1];
+  }, [groupParams, letterIndex]);
+
+  const onMoveExerciseToGroup = (groupIndex: number) => {
+    const groupProps = groupParams.get(groupIndex);
+    if (!groupProps) return;
+    const payload: MoveExercisePayload = {
+      exerciseId: exercise._id as string,
+      groupIndex: groupProps.groupIndex,
+      order: groupProps.totalExercises,
+    };
+    dispatch(moveExerciseAsync(payload));
+  };
 
   const renderItemHandler = (props: ListRenderItemInfo<number>) => {
     return (
       <ExerciseGroupIcon
         letterIndex={props.item}
-        onPress={() => undefined}
+        onPress={() => onMoveExerciseToGroup(props.item)}
         customSizes={{
           container: 40,
           fontSize: 23,

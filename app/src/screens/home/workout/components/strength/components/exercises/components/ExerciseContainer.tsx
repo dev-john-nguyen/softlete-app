@@ -24,7 +24,13 @@ const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
   };
 
   if (isMenuOpen) {
-    return <ExerciseMoveMenu onClose={() => setIsMenuOpen(false)} />;
+    return (
+      <ExerciseMoveMenu
+        onClose={() => setIsMenuOpen(false)}
+        letterIndex={letterIndex}
+        exercise={exercise}
+      />
+    );
   }
 
   return (
