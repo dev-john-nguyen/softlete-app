@@ -30,3 +30,5 @@ export { default as DemoArrow } from './DemoArrow';
 export { default as CustomPicker } from './Picker';
 export { default as ChevronNavigationButton } from './ChevronNavigationButton';
 export * from './screen-template/context';
+export { default as DragAndSortList } from './drag-sort-list';
+export * from './drag-sort-list/types';

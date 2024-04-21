@@ -21,18 +21,19 @@ const GroupExercises: FC<Props> = ({ item }) => {
       groupIndex: item.letterIndex,
     });
   };
-
   return (
     <FlexBox column gap={5} width="100%" onPress={onNavigateToExercise}>
-      {item.exercises.map(exercise => {
-        return (
-          <ExerciseContainer
-            exercise={exercise}
-            letterIndex={item.letterIndex}
-            key={exercise._id as string}
-          />
-        );
-      })}
+      {item.exercises
+        .sort((a, b) => a.order - b.order)
+        .map(exercise => {
+          return (
+            <ExerciseContainer
+              exercise={exercise}
+              letterIndex={item.letterIndex}
+              key={exercise._id as string}
+            />
+          );
+        })}
     </FlexBox>
   );
 };
