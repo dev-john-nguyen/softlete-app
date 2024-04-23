@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import WorkoutExercise from '../../../collections/workout-exercises';
+import { routeErrorWrapper } from '../../../utils/route-error-wrapper';
 
 const router = express.Router();
 
@@ -12,19 +13,9 @@ type Payload = {
     };
   };
 };
-
-const errorHandler = (fn: any) => async (req: Request, res: Response) => {
-  try {
-    await fn(req, res);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Oops! Something went wrong!');
-  }
-};
-
 router.put(
   '/',
-  errorHandler(
+  routeErrorWrapper(
     async (request: Request<null, null, Payload>, response: Response) => {
       const { uid } = request.headers;
       if (!uid) return response.status(401).send('cannot find user id.');

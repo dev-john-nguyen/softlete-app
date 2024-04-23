@@ -1,4 +1,8 @@
-import { WorkoutProps } from '@app/types';
+import {
+  ExerciseProps,
+  WorkoutExerciseDataProps,
+  WorkoutProps,
+} from '@app/types';
 
 export type ActiveWorkoutProps = {
   workout?: WorkoutProps;
@@ -18,4 +22,15 @@ export type ExerciseOrderPayload = {
       order: number;
     };
   };
+};
+
+export type NewExercisePayload = {
+  workoutUid: string;
+  exercises: {
+    _id: string;
+    group: number;
+    order: number;
+    details: ExerciseProps;
+    data: WorkoutExerciseDataProps[];
+  }[];
 };

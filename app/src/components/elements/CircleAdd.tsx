@@ -1,6 +1,12 @@
 import { Colors, rgba } from '@app/utils';
 import React from 'react';
-import { View, StyleSheet, Pressable, StyleProp } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  StyleProp,
+  ActivityIndicator,
+} from 'react-native';
 import PlusSvg from '../../assets/PlusSvg';
 import { moderateScale } from '../tools/StyleConstants';
 
@@ -9,21 +15,26 @@ interface Props {
   style?: StyleProp<any>;
   size?: number;
   onPressIn?: () => void;
+  isLoading?: boolean;
 }
 
-const CircleAdd = ({ onPress, style, size, onPressIn }: Props) => {
+const CircleAdd = ({ onPress, style, size, onPressIn, isLoading }: Props) => {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={isLoading ? undefined : onPress}
       onPressIn={onPressIn}
       style={[styles.container, style]}>
-      <View
-        style={{
-          width: size ? moderateScale(size) : moderateScale(20),
-          height: size ? moderateScale(size) : moderateScale(20),
-        }}>
-        <PlusSvg strokeColor={Colors.white} />
-      </View>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={Colors.white} />
+      ) : (
+        <View
+          style={{
+            width: size ? moderateScale(size) : moderateScale(20),
+            height: size ? moderateScale(size) : moderateScale(20),
+          }}>
+          <PlusSvg strokeColor={Colors.white} />
+        </View>
+      )}
     </Pressable>
   );
 };

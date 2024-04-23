@@ -8,8 +8,8 @@ import {
   ExerciseActionProps,
   Categories,
 } from '../../types/exercises.types';
-import { ReducerProps } from '../../services';
-import { connect, useSelector } from 'react-redux';
+import { ReducerProps, ThunkAppDispatch } from '../../services';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import ExerciseSearchPreview from '../../components/ExerciseSearchPreview';
 import { searchExercises } from '../../services/exercises/actions';
 import { updateWorkoutExercises } from '../../services/workout/actions';
@@ -25,10 +25,10 @@ import { HomeStackScreens } from '../home/types';
 import CircleAdd from '../../components/elements/CircleAdd';
 import SearchHeader from '../../components/SearchHeader';
 import SearchFilter from '../../components/SearchFilter';
-import { AppDispatch } from '../../../App';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { ProgramStackScreens } from '../program/types';
 import ScreenTemplate from '../../components/elements/screen-template';
+import { useAddExerciseToWorkout } from './hooks/search.hooks';
 
 interface Props {
   navigation: any;
@@ -36,7 +36,6 @@ interface Props {
   searchExercises: ExerciseActionProps['searchExercises'];
   updateWorkoutExercises: WorkoutActionProps['updateWorkoutExercises'];
   updateProgramWorkoutExercises: ProgramActionProps['updateProgramWorkoutExercises'];
-  dispatch: AppDispatch;
 }
 
 const Exercises = ({
@@ -45,7 +44,6 @@ const Exercises = ({
   searchExercises,
   updateWorkoutExercises,
   updateProgramWorkoutExercises,
-  dispatch,
 }: Props) => {
   const { exercisesProps, pinExercises, user, offline } = useSelector(
     (state: ReducerProps) => ({
@@ -70,6 +68,14 @@ const Exercises = ({
     { title: string; data: ExerciseProps[] }[]
   >([]);
   const [query, setQuery] = useState('');
+  const dispatch = useDispatch<ThunkAppDispatch>();
+
+  const onGoBackHandler = () => {
+    if (navigation.canGoBack()) return navigation.goBack();
+    navigation.navigate(HomeStackScreens.Home);
+  };
+
+  const addExerciseToWorkout = useAddExerciseToWorkout(onGoBackHandler);
 
   const workoutParams = useMemo(() => {
     const { group, order, workoutUid, programTemplateUid } =
@@ -149,20 +155,17 @@ const Exercises = ({
     query,
   ]);
 
-  const onGoBackHandler = () => {
-    if (navigation.canGoBack()) return navigation.goBack();
-    navigation.navigate(HomeStackScreens.Home);
-  };
-
-  const onSendExerciseToWorkout = () => {
+  const onSendExerciseToWorkout = async () => {
     if (!workoutParams.workoutUid) return navigation.goBack();
 
     const workoutExercises = Array.from(selectedExercises).map(
       ([, exercise]) => {
         const workoutExercise: WorkoutExerciseProps = {
+          _id: exercise._id as string,
           group: workoutParams.group,
           order: workoutParams.order,
           exercise: exercise,
+          details: exercise,
           data: [
             {
               reps: 1,
@@ -183,9 +186,7 @@ const Exercises = ({
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
     } else {
-      updateWorkoutExercises(workoutParams.workoutUid, workoutExercises)
-        .then(() => onGoBackHandler())
-        .catch(err => console.log(err));
+      addExerciseToWorkout.mutateAsync(workoutExercises);
     }
   };
 
@@ -375,7 +376,11 @@ const Exercises = ({
         indicatorStyle="white"
       />
       {route.params && (
-        <CircleAdd onPress={onSendExerciseToWorkout} style={{ bottom: '3%' }} />
+        <CircleAdd
+          onPress={onSendExerciseToWorkout}
+          style={{ bottom: '3%' }}
+          isLoading={addExerciseToWorkout.isLoading}
+        />
       )}
     </ScreenTemplate>
   );
@@ -395,7 +400,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(
       updateProgramWorkoutExercises(workoutUid, exercises, removedExercises),
     ),
-  dispatch,
 });
 
 export default connect(null, mapDispatchToProps)(Exercises);

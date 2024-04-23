@@ -44,7 +44,7 @@ const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
       <ExerciseGroupIcon letterIndex={letterIndex} />
       <FlexBox flex={1}>
         <PrimaryText size="large" textTransform="capitalize">
-          {exercise.details.name}
+          {exercise.details?.name ?? 'Not Found'}
         </PrimaryText>
       </FlexBox>
       <FlexBox gap={15}>

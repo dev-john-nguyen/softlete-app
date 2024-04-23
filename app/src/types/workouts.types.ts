@@ -136,7 +136,7 @@ export enum WorkoutStatus {
 }
 
 export interface WorkoutExerciseProps {
-  _id?: string;
+  _id: string;
   remove?: boolean;
   workoutUid?: string;
   tempId?: string;

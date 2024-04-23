@@ -1,10 +1,23 @@
 import mongoose from 'mongoose';
 
+export type NewWorkoutExerciseProps = {
+  date: Date | string;
+  data?: WorkoutExerciseDataProps[];
+  userUid: string;
+  exerciseUid: mongoose.Types.ObjectId;
+  workoutUid: mongoose.Types.ObjectId;
+  group: Number;
+  order: Number;
+  comments?: String;
+  programUid?: mongoose.Types.ObjectId;
+  calcRef?: Number;
+};
+
 export interface WorkoutExercisesProps {
   _id: mongoose.Types.ObjectId;
   date: Date | string;
   data: WorkoutExerciseDataProps[];
-  userUid: mongoose.Types.ObjectId;
+  userUid: string;
   exerciseUid: mongoose.Types.ObjectId;
   workoutUid: mongoose.Types.ObjectId;
   group: Number;

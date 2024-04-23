@@ -3,6 +3,7 @@ import {
   ActiveWorkoutProps,
   ExerciseOrderPayload,
   MoveExercisePayload,
+  NewExercisePayload,
 } from './types';
 import { WorkoutProps } from '@app/types';
 import axios from 'axios';
@@ -14,6 +15,10 @@ import { AppDispatch } from 'App';
 
 const initialState: ActiveWorkoutProps = {
   workout: undefined,
+};
+
+const getWorkoutUid = (getState: () => unknown) => {
+  return (getState() as ReducerProps).activeWorkout.workout?._id as string;
 };
 
 export const removeExerciseAsync = createAsyncThunk(
@@ -40,8 +45,7 @@ export const reorderExercisesAsync = createAsyncThunk(
     payload: Omit<ExerciseOrderPayload, 'workoutUid'>,
     { dispatch, getState },
   ) => {
-    const rootState = getState() as ReducerProps;
-    const workoutUid = rootState.activeWorkout.workout?._id as string;
+    const workoutUid = getWorkoutUid(getState);
     const requestPayload: ExerciseOrderPayload = {
       workoutUid,
       exercises: payload.exercises,
@@ -62,8 +66,7 @@ export const reorderExercisesAsync = createAsyncThunk(
 export const moveExerciseAsync = createAsyncThunk(
   'active-workout/move-exercise',
   async (payload: MoveExercisePayload, { getState, dispatch }) => {
-    const rootState = getState() as ReducerProps;
-    const workoutUid = rootState.activeWorkout.workout?._id as string;
+    const workoutUid = getWorkoutUid(getState);
     const requestPayload: ExerciseOrderPayload = {
       workoutUid,
       exercises: {
@@ -82,6 +85,32 @@ export const moveExerciseAsync = createAsyncThunk(
           'Oops! Having trouble saving your actions.',
         )(dispatch as AppDispatch, getState as () => ReducerProps);
       });
+    return payload;
+  },
+);
+
+export const addExerciseToWorkoutAsync = createAsyncThunk(
+  'active-workout/add-exercises',
+  async (
+    payload: Omit<NewExercisePayload, 'workoutUid'>,
+    { getState, dispatch },
+  ) => {
+    const workoutUid = getWorkoutUid(getState);
+    const requestPayload: NewExercisePayload = {
+      workoutUid,
+      exercises: payload.exercises,
+    };
+    console.log('resquest');
+    const resp = await axios
+      .put(getURL(PATHS.workouts.insertExercises), requestPayload)
+      .catch(error => {
+        console.error(error);
+        setBanner(
+          BannerTypes.error,
+          'Oops! Having trouble saving your actions.',
+        )(dispatch as AppDispatch, getState as () => ReducerProps);
+      });
+    console.log(resp);
     return payload;
   },
 );
@@ -136,6 +165,19 @@ const activeWorkout = createSlice({
         if (exerciseIndex < 0) return;
         // Directly update the group property of the exercise
         state.workout.exercises[exerciseIndex].group = groupIndex;
+      })
+      .addCase(addExerciseToWorkoutAsync.fulfilled, (state, action) => {
+        if (!state.workout) return;
+        const { exercises } = action.payload;
+        exercises.forEach(exercise => {
+          state.workout?.exercises.push({
+            _id: exercise._id,
+            order: exercise.order,
+            group: exercise.group,
+            details: exercise.details,
+            data: exercise.data,
+          });
+        });
       });
   },
 });

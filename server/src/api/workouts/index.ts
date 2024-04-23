@@ -1,7 +1,6 @@
 const router = require('express').Router();
 import create from './create';
 import get from './get';
-// import update from './update';
 import authenticate from '../../utils/authenticate';
 import duplicate from './duplicate';
 import remove from './remove';
@@ -13,7 +12,6 @@ router.use(authenticate);
 
 router.use('/get', get);
 router.use('/create', create);
-// router.use('/update', update);
 router.use('/duplicate', duplicate);
 router.use('/remove/exercise', removeExercise);
 router.use('/remove', remove);
