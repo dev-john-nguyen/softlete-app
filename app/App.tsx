@@ -12,13 +12,12 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import auth from '@react-native-firebase/auth';
+import axiosRetry from 'axios-retry';
 
 async function resetAuthHeader() {
   const user = auth().currentUser;
 
-  if (!user) {
-    throw new Error('User is not signed in.');
-  }
+  if (!user) return false;
 
   const newAuthToken = await user.getIdToken();
 
@@ -27,6 +26,21 @@ async function resetAuthHeader() {
   return true;
 }
 
+// axios retry configuration
+axiosRetry(axios, {
+  retries: 3,
+  retryCondition: (error: any) => {
+    console.error(error);
+    const { data } = error.response;
+    if (data.tokenExpired) {
+      // token expired. Try to reapply
+      return resetAuthHeader();
+    }
+    return false;
+  },
+});
+
+// useQuery retry configuration - This might not be needed since I'm implementing retries in axios itself
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
