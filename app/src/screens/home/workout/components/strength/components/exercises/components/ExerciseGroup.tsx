@@ -21,14 +21,14 @@ import { objectMove } from '../helpers';
 import GroupExercises from './GroupExercises';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
+import { ExerciseOrderPayload, reorderExercises } from '@app/services';
 
 type Props = {
   item: ExerciseDataProps;
   setItemLayoutProps: React.Dispatch<
     React.SetStateAction<Map<string, ItemLayoutProps>>
   >;
-  setData: React.Dispatch<React.SetStateAction<ExerciseDataProps[]>>;
+  data: ExerciseDataProps[];
   scrollLayoutProps: ItemLayoutProps | undefined;
   scrollY: SharedValue<number>;
   scrollViewHeight: number;
@@ -39,7 +39,7 @@ type Props = {
 const ExerciseGroup = ({
   item,
   setItemLayoutProps,
-  setData,
+  data,
   scrollLayoutProps,
   scrollY,
   scrollViewHeight,
@@ -72,39 +72,33 @@ const ExerciseGroup = ({
   );
 
   const finalizedPositions = () => {
-    setData(data => {
-      const ids = Object.keys(positions.value);
-      const sortedPositions = ids.sort(
-        (a, b) =>
-          (positions.value[a]?.sortOrder as number) -
-          (positions.value[b]?.sortOrder as number),
-      );
-      const sortedData: ExerciseDataProps[] = [];
+    const ids = Object.keys(positions.value);
+    const sortedPositions = ids.sort(
+      (a, b) =>
+        (positions.value[a]?.sortOrder as number) -
+        (positions.value[b]?.sortOrder as number),
+    );
+    const sortedData: ExerciseDataProps[] = [];
 
-      sortedPositions.forEach(id => {
-        const targetData = data.find(d => d.id === id);
-        if (targetData) {
-          sortedData.push(targetData);
-        }
-      });
-
-      // This only updates groups
-      const payloadExercises: ExerciseOrderPayload['exercises'] = {};
-
-      sortedData.forEach((props, groupIndex) => {
-        props.exercises.forEach((exercise, index) => {
-          payloadExercises[exercise._id as string] = {
-            group: groupIndex,
-            order: index,
-          };
-        });
-      });
-
-      dispatch(reorderExercisesAsync({ exercises: payloadExercises }));
-
-      // Don't want to rerender. The dispatch action should update the state of workout which will force the rerender
-      return data;
+    sortedPositions.forEach(id => {
+      const targetData = data.find(d => d.id === id);
+      if (targetData) {
+        sortedData.push(targetData);
+      }
     });
+
+    // This only updates groups
+    const payloadExercises: ExerciseOrderPayload['exercises'] = {};
+
+    sortedData.forEach((props, groupIndex) => {
+      props.exercises.forEach((exercise, index) => {
+        payloadExercises[exercise._id as string] = {
+          group: groupIndex,
+          order: index,
+        };
+      });
+    });
+    dispatch(reorderExercises({ exercises: payloadExercises }));
   };
 
   const autoScrollHandler = () => {

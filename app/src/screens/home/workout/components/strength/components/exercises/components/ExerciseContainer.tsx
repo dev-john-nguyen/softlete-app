@@ -8,7 +8,7 @@ import { Colors } from '@app/utils';
 import ExerciseMoveMenu from './ExerciseMoveMenu';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { removeExerciseAsync } from '@app/services';
+import { removeExercise } from '@app/services';
 
 type Props = {
   exercise: WorkoutExerciseProps;
@@ -20,7 +20,7 @@ const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
   const dispatch = useDispatch<ThunkAppDispatch>();
 
   const onRemove = () => {
-    dispatch(removeExerciseAsync(exercise._id as string));
+    dispatch(removeExercise(exercise._id as string));
   };
 
   if (isMenuOpen) {

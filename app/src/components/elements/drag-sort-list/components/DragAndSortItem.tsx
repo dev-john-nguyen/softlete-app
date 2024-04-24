@@ -8,7 +8,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { useState, useRef, FC } from 'react';
+import { useRef, FC } from 'react';
 import { View, Vibration, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { objectMove } from '../helpers';

@@ -7,7 +7,7 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors, rgba } from '@app/utils';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { MoveExercisePayload, moveExerciseAsync } from '@app/services';
+import { MoveExercisePayload, moveExercise } from '@app/services';
 import { WorkoutExerciseProps } from '@app/types';
 
 type Props = {
@@ -37,7 +37,7 @@ const ExerciseMoveMenu: FC<Props> = ({ onClose, letterIndex, exercise }) => {
       groupIndex: groupProps.groupIndex,
       order: groupProps.totalExercises,
     };
-    dispatch(moveExerciseAsync(payload));
+    dispatch(moveExercise(payload));
   };
 
   const renderItemHandler = (props: ListRenderItemInfo<number>) => {

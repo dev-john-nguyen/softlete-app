@@ -10,7 +10,7 @@ import { WorkoutExerciseProps } from '@app/types';
 import ExerciseContainer from '../components/strength/components/exercises/components/ExerciseContainer';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
-import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
+import { ExerciseOrderPayload, reorderExercises } from '@app/services';
 import { FlexBox } from '@app/ui';
 
 const WorkoutGroupExercises = () => {
@@ -61,7 +61,7 @@ const WorkoutGroupExercises = () => {
         order: i,
       };
     });
-    dispatch(reorderExercisesAsync({ exercises: payloadExercises }));
+    dispatch(reorderExercises({ exercises: payloadExercises }));
   };
 
   if (!workout) {

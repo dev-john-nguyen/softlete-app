@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { SectionList } from 'react-native';
 import { PrimaryText } from '@app/elements';
-import { Colors } from '@app/utils';
+import { AutoId, Colors } from '@app/utils';
 import { FlexBox } from '@app/ui';
 import {
   ExerciseProps,
@@ -28,7 +28,7 @@ import SearchFilter from '../../components/SearchFilter';
 import { SET_TARGET_EXERCISE } from '../../services/exercises/actionTypes';
 import { ProgramStackScreens } from '../program/types';
 import ScreenTemplate from '../../components/elements/screen-template';
-import { useAddExerciseToWorkout } from './hooks/search.hooks';
+import { addExercise } from '@app/services';
 
 interface Props {
   navigation: any;
@@ -74,8 +74,6 @@ const Exercises = ({
     if (navigation.canGoBack()) return navigation.goBack();
     navigation.navigate(HomeStackScreens.Home);
   };
-
-  const addExerciseToWorkout = useAddExerciseToWorkout(onGoBackHandler);
 
   const workoutParams = useMemo(() => {
     const { group, order, workoutUid, programTemplateUid } =
@@ -161,7 +159,7 @@ const Exercises = ({
     const workoutExercises = Array.from(selectedExercises).map(
       ([, exercise]) => {
         const workoutExercise: WorkoutExerciseProps = {
-          _id: exercise._id as string,
+          _id: AutoId.newId(24),
           group: workoutParams.group,
           order: workoutParams.order,
           exercise: exercise,
@@ -186,7 +184,8 @@ const Exercises = ({
         .then(() => onGoBackHandler())
         .catch(err => console.log(err));
     } else {
-      addExerciseToWorkout.mutateAsync(workoutExercises);
+      dispatch(addExercise({ exercises: workoutExercises }));
+      onGoBackHandler();
     }
   };
 
@@ -376,11 +375,7 @@ const Exercises = ({
         indicatorStyle="white"
       />
       {route.params && (
-        <CircleAdd
-          onPress={onSendExerciseToWorkout}
-          style={{ bottom: '3%' }}
-          isLoading={addExerciseToWorkout.isLoading}
-        />
+        <CircleAdd onPress={onSendExerciseToWorkout} style={{ bottom: '3%' }} />
       )}
     </ScreenTemplate>
   );

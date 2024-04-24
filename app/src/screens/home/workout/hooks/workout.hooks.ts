@@ -1,10 +1,6 @@
-import { setActiveWorkout } from '@app/services';
-import { WorkoutProps } from '@app/types';
-import { PATHS, getURL } from '@app/utils';
+import { setActiveWorkoutAsync } from '@app/services';
 import { useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps, ThunkAppDispatch } from 'src/services';
 
@@ -17,22 +13,16 @@ export const useFetchWorkout = () => {
   const route = useRoute<any>();
   const dispatch = useDispatch<ThunkAppDispatch>();
   const workoutUid = route.params.workoutUid;
-  const { data, isFetching, isError } = useQuery<WorkoutProps>(
+  const { isFetching, isError } = useQuery(
     ['fetch-workouts', { workoutUid, uid: user.uid }],
     async () => {
-      return axios
-        .get(getURL(PATHS.workouts.fetchOne(user.uid, route.params.workoutUid)))
-        .then(resp => resp.data);
+      return dispatch(setActiveWorkoutAsync(workoutUid)).unwrap();
     },
     {
       enabled: Boolean(user.uid && workoutUid),
       cacheTime: 0,
     },
   );
-
-  useEffect(() => {
-    data && dispatch(setActiveWorkout(data));
-  }, [data, dispatch]);
 
   return {
     workout: activeWorkout,

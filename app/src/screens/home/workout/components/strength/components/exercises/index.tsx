@@ -88,7 +88,7 @@ const ExercisesContainer = () => {
         key={item.key}
         item={item}
         setItemLayoutProps={setItemLayoutProps}
-        setData={setData}
+        data={data}
         scrollLayoutProps={scrollLayoutProps}
         scrollY={scrollY}
         scrollViewHeight={scrollViewHeight}
