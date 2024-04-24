@@ -10,7 +10,7 @@ import Animated, {
   useAnimatedReaction,
   withSpring,
 } from 'react-native-reanimated';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
   CUSTOM_OFF_SET,
   ExerciseDataProps,
@@ -22,6 +22,9 @@ import GroupExercises from './GroupExercises';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
 import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
+import { moderateScale } from '@app/utils';
+
+const PADDING = moderateScale(15);
 
 type Props = {
   item: ExerciseDataProps;
@@ -47,10 +50,10 @@ const ExerciseGroup = ({
   positions,
 }: Props) => {
   const translateY = useSharedValue(0);
-  const [isMoving, setIsMoving] = useState(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
   const initializedPosition = useSharedValue(false);
   const dispatch = useDispatch<ThunkAppDispatch>();
+  const isMoving = useSharedValue(false);
 
   useAnimatedReaction(
     () => positions.value[item.id]?.positionY,
@@ -58,7 +61,7 @@ const ExerciseGroup = ({
       if (
         currentPosition !== undefined &&
         currentPosition !== previousPosition &&
-        !isMoving
+        !isMoving.value
       ) {
         if (initializedPosition.value) {
           translateY.value = withSpring(currentPosition);
@@ -164,10 +167,23 @@ const ExerciseGroup = ({
     }
   };
 
-  const gesture = Gesture.Pan()
-    .minDistance(10)
+  const longPress = Gesture.LongPress()
+    .minDuration(500)
     .onStart(() => {
-      runOnJS(setIsMoving)(true);
+      isMoving.value = true;
+    });
+
+  const panGesture = Gesture.Pan()
+    .manualActivation(true)
+    .onTouchesMove((event, stateManager) => {
+      if (isMoving.value) {
+        stateManager.activate();
+      } else {
+        stateManager.fail();
+      }
+    })
+    .onStart(() => {
+      isMoving.value = true;
       isAnItemDragging.value = true;
     })
     .onUpdate(event => {
@@ -180,9 +196,11 @@ const ExerciseGroup = ({
     })
     .onEnd(() => {
       runOnJS(finalizedPositions)();
-      runOnJS(setIsMoving)(false);
       isAnItemDragging.value = false;
       translateY.value = positions.value[item.id]?.positionY;
+    })
+    .onTouchesUp(() => {
+      isMoving.value = false;
     });
 
   const animatedStyle = useAnimatedStyle(
@@ -190,15 +208,18 @@ const ExerciseGroup = ({
       position: 'absolute',
       borderRadius: 10,
       top: translateY.value,
-      zIndex: isMoving ? 100 : 1,
+      zIndex: isMoving.value ? 100 : 1,
       backgroundColor: '#160303',
-      shadowColor: '#2C1A1A',
+      shadowColor: '#3A1A1A',
       shadowOffset: {
-        height: 0,
-        width: 0,
+        height: 5,
+        width: 5,
       },
-      shadowOpacity: withSpring(isMoving ? 1 : 0),
+      shadowOpacity: withSpring(isMoving.value ? 1 : 0),
       shadowRadius: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#3A1A1A',
     }),
     [isMoving],
   );
@@ -226,6 +247,8 @@ const ExerciseGroup = ({
       });
     });
   };
+
+  const gesture = Gesture.Simultaneous(longPress, panGesture);
 
   return (
     <GestureDetector gesture={gesture}>
