@@ -22,9 +22,6 @@ import GroupExercises from './GroupExercises';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
 import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
-import { moderateScale } from '@app/utils';
-
-const PADDING = moderateScale(15);
 
 type Props = {
   item: ExerciseDataProps;

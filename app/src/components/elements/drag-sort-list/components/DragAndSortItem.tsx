@@ -31,6 +31,7 @@ interface Props {
   positions: SharedValue<Positions>;
   updateCallback: (ids: string[]) => void;
   renderItem: (item: ItemProps<any>) => JSX.Element;
+  gap: number;
 }
 
 const DragAndSortItem: FC<Props> = ({
@@ -43,19 +44,20 @@ const DragAndSortItem: FC<Props> = ({
   positions,
   updateCallback,
   renderItem,
+  gap,
 }) => {
   const translateY = useSharedValue(0);
-  const [isMoving, setIsMoving] = useState(false);
   const myComponentRef = useRef() as React.MutableRefObject<View>;
   const initializedPosition = useSharedValue(false);
+  const isMoving = useSharedValue(false);
 
   useAnimatedReaction(
-    () => positions.value[item.id as string]?.positionY,
+    () => positions.value[item.id]?.positionY,
     (currentPosition, previousPosition) => {
       if (
         currentPosition !== undefined &&
         currentPosition !== previousPosition &&
-        !isMoving
+        !isMoving.value
       ) {
         if (initializedPosition.value) {
           translateY.value = withSpring(currentPosition);
@@ -135,14 +137,28 @@ const DragAndSortItem: FC<Props> = ({
         positions.value,
         item.id as string,
         newIndex,
+        gap,
       );
     }
   };
 
-  const gesture = Gesture.Pan()
-    .minDistance(10)
+  const longPress = Gesture.LongPress()
+    .minDuration(500)
     .onStart(() => {
-      runOnJS(setIsMoving)(true);
+      isMoving.value = true;
+    });
+
+  const panGesture = Gesture.Pan()
+    .manualActivation(true)
+    .onTouchesMove((event, stateManager) => {
+      if (isMoving.value) {
+        stateManager.activate();
+      } else {
+        stateManager.fail();
+      }
+    })
+    .onStart(() => {
+      isMoving.value = true;
       isAnItemDragging.value = true;
     })
     .onUpdate(event => {
@@ -155,9 +171,11 @@ const DragAndSortItem: FC<Props> = ({
     })
     .onEnd(() => {
       runOnJS(finalizedPositions)();
-      runOnJS(setIsMoving)(false);
       isAnItemDragging.value = false;
-      translateY.value = positions.value[item.id as string]?.positionY;
+      translateY.value = positions.value[item.id]?.positionY;
+    })
+    .onTouchesUp(() => {
+      isMoving.value = false;
     });
 
   const animatedStyle = useAnimatedStyle(
@@ -165,15 +183,18 @@ const DragAndSortItem: FC<Props> = ({
       position: 'absolute',
       borderRadius: 10,
       top: translateY.value,
-      zIndex: isMoving ? 100 : 1,
+      zIndex: isMoving.value ? 100 : 1,
       backgroundColor: '#160303',
-      shadowColor: '#2C1A1A',
+      shadowColor: '#3A1A1A',
       shadowOffset: {
-        height: 0,
-        width: 0,
+        height: 5,
+        width: 5,
       },
-      shadowOpacity: withSpring(isMoving ? 1 : 0),
+      shadowOpacity: withSpring(isMoving.value ? 1 : 0),
       shadowRadius: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#3A1A1A',
     }),
     [isMoving],
   );
@@ -201,6 +222,8 @@ const DragAndSortItem: FC<Props> = ({
       });
     });
   };
+
+  const gesture = Gesture.Simultaneous(longPress, panGesture);
 
   return (
     <GestureDetector gesture={gesture}>

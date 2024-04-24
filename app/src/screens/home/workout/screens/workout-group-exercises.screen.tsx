@@ -11,6 +11,7 @@ import ExerciseContainer from '../components/strength/components/exercises/compo
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
 import { ExerciseOrderPayload, reorderExercisesAsync } from '@app/services';
+import { FlexBox } from '@app/ui';
 
 const WorkoutGroupExercises = () => {
   const workout = useGetActiveWorkout();
@@ -70,12 +71,14 @@ const WorkoutGroupExercises = () => {
   return (
     <WorkoutContextProvider workout={workout}>
       <ScreenTemplate isBackVisible>
-        <DragAndSortList
-          data={groupedExercises}
-          renderItem={renderItem}
-          gap={10}
-          updateCallback={onUpdateCallback}
-        />
+        <FlexBox paddingTop={10} flex={1}>
+          <DragAndSortList
+            data={groupedExercises}
+            renderItem={renderItem}
+            gap={10}
+            updateCallback={onUpdateCallback}
+          />
+        </FlexBox>
       </ScreenTemplate>
     </WorkoutContextProvider>
   );

@@ -100,6 +100,7 @@ const DragAndSortList: FC<Props> = ({
         positions={positions}
         updateCallback={onUpdateCallback}
         renderItem={renderItem}
+        gap={gap}
       />
     );
   };
