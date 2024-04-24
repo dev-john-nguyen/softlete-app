@@ -1,5 +1,5 @@
 import { FlexBox } from '@app/ui';
-import { moderateScale } from '@app/utils';
+import { AutoId, moderateScale } from '@app/utils';
 import { FC, useState, useEffect } from 'react';
 import Animated, {
   useSharedValue,
@@ -18,18 +18,19 @@ import {
 } from './types';
 
 interface Props {
-  data: ItemProps<any>[];
+  data: any[];
   renderItem: (data: ItemProps<any>) => JSX.Element;
   updateCallback: (data: ItemProps<any>[]) => void;
   gap?: number;
 }
 
 const DragAndSortList: FC<Props> = ({
-  data,
+  data: dataProp,
   renderItem,
   updateCallback,
   gap = GAP_BETWEEN_GROUPS,
 }) => {
+  const [data, setData] = useState<ItemProps<any>[]>([]);
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const [itemLayoutProps, setItemLayoutProps] = useState<
     Map<string, ItemLayoutProps>
@@ -44,11 +45,18 @@ const DragAndSortList: FC<Props> = ({
     // resets states
     setItemLayoutProps(new Map());
     positions.value = {};
-  }, [data, positions]);
+    setData(
+      dataProp.map(props => {
+        return {
+          id: AutoId.newId(20),
+          data: props,
+        };
+      }),
+    );
+  }, [dataProp, positions]);
 
   useEffect(() => {
     // validate that all items have a height before proceeding
-
     if (itemLayoutProps.size !== data.length) {
       return;
     }
