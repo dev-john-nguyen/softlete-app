@@ -27,7 +27,8 @@ export type ExerciseOrderPayload = {
 export type NewExercisePayload = {
   workoutUid: string;
   exercises: {
-    _id: string;
+    _id: string; // This is unique id
+    exerciseUid: string;
     group: number;
     order: number;
     details: ExerciseProps;

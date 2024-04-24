@@ -77,6 +77,7 @@ const activeWorkout = createSlice({
       exercises.forEach(exercise => {
         state.workout?.exercises.push({
           _id: exercise._id,
+          exerciseUid: exercise.exerciseUid,
           order: exercise.order,
           group: exercise.group,
           details: exercise.details,
@@ -132,6 +133,7 @@ const activeWorkout = createSlice({
         exercises.forEach(exercise => {
           state.workout?.exercises.push({
             _id: exercise._id,
+            exerciseUid: exercise.exerciseUid,
             order: exercise.order,
             group: exercise.group,
             details: exercise.details,

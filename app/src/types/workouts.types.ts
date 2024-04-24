@@ -141,7 +141,7 @@ export interface WorkoutExerciseProps {
   workoutUid?: string;
   tempId?: string;
   data: WorkoutExerciseDataProps[];
-  exerciseUid?: string;
+  exerciseUid: string;
   exercise?: ExerciseProps; // will deprecate and move to details
   group: number;
   order: number;

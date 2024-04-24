@@ -23,7 +23,7 @@ export interface ExerciseFormProps {
 }
 
 export interface ExerciseProps extends ExerciseFormProps {
-  _id?: string;
+  _id: string;
   userUid?: string;
 }
 

@@ -160,6 +160,7 @@ const Exercises = ({
       ([, exercise]) => {
         const workoutExercise: WorkoutExerciseProps = {
           _id: AutoId.newId(24),
+          exerciseUid: exercise._id as string,
           group: workoutParams.group,
           order: workoutParams.order,
           exercise: exercise,
