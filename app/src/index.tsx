@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import SignIn from './screens/signin';
 import SettingsStack from './screens/settings';
 import { connect } from 'react-redux';
@@ -37,6 +40,7 @@ import './permissions/health';
 import Demo from './components/elements/Demo';
 import { TimerBanner } from './components/TimerBanner';
 import AppLoadingIndicator from './components/AppLoadingIndicator';
+import { HomeStackScreens } from './screens/home/types';
 
 const Tab = createBottomTabNavigator<IndexStackParamsList>();
 
@@ -49,6 +53,8 @@ interface Props {
   dispatch: AppDispatch;
 }
 
+const TabBarHiddenScreens = new Set<string>([HomeStackScreens.WorkoutExercise]);
+
 const Main = ({
   logout,
   login,
@@ -60,6 +66,13 @@ const Main = ({
   useNetInfo(dispatch);
   useUserPermission(user);
   const { loading, verify } = useAuth(login, logout);
+
+  const renderTabBar = useCallback(
+    (props: BottomTabBarProps) => {
+      return <TabBar {...props} isHidden={verify || isNewUser || !user?.uid} />;
+    },
+    [isNewUser, user?.uid, verify],
+  );
 
   return (
     <SafeAreaProvider>
@@ -80,10 +93,11 @@ const Main = ({
             screenOptions={() => ({
               headerShown: false,
               drawerPosition: 'right',
+              tabBarStyle: {
+                position: 'absolute',
+              },
             })}
-            tabBar={props => (
-              <TabBar {...props} isHidden={verify || isNewUser || !user?.uid} />
-            )}>
+            tabBar={renderTabBar}>
             {verify ? (
               <Tab.Screen name="VerifyEmail" component={VerifyEmail} />
             ) : user.token ? (
