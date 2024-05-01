@@ -140,6 +140,74 @@ const activeWorkout = createSlice({
 
       storeWorkoutLocalStorage(state.workout);
     },
+    onDeleteExerciseMetric: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        exerciseUid: string;
+        metricUid: string;
+      }>,
+    ) => {
+      if (!state.workout) return;
+
+      const targetExercise = state.workout.exercises.find(
+        exercise => exercise._id === payload.exerciseUid,
+      );
+
+      if (targetExercise) {
+        const targetMetricsIndex = targetExercise.data.findIndex(
+          metric => metric._id === payload.metricUid,
+        );
+        if (targetMetricsIndex > -1) {
+          targetExercise.data.splice(targetMetricsIndex, 1);
+        }
+      }
+
+      storeWorkoutLocalStorage(state.workout);
+    },
+    updateExerciseMetricStatus: (
+      state,
+      { payload }: PayloadAction<{ exerciseUid: string; metricUid: string }>,
+    ) => {
+      if (!state.workout) return;
+
+      const targetExercise = state.workout.exercises.find(
+        exercise => exercise._id === payload.exerciseUid,
+      );
+
+      if (targetExercise) {
+        const targetMetrics = targetExercise.data.find(
+          metric => metric._id === payload.metricUid,
+        );
+
+        if (targetMetrics) {
+          targetMetrics.completed = targetMetrics.completed ? false : true;
+        }
+      }
+      storeWorkoutLocalStorage(state.workout);
+    },
+    updateExerciseMetricWarmUpStatus: (
+      state,
+      { payload }: PayloadAction<{ exerciseUid: string; metricUid: string }>,
+    ) => {
+      if (!state.workout) return;
+
+      const targetExercise = state.workout.exercises.find(
+        exercise => exercise._id === payload.exerciseUid,
+      );
+
+      if (targetExercise) {
+        const targetMetrics = targetExercise.data.find(
+          metric => metric._id === payload.metricUid,
+        );
+
+        if (targetMetrics) {
+          targetMetrics.warmup = targetMetrics.warmup ? false : true;
+        }
+      }
+      storeWorkoutLocalStorage(state.workout);
+    },
   },
   extraReducers: builder => {
     builder
@@ -206,6 +274,9 @@ export const {
   reorderExercises,
   addExerciseMetric,
   updateExerciseMetric,
+  onDeleteExerciseMetric,
+  updateExerciseMetricWarmUpStatus,
+  updateExerciseMetricStatus,
 } = activeWorkout.actions;
 
 export default activeWorkout.reducer;

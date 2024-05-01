@@ -21,10 +21,16 @@ const WorkoutExerciseMetrics = () => {
 
   return (
     <FlexBox flex={1} marginTop={20} column paddingBottom={bottomNavBarHeight}>
-      <ScrollView contentContainerStyle={{ gap: 10, flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ gap: 10, flexGrow: 1, paddingBottom: 20 }}>
         {exercise?.data.map(metrics => {
           return (
-            <WorkoutExerciseMetricsItem key={metrics._id} metrics={metrics} />
+            <WorkoutExerciseMetricsItem
+              key={metrics._id}
+              metrics={metrics}
+              exerciseUid={exercise._id}
+            />
           );
         })}
       </ScrollView>

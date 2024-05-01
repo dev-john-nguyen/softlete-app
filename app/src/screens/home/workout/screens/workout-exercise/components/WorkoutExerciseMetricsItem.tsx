@@ -6,13 +6,21 @@ import { useWorkoutExerciseState } from '../context';
 import { FC } from 'react';
 import { ScrollView } from 'react-native';
 import { WorkoutExerciseDataProps } from '@app/types';
-import { WorkoutExerciseDataMetrics } from '@app/services';
+import {
+  WorkoutExerciseDataMetrics,
+  onDeleteExerciseMetric,
+  updateExerciseMetricStatus,
+  updateExerciseMetricWarmUpStatus,
+} from '@app/services';
+import { useDispatch } from 'react-redux';
 
 type Props = {
   metrics: WorkoutExerciseDataProps;
+  exerciseUid: string;
 };
 
-const WorkoutExerciseMetricsItem: FC<Props> = ({ metrics }) => {
+const WorkoutExerciseMetricsItem: FC<Props> = ({ metrics, exerciseUid }) => {
+  const dispatch = useDispatch();
   const { onTriggerNumericKeyboard } = useWorkoutExerciseState();
 
   const onMetricPress = (type: WorkoutExerciseDataMetrics) => () => {
@@ -26,15 +34,48 @@ const WorkoutExerciseMetricsItem: FC<Props> = ({ metrics }) => {
     onTriggerNumericKeyboard(activeItemValue, defaultValue);
   };
 
+  const onRemoveMetric = () => {
+    dispatch(
+      onDeleteExerciseMetric({
+        exerciseUid,
+        metricUid: metrics._id,
+      }),
+    );
+  };
+
+  const onUpdateMetricWarmUpStatus = () => {
+    dispatch(
+      updateExerciseMetricWarmUpStatus({
+        exerciseUid,
+        metricUid: metrics._id,
+      }),
+    );
+  };
+
+  const onUpdateMetricStatus = () => {
+    dispatch(
+      updateExerciseMetricStatus({
+        exerciseUid,
+        metricUid: metrics._id,
+      }),
+    );
+  };
+
   return (
     <FlexBox
       alignSelf="flex-start"
       alignItems="center"
-      gap={5}
+      gap={10}
       width="100%"
       justifyContent="space-between">
-      <FlexBox marginRight={10} column>
-        <Icon name="circle-check" color={Colors.green} size={30} />
+      <FlexBox column>
+        <Icon
+          name="circle-check"
+          style={{ opacity: metrics.completed ? 1 : 0.2 }}
+          color={metrics.completed ? Colors.green : Colors.white}
+          size={30}
+          onPress={onUpdateMetricStatus}
+        />
       </FlexBox>
       <FlexBox flex={1} gap={10}>
         <ScrollView horizontal contentContainerStyle={{ gap: 5 }}>
@@ -83,8 +124,18 @@ const WorkoutExerciseMetricsItem: FC<Props> = ({ metrics }) => {
         </ScrollView>
       </FlexBox>
       <FlexBox gap={15} alignItems="center">
-        <Icon name="temperature-quarter" color={Colors.white} size={25} />
-        <Icon name="trash" color={Colors.white} size={20} />
+        <Icon
+          name={metrics.warmup ? 'temperature-quarter' : 'fire'}
+          color={Colors.white}
+          size={metrics.warmup ? 25 : 24}
+          onPress={onUpdateMetricWarmUpStatus}
+        />
+        <Icon
+          name="trash"
+          color={Colors.white}
+          size={20}
+          onPress={onRemoveMetric}
+        />
       </FlexBox>
     </FlexBox>
   );
