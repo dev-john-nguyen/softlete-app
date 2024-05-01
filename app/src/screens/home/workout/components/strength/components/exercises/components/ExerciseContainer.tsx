@@ -13,9 +13,10 @@ import { removeExercise } from '@app/services';
 type Props = {
   exercise: WorkoutExerciseProps;
   letterIndex: number;
+  onPress?: () => void;
 };
 
-const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
+const ExerciseContainer: FC<Props> = ({ exercise, letterIndex, onPress }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch<ThunkAppDispatch>();
 
@@ -35,6 +36,7 @@ const ExerciseContainer: FC<Props> = ({ exercise, letterIndex }) => {
 
   return (
     <FlexBox
+      onPress={onPress}
       width="100%"
       padding={5}
       paddingLeft={0}

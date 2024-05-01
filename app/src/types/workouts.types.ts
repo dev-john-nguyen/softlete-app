@@ -156,7 +156,7 @@ export interface WorkoutExerciseProps {
 }
 
 export interface WorkoutExerciseDataProps {
-  _id?: string;
+  _id: string;
   reps: number;
   performVal?: number;
   predictVal: number;

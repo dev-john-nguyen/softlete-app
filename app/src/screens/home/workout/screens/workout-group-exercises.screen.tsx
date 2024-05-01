@@ -2,7 +2,12 @@ import { DragAndSortList, ItemProps, ScreenTemplate } from '@app/elements';
 import { useGetActiveWorkout } from '../hooks/workout.hooks';
 import { useCallback, useMemo } from 'react';
 import { groupWoExercisesByGroup } from '../helpers/workout.helpers';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { WorkoutContextProvider } from '../contexts';
 import WorkoutEmpty from '../components/WorkoutEmpty';
@@ -20,7 +25,7 @@ const WorkoutGroupExercises = () => {
   const { params } =
     useRoute<RouteProp<HomeStackParamsList, 'WorkoutGroupExercises'>>();
   const dispatch = useDispatch<ThunkAppDispatch>();
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
 
   const groupIndex = params?.groupIndex;
 
@@ -38,15 +43,23 @@ const WorkoutGroupExercises = () => {
 
   const renderItem = useCallback(
     (data: ItemProps<WorkoutExerciseProps>) => {
+      const onNavigateToExercise = () => {
+        if (!workout) return;
+        navigation.navigate(HomeStackScreens.WorkoutExercise, {
+          exerciseUid: data.data._id,
+          workoutUid: workout._id,
+        });
+      };
       return (
         <ExerciseContainer
+          onPress={onNavigateToExercise}
           exercise={data.data}
           letterIndex={groupIndex}
           key={data.id}
         />
       );
     },
-    [groupIndex],
+    [groupIndex, navigation, workout],
   );
 
   const onUpdateCallback = (items: ItemProps<WorkoutExerciseProps>[]) => {

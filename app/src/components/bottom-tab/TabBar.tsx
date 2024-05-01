@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import DashboardSvg from '../../assets/DashboardSvg';
 import { IndexStackList } from '../../screens/types';
-import { Colors, rgba } from '@app/utils';
+import { Colors, TabBarHiddenScreens, rgba } from '@app/utils';
 import { moderateScale } from '../tools/StyleConstants';
 import Tab from './Tab';
 import GearSvg from '../../assets/GearSvg';
@@ -15,8 +15,6 @@ import { ProgramStackScreens } from '../../screens/program/types';
 import Icon from '@app/icons';
 import DemoArrow from '../elements/DemoArrow';
 import { DemoStates } from '@app/services';
-
-const TabBarHiddenScreens = new Set<string>([HomeStackScreens.WorkoutExercise]);
 
 const TabBar = ({
   state,

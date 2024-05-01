@@ -40,7 +40,7 @@ const WorkoutHeader = () => {
           <PrimaryText size="small" opacity={workout.description ? 1 : 0.5}>
             {workout.description ?? 'No description provided'}
           </PrimaryText>
-          <FlexBox gap={10} marginTop={10}>
+          <FlexBox gap={5} marginTop={10}>
             <Icon name="book" size={20} color={Colors.white} />
             <PrimaryText size="small" opacity={workout.description ? 1 : 0.5}>
               : {program ? program.name : 'Not Assigned'}

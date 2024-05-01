@@ -4,6 +4,7 @@ import {
   ExerciseOrderPayload,
   MoveExercisePayload,
   NewExercisePayload,
+  WorkoutExerciseDataMetrics,
 } from './types';
 import {
   removeExerciseAsync,
@@ -13,6 +14,8 @@ import {
   setActiveWorkoutAsync,
 } from './async-actions';
 import { storeWorkoutLocalStorage } from './helpers';
+import { WorkoutExerciseDataProps } from '@app/types';
+import { AutoId } from '@app/utils';
 
 const initialState: ActiveWorkoutProps = {
   workout: undefined,
@@ -86,6 +89,57 @@ const activeWorkout = createSlice({
       });
       storeWorkoutLocalStorage(state.workout);
     },
+    addExerciseMetric: (
+      state,
+      { payload }: PayloadAction<{ exerciseUid: string }>,
+    ) => {
+      if (!state.workout) return;
+      const targetExercise = state.workout.exercises.find(
+        exercise => exercise._id === payload.exerciseUid,
+      );
+
+      if (targetExercise) {
+        targetExercise.data.push({
+          _id: AutoId.newId(20),
+          reps: 0,
+          performVal: 0,
+          pct: 0,
+          predictVal: 0,
+        });
+      }
+
+      storeWorkoutLocalStorage(state.workout);
+    },
+    updateExerciseMetric: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        exerciseUid: string;
+        metricUid: string;
+        metric: WorkoutExerciseDataMetrics;
+        value: number;
+      }>,
+    ) => {
+      if (!state.workout) return;
+
+      const targetExercise = state.workout.exercises.find(
+        exercise => exercise._id === payload.exerciseUid,
+      );
+
+      if (targetExercise) {
+        const targetMetrics = targetExercise.data.find(
+          metric => metric._id === payload.metricUid,
+        );
+
+        if (targetMetrics) {
+          targetMetrics[payload.metric as keyof WorkoutExerciseDataProps] =
+            payload.value as never;
+        }
+      }
+
+      storeWorkoutLocalStorage(state.workout);
+    },
   },
   extraReducers: builder => {
     builder
@@ -150,6 +204,8 @@ export const {
   moveExercise,
   addExercise,
   reorderExercises,
+  addExerciseMetric,
+  updateExerciseMetric,
 } = activeWorkout.actions;
 
 export default activeWorkout.reducer;

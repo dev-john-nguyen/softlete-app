@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { Workout, WorkoutGroupExercises, WorkoutExercise } from './workout';
+import { Workout, WorkoutGroupExercises, WorkoutExercise } from './workout/';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit/Edit';
@@ -24,7 +24,6 @@ import Map from './Map';
 import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
-import { FlexBox } from '@app/ui';
 import { Goals, GoalForm } from '../goals';
 import { HealthGoalForm } from './health-goal';
 import { EnduranceAnalytics } from './endurance';
@@ -273,6 +272,7 @@ function HomeStack(parentProps: any) {
           component={Workout}
           options={{
             gestureEnabled: false,
+            tabBarStyle: { position: 'absolute' },
           }}
         />
         <Tab.Screen
@@ -289,9 +289,6 @@ function HomeStack(parentProps: any) {
         screenOptions={{
           presentation: 'transparentModal',
           cardStyle: { backgroundColor: 'transparent' },
-          cardOverlay: () => {
-            return <FlexBox flex={1} backgroundColor="red" />;
-          },
         }}>
         <Tab.Screen
           name={HomeStackScreens.WorkoutModal}

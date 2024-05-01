@@ -35,3 +35,9 @@ export type NewExercisePayload = {
     data: WorkoutExerciseDataProps[];
   }[];
 };
+
+export enum WorkoutExerciseDataMetrics {
+  'performVal' = 'performVal',
+  'reps' = 'reps',
+  'pct' = 'pct',
+}

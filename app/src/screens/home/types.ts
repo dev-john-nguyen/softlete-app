@@ -22,7 +22,13 @@ export type HomeStackParamsList = {
   WorkoutHeader: undefined;
   EditWorkout: undefined;
   AddExercise: undefined;
-  SearchExercises: undefined;
+  SearchExercises: {
+    group: number;
+    order: number;
+    workoutUid: string;
+    programTemplateUid?: string;
+    goBackScreen: any;
+  };
   CreateExercise: undefined;
   UploadExerciseVideo: undefined;
   Exercise: {
@@ -58,7 +64,10 @@ export type HomeStackParamsList = {
     groupIndex: number;
     workoutUid: string;
   };
-  WorkoutExercise: undefined;
+  WorkoutExercise: {
+    workoutUid: string;
+    exerciseUid: string;
+  };
 };
 
 export enum HomeStackScreens {
