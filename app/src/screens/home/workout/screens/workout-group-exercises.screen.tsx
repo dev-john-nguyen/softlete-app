@@ -1,4 +1,9 @@
-import { DragAndSortList, ItemProps, ScreenTemplate } from '@app/elements';
+import {
+  DragAndSortList,
+  ItemProps,
+  PrimaryText,
+  ScreenTemplate,
+} from '@app/elements';
 import { useGetActiveWorkout } from '../hooks/workout.hooks';
 import { useCallback, useMemo } from 'react';
 import { groupWoExercisesByGroup } from '../helpers/workout.helpers';
@@ -73,6 +78,26 @@ const WorkoutGroupExercises = () => {
     dispatch(reorderExercises({ exercises: payloadExercises }));
   };
 
+  const onNavigateToNextGroup = () => {
+    if (!workout) return;
+
+    const allGroupExercises = groupWoExercisesByGroup(workout);
+
+    const nextGroupNumber = groupIndex + 1;
+    let nextGroup = allGroupExercises.get(nextGroupNumber);
+
+    if (!nextGroup) {
+      nextGroup = allGroupExercises.get(0);
+    }
+
+    if (!nextGroup) return;
+
+    navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
+      workoutUid: workout._id,
+      groupIndex: nextGroup.groupIndex,
+    });
+  };
+
   const onNavigateToAddExercise = () => {
     if (!workout || workout.status === WorkoutStatus.completed) {
       return;
@@ -114,6 +139,19 @@ const WorkoutGroupExercises = () => {
             gap={10}
             updateCallback={onUpdateCallback}
           />
+        </FlexBox>
+        <FlexBox
+          padding={15}
+          paddingBottom={20}
+          gap={5}
+          alignItems="center"
+          onPress={onNavigateToNextGroup}>
+          <FontAwesome6Icon
+            name="chevron-down"
+            color={Colors.white}
+            size={20}
+          />
+          <PrimaryText>Group</PrimaryText>
         </FlexBox>
       </ScreenTemplate>
     </WorkoutContextProvider>

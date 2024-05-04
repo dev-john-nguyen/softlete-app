@@ -15,18 +15,10 @@ const GroupExercises: FC<Props> = ({ item }) => {
   const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
 
   const onNavigateToExercise = () => {
-    if (item.exercises.length > 1) {
-      // need to determine which screen to navigate to depending on the total amount of exercise in the group
-      navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
-        workoutUid: workout._id,
-        groupIndex: item.letterIndex,
-      });
-    } else {
-      navigation.navigate(HomeStackScreens.WorkoutExercise, {
-        workoutUid: workout._id,
-        exerciseUid: item.exercises[0]._id,
-      });
-    }
+    navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
+      workoutUid: workout._id,
+      groupIndex: item.letterIndex,
+    });
   };
 
   return (

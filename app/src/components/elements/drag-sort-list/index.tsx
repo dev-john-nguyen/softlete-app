@@ -148,7 +148,7 @@ const DragAndSortList: FC<Props> = ({
   };
 
   return (
-    <FlexBox flex={1} backgroundColor>
+    <FlexBox flex={1}>
       <Animated.ScrollView
         ref={scrollViewRef}
         onScroll={onScroll}
