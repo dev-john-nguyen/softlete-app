@@ -7,12 +7,7 @@ import {
 import { useGetActiveWorkout } from '../hooks/workout.hooks';
 import { useCallback, useMemo } from 'react';
 import { groupWoExercisesByGroup } from '../helpers/workout.helpers';
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { WorkoutContextProvider } from '../contexts';
 import WorkoutEmpty from '../components/WorkoutEmpty';
@@ -24,13 +19,14 @@ import { ExerciseOrderPayload, reorderExercises } from '@app/services';
 import { FlexBox } from '@app/ui';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const WorkoutGroupExercises = () => {
   const workout = useGetActiveWorkout();
   const { params } =
     useRoute<RouteProp<HomeStackParamsList, 'WorkoutGroupExercises'>>();
   const dispatch = useDispatch<ThunkAppDispatch>();
-  const navigation = useNavigation<NavigationProp<HomeStackParamsList>>();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
 
   const groupIndex = params?.groupIndex;
 
@@ -50,7 +46,7 @@ const WorkoutGroupExercises = () => {
     (data: ItemProps<WorkoutExerciseProps>) => {
       const onNavigateToExercise = () => {
         if (!workout) return;
-        navigation.navigate(HomeStackScreens.WorkoutExercise, {
+        navigation.push(HomeStackScreens.WorkoutExercise, {
           exerciseUid: data.data._id,
           workoutUid: workout._id,
         });
@@ -92,7 +88,7 @@ const WorkoutGroupExercises = () => {
 
     if (!nextGroup) return;
 
-    navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
+    navigation.push(HomeStackScreens.WorkoutGroupExercises, {
       workoutUid: workout._id,
       groupIndex: nextGroup.groupIndex,
     });

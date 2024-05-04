@@ -272,12 +272,14 @@ function HomeStack(parentProps: any) {
           component={Workout}
           options={{
             gestureEnabled: false,
-            tabBarStyle: { position: 'absolute' },
           }}
         />
         <Tab.Screen
           name={HomeStackScreens.WorkoutGroupExercises}
           component={WorkoutGroupExercises}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+          }}
         />
         <Tab.Screen
           name={HomeStackScreens.WorkoutExercise}

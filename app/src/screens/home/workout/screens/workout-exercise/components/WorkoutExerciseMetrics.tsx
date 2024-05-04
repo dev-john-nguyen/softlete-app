@@ -46,7 +46,7 @@ const WorkoutExerciseMetrics = () => {
 
     if (!nextGroup) return;
 
-    navigation.navigate(HomeStackScreens.WorkoutGroupExercises, {
+    navigation.push(HomeStackScreens.WorkoutGroupExercises, {
       workoutUid: workout._id,
       groupIndex: nextGroup.groupIndex,
     });
