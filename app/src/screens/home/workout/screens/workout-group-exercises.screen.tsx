@@ -20,6 +20,7 @@ import { FlexBox } from '@app/ui';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { alphabetMap } from '../constants';
 
 const WorkoutGroupExercises = () => {
   const workout = useGetActiveWorkout();
@@ -40,6 +41,21 @@ const WorkoutGroupExercises = () => {
       return [];
     }
     return targetGroup.exercises.sort((a, b) => a.order - b.order);
+  }, [groupIndex, workout]);
+
+  const nextGroup = useMemo(() => {
+    if (!workout) return;
+
+    const allGroupExercises = groupWoExercisesByGroup(workout);
+
+    const nextGroupNumber = groupIndex + 1;
+    let nextGroupProps = allGroupExercises.get(nextGroupNumber);
+
+    if (!nextGroupProps) {
+      nextGroupProps = allGroupExercises.get(0);
+    }
+
+    return nextGroupProps;
   }, [groupIndex, workout]);
 
   const renderItem = useCallback(
@@ -75,22 +91,18 @@ const WorkoutGroupExercises = () => {
   };
 
   const onNavigateToNextGroup = () => {
-    if (!workout) return;
-
-    const allGroupExercises = groupWoExercisesByGroup(workout);
-
-    const nextGroupNumber = groupIndex + 1;
-    let nextGroup = allGroupExercises.get(nextGroupNumber);
-
-    if (!nextGroup) {
-      nextGroup = allGroupExercises.get(0);
-    }
-
-    if (!nextGroup) return;
+    if (!workout || !nextGroup) return;
 
     navigation.push(HomeStackScreens.WorkoutGroupExercises, {
       workoutUid: workout._id,
       groupIndex: nextGroup.groupIndex,
+    });
+  };
+
+  const onNavigateBackToWorkout = () => {
+    if (!workout) return;
+    navigation.navigate(HomeStackScreens.Workout, {
+      workoutUid: workout._id,
     });
   };
 
@@ -136,18 +148,34 @@ const WorkoutGroupExercises = () => {
             updateCallback={onUpdateCallback}
           />
         </FlexBox>
-        <FlexBox
-          padding={15}
-          paddingBottom={20}
-          gap={5}
-          alignItems="center"
-          onPress={onNavigateToNextGroup}>
-          <FontAwesome6Icon
-            name="chevron-down"
-            color={Colors.white}
-            size={20}
-          />
-          <PrimaryText>Group</PrimaryText>
+        <FlexBox width="100%" padding={15} paddingBottom={20}>
+          <FlexBox
+            flex={1}
+            gap={5}
+            alignItems="center"
+            onPress={onNavigateBackToWorkout}>
+            <FontAwesome6Icon
+              name="chevron-left"
+              color={Colors.white}
+              size={20}
+            />
+            <PrimaryText>Overview</PrimaryText>
+          </FlexBox>
+          <FlexBox
+            justifyContent="flex-end"
+            flex={1}
+            gap={5}
+            alignItems="center"
+            onPress={onNavigateToNextGroup}>
+            <PrimaryText>
+              Group {nextGroup ? alphabetMap.get(nextGroup.groupIndex) : ''}
+            </PrimaryText>
+            <FontAwesome6Icon
+              name="chevron-down"
+              color={Colors.white}
+              size={20}
+            />
+          </FlexBox>
         </FlexBox>
       </ScreenTemplate>
     </WorkoutContextProvider>

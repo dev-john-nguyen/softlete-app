@@ -15,6 +15,7 @@ import { WorkoutProps } from '@app/types';
 import { useGetActiveWorkout } from '../../../hooks/workout.hooks';
 import { groupWoExercisesByGroup } from '../../../helpers/workout.helpers';
 import { useMemo } from 'react';
+import { alphabetMap } from '../../../constants';
 
 const WorkoutExerciseMetrics = () => {
   const exercise = useActiveExercise();
@@ -35,24 +36,19 @@ const WorkoutExerciseMetrics = () => {
     dispatch(addExerciseMetric({ exerciseUid: exercise?._id }));
   };
 
-  const onNavigateToNextGroup = () => {
+  const nextGroup = useMemo(() => {
     if (!exercise || !groupedExercises.size) return;
     const nextGroupNumber = exercise.group + 1;
-    let nextGroup = groupedExercises.get(nextGroupNumber);
+    let nextGroupProps = groupedExercises.get(nextGroupNumber);
 
-    if (!nextGroup) {
-      nextGroup = groupedExercises.get(0);
+    if (!nextGroupProps) {
+      nextGroupProps = groupedExercises.get(0);
     }
 
-    if (!nextGroup) return;
+    return nextGroupProps;
+  }, [exercise, groupedExercises]);
 
-    navigation.push(HomeStackScreens.WorkoutGroupExercises, {
-      workoutUid: workout._id,
-      groupIndex: nextGroup.groupIndex,
-    });
-  };
-
-  const onNavigateToNextExercise = () => {
+  const nextExercise = useMemo(() => {
     if (!exercise || !groupedExercises.size) return;
 
     if (!thisExerciseGroup) return;
@@ -71,8 +67,18 @@ const WorkoutExerciseMetrics = () => {
         ? 0
         : thisExerciseIndex + 1;
 
-    const nextExercise = thisExerciseGroup.exercises[nextExerciseIndex];
+    return thisExerciseGroup.exercises[nextExerciseIndex];
+  }, [exercise, groupedExercises.size, thisExerciseGroup]);
 
+  const onNavigateToNextGroup = () => {
+    if (!nextGroup) return;
+    navigation.push(HomeStackScreens.WorkoutGroupExercises, {
+      workoutUid: workout._id,
+      groupIndex: nextGroup.groupIndex,
+    });
+  };
+
+  const onNavigateToNextExercise = () => {
     if (!nextExercise) return;
 
     navigation.navigate(HomeStackScreens.WorkoutExercise, {
@@ -107,9 +113,11 @@ const WorkoutExerciseMetrics = () => {
             color={Colors.white}
             size={20}
           />
-          <PrimaryText>Group</PrimaryText>
+          <PrimaryText>
+            Group {nextGroup ? alphabetMap.get(nextGroup.groupIndex) : ''}
+          </PrimaryText>
         </FlexBox>
-        <FlexBox flex={1} justifyContent="center">
+        <FlexBox flex={0.7} justifyContent="center">
           <FontAwesome6Icon
             name="circle-plus"
             color={Colors.white}
@@ -124,7 +132,9 @@ const WorkoutExerciseMetrics = () => {
             alignItems="center"
             gap={5}
             onPress={onNavigateToNextExercise}>
-            <PrimaryText>Exercise</PrimaryText>
+            <PrimaryText textTransform="capitalize">
+              {nextExercise?.details.name ?? 'Exercise'}
+            </PrimaryText>
             <FontAwesome6Icon
               name="chevron-right"
               color={Colors.white}

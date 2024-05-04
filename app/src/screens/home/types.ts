@@ -17,7 +17,9 @@ export interface MyRouteProps extends RouteProp<ParamListBase, ''> {
 
 export type HomeStackParamsList = {
   push(screen: HomeStackScreens, arg1: { data: HealthDataProps }): unknown;
-  Workout: undefined;
+  Workout: {
+    workoutUid: string;
+  };
   WorkoutTemplate: undefined;
   WorkoutHeader: undefined;
   EditWorkout: undefined;
