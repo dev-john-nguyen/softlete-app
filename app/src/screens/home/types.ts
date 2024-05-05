@@ -19,9 +19,12 @@ export type HomeStackParamsList = {
   push(screen: HomeStackScreens, arg1: { data: HealthDataProps }): unknown;
   Workout: {
     workoutUid: string;
+    directToDash?: boolean;
   };
   WorkoutTemplate: undefined;
-  WorkoutHeader: undefined;
+  WorkoutHeader: {
+    directToDash?: boolean;
+  };
   EditWorkout: undefined;
   AddExercise: undefined;
   SearchExercises: {

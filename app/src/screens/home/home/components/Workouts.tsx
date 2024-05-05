@@ -8,7 +8,6 @@ import { WorkoutProps } from '../../../../types/workouts.types';
 import DateTools from '../../../../utils/DateTools';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
 import { useDispatch } from 'react-redux';
-import { setViewWorkout } from '../../../../services/workout/actions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@app/icons';
 import WorkoutPreviewList from 'src/components/workout/preview/PreviewList';
@@ -42,8 +41,9 @@ const HomeWorkouts = ({ wos, desc }: Props) => {
     navigation.navigate(HomeStackScreens.DeviceActivities);
 
   const onNavToWorkout = (workoutUid: string) => {
-    dispatch(setViewWorkout(workoutUid));
-    navigation.navigate(HomeStackScreens.Workout);
+    navigation.navigate(HomeStackScreens.Workout, {
+      workoutUid: workoutUid,
+    });
   };
 
   return (

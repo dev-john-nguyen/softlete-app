@@ -87,12 +87,11 @@ const Cal = ({
   const onDayPress = (d: DateData) =>
     dispatch({ type: SET_SELECTED_DATE, payload: d.dateString });
 
-  const onGoOnline = () => {
-    navigation.navigate(HomeStackScreens.GoOnlineModal);
-  };
-
   const renderCustomHeader = useCallback(
-    props => {
+    (props: any) => {
+      const onGoOnline = () => {
+        navigation.navigate(HomeStackScreens.GoOnlineModal);
+      };
       return (
         <CalendarHeader
           monthProps={props.month}
@@ -103,7 +102,7 @@ const Cal = ({
         />
       );
     },
-    [selectedDate, fetching, offline],
+    [fetching, navigation, offline],
   );
 
   const renderSelectDateDots = () => {
@@ -151,7 +150,7 @@ const Cal = ({
         customHeader={renderCustomHeader}
       />
       <DashboardFilter />
-      <DashboardContent navigation={navigation} loading={fetching} />
+      <DashboardContent loading={fetching} />
     </ScreenTemplate>
   );
 };

@@ -12,31 +12,30 @@ import {
 } from '../../services/workout/actionTypes';
 import { ReducerProps } from '../../services';
 import { setViewWorkout } from '../../services/workout/actions';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { ProgramHeaderProps } from '../../services/program/types';
 import { PinExerciseProps } from '../../services/misc/types';
-import { HomeStackScreens } from '../../screens/home/types';
+import {
+  HomeStackParamsList,
+  HomeStackScreens,
+} from '../../screens/home/types';
 import { setTargetProgram } from '../../services/program/actions';
 import { updatePinExercises } from '../../services/user/actions';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
-  dispatch: AppDispatch;
-  navigation: any;
-  setViewWorkout: WorkoutActionProps['setViewWorkout'];
   loading: boolean;
 }
 
 const getSelectDate = (state: ReducerProps) => state.workout.selectedDate;
 const getWorkouts = (state: ReducerProps) => state.workout.selectedDateWorkouts;
 
-const DashboardContent = ({
-  dispatch,
-  navigation,
-  setViewWorkout,
-  loading,
-}: Props) => {
+const DashboardContent = ({ loading }: Props) => {
   const workouts = useSelector(getWorkouts);
   const selectedDate = useSelector(getSelectDate);
+  const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
 
   const onNavToAddWorkout = () => {
     dispatch({
@@ -49,7 +48,6 @@ const DashboardContent = ({
   };
 
   const onNavToViewWorkout = async (workoutUid: string) => {
-    setViewWorkout(workoutUid);
     navigation.navigate(HomeStackScreens.Workout, {
       directToDash: true,
       workoutUid: workoutUid,
