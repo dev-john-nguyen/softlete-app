@@ -10,7 +10,7 @@ import {
   HealthDataProps,
   WorkoutActionProps,
   WorkoutProps,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import { useDeviceWos } from '../../hooks/workout/activities.hooks';
 import {
   updateWorkoutHeader,

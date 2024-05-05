@@ -11,7 +11,7 @@ import Empty from './Empty';
 import {
   HealthDataProps,
   WorkoutExerciseDataProps,
-} from 'src/services/workout/types';
+} from 'src/types/workouts.types';
 import WorkoutTracker from 'src/classes/WorkoutTracker';
 import { DataType } from './types';
 

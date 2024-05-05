@@ -6,26 +6,32 @@ import { DemoStatePositions, DemoStates } from '@app/services';
 import { useSelector } from 'react-redux';
 import { ReducerProps } from 'src/services';
 
+const getDemo = (state: ReducerProps) => state.demo;
+
 type Props = {
   state: DemoStates[];
 };
 
 const DemoArrow: React.FC<Props> = ({ state = [] }) => {
-  const { demo } = useSelector((state: ReducerProps) => ({
-    demo: state.demo,
-  }));
+  const demo = useSelector(getDemo);
 
   const demoPos = useMemo(() => {
     return demo.state ? DemoStatePositions[demo.state] ?? {} : {};
   }, [demo]);
 
-  if (!demo.state) return <></>;
+  if (!demo.state) {
+    return <></>;
+  }
 
-  if (!state.find(s => s === demo.state)) return <></>;
+  if (!state.find(s => s === demo.state)) {
+    return <></>;
+  }
 
   const { direction = 'down', arrowVisible = true, ...positions } = demoPos;
 
-  if (!arrowVisible) return null;
+  if (!arrowVisible) {
+    return null;
+  }
 
   return (
     <FlexBox

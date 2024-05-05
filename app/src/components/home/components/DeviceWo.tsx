@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
-import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
+import { HealthDataProps, WorkoutProps } from '../../../types/workouts.types';
 import WoAerobic from './WoAerobic';
 
 interface Props {

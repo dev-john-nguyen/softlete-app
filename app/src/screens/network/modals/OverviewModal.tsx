@@ -9,7 +9,7 @@ import StyleConstants from '../../../components/tools/StyleConstants';
 import ReflectionImage from '../../../components/workout/overview/ReflectionImage';
 import { ReducerProps } from '../../../services';
 import { UserProps } from '../../../services/user/types';
-import { WorkoutProps } from '../../../services/workout/types';
+import { WorkoutProps } from '../../../types/workouts.types';
 import BaseColors from '../../../utils/BaseColors';
 import { normalize } from '../../../utils/tools';
 import reportUser from '../../utils/report-user';

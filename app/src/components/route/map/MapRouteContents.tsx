@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, ListRenderItemInfo } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { MarkerProps } from '../../../types/route/route.types';
+import { MarkerProps } from '../../../types/route.types';
 import StyleConstants from '../../tools/StyleConstants';
 import MapRouteItem from './MapRouteItem';
 

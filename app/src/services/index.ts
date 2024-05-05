@@ -12,22 +12,23 @@ import notificationReducer from './notifications/reducer';
 import goalsReducer from './goals/slice';
 import demoReducer from './demo/slice';
 import timerReducer from './timer/slice';
+import activeReducer from './active-workout/slice';
 
 import { GoalsRootStateProps } from './goals/types';
 import { MiscProps } from './misc/types';
 import { UserProps } from './user/types';
 import { BannersProps } from './banner/types';
-import { ExerciseBaseProps } from './exercises/types';
-import { RootWorkoutProps } from './workout/types';
+import { ExerciseBaseProps } from '../types/exercises.types';
+import { RootWorkoutProps } from '../types/workouts.types';
 import { GlobalProps } from './global/types';
 import { RootProgramProps } from './program/types';
 import { AthletesRootProps } from './athletes/types';
 import { ChatRootProps } from './chat/types';
 import { NotificationRootProps } from './notifications/types';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action } from '@reduxjs/toolkit';
 import { DemoProps } from './services';
 import { TimerProps } from './timer/types';
+import { ActiveWorkoutProps } from './active-workout/types';
 
 export default combineReducers({
   user: userReducer,
@@ -43,6 +44,7 @@ export default combineReducers({
   goals: goalsReducer,
   demo: demoReducer,
   timer: timerReducer,
+  activeWorkout: activeReducer,
 });
 
 export interface ReducerProps {
@@ -59,6 +61,7 @@ export interface ReducerProps {
   goals: GoalsRootStateProps;
   demo: DemoProps;
   timer: TimerProps;
+  activeWorkout: ActiveWorkoutProps;
 }
 
-export type ThunkAppDispatch = ThunkDispatch<ReducerProps, void, Action>;
+export type ThunkAppDispatch = ThunkDispatch<ReducerProps, any, any>;

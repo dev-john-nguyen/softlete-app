@@ -7,7 +7,7 @@ import {
   renderHeartRateAvg,
 } from '@app/utils';
 import React from 'react';
-import { HealthDataProps } from '../../../services/workout/types';
+import { HealthDataProps } from '../../../types/workouts.types';
 
 interface ItemProps {
   text: string;

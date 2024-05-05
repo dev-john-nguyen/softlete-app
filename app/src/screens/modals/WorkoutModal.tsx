@@ -6,7 +6,7 @@ import { removeProgramWorkout } from '../../services/program/actions';
 import { ProgramStackScreens } from '../program/types';
 import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
 import { SET_PROGRAM_WORKOUT_HEADER } from 'src/services/program/actionTypes';
-import { WorkoutTypes } from 'src/services/workout/types';
+import { WorkoutTypes } from 'src/types/workouts.types';
 import { RouteProp } from '@react-navigation/native';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { removeWorkout } from '../../services/workout/actions';

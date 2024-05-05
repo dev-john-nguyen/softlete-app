@@ -2,13 +2,13 @@ import { useCallback, useEffect } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { AppDispatch } from '../../../App';
 import { ChatActionProps } from '../../services/chat/types';
-import { ExerciseActionProps } from '../../services/exercises/types';
+import { ExerciseActionProps } from '../../types/exercises.types';
 import { MiscActionProps } from '../../services/misc/types';
 import { NotificationActionProps } from '../../services/notifications/types';
 import { ProgramActionProps } from '../../services/program/types';
 import { UserActionProps, UserProps } from '../../services/user/types';
 import { SET_SELECTED_DATE } from '../../services/workout/actionTypes';
-import { WorkoutActionProps } from '../../services/workout/types';
+import { WorkoutActionProps } from '../../types/workouts.types';
 import DateTools from '../../utils/DateTools';
 import { useDispatch } from 'react-redux';
 import { fetchGoalsAsync } from 'src/services/goals/slice';
@@ -87,10 +87,13 @@ export function useApiHooks(
       }
     };
 
-    AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
 
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
+      subscription.remove();
     };
   }, [initReduxState]);
 

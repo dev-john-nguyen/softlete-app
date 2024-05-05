@@ -8,7 +8,7 @@ import { StyleSheet } from 'react-native';
 import {
   WorkoutExerciseDataProps,
   WorkoutStatus,
-} from '../../../../services/workout/types';
+} from '../../../../types/workouts.types';
 import { DataKeys } from './types';
 import WarmUp from './WarmUp';
 import Checkmark from './Checkmark';

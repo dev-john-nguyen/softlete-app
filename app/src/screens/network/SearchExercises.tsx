@@ -7,7 +7,7 @@ import {
   Keyboard,
 } from 'react-native';
 import BaseColors from '../../utils/BaseColors';
-import { ExerciseProps, Categories } from '../../services/exercises/types';
+import { ExerciseProps, Categories } from '../../types/exercises.types';
 import { ReducerProps } from '../../services';
 import { connect } from 'react-redux';
 import ExerciseSearchPreview from '../../components/ExerciseSearchPreview';

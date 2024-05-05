@@ -16,12 +16,12 @@ import { CLEAR_DEMO_STATE_DATA } from 'src/services/global/actionTypes';
 
 const { height: screenHeight } = Dimensions.get('window');
 
+const getDemo = (state: ReducerProps) => state.demo;
+
 const Demo = () => {
   const translationY = useSharedValue(50);
   const initialTranslationY = useSharedValue(50);
-  const { demo } = useSelector((state: ReducerProps) => ({
-    demo: state.demo,
-  }));
+  const demo = useSelector(getDemo);
   const dispatch = useDispatch();
 
   const panGesture = Gesture.Pan()

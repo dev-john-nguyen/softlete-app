@@ -8,8 +8,8 @@ import {
   WorkoutStatus,
   WorkoutTypes,
   HealthDataProps,
-} from '../../services/workout/types';
-import { ExerciseProps } from '../../services/exercises/types';
+} from '../../types/workouts.types';
+import { ExerciseProps } from '../../types/exercises.types';
 import WorkoutContainer from '../../components/workout/Container';
 import {
   GeneratedProgramProps,
@@ -114,8 +114,12 @@ const Workout = ({
   }, [workout]);
 
   const onUpdateStatus = async (status: WorkoutStatus) => {
-    if (!workout || workout.programTemplateUid) return;
-    if (status === workout.status) return;
+    if (!workout || workout.programTemplateUid) {
+      return;
+    }
+    if (status === workout.status) {
+      return;
+    }
 
     // check if there are any exercises
     if (
@@ -146,7 +150,9 @@ const Workout = ({
   };
 
   const onNavigateToAddExercise = (group: number, order: number) => {
-    if (!workout) return;
+    if (!workout) {
+      return;
+    }
     navigation.navigate(HomeStackScreens.SearchExercises, {
       group,
       order,
@@ -170,7 +176,9 @@ const Workout = ({
     navigation.navigate(HomeStackScreens.Exercise, { exercise });
   };
 
-  if (!workout) return <Loading />;
+  if (!workout) {
+    return <Loading />;
+  }
 
   return (
     <WorkoutProvider

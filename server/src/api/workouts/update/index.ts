@@ -6,7 +6,9 @@ import updateExercises from './exercises';
 import updateHealth from './health-data';
 import updateWorkoutRoute from './workout-route';
 import updateReflection from './reflection';
+import updateOrder from './reorder';
 import batch from './batch';
+import insertExercises from './insert-exercises';
 
 router.use('/exercises', updateExercises);
 router.use('/header', updateHeader);
@@ -16,5 +18,7 @@ router.use('/health-data', updateHealth);
 router.use('/workout-route', updateWorkoutRoute);
 router.use('/reflection', updateReflection);
 router.use('/batch', batch);
+router.use('/order', updateOrder);
+router.use('/insert-exercises', insertExercises);
 
 export default router;

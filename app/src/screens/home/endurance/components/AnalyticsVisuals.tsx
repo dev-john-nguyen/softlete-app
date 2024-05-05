@@ -4,7 +4,7 @@ import { EnduranceFilterValues, HealthDataAnalytics } from '../types';
 import { PaginatedHorizontalList } from '@app/elements';
 import { DataTable } from 'src/components/analytics';
 import { AnalyticalDataProps } from 'src/services/misc/types';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 import { DateTools } from '@app/utils';
 import StackedBarChart from './StackedBarChart';
 import { DataType } from 'src/components/analytics/types';

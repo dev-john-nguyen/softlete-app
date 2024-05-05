@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
-import { HealthDataProps } from '../../../../services/workout/types';
+import { HealthDataProps } from '../../../../types/workouts.types';
 import BaseColors, { rgba } from '../../../../utils/BaseColors';
 import AppleHealthKit, {
   HealthInputOptions,

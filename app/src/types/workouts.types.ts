@@ -3,9 +3,9 @@ import {
   HKWorkoutEventType,
   LocationValue,
 } from 'react-native-health';
-import { ExerciseProps } from '../exercises/types';
-import { ProgramWorkoutProps } from '../program/types';
-import { ImageProps } from '../user/types';
+import { ExerciseProps } from './exercises.types';
+import { ProgramWorkoutProps } from '../services/program/types';
+import { ImageProps } from '../services/user/types';
 import AppleHealthKit from 'react-native-health';
 
 export interface RootWorkoutProps {
@@ -55,7 +55,7 @@ export interface WorkoutProps {
   imageBase64?: string;
   imageId?: string;
   userUid?: string;
-  healthData?: HealthDataProps;
+  healthData?: HealthDataProps; // will deprecate because of HIPPA
   type: HealthActivity;
 }
 
@@ -136,13 +136,13 @@ export enum WorkoutStatus {
 }
 
 export interface WorkoutExerciseProps {
-  _id?: string;
+  _id: string;
   remove?: boolean;
   workoutUid?: string;
   tempId?: string;
   data: WorkoutExerciseDataProps[];
-  exerciseUid?: string;
-  exercise?: ExerciseProps;
+  exerciseUid: string;
+  exercise?: ExerciseProps; // will deprecate and move to details
   group: number;
   order: number;
   sets?: number;
@@ -152,10 +152,11 @@ export interface WorkoutExerciseProps {
   date?: string;
   programWorkoutUid?: string;
   programTemplateUid?: string;
+  details: ExerciseProps;
 }
 
 export interface WorkoutExerciseDataProps {
-  _id?: string;
+  _id: string;
   reps: number;
   performVal?: number;
   predictVal: number;

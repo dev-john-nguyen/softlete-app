@@ -4,7 +4,7 @@ import WorkoutTracker from 'src/classes/WorkoutTracker';
 import ActivitySummary from 'src/components/ActivitySummary';
 import { getWoRouteSamples } from 'src/helpers/health.helpers';
 import { FlexBox } from '@app/ui';
-import { WorkoutStatus } from 'src/services/workout/types';
+import { WorkoutStatus } from 'src/types/workouts.types';
 import { Colors } from '@app/utils';
 import { useQuery } from '@tanstack/react-query';
 import { ActivityIndicator } from 'react-native';

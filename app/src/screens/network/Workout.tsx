@@ -8,9 +8,9 @@ import React, {
 import { Pressable, StyleSheet } from 'react-native';
 import { ReducerProps } from '../../services';
 import { connect } from 'react-redux';
-import { ViewWorkoutProps } from '../../services/workout/types';
+import { ViewWorkoutProps } from '../../types/workouts.types';
 import BaseColors from '../../utils/BaseColors';
-import { ExerciseProps } from '../../services/exercises/types';
+import { ExerciseProps } from '../../types/exercises.types';
 import WorkoutContainer from '../../components/workout/Container';
 import { GeneratedProgramProps } from '../../services/program/types';
 import { SafeAreaView } from 'react-native-safe-area-context';

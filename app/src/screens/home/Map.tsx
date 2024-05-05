@@ -22,7 +22,7 @@ import { Colors, moderateScale } from '@app/utils';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProps } from './types';
 import { BackButton } from '@app/elements';
-import { MarkerProps } from 'src/types/route/route.types';
+import { MarkerProps } from 'src/types/route.types';
 
 interface MapMarkersProps {
   markers: MarkerProps[];

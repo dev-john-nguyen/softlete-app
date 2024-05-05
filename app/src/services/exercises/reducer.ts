@@ -7,7 +7,7 @@ import {
   SET_TARGET_EXERCISE,
   REMOVE_TARGET_EXERCISE,
 } from './actionTypes';
-import { ExerciseProps } from './types';
+import { ExerciseProps } from '../../types/exercises.types';
 import { SIGNOUT_USER } from '../user/actionTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStoragePaths from '../../utils/LocalStoragePaths';

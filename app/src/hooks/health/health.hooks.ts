@@ -8,7 +8,7 @@ import {
   getRestingHeartRateSamples,
   getSleepDailyAmts,
 } from 'src/helpers/health.helpers';
-import { HealthEvalProps, DateValueProps } from 'src/services/workout/types';
+import { HealthEvalProps, DateValueProps } from 'src/types/workouts.types';
 import { useAppState } from '../base/app-state.hook';
 
 export const getDates = (prevD: number) => {

@@ -1,5 +1,5 @@
 import { DemoExerciseData } from '@app/utils';
-import { ExerciseProps } from './types';
+import { ExerciseProps } from '../../types/exercises.types';
 
 export const clearDemoExerciseHandler = (exercises: ExerciseProps[]) => {
   return exercises.filter(e => {

@@ -3,7 +3,7 @@ import { FlexBox } from '@app/ui';
 import { ScrollView } from 'react-native';
 import { useFetchHealthData } from '../../hooks/fetch-health-data.hooks';
 import DeviceHealthImportItem from '../../components/DeviceHealthImportItem';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 import { ChevronNavigationButton, PrimaryText } from '@app/elements';
 import Icon from '@app/icons';
 import { Colors } from '@app/utils';

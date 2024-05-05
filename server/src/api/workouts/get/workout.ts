@@ -1,10 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
-import Workout from '../../../collections/workouts';
 import errorCatch from '../../../utils/error-catch';
 import mongoose from 'mongoose';
 import apicache from 'apicache';
 import cacheOnlyNonOwner from '../../../utils/cache-only-non-owner';
-import { formatWorkoutsHandler } from '../../../utils/workouts/formatters';
+import { fetchWorkout } from '../../../queries/fetch-workout.queries';
 const cache = apicache.middleware;
 const router = express.Router();
 
@@ -27,10 +26,9 @@ router.get(
     }
 
     try {
-      const workout = await Workout.findById(workoutUid);
+      const workout = await fetchWorkout(workoutUid);
       if (!workout) return res.status(404).send('Workout not found');
-      const formattedWorkouts = await formatWorkoutsHandler([workout], userUid);
-      return res.status(200).send(formattedWorkouts[0]);
+      return res.status(200).send(workout);
     } catch (err) {
       return errorCatch(err, res, next);
     }

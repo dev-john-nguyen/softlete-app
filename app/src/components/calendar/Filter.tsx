@@ -26,15 +26,17 @@ interface Props {
   athlete?: boolean;
 }
 
+const getPrograms = (state: ReducerProps) => state.program.generatedPrograms;
+const getSelectedProgram = (state: ReducerProps) =>
+  state.workout.filterByProgramUid;
+
 const DashboardFilter = ({
   removeGeneratedProgram,
   dispatch,
   athlete,
 }: Props) => {
-  const { programs, selectedProgram } = useSelector((state: ReducerProps) => ({
-    programs: state.program.generatedPrograms,
-    selectedProgram: state.workout.filterByProgramUid,
-  }));
+  const programs = useSelector(getPrograms);
+  const selectedProgram = useSelector(getSelectedProgram);
   const setBanner = useBanner();
 
   const onProgramSelect = useCallback(

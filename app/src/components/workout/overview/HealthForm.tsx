@@ -1,10 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
-import {
-  HealthDataProps,
-  HealthDisMeas,
-} from '../../../services/workout/types';
+import { HealthDataProps, HealthDisMeas } from '../../../types/workouts.types';
 import { FlexBox } from '@app/ui';
 import {
   ChevronNavigationButton,
@@ -69,7 +66,9 @@ class HealthForm extends React.Component<Props, StateProps> {
   }
 
   onSubmitHandler = async () => {
-    if (this.state.isLoading) return;
+    if (this.state.isLoading) {
+      return;
+    }
     const manualData: HealthDataProps = {
       activityId: this.state.activityId,
       activityName: this.props.activityName as HealthActivity,

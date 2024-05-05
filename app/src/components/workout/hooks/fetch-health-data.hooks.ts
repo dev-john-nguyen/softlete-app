@@ -1,7 +1,7 @@
 import { useWorkoutState } from '@app/contexts';
 import { useEffect, useState } from 'react';
 import { getWoSample } from 'src/helpers/health.helpers';
-import { HealthDataProps, WorkoutProps } from 'src/services/workout/types';
+import { HealthDataProps, WorkoutProps } from 'src/types/workouts.types';
 import AppleHealthKit, {
   HealthInputOptions,
   HealthValue,
@@ -17,7 +17,9 @@ export const useFetchHealthData = (
   const [data, setData] = useState<HealthDataProps[]>([]);
 
   const getActiveEnergy = async () => {
-    if (!workout.date) return;
+    if (!workout.date) {
+      return;
+    }
     const d = new Date(workout.date);
 
     const options = {
@@ -45,11 +47,15 @@ export const useFetchHealthData = (
   };
 
   const fetchHeartRateData = async (healthData: HealthDataProps[]) => {
-    if (healthData.length < 1) return;
+    if (healthData.length < 1) {
+      return;
+    }
 
     const dataToFetchHR = healthData.filter(d => d.start && d.end);
 
-    if (dataToFetchHR.length < 1) return;
+    if (dataToFetchHR.length < 1) {
+      return;
+    }
 
     interface StoreProps {
       heartRates: number[];

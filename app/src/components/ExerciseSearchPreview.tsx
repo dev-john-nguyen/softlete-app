@@ -7,7 +7,7 @@ import {
   ExerciseVideo,
 } from '@app/elements';
 import React from 'react';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import Icon from '@app/icons';
 import { UserProps } from '@app/services';
 

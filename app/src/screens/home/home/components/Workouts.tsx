@@ -4,7 +4,7 @@ import { CircleAdd, DemoArrow } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { HomeStackScreens } from '../../types';
 import { INITIATE_WORKOUT_HEADER } from '../../../../services/workout/actionTypes';
-import { WorkoutProps } from '../../../../services/workout/types';
+import { WorkoutProps } from '../../../../types/workouts.types';
 import DateTools from '../../../../utils/DateTools';
 import SectionHeader from '../../../../components/home/components/SectionHeader';
 import { useDispatch } from 'react-redux';

@@ -23,6 +23,7 @@ module.exports = {
           '@app/utils': './src/utils',
           '@app/services': './src/services/services',
           '@app/contexts': './src/contexts',
+          '@app/types': './src/types',
         },
       },
     ],

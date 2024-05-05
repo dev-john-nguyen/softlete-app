@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerProps, ThunkAppDispatch } from 'src/services';
 import { removeExercise } from 'src/services/exercises/actions';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 
 export const useDelete = () => {
   const admin = useSelector((state: ReducerProps) => Boolean(state.user.admin));

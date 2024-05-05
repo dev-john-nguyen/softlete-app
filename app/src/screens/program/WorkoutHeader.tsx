@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Keyboard } from 'react-native';
 import { ReducerProps } from '../../services';
-import { WorkoutTypes } from '../../services/workout/types';
+import { WorkoutTypes } from '../../types/workouts.types';
 import {
   convertDaysToWeekObj,
   convertObjToDays,

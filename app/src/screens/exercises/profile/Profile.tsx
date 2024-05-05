@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { ExerciseProps } from '../../../services/exercises/types';
+import { ExerciseProps } from '../../../types/exercises.types';
 import { normalize } from '../../../utils/tools';
 import { ReducerProps } from '../../../services';
 import { useDispatch, useSelector } from 'react-redux';

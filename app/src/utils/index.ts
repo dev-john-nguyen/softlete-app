@@ -1,3 +1,5 @@
+import { SERVERURL } from './PATHS';
+
 export { default as Colors } from './BaseColors';
 export { default as Constants } from './Constants';
 export { default as DateTools } from './DateTools';
@@ -14,3 +16,8 @@ export * from '../services/utils/request';
 export { default as PATHS } from './PATHS';
 export { default as DemoExerciseData } from './demo/demo-exercise.json';
 export { default as DemoWorkoutData } from './demo/demo-workout.json';
+export * from './BottomTabBarHiddenScreens';
+
+export function getURL(path: string) {
+  return SERVERURL + path;
+}

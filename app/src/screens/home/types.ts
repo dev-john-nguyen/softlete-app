@@ -1,6 +1,6 @@
 import { ParamListBase, RouteProp } from '@react-navigation/native';
-import { HealthDataProps } from 'src/services/workout/types';
-import { ExerciseProps } from '../../services/exercises/types';
+import { HealthDataProps } from 'src/types/workouts.types';
+import { ExerciseProps } from '../../types/exercises.types';
 import { GoalProps, GoalTypes } from 'src/services/goals/types';
 
 export type NavigationProps = {
@@ -17,12 +17,20 @@ export interface MyRouteProps extends RouteProp<ParamListBase, ''> {
 
 export type HomeStackParamsList = {
   push(screen: HomeStackScreens, arg1: { data: HealthDataProps }): unknown;
-  Workout: undefined;
+  Workout: {
+    workoutUid: string;
+  };
   WorkoutTemplate: undefined;
   WorkoutHeader: undefined;
   EditWorkout: undefined;
   AddExercise: undefined;
-  SearchExercises: undefined;
+  SearchExercises: {
+    group: number;
+    order: number;
+    workoutUid: string;
+    programTemplateUid?: string;
+    goBackScreen: any;
+  };
   CreateExercise: undefined;
   UploadExerciseVideo: undefined;
   Exercise: {
@@ -54,6 +62,14 @@ export type HomeStackParamsList = {
   WorkoutHelp: undefined;
   Timer: undefined;
   WorkoutReflectionModal: undefined;
+  WorkoutGroupExercises: {
+    groupIndex: number;
+    workoutUid: string;
+  };
+  WorkoutExercise: {
+    workoutUid: string;
+    exerciseUid: string;
+  };
 };
 
 export enum HomeStackScreens {
@@ -83,6 +99,8 @@ export enum HomeStackScreens {
   WorkoutHelp = 'WorkoutHelp',
   Timer = 'Timer',
   WorkoutReflectionModal = 'WorkoutReflectionModal',
+  WorkoutGroupExercises = 'WorkoutGroupExercises',
+  WorkoutExercise = 'WorkoutExercise',
 }
 
 export enum HomeStackScreenTitle {
@@ -96,4 +114,6 @@ export enum HomeStackScreenTitle {
   Map = 'Map',
   WorkoutHelp = 'WorkoutHelp',
   Timer = 'Timer',
+  WorkoutGroupExercises = 'WorkoutGroupExercises',
+  WorkoutExercise = 'WorkoutExercise',
 }

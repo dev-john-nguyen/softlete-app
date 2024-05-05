@@ -3,7 +3,7 @@ import { InfoListBox, PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import CustomImport from './CustomImport';
 import ImportDeviceActivities from './ImportDeviceActivities';
-import { HealthDataProps, HealthDisMeas } from 'src/services/workout/types';
+import { HealthDataProps, HealthDisMeas } from 'src/types/workouts.types';
 import { useWorkoutState } from '@app/contexts';
 import isEqual from 'lodash/isEqual';
 import useBanner from 'src/hooks/utils/useBanner';

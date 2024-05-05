@@ -3,7 +3,7 @@ import {
   HealthDataProps,
   WorkoutProps,
   WorkoutTypes,
-} from 'src/services/workout/types';
+} from 'src/types/workouts.types';
 
 export const EnduranceOptions: PickerOptionProp[] = [
   {

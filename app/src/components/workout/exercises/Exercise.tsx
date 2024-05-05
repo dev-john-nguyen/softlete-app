@@ -6,10 +6,10 @@ import {
   WorkoutStatus,
   WorkoutActionProps,
   ViewWorkoutProps,
-} from '../../../services/workout/types';
+} from '../../../types/workouts.types';
 import PrimaryText from '../../elements/PrimaryText';
 import ExerciseData from './data/Container';
-import { MeasSubCats, ExerciseProps } from '../../../services/exercises/types';
+import { MeasSubCats, ExerciseProps } from '../../../types/exercises.types';
 import _ from 'lodash';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
@@ -59,7 +59,9 @@ const WorkoutExercise = ({
 
   const onTrash = async () => {
     if (!athlete) {
-      if (loading) return;
+      if (loading) {
+        return;
+      }
       setLoading(true);
       await removeWorkoutExercise(exercise);
       if (mount.current) {

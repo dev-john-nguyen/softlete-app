@@ -3,7 +3,7 @@ import SoftExercises from '../../../collections/exercises';
 import errorCatch from '../../../utils/error-catch';
 import apicache from 'apicache';
 import cacheOnlyNonOwner from '../../../utils/cache-only-non-owner';
-import fetchExerciseData from '../helpers/fetch-exercise-data';
+import fetchExerciseData from '../../../utils/exercises/fetch-exercise-data';
 const cache = apicache.middleware;
 
 router.get(

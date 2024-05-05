@@ -1,6 +1,6 @@
-import Video, { VideoSchemaProps } from '../../../collections/videos';
-import UserExerciseMeas from '../../../collections/user-exercise-measurements';
-import { ExerciseSchemaProps } from '../../../collections/exercises';
+import Video, { VideoSchemaProps } from '../../collections/videos';
+import UserExerciseMeas from '../../collections/user-exercise-measurements';
+import { ExerciseSchemaProps } from '../../collections/exercises';
 import mongoose from 'mongoose';
 
 type DocProps = (mongoose.Document<any, any, ExerciseSchemaProps> &
