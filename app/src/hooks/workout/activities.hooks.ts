@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getWoSample } from '../../helpers/health.helpers';
-import { HealthDataProps } from '../../services/workout/types';
+import { HealthDataProps } from '../../types/workouts.types';
 import AppleHealthKit from 'react-native-health';
 
 export function useDeviceWos() {

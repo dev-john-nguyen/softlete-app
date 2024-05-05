@@ -11,7 +11,7 @@ import {
   WorkoutProps,
   WorkoutStatus,
   WorkoutTypes,
-} from '../../../services/workout/types';
+} from '../../../types/workouts.types';
 import CircleAdd from '../../elements/CircleAdd';
 import { FlatList } from 'react-native-gesture-handler';
 import { FlexBox } from '@app/ui';
@@ -182,6 +182,9 @@ interface Props {
   isProgram?: boolean;
 }
 
+const getProgram = (state: ReducerProps) => state.program.targetProgram;
+const getUser = (state: ReducerProps) => state.user;
+
 const WorkoutPreviewList = ({
   workouts,
   onPress,
@@ -190,13 +193,10 @@ const WorkoutPreviewList = ({
   athlete,
   isProgram,
 }: Props) => {
-  const { isAdmin } = useSelector((state: ReducerProps) => {
-    const program = state.program.targetProgram;
-    const isAdmin = program.userUid === state.user.uid;
-    return {
-      isAdmin,
-    };
-  });
+  const program = useSelector(getProgram);
+  const user = useSelector(getUser);
+
+  const isAdmin = program.userUid === user.uid;
 
   const renderItem = useCallback(
     ({ item }: { item: Omit<WorkoutProps, 'date'> }) => (

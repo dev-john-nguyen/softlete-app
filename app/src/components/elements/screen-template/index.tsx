@@ -3,7 +3,7 @@ import { ActivityIndicator, Keyboard, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { FlexBox } from '@app/ui';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../BackButton';
 import {
   SafeAreaView,
@@ -11,12 +11,14 @@ import {
 } from 'react-native-safe-area-context';
 import CustomPicker, { PickerOptionProp } from '../Picker';
 import DatePicker from 'react-native-date-picker';
-import { Colors, moderateScale } from '@app/utils';
+import { Colors, TabBarHiddenScreens, moderateScale } from '@app/utils';
 import useKeyboard from 'src/hooks/utils/useKeyboard';
 import { DemoStates } from '@app/services';
 import DemoArrow from '../DemoArrow';
 import { ScreenTemplateProvider } from './context';
 import HeaderMiddleContent from './components/HeaderMiddleContent';
+import NumericKeyboard from '../numeric-keyboard';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 interface Props {
   children: any;
@@ -44,6 +46,9 @@ interface Props {
   rightContentFlex?: number;
   middleContentFlex?: number;
   headerTitleFormatted?: string;
+  onNumberKeypadSubmit?: (value: number) => void;
+  isNumericKeypadOpen?: boolean;
+  defaultNumericValue?: number;
 }
 
 const ScreenTemplate = ({
@@ -72,11 +77,19 @@ const ScreenTemplate = ({
   rightContentFlex,
   middleContentFlex,
   headerTitleFormatted,
+  onNumberKeypadSubmit,
+  isNumericKeypadOpen,
+  defaultNumericValue,
 }: Props) => {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
   const navigate = useNavigation();
   const keyboardHeight = useKeyboard();
+  const bottomNavBarHeight = useBottomTabBarHeight();
+  const route = useRoute();
+  const isTabBarHiddden = TabBarHiddenScreens.has(route.name);
+
+  const applyBottomNavBarHeight = !isTabBarHiddden;
 
   useEffect(() => {
     if (isPickerOpen || isDatePickerOpen) {
@@ -97,7 +110,12 @@ const ScreenTemplate = ({
       <LinearGradient
         colors={['#140000', '#0C0001', '#140000']}
         style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']}>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            paddingBottom: applyBottomNavBarHeight ? bottomNavBarHeight : 0,
+          }}
+          edges={['left', 'right', 'top']}>
           <FlexBox
             marginTop={headerPadding ? headerHeight - insets.top : 0}
             justifyContent="space-between"
@@ -190,6 +208,11 @@ const ScreenTemplate = ({
         }}
         onCancel={() => onDatePickerClose && onDatePickerClose()}
         textColor={Colors.white}
+      />
+      <NumericKeyboard
+        onNumberKeypadSubmit={onNumberKeypadSubmit}
+        isNumericKeypadOpen={isNumericKeypadOpen}
+        defaultNumericValue={defaultNumericValue}
       />
     </ScreenTemplateProvider>
   );

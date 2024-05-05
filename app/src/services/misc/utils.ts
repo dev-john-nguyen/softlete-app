@@ -3,7 +3,7 @@ import {
   AnalyticsProps,
   PinExerciseProps,
 } from './types';
-import { WorkoutExerciseProps } from '../workout/types';
+import { WorkoutExerciseProps } from '../../types/workouts.types';
 import _ from 'lodash';
 import { updateAnalyticsExercises } from '../exercises/actions';
 import { AppDispatch } from '../../../App';
@@ -15,8 +15,9 @@ export function insertOrUpdateAnalytics(
   stateFetchAnalytics: AnalyticsProps[],
   fetchedAnalytics: AnalyticsProps[],
 ) {
-  if (!fetchedAnalytics || fetchedAnalytics.length < 1)
+  if (!fetchedAnalytics || fetchedAnalytics.length < 1) {
     return stateFetchAnalytics;
+  }
 
   fetchedAnalytics.forEach(a => {
     const foundIndex = stateFetchAnalytics.findIndex(
@@ -114,14 +115,15 @@ export const handleAnalyticsFetched =
   (data?: WorkoutExerciseProps[], athlete?: boolean) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     if (data) {
-      if (data.length < 1) return [];
+      if (data.length < 1) {
+        return [];
+      }
 
       const exercisesObj = reduceExercises(data);
 
       let analyticsArr: AnalyticsProps[] = [];
 
       for (const key in exercisesObj) {
-        // eslint-disable-next-line no-prototype-builtins
         if (exercisesObj.hasOwnProperty(key)) {
           const exercises = exercisesObj[key];
           analyticsArr.push({

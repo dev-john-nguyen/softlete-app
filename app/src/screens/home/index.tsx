@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import Workout from './Workout';
+import { Workout, WorkoutGroupExercises, WorkoutExercise } from './workout/';
 import WorkoutHeader from './WorkoutHeader';
 import SearchExercises from '../exercises/Search';
 import EditExercise from '../exercises/Edit/Edit';
@@ -24,7 +24,6 @@ import Map from './Map';
 import Health from './Health';
 import DeviceActivities from './DeviceActivities';
 import WorkoutActivitySummary from './WorkoutActivitySummary';
-import { FlexBox } from '@app/ui';
 import { Goals, GoalForm } from '../goals';
 import { HealthGoalForm } from './health-goal';
 import { EnduranceAnalytics } from './endurance';
@@ -173,14 +172,6 @@ function HomeStack(parentProps: any) {
         />
 
         <Tab.Screen
-          name={HomeStackScreens.Workout}
-          component={Workout}
-          options={{
-            gestureEnabled: false,
-          }}
-        />
-
-        <Tab.Screen
           name={HomeStackScreens.SearchExercises}
           component={SearchExercises}
           options={{
@@ -275,13 +266,31 @@ function HomeStack(parentProps: any) {
         />
       </Tab.Group>
 
+      <Tab.Group>
+        <Tab.Screen
+          name={HomeStackScreens.Workout}
+          component={Workout}
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutGroupExercises}
+          component={WorkoutGroupExercises}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+          }}
+        />
+        <Tab.Screen
+          name={HomeStackScreens.WorkoutExercise}
+          component={WorkoutExercise}
+        />
+      </Tab.Group>
+
       <Tab.Group
         screenOptions={{
           presentation: 'transparentModal',
           cardStyle: { backgroundColor: 'transparent' },
-          cardOverlay: () => {
-            return <FlexBox flex={1} backgroundColor="red" />;
-          },
         }}>
         <Tab.Screen
           name={HomeStackScreens.WorkoutModal}

@@ -7,7 +7,7 @@ import AppleHealthKit, {
   WorkoutRouteQueryResults,
 } from 'react-native-health';
 import { convertTimeToFormatTime } from '../utils/format';
-import { DateValueProps, HealthDataProps } from '../services/workout/types';
+import { DateValueProps, HealthDataProps } from '../types/workouts.types';
 
 export enum SleepValueProps {
   CORE = 'CORE',
@@ -53,7 +53,6 @@ export const getHeartRateSample = async (
   }) as Promise<HealthValue[]>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getWoSample = async (options: any) => {
   return new Promise((resolve, reject) => {
     AppleHealthKit.getAnchoredWorkouts(
@@ -135,7 +134,7 @@ export const getSleepSamples = async (startDate: Date, endDate: Date) => {
       endDate: endDate.toISOString(),
       ascending: true,
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     AppleHealthKit.getSleepSamples(options, (err, results: any) => {
       if (err) {
         reject(err);

@@ -7,7 +7,7 @@ import Icon from '@app/icons';
 import { Colors } from '@app/utils';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import GoalList from './GoalList';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 const GoalStatusFilters = [

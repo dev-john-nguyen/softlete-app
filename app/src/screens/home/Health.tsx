@@ -4,7 +4,7 @@ import { Colors, Constants, rgba } from '@app/utils';
 import { LineChart } from 'react-native-chart-kit';
 import HealthContainer from '../../components/HealthDataVisual';
 import { moderateScale } from '../../components/tools/StyleConstants';
-import { DateValueProps, HealthEvalProps } from '../../services/workout/types';
+import { DateValueProps, HealthEvalProps } from '../../types/workouts.types';
 import { normalize } from '../../utils/tools';
 import { GraphPlaceholder, PrimaryText, ScreenTemplate } from '@app/elements';
 import Icon from '@app/icons';

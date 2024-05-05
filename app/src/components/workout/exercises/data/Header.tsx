@@ -1,6 +1,6 @@
 import React from 'react';
-import { WorkoutStatus } from '../../../../services/workout/types';
-import { MeasSubCats } from '../../../../services/exercises/types';
+import { WorkoutStatus } from '../../../../types/workouts.types';
+import { MeasSubCats } from '../../../../types/exercises.types';
 import { PrimaryText } from '@app/elements';
 import { FlexBox } from '@app/ui';
 import { SET_COLUMN_WIDTHS } from './constants';
@@ -14,10 +14,7 @@ interface Props {
 const ExerciseDataHeader = ({ status, measSubCat }: Props) => {
   return (
     <FlexBox width="100%" marginBottom={10} paddingLeft={15} paddingRight={15}>
-      <FlexBox
-        flexBasis={moderateScale(30)}
-        flexShrink={1}
-        marginRight={10}></FlexBox>
+      <FlexBox flexBasis={moderateScale(30)} flexShrink={1} marginRight={10} />
       <FlexBox flex={SET_COLUMN_WIDTHS.two} marginRight={10}>
         <PrimaryText opacity={0.8} size={12}>
           Reps
@@ -33,7 +30,7 @@ const ExerciseDataHeader = ({ status, measSubCat }: Props) => {
           Percent
         </PrimaryText>
       </FlexBox>
-      <FlexBox flexBasis={moderateScale(38)}></FlexBox>
+      <FlexBox flexBasis={moderateScale(38)} />
     </FlexBox>
   );
 };

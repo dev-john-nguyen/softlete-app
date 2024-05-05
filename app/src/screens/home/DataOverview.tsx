@@ -17,7 +17,7 @@ import CustomPicker, {
 import SecondaryText from '../../components/elements/SecondaryText';
 import StyleConstants from '../../components/tools/StyleConstants';
 import { ReducerProps } from '../../services';
-import { HealthDataProps } from '../../services/workout/types';
+import { HealthDataProps } from '../../types/workouts.types';
 import BaseColors from '../../utils/BaseColors';
 import { normalize } from '../../utils/tools';
 

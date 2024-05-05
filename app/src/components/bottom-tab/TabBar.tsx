@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import DashboardSvg from '../../assets/DashboardSvg';
 import { IndexStackList } from '../../screens/types';
-import { Colors, rgba } from '@app/utils';
+import { Colors, TabBarHiddenScreens, rgba } from '@app/utils';
 import { moderateScale } from '../tools/StyleConstants';
 import Tab from './Tab';
 import GearSvg from '../../assets/GearSvg';
@@ -21,7 +21,6 @@ const TabBar = ({
   navigation,
   isHidden,
 }: BottomTabBarProps & { isHidden?: boolean }) => {
-  // const setBanner = useBanner();
   const navToHome = () => {
     if (isActive(IndexStackList.HomeStack)) {
       navigation.navigate(IndexStackList.HomeStack, {
@@ -68,15 +67,30 @@ const TabBar = ({
   //   }
   // };
 
+  const isHiddenScreen = (() => {
+    const navigationState = navigation.getState();
+    const parentIndex = navigationState.index;
+    const parentActive = navigationState.routes[parentIndex];
+    if (!parentActive) return false;
+    const childIndex = parentActive.state?.index;
+    if (childIndex === undefined) return false;
+    const child = parentActive.state?.routes[childIndex];
+    if (!child) return false;
+    if (TabBarHiddenScreens.has(child.name)) return true;
+    return false;
+  })();
+
   const isActive = useCallback(
     (val: string) => state.routes[state.index].name === val,
     [state],
   );
 
-  if (isHidden) return <></>;
+  if (isHidden) return null;
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.container, { bottom: isHiddenScreen ? -100 : 0 }]}
+      edges={['bottom', 'left', 'right']}>
       <DemoArrow
         state={[
           DemoStates.PROGRAMS,
@@ -151,6 +165,8 @@ const TabBar = ({
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    width: '100%',
     flexDirection: 'row',
     backgroundColor: '#140000',
     justifyContent: 'space-around',

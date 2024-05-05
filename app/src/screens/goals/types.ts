@@ -2,7 +2,7 @@ import {
   HealthDataProps,
   WorkoutExerciseProps,
   WorkoutProps,
-} from 'src/services/workout/types';
+} from 'src/types/workouts.types';
 
 export type GoalStatusProps = {
   status: string;

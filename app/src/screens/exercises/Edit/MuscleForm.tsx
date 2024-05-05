@@ -3,7 +3,7 @@ import { FlexBox } from '@app/ui';
 import { Colors, rgba } from '@app/utils';
 import React, { FC } from 'react';
 import { ScrollView } from 'react-native';
-import { MuscleGroups } from 'src/services/exercises/types';
+import { MuscleGroups } from 'src/types/exercises.types';
 
 type MuscleFormProps = {
   setMuscleGroups: React.Dispatch<

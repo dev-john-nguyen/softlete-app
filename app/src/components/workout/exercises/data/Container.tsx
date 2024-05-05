@@ -7,9 +7,9 @@ import {
   ViewWorkoutProps,
   WorkoutExerciseDataProps,
   WorkoutStatus,
-} from '../../../../services/workout/types';
+} from '../../../../types/workouts.types';
 import ExerciseDataHeader from './Header';
-import { MeasSubCats } from '../../../../services/exercises/types';
+import { MeasSubCats } from '../../../../types/exercises.types';
 import CalcRef from './CalcRef';
 import Animated, {
   useAnimatedStyle,
@@ -78,7 +78,9 @@ const ExerciseData = ({
     item: WorkoutExerciseDataProps,
     index: number,
   ) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
 
     const { completed, performVal, predictVal } = item;
 
@@ -93,9 +95,13 @@ const ExerciseData = ({
 
   const onAddSet = () => {
     //check length of data
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
 
-    if (data.length >= 50) return;
+    if (data.length >= 50) {
+      return;
+    }
 
     const lastItem = data[data.length - 1];
 
@@ -126,7 +132,9 @@ const ExerciseData = ({
     key: DataKeys,
     val: string,
   ) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
 
     let numVal = parseInt(val);
     let predictedVal;
@@ -156,7 +164,9 @@ const ExerciseData = ({
   };
 
   const onRemoveSet = (index: number) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
     if (data[index]) {
       data.splice(index, 1);
       updateData([...data]);
@@ -196,7 +206,9 @@ const ExerciseData = ({
     key: DataKeys,
     val: string,
   ) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
 
     const numVal = strToFloat(val);
 
@@ -210,7 +222,9 @@ const ExerciseData = ({
 
   const onWarmUpPress = (index: number) => {
     //set all the items before the pressed as warm up
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
     //check if the user double tap the last warm up
     let removeAll = false;
     for (let i = 0; i < data.length; i++) {

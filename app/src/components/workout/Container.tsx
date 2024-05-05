@@ -11,7 +11,7 @@ import {
   WorkoutExerciseDataProps,
   DataArrProps,
   WorkoutStatus,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import WorkoutNavbar from './Navbar';
 import ExercisesContainer from './exercises/Container';
 import _ from 'lodash';
@@ -64,7 +64,9 @@ const WorkoutContainer = () => {
   );
 
   const handleUpdateWorkoutStates = useCallback(() => {
-    if (!workout.exercises) return;
+    if (!workout.exercises) {
+      return;
+    }
     let cloneExs = _(workout.exercises).cloneDeep();
     cloneExs = _.sortBy(cloneExs, e => [e.group, e.order]);
     let groupCount = 0;
@@ -119,7 +121,9 @@ const WorkoutContainer = () => {
   }, [workout.status]);
 
   useEffect(() => {
-    if (mount.current) autoSaveHandler.current();
+    if (mount.current) {
+      autoSaveHandler.current();
+    }
   }, [exercises, athlete]);
 
   useEffect(() => {
@@ -225,13 +229,17 @@ const WorkoutContainer = () => {
     updatedData: WorkoutExerciseDataProps[],
     index: number,
   ) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
     exercises[index].data = [...updatedData];
     setExercises([...exercises]);
   };
 
   const onCalcRefUpdate = (calc: number | string, index: number) => {
-    if (athlete) return;
+    if (athlete) {
+      return;
+    }
     exercises[index].calcRef = calc as number; //but this is actually a string;
     exercises[index].data = exercises[index].data.map(d => {
       //take percentage and multiply by calc ref to get predicted val
@@ -253,8 +261,9 @@ const WorkoutContainer = () => {
       workout.status === WorkoutStatus.completed ||
       athlete ||
       !onNavigateToAddExercise
-    )
+    ) {
       return;
+    }
 
     let groupProps = 0;
 
@@ -290,9 +299,15 @@ const WorkoutContainer = () => {
   };
 
   const shouldAddCom = useMemo(() => {
-    if (athlete) return false;
-    if (workout.status !== WorkoutStatus.completed) return true;
-    if (workout.programTemplateUid) return true;
+    if (athlete) {
+      return false;
+    }
+    if (workout.status !== WorkoutStatus.completed) {
+      return true;
+    }
+    if (workout.programTemplateUid) {
+      return true;
+    }
     return false;
   }, [athlete, workout]);
 

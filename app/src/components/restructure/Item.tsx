@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import PrimaryText from '../elements/PrimaryText';
 import { HEIGHT } from './utils';
-import { WorkoutExerciseProps } from '../../services/workout/types';
+import { WorkoutExerciseProps } from '../../types/workouts.types';
 import { normalize } from '../../utils/tools';
 import Constants from '../../utils/Constants';
 import StyleConstants from '../tools/StyleConstants';

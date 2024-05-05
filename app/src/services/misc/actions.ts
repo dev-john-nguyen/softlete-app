@@ -3,7 +3,7 @@ import request from '../utils/request';
 import PATHS from '../../utils/PATHS';
 import { ReducerProps } from '..';
 import { UPDATE_ANALYTICS } from './actionTypes';
-import { WorkoutExerciseProps, WorkoutProps } from '../workout/types';
+import { WorkoutExerciseProps, WorkoutProps } from '../../types/workouts.types';
 import { PinExerciseProps } from './types';
 import _ from 'lodash';
 import {
@@ -16,7 +16,9 @@ import { fetchExercises } from '../exercises/actions';
 export const processAnalyticsExercises =
   (workout: WorkoutProps) =>
   (dispatch: AppDispatch, getState: () => ReducerProps) => {
-    if (!workout.exercises) return;
+    if (!workout.exercises) {
+      return;
+    }
 
     const { fetchedAnalytics } = getState().misc;
 
@@ -70,7 +72,9 @@ export const processAnalyticsExercises =
     });
 
     //nothing was updated so no need to do more logic
-    if (_.isEqual(analyticsStore, fetchedAnalytics)) return;
+    if (_.isEqual(analyticsStore, fetchedAnalytics)) {
+      return;
+    }
 
     //recalc all the exercises that were updated
     const newAnalyticsStore = analyticsStore.map(a => {
@@ -78,7 +82,9 @@ export const processAnalyticsExercises =
         fa => fa.exerciseUid === a.exerciseUid,
       );
       if (aIndex > -1) {
-        if (_.isEqual(a, fetchedAnalytics[aIndex])) return { ...a };
+        if (_.isEqual(a, fetchedAnalytics[aIndex])) {
+          return { ...a };
+        }
       }
 
       return {
@@ -111,7 +117,9 @@ export const fetchPinExerciseAnalytics =
       emptyPins = _.differenceBy(pinExercises, fetchedAnalytics, 'exerciseUid');
     }
 
-    if (emptyPins.length < 1) return fetchedAnalytics;
+    if (emptyPins.length < 1) {
+      return fetchedAnalytics;
+    }
 
     const exercisesStore = getState().exercises.data;
 
@@ -139,7 +147,9 @@ export const fetchPinExerciseAnalytics =
           const exercise = exercisesFetched.find(
             fe => fe._id === p.exerciseUid,
           );
-          if (exercise) p.exercise = { ...exercise };
+          if (exercise) {
+            p.exercise = { ...exercise };
+          }
         });
       }
     }
@@ -178,11 +188,15 @@ export const fetchExerciseAnalytics =
       uid = getState().user.uid;
     }
 
-    if (!uid) return [];
+    if (!uid) {
+      return [];
+    }
 
     const uniqExerciseUids = _.uniq(exerciseUids);
 
-    if (uniqExerciseUids.length < 1) return;
+    if (uniqExerciseUids.length < 1) {
+      return;
+    }
 
     return request<WorkoutExerciseProps[]>(
       'GET',
@@ -206,11 +220,15 @@ export const fetchExerciseAnalyticsDates =
       uid = getState().user.uid;
     }
 
-    if (!uid) return [];
+    if (!uid) {
+      return [];
+    }
 
     const uniqExerciseUids = _.uniq(exerciseUids);
 
-    if (uniqExerciseUids.length < 1) return;
+    if (uniqExerciseUids.length < 1) {
+      return;
+    }
 
     return request<WorkoutExerciseProps[]>(
       'GET',

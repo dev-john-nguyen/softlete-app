@@ -107,9 +107,11 @@ const BannerItem: FC<{ banner: BannerProps; index: number }> = ({
   );
 };
 
+const getBanner = (state: ReducerProps) => state.banner;
+
 const Banner = () => {
   const insets = useSafeAreaInsets();
-  const { banners } = useSelector((state: ReducerProps) => state.banner);
+  const { banners } = useSelector(getBanner);
   return (
     <FlexBox
       overflow="hidden"

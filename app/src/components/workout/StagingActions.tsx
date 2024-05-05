@@ -1,7 +1,7 @@
 import { Colors, rgba } from '@app/utils';
 import React, { useContext } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
-import { WorkoutStatus } from '../../services/workout/types';
+import { WorkoutStatus } from '../../types/workouts.types';
 import PrimaryText from '../elements/PrimaryText';
 import { FlexBox } from '@app/ui';
 import { WorkoutContext } from '@app/contexts';
@@ -12,11 +12,15 @@ const StagingActions = () => {
   const status = workout.status;
 
   const onPress = (s: WorkoutStatus) => {
-    if (status === s || athlete) return;
+    if (status === s || athlete) {
+      return;
+    }
     onUpdateStatus && onUpdateStatus(s);
   };
 
-  if (isProgram) return null;
+  if (isProgram) {
+    return null;
+  }
 
   return (
     <FlexBox

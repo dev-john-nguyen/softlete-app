@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getWoSample } from '../../helpers/health.helpers';
-import { HealthDataProps, WorkoutProps } from '../../services/workout/types';
+import { HealthDataProps, WorkoutProps } from '../../types/workouts.types';
 import AppleHealthKit from 'react-native-health';
 import DateTools from '../../utils/DateTools';
 

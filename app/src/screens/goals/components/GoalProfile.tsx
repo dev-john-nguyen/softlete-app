@@ -15,7 +15,7 @@ import useBanner from 'src/hooks/utils/useBanner';
 import { HomeStackParamsList, HomeStackScreens } from 'src/screens/home/types';
 import { ThunkAppDispatch } from 'src/services';
 import { BannerTypes } from 'src/services/banner/types';
-import { ExerciseProps } from 'src/services/exercises/types';
+import { ExerciseProps } from 'src/types/exercises.types';
 import { removeExerciseGoalAsync } from 'src/services/goals/slice';
 import { GoalProps, GoalTypes } from 'src/services/goals/types';
 import { GoalStatusProps } from '../types';

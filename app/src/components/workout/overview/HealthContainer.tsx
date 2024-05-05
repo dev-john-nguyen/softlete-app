@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { Fragment } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { HomeStackScreens } from '../../../screens/home/types';
-import { HealthDataProps, WorkoutProps } from '../../../services/workout/types';
+import { HealthDataProps, WorkoutProps } from '../../../types/workouts.types';
 import { InfoListBox } from '@app/elements';
 import {
   Colors,

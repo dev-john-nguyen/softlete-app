@@ -6,7 +6,7 @@ import {
   HealthDataProps,
   ViewWorkoutProps,
   EditWorkoutProps,
-} from '../workout/types';
+} from '../../types/workouts.types';
 
 export interface RootProgramProps {
   programs: ProgramProps[];

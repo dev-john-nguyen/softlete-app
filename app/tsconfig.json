@@ -1,4 +1,5 @@
 {
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -15,12 +16,12 @@
       "@app/ui": ["src/ui/index.ts"],
       "@app/utils": ["src/utils/index.ts"],
       "@app/services": ["src/services/services.ts"],
-      "@app/contexts": ["src/contexts/index.ts"]
+      "@app/contexts": ["src/contexts/index.ts"],
+      "@app/types": ["src/types/index.ts"]
     },
     "noEmit": true,
     "resolveJsonModule": true,
     "target": "esnext",
     "types": ["jest"]
-  },
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+  }
 }

@@ -51,8 +51,8 @@ import {
   MeasCats,
   MeasSubCats,
   MuscleGroups,
-} from '../../services/exercises/types';
-import { HealthDataProps, WorkoutProps } from '../../services/workout/types';
+} from '../../types/exercises.types';
+import { HealthDataProps, WorkoutProps } from '../../types/workouts.types';
 import store from '../../utils/init-redux';
 import { insertExercises } from '../../services/exercises/actions';
 import _ from 'lodash';

@@ -14,7 +14,7 @@ import {
 import {
   ExerciseActionProps,
   ExerciseProps,
-} from '../../../../services/exercises/types';
+} from '../../../../types/exercises.types';
 import {
   getGlobalVars,
   goOffline,
@@ -39,7 +39,7 @@ import {
   fetchWorkouts,
   getAllHealthData,
 } from '../../../../services/workout/actions';
-import { WorkoutActionProps } from '../../../../services/workout/types';
+import { WorkoutActionProps } from '../../../../types/workouts.types';
 import { normalize } from '../../../../utils/tools';
 import { HomeStackScreens } from '../../types';
 import HomeHealth from './Health';

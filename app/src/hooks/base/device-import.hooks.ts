@@ -10,7 +10,7 @@ import {
   updateWoHealthData,
   updateWoWorkoutRoute,
 } from 'src/services/workout/actions';
-import { HealthDataProps } from 'src/services/workout/types';
+import { HealthDataProps } from 'src/types/workouts.types';
 
 // Refactored version of handleDeviceActivityImport in route.helpers.ts
 

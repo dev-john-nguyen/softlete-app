@@ -15,7 +15,7 @@ import {
   PanGestureHandlerEventPayload,
 } from 'react-native-gesture-handler';
 import { HEIGHT, objectMove, clamp, findOverlapGroup } from './utils';
-import { WorkoutExerciseProps } from '../../services/workout/types';
+import { WorkoutExerciseProps } from '../../types/workouts.types';
 import { GroupPosProps, PositionProps } from './types';
 import { Colors } from '@app/utils';
 

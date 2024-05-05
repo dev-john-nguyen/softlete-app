@@ -14,7 +14,7 @@ import {
   WorkoutActionProps,
   WorkoutHeaderProps,
   WorkoutTypes,
-} from '../../services/workout/types';
+} from '../../types/workouts.types';
 import DateTools from '../../utils/DateTools';
 import { capitalize } from '../../utils/tools';
 import { updateWorkoutHeader } from '../../services/workout/actions';
