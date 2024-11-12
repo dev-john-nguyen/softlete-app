@@ -17,13 +17,13 @@ const AddExercise = () => {
   const route = useRoute<any>();
   const { groupParams } = useExerciseGroupParams();
 
-  const addOneToGroupLetterIndexes = useMemo(() => {
+  const groups = useMemo(() => {
     const groupLetterIndexes = [...groupParams.keys()].sort((a, b) => a - b);
     if (!groupLetterIndexes.length) {
       return [0];
     }
     const max = Math.max(...groupLetterIndexes);
-    return [...groupLetterIndexes, max + 1];
+    return [...groupLetterIndexes];
   }, [groupParams]);
 
   const onNavigateToAddExercise = (group: number) => {
@@ -59,11 +59,16 @@ const AddExercise = () => {
       paddingLeft={15}
       paddingRight={15}>
       <FlexBox gap={10} alignItems="center" flex={1}>
-        <FontAwesome6Icon name="circle-plus" color={Colors.white} size={49} />
+        <FontAwesome6Icon
+          name="circle-plus"
+          color={Colors.white}
+          size={49}
+          onPress={() => onNavigateToAddExercise(Math.max(...groups) + 1)}
+        />
         <FlatList
           horizontal
           renderItem={renderItemHandler}
-          data={addOneToGroupLetterIndexes}
+          data={groups}
           contentContainerStyle={{ gap: 10 }}
         />
       </FlexBox>

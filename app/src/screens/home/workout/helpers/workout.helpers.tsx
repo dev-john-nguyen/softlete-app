@@ -16,7 +16,7 @@ export function groupWoExercisesByGroup(workout: WorkoutProps) {
       groupInstance.totalExercises++;
     } else {
       groupedExercise.set(e.group, {
-        exercises: [],
+        exercises: [e],
         totalExercises: 1,
         groupIndex: e.group,
       });
@@ -25,7 +25,7 @@ export function groupWoExercisesByGroup(workout: WorkoutProps) {
 
   Array.from(groupedExercise.entries())
     .sort((a, b) => a[0] - b[0])
-    .filter(([, props]) => props.exercises.length)
+    .filter(([, props]) => props.exercises && props.exercises.length)
     .forEach(([, props], index) => {
       groupParamsByLetterIndex.set(index, props);
     });
