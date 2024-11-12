@@ -20,9 +20,8 @@ const AddExercise = () => {
   const groups = useMemo(() => {
     const groupLetterIndexes = [...groupParams.keys()].sort((a, b) => a - b);
     if (!groupLetterIndexes.length) {
-      return [0];
+      return [];
     }
-    const max = Math.max(...groupLetterIndexes);
     return [...groupLetterIndexes];
   }, [groupParams]);
 
