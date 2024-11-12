@@ -120,10 +120,13 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
     };
 
     updateWorkoutHeader(workoutHeaderData)
-      .then(() => {
+      .then(workouts => {
+        if (!workouts) return setBanner('Error saving workout.');
+        const workout = workouts[0];
         setLoading(false);
         navigation.navigate(HomeStackScreens.Workout, {
           goBackScreen: HomeStackScreens.Home,
+          workoutUid: workout._id,
         });
       })
       .catch(err => {
