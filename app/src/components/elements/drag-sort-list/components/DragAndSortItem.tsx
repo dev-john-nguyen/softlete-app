@@ -163,8 +163,7 @@ const DragAndSortItem: FC<Props> = ({
     })
     .onUpdate(event => {
       const scrollPageY = scrollLayoutProps?.pageY ?? 0;
-      const positionY =
-        scrollY.value + event.absoluteY - scrollPageY - CUSTOM_OFF_SET;
+      const positionY = scrollY.value + event.absoluteY - CUSTOM_OFF_SET;
       translateY.value = positionY;
       autoScrollHandler();
       moveHandler();
