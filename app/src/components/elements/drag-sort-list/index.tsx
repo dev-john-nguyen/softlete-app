@@ -43,6 +43,9 @@ const DragAndSortList: FC<Props> = ({
 
   useEffect(() => {
     // resets states
+    // don't reset if data is the same length? Will this cause any issues
+    if (data.length === dataProp.length) return;
+
     setItemLayoutProps(new Map());
     positions.value = {};
     setData(
