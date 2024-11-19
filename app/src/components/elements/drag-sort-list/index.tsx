@@ -1,6 +1,6 @@
 import { FlexBox } from '@app/ui';
 import { AutoId, moderateScale } from '@app/utils';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedRef,
@@ -80,7 +80,10 @@ const DragAndSortList: FC<Props> = ({
       };
       accumulatedHeight += (itemProps?.height as number) + gap;
     });
-    setScrollViewHeight(accumulatedHeight);
+
+    setScrollViewHeight(
+      scrollViewHeight ? scrollViewHeight : accumulatedHeight,
+    );
     positions.value = newPositions;
   }, [data, gap, itemLayoutProps, positions]);
 
@@ -147,6 +150,10 @@ const DragAndSortList: FC<Props> = ({
     );
   };
 
+  const items = useMemo(() => {
+    return data.map(renderItemHandler);
+  }, [data]);
+
   return (
     <FlexBox flex={1}>
       <Animated.ScrollView
@@ -155,12 +162,12 @@ const DragAndSortList: FC<Props> = ({
         onLayout={getLayoutMeasurements}
         scrollEventThrottle={16}
         contentContainerStyle={{
-          height: scrollViewHeight,
+          height: isNaN(scrollViewHeight) ? 0 : scrollViewHeight,
           paddingLeft: moderateScale(15),
           paddingRight: moderateScale(15),
           alignItems: 'center',
         }}>
-        {data.map(renderItemHandler)}
+        {items}
       </Animated.ScrollView>
     </FlexBox>
   );
