@@ -24,6 +24,7 @@ const GroupExercises: FC<Props> = ({ item }) => {
   return (
     <FlexBox column gap={5} width="100%" onPress={onNavigateToExercise}>
       {item.exercises
+        .slice()
         .sort((a, b) => a.order - b.order)
         .map(exercise => {
           return (
