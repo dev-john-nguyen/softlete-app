@@ -26,7 +26,7 @@ const ExerciseMoveMenu: FC<Props> = ({ onClose, letterIndex, exercise }) => {
       return [0];
     }
     const max = Math.max(...groupLetterIndexes);
-    return [...groupLetterIndexes.filter(i => i !== letterIndex), max + 1];
+    return [...groupLetterIndexes.filter(i => i !== letterIndex)];
   }, [groupParams, letterIndex]);
 
   const onMoveExerciseToGroup = (groupIndex: number) => {
