@@ -3,7 +3,7 @@ import Icon from '@app/icons';
 import { Colors } from '@app/utils';
 import { HomeStackScreens } from '../../types';
 import ScreenTemplate from '../../../../components/elements/screen-template';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { FlexBox } from '@app/ui';
 import { DemoArrow } from '@app/elements';
 import { DemoStates } from '@app/services';
@@ -19,6 +19,8 @@ const Workout = () => {
   const navigation = useNavigation<any>();
   const { workout, isFetching, isError } = useFetchWorkout();
   const { onGoBackHandler } = useGoBack();
+  const route = useRoute<any>();
+  const workoutUid = route.params.workoutUid;
 
   if (isError) {
     return <WorkoutError />;
@@ -50,21 +52,29 @@ const Workout = () => {
               size={25}
               color={Colors.white}
               onPress={() =>
-                navigation.navigate(HomeStackScreens.WorkoutReflectionModal)
+                navigation.navigate(HomeStackScreens.WorkoutReflectionModal, {
+                  workoutUid,
+                })
               }
             />
             <Icon
               icon="timer"
               size={25}
               color={Colors.white}
-              onPress={() => navigation.navigate(HomeStackScreens.Timer)}
+              onPress={() =>
+                navigation.navigate(HomeStackScreens.Timer, { workoutUid })
+              }
               containerStyles={{ marginLeft: 10 }}
             />
             <Icon
               icon="ellipsis"
               size={20}
               color={Colors.white}
-              onPress={() => navigation.navigate(HomeStackScreens.WorkoutModal)}
+              onPress={() =>
+                navigation.navigate(HomeStackScreens.WorkoutModal, {
+                  workoutUid,
+                })
+              }
               containerStyles={{ marginLeft: 10 }}
             />
           </FlexBox>

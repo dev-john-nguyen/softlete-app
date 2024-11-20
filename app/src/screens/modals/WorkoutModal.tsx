@@ -11,6 +11,7 @@ import { RouteProp } from '@react-navigation/native';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { removeWorkout } from '../../services/workout/actions';
 import { INITIATE_WORKOUT_HEADER } from 'src/services/workout/actionTypes';
+import { useFetchWorkout } from '../home/workout/hooks/workout.hooks';
 
 interface Props {
   navigation: any;
@@ -20,11 +21,7 @@ interface Props {
 const WorkoutModal = ({ navigation, route }: Props) => {
   const isProgramWorkout = route.name !== HomeStackScreens.WorkoutModal;
   const dispatch = useDispatch<ThunkAppDispatch>();
-  const { workout } = useSelector((state: ReducerProps) => ({
-    workout: isProgramWorkout
-      ? state.program.viewWorkout
-      : state.workout.viewWorkout,
-  }));
+  const { workout } = useFetchWorkout();
 
   const onEditWorkoutHeader = useCallback(() => {
     if (!workout) return;
@@ -43,6 +40,7 @@ const WorkoutModal = ({ navigation, route }: Props) => {
       });
       navigation.navigate(HomeStackScreens.WorkoutHeader, {
         goBackScreen: HomeStackScreens.Workout,
+        workoutUid: workout._id,
       });
     }
   }, [dispatch, isProgramWorkout, navigation, workout]);
@@ -51,7 +49,7 @@ const WorkoutModal = ({ navigation, route }: Props) => {
     const deleteHandler = () => {
       if (!workout) return;
       if (isProgramWorkout) {
-        if (workout.programTemplateUid) {
+        if (workout.programUid) {
           dispatch(removeProgramWorkout(workout._id))
             .then(() => navigation.navigate(ProgramStackScreens.Program))
             .catch(err => {
@@ -82,14 +80,6 @@ const WorkoutModal = ({ navigation, route }: Props) => {
     );
   }, [dispatch, isProgramWorkout, navigation, workout]);
 
-  const onRestructure = useCallback(() => {
-    if (isProgramWorkout) {
-      navigation.navigate(ProgramStackScreens.ProgramReorderWorkoutExercises);
-    } else {
-      navigation.navigate(HomeStackScreens.ReorderWorkoutExercises);
-    }
-  }, [navigation, isProgramWorkout]);
-
   const onHelp = useCallback(() => {
     if (isProgramWorkout) {
       navigation.navigate(ProgramStackScreens.ProgramWorkoutHelp);
@@ -116,21 +106,8 @@ const WorkoutModal = ({ navigation, route }: Props) => {
         onPress: onDeleteWorkout,
       },
     ];
-    if (workout.type === WorkoutTypes.TraditionalStrengthTraining) {
-      options.splice(1, 0, {
-        text: 'Restructure',
-        icon: 'sort',
-        onPress: onRestructure,
-      });
-    }
     return options;
-  }, [
-    onDeleteWorkout,
-    onEditWorkoutHeader,
-    onHelp,
-    onRestructure,
-    workout.type,
-  ]);
+  }, [onDeleteWorkout, onEditWorkoutHeader, onHelp]);
 
   return <MenuModal title="Menu" menuItems={menuItems} />;
 };

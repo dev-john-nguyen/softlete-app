@@ -183,7 +183,7 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
   const onGoBackHandler = () => {
     const { params } = route;
     params && params.goBackScreen
-      ? navigation.navigate(params.goBackScreen)
+      ? navigation.navigate(params.goBackScreen, params)
       : navigation.navigate(HomeStackScreens.Home, {
           directToDash: params && params.directToDash ? true : false,
         });

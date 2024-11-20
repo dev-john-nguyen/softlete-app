@@ -23,7 +23,7 @@ const MenuModal: FC<MenuModalProps> = ({ menuItems, title }) => {
       flex={1}
       alignItems="center"
       justifyContent="center"
-      backgroundColor={rgba(Colors.primaryRgb, 0.5)}>
+      backgroundColor={rgba(`0,0,0`, 0.5)}>
       <UnderLay />
       <FlexBox
         column
@@ -34,7 +34,7 @@ const MenuModal: FC<MenuModalProps> = ({ menuItems, title }) => {
         <UnderLay />
         <FlexBox
           column
-          backgroundColor={Colors.lightPrimary}
+          backgroundColor={Colors.primary}
           applyBoxShadow
           padding={10}
           paddingTop={20}
