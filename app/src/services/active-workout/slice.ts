@@ -14,7 +14,7 @@ import {
   setActiveWorkoutAsync,
 } from './async-actions';
 import { storeWorkoutLocalStorage } from './helpers';
-import { WorkoutExerciseDataProps } from '@app/types';
+import { WorkoutExerciseDataProps, WorkoutStatus } from '@app/types';
 import { AutoId } from '@app/utils';
 
 const initialState: ActiveWorkoutProps = {
@@ -27,6 +27,15 @@ const activeWorkout = createSlice({
   reducers: {
     clearActiveWorkout: (state: ActiveWorkoutProps) => {
       state.workout = undefined;
+    },
+    updateStatus: (
+      state: ActiveWorkoutProps,
+      { payload: status }: PayloadAction<WorkoutStatus>,
+    ) => {
+      if (state.workout) {
+        state.workout.status = status;
+        storeWorkoutLocalStorage(state.workout);
+      }
     },
     removeExercise: (
       state: ActiveWorkoutProps,
@@ -277,6 +286,7 @@ export const {
   onDeleteExerciseMetric,
   updateExerciseMetricWarmUpStatus,
   updateExerciseMetricStatus,
+  updateStatus,
 } = activeWorkout.actions;
 
 export default activeWorkout.reducer;

@@ -7,6 +7,7 @@ import { updateWorkoutStatus } from 'src/services/workout/actions';
 import { useDispatch } from 'react-redux';
 import { ThunkAppDispatch } from 'src/services';
 import { useWorkout } from '../contexts';
+import { updateStatus } from '@app/services';
 
 const WorkoutStages = () => {
   const { workout, isProgram } = useWorkout();
@@ -17,7 +18,7 @@ const WorkoutStages = () => {
     if (status === s) {
       return;
     }
-    dispatch(updateWorkoutStatus(workout._id, s));
+    dispatch(updateStatus(s));
   };
 
   if (isProgram) {
