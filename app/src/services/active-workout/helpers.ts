@@ -1,4 +1,4 @@
-import { WorkoutProps } from '@app/types';
+import { WorkoutHeaderProps, WorkoutProps } from '@app/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ReducerProps } from '..';
 
@@ -30,4 +30,11 @@ export const removeLocalStorageWorkout = async (workoutUid: string) => {
   return AsyncStorage.removeItem(`workouts/${workoutUid}`).catch(error =>
     console.error(error),
   );
+};
+
+export const updateLocalStorageWorkoutHeader = async (
+  header: WorkoutHeaderProps,
+) => {
+  const workout = await getWorkoutFromLocalStorage(header._id as string);
+  return storeWorkoutLocalStorage({ ...workout, ...header });
 };

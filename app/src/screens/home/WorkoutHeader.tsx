@@ -26,6 +26,7 @@ import useBanner from 'src/hooks/utils/useBanner';
 import { RouteProp } from '@react-navigation/native';
 import { Colors } from '@app/utils';
 import Icon from '@app/icons';
+import { updateLocalStorageWorkoutHeader } from 'src/services/active-workout/helpers';
 
 interface Props {
   route: RouteProp<any>;
@@ -120,9 +121,10 @@ const WorkoutHeader = ({ route, navigation, updateWorkoutHeader }: Props) => {
     };
 
     updateWorkoutHeader(workoutHeaderData)
-      .then(workouts => {
+      .then(async workouts => {
         if (!workouts) return setBanner('Error saving workout.');
         const workout = workouts[0];
+        await updateLocalStorageWorkoutHeader(workout);
         setLoading(false);
         navigation.navigate(HomeStackScreens.Workout, {
           goBackScreen: HomeStackScreens.Home,
