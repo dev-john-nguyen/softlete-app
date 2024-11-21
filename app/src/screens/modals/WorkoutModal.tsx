@@ -1,17 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
-import { ReducerProps, ThunkAppDispatch } from '../../services';
-import { useDispatch, useSelector } from 'react-redux';
+import { ThunkAppDispatch } from '../../services';
+import { useDispatch } from 'react-redux';
 import { removeProgramWorkout } from '../../services/program/actions';
 import { ProgramStackScreens } from '../program/types';
 import MenuModal, { MenuItemProps } from 'src/screens/modals/MenuModal';
 import { SET_PROGRAM_WORKOUT_HEADER } from 'src/services/program/actionTypes';
-import { WorkoutTypes } from 'src/types/workouts.types';
 import { RouteProp } from '@react-navigation/native';
 import { HomeStackScreens } from 'src/screens/home/types';
 import { removeWorkout } from '../../services/workout/actions';
 import { INITIATE_WORKOUT_HEADER } from 'src/services/workout/actionTypes';
-import { useFetchWorkout } from '../home/workout/hooks/workout.hooks';
+import { useGetActiveWorkout } from '../home/workout/hooks/workout.hooks';
 import { removeLocalStorageWorkout } from 'src/services/active-workout/helpers';
 
 interface Props {
@@ -22,7 +21,7 @@ interface Props {
 const WorkoutModal = ({ navigation, route }: Props) => {
   const isProgramWorkout = route.name !== HomeStackScreens.WorkoutModal;
   const dispatch = useDispatch<ThunkAppDispatch>();
-  const { workout } = useFetchWorkout();
+  const workout = useGetActiveWorkout();
 
   const onEditWorkoutHeader = useCallback(() => {
     if (!workout) return;
