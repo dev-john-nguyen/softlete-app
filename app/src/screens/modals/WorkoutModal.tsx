@@ -22,7 +22,7 @@ interface Props {
 const WorkoutModal = ({ navigation, route }: Props) => {
   const isProgramWorkout = route.name !== HomeStackScreens.WorkoutModal;
   const dispatch = useDispatch<ThunkAppDispatch>();
-  const { workout } = useFetchWorkout('modal');
+  const { workout } = useFetchWorkout();
 
   const onEditWorkoutHeader = useCallback(() => {
     if (!workout) return;

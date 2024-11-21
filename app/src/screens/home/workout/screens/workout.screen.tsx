@@ -17,7 +17,7 @@ import WorkoutEmpty from '../components/WorkoutEmpty';
 
 const Workout = () => {
   const navigation = useNavigation<any>();
-  const { workout, isFetching, isError } = useFetchWorkout('workout');
+  const { workout, isFetching, isError } = useFetchWorkout();
   const { onGoBackHandler } = useGoBack();
   const route = useRoute<any>();
   const workoutUid = route.params.workoutUid;
