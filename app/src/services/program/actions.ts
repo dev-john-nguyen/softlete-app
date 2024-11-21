@@ -407,7 +407,7 @@ export const duplicateProgramWorkout =
   };
 
 export const removeProgramWorkout =
-  (programWorkoutUid: string) => async (dispatch: AppDispatch) => {
+  async (programWorkoutUid: string) => async (dispatch: AppDispatch) => {
     const res = await request('POST', PATHS.programs.removeWorkout, dispatch, {
       programWorkoutUid,
     });

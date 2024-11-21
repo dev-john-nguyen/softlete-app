@@ -333,7 +333,7 @@ export const fetchWorkouts =
   };
 
 export const removeWorkout =
-  (workoutUid: string) =>
+  async (workoutUid: string) =>
   async (dispatch: AppDispatch, getState: () => ReducerProps) => {
     const { global, workout } = getState();
 

@@ -12,6 +12,7 @@ import { HomeStackScreens } from 'src/screens/home/types';
 import { removeWorkout } from '../../services/workout/actions';
 import { INITIATE_WORKOUT_HEADER } from 'src/services/workout/actionTypes';
 import { useFetchWorkout } from '../home/workout/hooks/workout.hooks';
+import { removeLocalStorageWorkout } from 'src/services/active-workout/helpers';
 
 interface Props {
   navigation: any;
@@ -46,24 +47,27 @@ const WorkoutModal = ({ navigation, route }: Props) => {
   }, [dispatch, isProgramWorkout, navigation, workout]);
 
   const onDeleteWorkout = useCallback(() => {
-    const deleteHandler = () => {
+    const deleteHandler = async () => {
       if (!workout) return;
       if (isProgramWorkout) {
         if (workout.programUid) {
-          dispatch(removeProgramWorkout(workout._id))
-            .then(() => navigation.navigate(ProgramStackScreens.Program))
-            .catch(err => {
-              console.log(err);
-              navigation.navigate(ProgramStackScreens.Program);
-            });
+          try {
+            await dispatch(removeProgramWorkout(workout._id));
+            await dispatch(removeLocalStorageWorkout(workout._id));
+          } catch (error) {
+            console.log(error);
+            navigation.navigate(ProgramStackScreens.Program);
+          }
         }
       } else {
-        dispatch(removeWorkout(workout._id))
-          .then(() => navigation.navigate(HomeStackScreens.Home))
-          .catch(err => {
-            console.log(err);
-            navigation.navigate(HomeStackScreens.Home);
-          });
+        try {
+          await dispatch(removeWorkout(workout._id));
+          await dispatch(removeLocalStorageWorkout(workout._id));
+          navigation.navigate(HomeStackScreens.Home);
+        } catch (error) {
+          console.log(error);
+          navigation.navigate(HomeStackScreens.Home);
+        }
       }
     };
 

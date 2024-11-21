@@ -25,3 +25,9 @@ export const getWorkoutFromLocalStorage = async (workoutUid: string) => {
 export const getWorkout = (getState: () => unknown) => {
   return (getState() as ReducerProps).activeWorkout.workout;
 };
+
+export const removeLocalStorageWorkout = async (workoutUid: string) => {
+  return AsyncStorage.removeItem(`workouts/${workoutUid}`).catch(error =>
+    console.error(error),
+  );
+};
