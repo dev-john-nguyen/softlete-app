@@ -7,20 +7,19 @@ import { ReducerProps, ThunkAppDispatch } from 'src/services';
 const getUser = (state: ReducerProps) => state.user;
 const getActiveWorkout = (state: ReducerProps) => state.activeWorkout.workout;
 
-export const useFetchWorkout = () => {
+export const useFetchWorkout = (screen: string) => {
   const user = useSelector(getUser);
   const activeWorkout = useSelector(getActiveWorkout);
   const route = useRoute<any>();
   const dispatch = useDispatch<ThunkAppDispatch>();
   const workoutUid = route.params.workoutUid;
   const { isFetching, isError } = useQuery(
-    ['fetch-workouts', { workoutUid, uid: user.uid }],
+    [`${screen}-fetch-workout`, { workoutUid, uid: user.uid }],
     async () => {
       return dispatch(setActiveWorkoutAsync(workoutUid)).unwrap();
     },
     {
       enabled: Boolean(user.uid && workoutUid),
-      cacheTime: 0,
     },
   );
 
