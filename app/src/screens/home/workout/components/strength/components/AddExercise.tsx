@@ -25,7 +25,7 @@ const AddExercise = () => {
     return [...groupLetterIndexes];
   }, [groupParams]);
 
-  const onNavigateToAddExercise = (group: number) => {
+  const onNavigateToAddExercise = (group = 0) => {
     if (!workout || workout.status === WorkoutStatus.completed) {
       return;
     }
@@ -62,7 +62,9 @@ const AddExercise = () => {
           name="circle-plus"
           color={Colors.white}
           size={49}
-          onPress={() => onNavigateToAddExercise(Math.max(...groups) + 1)}
+          onPress={() =>
+            onNavigateToAddExercise(groups.length ? Math.max(...groups) + 1 : 0)
+          }
         />
         <FlatList
           horizontal

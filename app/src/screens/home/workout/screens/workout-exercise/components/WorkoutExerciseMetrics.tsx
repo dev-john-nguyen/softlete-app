@@ -20,7 +20,6 @@ import { alphabetMap } from '../../../constants';
 const WorkoutExerciseMetrics = () => {
   const exercise = useActiveExercise();
   const bottomNavBarHeight = useBottomTabBarHeight();
-  exercise;
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<HomeStackParamsList>>();
   const workout = useGetActiveWorkout() as WorkoutProps;
@@ -39,13 +38,7 @@ const WorkoutExerciseMetrics = () => {
   const nextGroup = useMemo(() => {
     if (!exercise || !groupedExercises.size) return;
     const nextGroupNumber = exercise.group + 1;
-    let nextGroupProps = groupedExercises.get(nextGroupNumber);
-
-    if (!nextGroupProps) {
-      nextGroupProps = groupedExercises.get(0);
-    }
-
-    return nextGroupProps;
+    return groupedExercises.get(nextGroupNumber);
   }, [exercise, groupedExercises]);
 
   const nextExercise = useMemo(() => {
@@ -103,20 +96,24 @@ const WorkoutExerciseMetrics = () => {
         })}
       </ScrollView>
       <FlexBox alignItems="center" width="100%" justifyContent="space-between">
-        <FlexBox
-          flex={1}
-          gap={5}
-          alignItems="center"
-          onPress={onNavigateToNextGroup}>
-          <FontAwesome6Icon
-            name="chevron-down"
-            color={Colors.white}
-            size={20}
-          />
-          <PrimaryText>
-            Group {nextGroup ? alphabetMap.get(nextGroup.groupIndex) : ''}
-          </PrimaryText>
-        </FlexBox>
+        {nextGroup ? (
+          <FlexBox
+            flex={1}
+            gap={5}
+            alignItems="center"
+            onPress={onNavigateToNextGroup}>
+            <FontAwesome6Icon
+              name="chevron-down"
+              color={Colors.white}
+              size={20}
+            />
+            <PrimaryText>
+              Group {nextGroup ? alphabetMap.get(nextGroup.groupIndex) : ''}
+            </PrimaryText>
+          </FlexBox>
+        ) : (
+          <FlexBox flex={1} />
+        )}
         <FlexBox flex={0.7} justifyContent="center">
           <FontAwesome6Icon
             name="circle-plus"
